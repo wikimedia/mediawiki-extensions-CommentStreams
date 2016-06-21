@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jason Ji", 
+			"Cindy Cicalese"
+		]
+	},
+	"commentstreams" : "Comment Streams",
+	"commentstreams-desc": "An extension to allow commenting on wiki pages",
+	"commentstreams-summary" : "Use this extension to leave comments on wiki pages."
+}

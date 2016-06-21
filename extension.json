@@ -1,0 +1,80 @@
+{
+	"name": "CommentStreams",
+	"version": "1.7",
+	"author": [
+		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
+		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
+	],
+	"url": "http://gestalt.mitre.org/gestaltd/index.php/CommentStreams",
+	"descriptionmsg": "commentstreams-desc",
+	"type": "parserhook",
+	"APIModules": {
+		"csPostComment": "ApiCSPostComment",
+		"csQueryComment": "ApiCSQueryComment",
+		"csDeleteComment": "ApiCSDeleteComment",
+		"csEditComment": "ApiCSEditComment",
+		"csQueryDatabase": "ApiCSQueryDatabase"
+	},
+	"MessagesDirs": {
+		"CommentStreams": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"CommentStreamsNamespaces": "i18n/CommentStreams.namespaces.php"
+	},
+	"AutoloadClasses": {
+		"CommentStreams": "php/CommentStreams_body.php",
+		"DatabaseQuerier": "php/DatabaseQuerier.php",
+		"CommentManager": "php/CommentManager.php",
+		"Comment": "php/Comment.php",
+		"ApiCSPostComment": "api/ApiCSPostComment.php",
+		"ApiCSQueryComment": "api/ApiCSQueryComment.php",
+		"ApiCSDeleteComment": "api/ApiCSDeleteComment.php",
+		"ApiCSEditComment": "api/ApiCSEditComment.php",
+		"ApiCSQueryDatabase": "api/ApiCSQueryDatabase.php"
+	},
+	"config": {
+		"CommentStreamsEnableTalk": false,
+		"CommentStreamsNewestStreamsOnTop": true,
+		"CommentStreamsInitiallyCollapsedNamespaces" : [],
+		"CommentStreamsCommentTitlePropertyName" : "Comment Title",
+		"CommentStreamsUserRealNamePropertyName" : null
+	},
+	"ResourceModules": {
+		"ext.CommentStreams": {
+			"styles": [
+				"CommentStreams.css"
+			],
+			"scripts": [
+				"CommentStreams.Querier.js",
+				"CommentStreams.Data.js",
+				"CommentStreams.Controller.js",
+				"spin.min.js"
+			],
+			"messages": []
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "js+css",
+		"remoteExtPath": "CommentStreams/js+css"
+	},
+	"Hooks": {
+		"LoadExtensionSchemaUpdates": [
+			"CommentStreams::addCommentTableToDatabase"
+		],
+		"CanonicalNamespaces": [
+			"CommentStreams::addCommentStreamsNamespaces"
+		],
+		"MediaWikiPerformAction": [
+			"CommentManager::storePageInfo"
+		],
+		"BeforePageDisplay": [
+			"CommentManager::addCommentsAndInitializeJS"
+		],
+		"ParserFirstCallInit": [
+			"CommentStreams::onParserSetup"
+		]
+	},
+	"callback" : "CommentStreams::onRegistration"
+}

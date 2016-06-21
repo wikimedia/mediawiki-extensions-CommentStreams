@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cindy Cicalese",
+			"Jason Ji"
+		]
+	},
+	"commentstreams": "The name of the extension's entry in Special:SpecialPages",
+	"commentstreams-desc": "{{desc|name=CommentStreams|url=http://gestalt.mitre.org/gestaltd/index.php/CommentStreams}}",
+	"commentstreams-summary": "Description appearing on top of [[CommentStreams]]"
+}
