@@ -1,45 +1,17 @@
 {
 	"name": "CommentStreams",
-	"version": "1.7",
+	"version": "2.0",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
 	],
-	"url": "http://gestalt.mitre.org/gestaltd/index.php/CommentStreams",
+	"url": "https://www.mediawiki.org/wiki/Extension:CommentStreams",
 	"descriptionmsg": "commentstreams-desc",
 	"type": "parserhook",
-	"APIModules": {
-		"csPostComment": "ApiCSPostComment",
-		"csQueryComment": "ApiCSQueryComment",
-		"csDeleteComment": "ApiCSDeleteComment",
-		"csEditComment": "ApiCSEditComment",
-		"csQueryDatabase": "ApiCSQueryDatabase"
-	},
 	"MessagesDirs": {
 		"CommentStreams": [
 			"i18n"
 		]
-	},
-	"ExtensionMessagesFiles": {
-		"CommentStreamsNamespaces": "i18n/CommentStreams.namespaces.php"
-	},
-	"AutoloadClasses": {
-		"CommentStreams": "php/CommentStreams_body.php",
-		"DatabaseQuerier": "php/DatabaseQuerier.php",
-		"CommentManager": "php/CommentManager.php",
-		"Comment": "php/Comment.php",
-		"ApiCSPostComment": "api/ApiCSPostComment.php",
-		"ApiCSQueryComment": "api/ApiCSQueryComment.php",
-		"ApiCSDeleteComment": "api/ApiCSDeleteComment.php",
-		"ApiCSEditComment": "api/ApiCSEditComment.php",
-		"ApiCSQueryDatabase": "api/ApiCSQueryDatabase.php"
-	},
-	"config": {
-		"CommentStreamsEnableTalk": false,
-		"CommentStreamsNewestStreamsOnTop": true,
-		"CommentStreamsInitiallyCollapsedNamespaces" : [],
-		"CommentStreamsCommentTitlePropertyName" : "Comment Title",
-		"CommentStreamsUserRealNamePropertyName" : null
 	},
 	"ResourceModules": {
 		"ext.CommentStreams": {
@@ -47,34 +19,87 @@
 				"CommentStreams.css"
 			],
 			"scripts": [
-				"CommentStreams.Querier.js",
-				"CommentStreams.Data.js",
-				"CommentStreams.Controller.js",
+				"CommentStreamsQuerier.js",
+				"CommentStreams.js",
 				"spin.min.js"
 			],
-			"messages": []
+			"position": "top",
+			"targets": [
+				"desktop",
+				"mobile"
+			],
+			"messages": [
+				"commentstreams-api-error-commentnotfound",
+				"commentstreams-api-error-notacomment",
+				"commentstreams-api-error-missingcommenttitle",
+				"commentstreams-api-error-post-notloggedin",
+				"commentstreams-api-error-post-parentandtitle",
+				"commentstreams-api-error-post-parentpagedoesnotexist",
+				"commentstreams-api-error-post-associatedpageidmismatch",
+				"commentstreams-api-error-post-associatedpagedoesnotexist",
+				"commentstreams-api-error-post",
+				"commentstreams-api-error-edit-permissions",
+				"commentstreams-api-error-edit",
+				"commentstreams-api-error-delete-haschildren",
+				"commentstreams-api-error-delete-permissions",
+				"commentstreams-api-error-delete",
+				"commentstreams-validation-error-nocommenttitle",
+				"commentstreams-validation-error-nocommenttext",
+				"commentstreams-buttontext-add",
+				"commentstreams-buttontext-reply",
+				"commentstreams-buttontext-edit",
+				"commentstreams-buttontext-delete",
+				"commentstreams-buttontext-collapse",
+				"commentstreams-buttontext-expand",
+				"commentstreams-buttontext-submit",
+				"commentstreams-buttontext-cancel",
+				"commentstreams-datetext-postedon",
+				"commentstreams-datetext-lasteditedon",
+				"commentstreams-title-field-placeholder",
+				"commentstreams-body-field-placeholder"
+			]
 		}
 	},
 	"ResourceFileModulePaths": {
-		"localBasePath": "js+css",
-		"remoteExtPath": "CommentStreams/js+css"
+		"localBasePath": "resources",
+		"remoteExtPath": "CommentStreams/resources"
+	},
+	"AutoloadClasses": {
+		"CommentStreamsHooks": "includes/CommentStreamsHooks.php",
+		"CommentStreams": "includes/CommentStreams.php",
+		"Comment": "includes/Comment.php",
+		"ApiCSBase": "includes/ApiCSBase.php",
+		"ApiCSPostComment": "includes/ApiCSPostComment.php",
+		"ApiCSQueryComment": "includes/ApiCSQueryComment.php",
+		"ApiCSEditComment": "includes/ApiCSEditComment.php",
+		"ApiCSDeleteComment": "includes/ApiCSDeleteComment.php"
+	},
+	"APIModules": {
+		"csPostComment": "ApiCSPostComment",
+		"csQueryComment": "ApiCSQueryComment",
+		"csEditComment": "ApiCSEditComment",
+		"csDeleteComment": "ApiCSDeleteComment"
 	},
 	"Hooks": {
-		"LoadExtensionSchemaUpdates": [
-			"CommentStreams::addCommentTableToDatabase"
-		],
-		"CanonicalNamespaces": [
-			"CommentStreams::addCommentStreamsNamespaces"
-		],
-		"MediaWikiPerformAction": [
-			"CommentManager::storePageInfo"
-		],
-		"BeforePageDisplay": [
-			"CommentManager::addCommentsAndInitializeJS"
-		],
-		"ParserFirstCallInit": [
-			"CommentStreams::onParserSetup"
-		]
+		"LoadExtensionSchemaUpdates": "CommentStreamsHooks::addCommentTableToDatabase",
+		"CanonicalNamespaces": "CommentStreamsHooks::addCommentStreamsNamespaces",
+		"MediaWikiPerformAction": "CommentStreamsHooks::onMediaWikiPerformAction",
+		"MovePageIsValidMove": "CommentStreamsHooks::onMovePageIsValidMove",
+		"userCan": "CommentStreamsHooks::userCan",
+		"ParserFirstCallInit": "CommentStreamsHooks::onParserSetup",
+		"BeforePageDisplay": "CommentStreamsHooks::addCommentsAndInitializeJS",
+		"ShowSearchHitTitle": "CommentStreamsHooks::showSearchHitTitle",
+		"smwInitProperties": "CommentStreamsHooks::initProperties",
+		"SMWStore::updateDataBefore": "CommentStreamsHooks::updateData"
 	},
-	"callback" : "CommentStreams::onRegistration"
+	"callback" : "CommentStreamsHooks::onRegistration",
+	"config": {
+		"CommentStreamsNamespaceIndex": 844,
+		"CommentStreamsAllowedNamespaces" : null,
+		"CommentStreamsEnableTalk": false,
+		"CommentStreamsNewestStreamsOnTop": true,
+		"CommentStreamsInitiallyCollapsedNamespaces" : [],
+		"CommentStreamsUserRealNamePropertyName" : null,
+		"CommentStreamsUserAvatarPropertyName" : null
+	}
 }
