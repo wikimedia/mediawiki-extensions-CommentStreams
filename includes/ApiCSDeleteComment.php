@@ -21,23 +21,41 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-/**
-* To activate the functionality of this extension include the following
-* in your LocalSettings.php file:
-* wfLoadExtension("CommentStreams");
-*/
+class ApiCSDeleteComment extends ApiCSBase {
 
-if ( function_exists( 'wfLoadExtension' ) ) {
-	wfLoadExtension( 'CommentStreams' );
-	// Keep i18n globals so mergeMessageFileList.php doesn't break
-	$wgMessagesDirs['CommentStreams'] = __DIR__ . "/i18n";
-	$wgExtensionMessagesFiles['CommentStreamsNamespaces'] = __DIR__ . '/i18n/CommentStreams.namespaces.php';
-	wfWarn(
-		'Deprecated PHP entry point used for CommentStreams extension. Please use wfLoadExtension instead, ' .
-		'see https://www.mediawiki.org/wiki/Extension_registration for more details.'
-	);
-	return;
-}
-else {
-	die( 'This version of CommentStreams requires MediaWiki 1.25+.');
+	/**
+	 * @param ApiMain $main main module
+	 * @param string $action name of this module
+	 */
+	public function __construct( $main, $action ) {
+		parent::__construct( $main, $action, true );
+	}
+
+	/**
+	 * the real body of the execute function
+	 *
+	 * @param Comment $comment the comment to execute the action upon
+	 * @return result of API request
+	 */
+	protected function executeBody( $comment ) {
+		$wikipage = $comment->getWikiPage();
+		if ( !$wikipage->getTitle()->userCan( 'edit', $this->getUser() ) ) {
+			$this->dieCustomUsageMessage(
+				'commentstreams-api-error-delete-permissions' );
+		}
+
+		$childCount = $comment->getNumReplies();
+		if ( $childCount > 0 ) {
+			$this->dieCustomUsageMessage(
+				'commentstreams-api-error-delete-haschildren' );
+		}
+
+		$result = $comment->delete();
+		if ( !$result ) {
+			$this->dieCustomUsageMessage(
+				'commentstreams-api-error-delete' );
+		}
+
+		return null;
+	}
 }

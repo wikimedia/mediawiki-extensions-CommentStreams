@@ -21,31 +21,23 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class CommentStreams {
+class ApiCSQueryComment extends ApiCSBase {
 
-	static function onRegistration() {
-		global $wgCommentStreamsSMWinstalled;
-		$wgCommentStreamsSMWinstalled = false;
-		if ( defined( 'SMW_VERSION' ) ) {
-			$wgCommentStreamsSMWinstalled = true;
-		}
-	}
-	
-	static function addCommentTableToDatabase(DatabaseUpdater $updater) {
-		$updater->addExtensionTable( 'cs_comment_data', dirname(__FILE__) . '/sql/commentData.sql', true );
-		$updater->addExtensionTable( 'cs_upvotes', dirname(__FILE__) . '/sql/upvotes.sql', true );
-		$updater->addExtensionTable( 'cs_downvotes', dirname(__FILE__) . '/sql/downvotes.sql', true );
-		$updater->addExtensionTable( 'cs_next_comment', dirname(__FILE__) . '/sql/nextComment.sql', true);
-
-		return true;
+	/**
+	 * @param ApiMain $main main module
+	 * @param string $action name of this module
+	 */
+	public function __construct( $main, $action ) {
+		parent::__construct( $main, $action );
 	}
 
-	static function addCommentStreamsNamespaces(array &$namespaces) {
-		$namespaces[NS_COMMENTSTREAMS] = 'CommentStreams';
-		$namespaces[NS_COMMENTSTREAMS+1] = 'CommentStreams_Talk';
-	}
-	
-	static function onParserSetup( Parser $parser ) {
-		$parser->setHook( 'no-comment-streams', 'CommentManager::hideCommentStreams' );
+	/**
+	 * the real body of the execute function
+	 *
+	 * @param Comment $comment the comment to execute the action upon
+	 * @return result of API request
+	 */
+	protected function executeBody( $comment ) {
+		return $comment->getJSON();
 	}
 }

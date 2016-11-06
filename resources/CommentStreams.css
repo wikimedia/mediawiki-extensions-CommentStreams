@@ -1,0 +1,148 @@
+#cs-comments {
+	margin-top: 10px;
+	font-family: sans-serif;
+}
+
+.cs-stream {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	overflow: hidden;
+}
+
+.cs-comment {
+	position: relative;
+}
+
+.cs-reply-comment {
+	margin-top: 10px;
+	margin-left: 30px;
+}
+
+.cs-head-comment > .cs-comment-header {
+	border-top: 1px solid #00a7d8;
+}
+
+.cs-expanded .cs-comment-header{
+	background-color: #e4f1fe;
+}
+
+.cs-collapsed .cs-comment-header{
+	background-color: #eeeeee;
+	margin-bottom: 10px;
+}
+
+.cs-comment-header {
+	padding-top: 2px;
+	padding-left: 5px;
+	padding-bottom: 5px;
+	overflow: auto;
+}
+
+.cs-comment-title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.cs-avatar {
+	width: 30px;
+	height: 30px;
+	padding-right: 5px;
+	margin-top: 3px;
+}
+
+.cs-comment-author {
+	padding-right: 5px;
+	font-size: 12px;
+}
+
+.cs-comment-author a {
+	color: #00a7d8;
+	font-weight: bold;
+}
+
+.cs-comment-body {
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+.cs-comment-details {
+	color: #555555;
+	opacity: 0.8;
+	font-size: 12px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.cs-button {
+	background-color: transparent;
+	border: none;
+	color: #00a7d8;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-decoration: none;
+	padding-left: 5px;
+	padding-right: 5px;
+	box-shadow: none;
+}
+
+.cs-button:enabled:active {
+	opacity: 0.5;
+}
+
+.cs-button:enabled:hover {
+	color: #3ccefa;
+}
+
+.cs-button:disabled {
+	color: #95a5a6;
+	opacity: 0.2;
+}
+
+.cs-toggle-button {
+	float: right;
+	border: none;
+	border-style: none;
+	padding-left: 10px;
+}
+
+#cs-add-button, .cs-reply-button, .cs-submit-button {
+	font-size: 14px;
+	padding-left: 0;
+}
+
+#cs-edit-box {
+	position: relative;
+	background-color: #e4f1fe;
+	padding: 5px 5px 5px 5px;
+	margin-bottom: 7px;
+}
+
+.cs-reply-edit-box {
+	margin-left: 30px;
+}
+
+#cs-title-edit-field {
+	border-radius: 2px;
+	border-width: 1px;
+	border-color: #00a7d8;
+	box-style: content-box;
+	-webkit-box-sizing: content-box;
+	width: 80%;
+	min-width: 400px;
+	padding: 5px 5px 5px 5px;
+	margin-bottom: 5px;
+	font-family: sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#cs-body-edit-field {
+	border-radius: 2px;
+	border-width: 1px;
+	border-color: #00a7d8;
+	width: 100%;
+	padding: 5px 5px 5px 5px;
+	margin-bottom: 5px;
+	font-family: sans-serif;
+	font-size: 14px;
+}
