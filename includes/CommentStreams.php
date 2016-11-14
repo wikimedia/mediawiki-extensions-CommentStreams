@@ -107,8 +107,8 @@ class CommentStreams {
 			return false;
 		}
 
-		// don't display comments on deleted pages or pages that do not exist yet
-		if ( $title->isDeletedQuick() || !$title->exists() ) {
+		// don't display comments on pages that do not exist
+		if ( !$title->exists() ) {
 			return false;
 		}
 
