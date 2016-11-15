@@ -167,7 +167,8 @@ class CommentStreamsHooks {
 	/**
 	 * Implements ParserFirstCallInit hook.
 	 * See https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
-	 * Adds no-comment-streams magic word.
+	 * Adds no-comment-streams and comment-streams-initially-collapsed magic
+	 * words.
 	 *
 	 * @param Parser $parser the parser
 	 * @return bool continue checking hooks
@@ -175,11 +176,13 @@ class CommentStreamsHooks {
 	public static function onParserSetup( Parser $parser ) {
 		$parser->setHook( 'no-comment-streams',
 			'CommentStreamsHooks::hideCommentStreams' );
+		$parser->setHook( 'comment-streams-initially-collapsed',
+			'CommentStreamsHooks::initiallyCollapseCommentStreams' );
 		return true;
 	}
 
 	/**
-	 * Implements tag function, <no-comment-streams \>, which disables
+	 * Implements tag function, <no-comment-streams/>, which disables
 	 * CommentStreams on a page.
 	 *
 	 * @param string $input input between the tags (ignored)
@@ -193,6 +196,24 @@ class CommentStreamsHooks {
 		$parser->disableCache();
 		$cs = CommentStreams::singleton();
 		$cs->disableCommentsOnPage();
+		return "";
+	}
+
+	/**
+	 * Implements tag function, <comment-streams-initially-collapsed/>, which
+	 * makes CommentStreams on a page start as collapsed when the page is viewed.
+	 *
+	 * @param string $input input between the tags (ignored)
+	 * @param array $args tag arguments
+	 * @param Parser $parser the parser
+	 * @param PPFrame $frame the parent frame
+	 * @return string to replace tag with
+	 */
+	public static function initiallyCollapseCommentStreams( $input, array $args,
+		Parser $parser, PPFrame $frame ) {
+		$parser->disableCache();
+		$cs = CommentStreams::singleton();
+		$cs->initiallyCollapseCommentsOnPage();
 		return "";
 	}
 
@@ -278,24 +299,30 @@ class CommentStreamsHooks {
 			$wikipage = WikiPage::newFromId( $page_id );
 			$comment = Comment::newFromWikiPage( $wikipage );
 
-			$assoc_page_id = $comment->getAssociatedId();
-			if ( is_null( $assoc_page_id ) ) {
+			if ( is_null( $comment ) ) {
 				return true;
 			}
 
-			$assoc_wikipage = WikiPage::newFromId( $assoc_page_id );
-			$propertyDI = new SMW\DIProperty( '___CS_ASSOCPG' );
-			$dataItem =
-				SMW\DIWikiPage::newFromTitle( $assoc_wikipage->getTitle() );
-			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+			$assoc_page_id = $comment->getAssociatedId();
+			if ( !is_null( $assoc_page_id ) ) {
+				$assoc_wikipage = WikiPage::newFromId( $assoc_page_id );
+				if ( !is_null( $assoc_wikipage ) ) {
+					$propertyDI = new SMW\DIProperty( '___CS_ASSOCPG' );
+					$dataItem =
+						SMW\DIWikiPage::newFromTitle( $assoc_wikipage->getTitle() );
+					$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+				}
+			}
 
 			$parent_page_id = $comment->getParentId();
 			if ( !is_null( $parent_page_id ) ) {
 				$parent_wikipage = WikiPage::newFromId( $parent_page_id );
-				$propertyDI = new SMW\DIProperty( '___CS_REPLYTO' );
-				$dataItem =
-					SMW\DIWikiPage::newFromTitle( $parent_wikipage->getTitle() );
-				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+				if ( !is_null( $parent_wikipage ) ) {
+					$propertyDI = new SMW\DIProperty( '___CS_REPLYTO' );
+					$dataItem =
+						SMW\DIWikiPage::newFromTitle( $parent_wikipage->getTitle() );
+					$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+				}
 			}
 
 			$commentTitle = $comment->getCommentTitle();

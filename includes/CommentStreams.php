@@ -38,14 +38,25 @@ class CommentStreams {
 		return self::$instance;
 	}
 
+	// no CommentStreams flag
 	private $noCommentStreams = false;
 
 	/**
 	 * disables the display of comments on the current page
-	 * by default, a warning message is displayed instead
 	 */
 	public function disableCommentsOnPage() {
 		$this->noCommentStreams = true;
+	}
+
+	// initially collapse CommentStreams flag
+	private $initiallyCollapseCommentStreams = false;
+
+	/**
+	 * makes the comments appear initially collapsed when the current page
+	 * is viewed
+	 */
+	public function initiallyCollapseCommentsOnPage() {
+		$this->initiallyCollapseCommentStreams = true;
 	}
 
 	/**
@@ -154,8 +165,13 @@ class CommentStreams {
 		if ( $title->isTalkPage() ) {
 			$namespace = MWNamespace::getSubject( $namespace );
 		}
-		$initiallyCollapsed = in_array( $namespace,
-			$GLOBALS['wgCommentStreamsInitiallyCollapsedNamespaces'] );
+
+		if ( $this->initiallyCollapseCommentStreams ) {
+			$initiallyCollapsed = true;
+		} else {
+			$initiallyCollapsed = in_array( $namespace,
+				$GLOBALS['wgCommentStreamsInitiallyCollapsedNamespaces'] );
+		}
 
 		$commentStreamsParams = [
 			'userDisplayName' =>

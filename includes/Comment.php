@@ -552,10 +552,20 @@ EOT;
 	 * @return string display name for user
 	 */
 	public static function getDisplayNameFromUser( $user ) {
+		$userpage = $user->getUserPage();
 		$displayname = null;
 		if ( !is_null( $GLOBALS['wgCommentStreamsUserRealNamePropertyName'] ) ) {
 			$displayname = self::getUserProperty( $user,
 				$GLOBALS['wgCommentStreamsUserRealNamePropertyName'] );
+		}
+		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
+			if ( class_exists( 'PageProps' ) ) {
+				$values = PageProps::getInstance()->getProperties( $userpage,
+					'displaytitle' );
+			}
+			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
+				$displayname = $values[$userpage->getArticleID()];
+			}
 		}
 		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
 			$displayname = $user->getRealName();
@@ -563,7 +573,6 @@ EOT;
 		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
 			$displayname = $user->getName();
 		}
-		$userpage = $user->getUserPage();
 		if ( $userpage->exists() ) {
 			$displayname = Linker::link( $userpage, $displayname );
 		}
@@ -585,11 +594,11 @@ EOT;
 				if ( gettype( $avatar ) === 'string' ) {
 					$avatar = Title::newFromText( $avatar );
 					if ( is_null( $avatar ) ) {
-						return false;
+						return null;
 					}
 				}
 				if ( !get_class( $avatar ) === 'Title' ) {
-					return false;
+					return null;
 				}
 				if ( $avatar->isKnown() && $avatar->getNamespace() === NS_FILE ) {
 					$file = wfFindFile( $avatar );
