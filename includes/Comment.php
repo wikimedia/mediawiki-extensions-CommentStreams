@@ -562,9 +562,9 @@ EOT;
 			if ( class_exists( 'PageProps' ) ) {
 				$values = PageProps::getInstance()->getProperties( $userpage,
 					'displaytitle' );
-			}
-			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
-				$displayname = $values[$userpage->getArticleID()];
+				if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
+					$displayname = $values[$userpage->getArticleID()];
+				}
 			}
 		}
 		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
