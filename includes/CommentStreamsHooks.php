@@ -334,4 +334,83 @@ class CommentStreamsHooks {
 		}
 		return true;
 	}
+
+	/**
+	 * @param array &$notifications notifications
+	 * @param array &$notificationCategories notification categories
+	 * @param array &$icons notification icons
+	 */
+	public static function onBeforeCreateEchoEvent( &$notifications,
+		&$notificationCategories, &$icons ) {
+		$notificationCategories['commentstreams-notification-category'] = [
+			'priority' => 3
+		];
+
+		$notifications['commentstreams-comment-on-watched-page'] = [
+			'category' => 'commentstreams-notification-category',
+			'group' => 'positive',
+			'section' => 'alert',
+			'presentation-model' => EchoCSWatchedPresentationModel::class,
+			'formatter-class' => EchoCSFormatter::class,
+			'title-message' => 'title-message',
+			'email-subject-message' =>
+				'commentstreams-email-subject-message-comment-on-watched-page',
+			'email-body-batch-message' =>
+				'commentstreams-email-body-message-comment-on-watched-page',
+			'email-body-batch-params' => [
+				'comment_author_username',
+				'comment_author_display_name',
+				'comment_title',
+				'associated_page_display_title',
+				'titlelink',
+				'comment_wikitext'
+			],
+			'user-locators' => [ 'EchoUserLocator::locateUsersWatchingTitle' ]
+		];
+
+		$notifications['commentstreams-reply-on-watched-page'] = [
+			'category' => 'commentstreams-notification-category',
+			'group' => 'positive',
+			'section' => 'alert',
+			'presentation-model' => EchoCSWatchedPresentationModel::class,
+			'formatter-class' => EchoCSFormatter::class,
+			'title-message' => 'title-message',
+			'email-subject-message' =>
+				'commentstreams-email-subject-message-reply-on-watched-page',
+			'email-body-batch-message' =>
+				'commentstreams-email-body-message-reply-on-watched-page',
+			'email-body-batch-params' => [
+				'comment_author_username',
+				'comment_author_display_name',
+				'comment_title',
+				'associated_page_display_title',
+				'titlelink',
+				'comment_wikitext'
+			],
+			'user-locators' => [ 'EchoUserLocator::locateUsersWatchingTitle' ],
+			'user-filters' => [ 'Comment::locateParentCommentAuthor' ]
+		];
+
+		$notifications['commentstreams-reply-to-author'] = [
+			'category' => 'commentstreams-notification-category',
+			'group' => 'positive',
+			'section' => 'alert',
+			'presentation-model' => EchoCSReplyPresentationModel::class,
+			'formatter-class' => EchoCSFormatter::class,
+			'title-message' => 'title-message',
+			'email-subject-message' =>
+				'commentstreams-email-subject-message-reply-to-author',
+			'email-body-batch-message' =>
+				'commentstreams-email-body-message-reply-to-author',
+			'email-body-batch-params' => [
+				'comment_author_username',
+				'comment_author_display_name',
+				'comment_title',
+				'associated_page_display_title',
+				'titlelink',
+				'comment_wikitext'
+			],
+			'user-locators' => [ 'Comment::locateParentCommentAuthor' ]
+		];
+	}
 }

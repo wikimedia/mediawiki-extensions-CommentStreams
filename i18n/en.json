@@ -64,5 +64,17 @@
 	"commentstreams-datetext-postedon": "Posted on",
 	"commentstreams-datetext-lasteditedon": "Last edited on",
 	"commentstreams-title-field-placeholder": "Enter title...",
-	"commentstreams-body-field-placeholder": "Enter new comment text..."
+	"commentstreams-body-field-placeholder": "Enter new comment text...",
+	"echo-category-title-commentstreams-notification-category":
+		"New comments and replies",
+	"notification-header-commentstreams-comment-on-watched-page": "$1 {{GENDER:$4|commented}} <i>$2</i> on <i>$3</i>, which {{GENDER:$5|you}} are watching.",
+	"notification-header-commentstreams-reply-on-watched-page": "$1 {{GENDER:$4|replied}} to <i>$2</i> on <i>$3</i>, which {{GENDER:$5|you}} are watching.",
+	"notification-header-commentstreams-reply-to-author": "$1 {{GENDER:$4|replied}} to {{GENDER:$5|your}} comment <i>$2</i> on <i>$3</i>.",
+	"commentstreams-email-subject-message-comment-on-watched-page": "Somebody has commented on a page you are watching",
+	"commentstreams-email-body-message-comment-on-watched-page": "$2 has commented \"$3\" on $4, a page you are watching. Click the link to visit the page: $5. The comment is:\n\n$6",
+	"commentstreams-email-subject-message-reply-on-watched-page": "Somebody has replied to a comment on a page you are watching",
+	"commentstreams-email-body-message-reply-on-watched-page": "$2 has replied to \"$3\" on $4, a page you are watching. Click the link to visit the page: $5. The reply is:\n\n$6",
+	"commentstreams-email-subject-message-reply-to-author": "Somebody has replied to one of your comments",
+	"commentstreams-email-body-message-reply-to-author": "$2 has replied to your comment \"$3\" on $4. Click the link to visit the page: $5. The reply is:\n\n$6",
+	"notification-commentstreams-page": "Visit page"
 }

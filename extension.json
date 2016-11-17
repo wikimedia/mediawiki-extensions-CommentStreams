@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "2.1",
+	"version": "3.0",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -81,7 +81,11 @@
 		"ApiCSPostComment": "includes/ApiCSPostComment.php",
 		"ApiCSQueryComment": "includes/ApiCSQueryComment.php",
 		"ApiCSEditComment": "includes/ApiCSEditComment.php",
-		"ApiCSDeleteComment": "includes/ApiCSDeleteComment.php"
+		"ApiCSDeleteComment": "includes/ApiCSDeleteComment.php",
+		"EchoCSFormatter": "includes/EchoCSFormatter.php",
+		"EchoCSReplyPresentationModel": "includes/EchoCSReplyPresentationModel.php",
+		"EchoCSWatchedPresentationModel":
+			"includes/EchoCSWatchedPresentationModel.php"
 	},
 	"APIModules": {
 		"csPostComment": "ApiCSPostComment",
@@ -99,7 +103,8 @@
 		"BeforePageDisplay": "CommentStreamsHooks::addCommentsAndInitializeJS",
 		"ShowSearchHitTitle": "CommentStreamsHooks::showSearchHitTitle",
 		"smwInitProperties": "CommentStreamsHooks::initProperties",
-		"SMWStore::updateDataBefore": "CommentStreamsHooks::updateData"
+		"SMWStore::updateDataBefore": "CommentStreamsHooks::updateData",
+		"BeforeCreateEchoEvent": "CommentStreamsHooks::onBeforeCreateEchoEvent"
 	},
 	"callback" : "CommentStreamsHooks::onRegistration",
 	"config": {

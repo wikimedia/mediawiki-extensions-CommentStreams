@@ -62,7 +62,7 @@ class ApiCSPostComment extends ApiBase {
 					'commentstreams-api-error-post-parentpagedoesnotexist' );
 			}
 			$parent_comment = Comment::newFromWikiPage( $parent_page );
-			if ( $parent_comment->getAssociatedId() !== (integer) $associatedid ) {
+			if ( $parent_comment->getAssociatedId() !== (integer)$associatedid ) {
 				$this->dieCustomUsageMessage(
 					'commentstreams-api-error-post-associatedpageidmismatch' );
 			}
@@ -83,6 +83,8 @@ class ApiCSPostComment extends ApiBase {
 
 		$this->getResult()->addValue( null, $this->getModuleName(),
 			$comment->getJSON() );
+
+		$this->sendNotifications( $comment, $associated_page );
 	}
 
 	/**
@@ -114,6 +116,78 @@ class ApiCSPostComment extends ApiBase {
 	 */
 	public function needstoken() {
 		return 'csrf';
+	}
+
+	/**
+	 * Send Echo notifications if Echo is installed.
+	 *
+	 * @param Comment $comment the comment to send notifications for
+	 * @param WikiPage $associated_page the associated page for the comment
+	 * @return not used
+	 */
+	private function sendNotifications( $comment, $associated_page ) {
+		if ( !class_exists( 'EchoEvent' ) ) {
+			return;
+		}
+
+		$parent_id = $comment->getParentId();
+		if ( is_null( $parent_id ) ) {
+			$comment_title = $comment->getCommentTitle();
+		} else {
+			$parent_page = WikiPage::newFromId( $parent_id );
+			if ( is_null( $parent_page ) ) {
+				return;
+			}
+			$parent_comment = Comment::newFromWikiPage( $parent_page );
+			if ( is_null( $parent_comment ) ) {
+				return;
+			} else {
+				$comment_title = $parent_comment->getCommentTitle();
+			}
+		}
+
+		$associated_page_display_title =
+			$associated_page->getTitle()->getPrefixedText();
+		if ( class_exists( 'PageProps' ) ) {
+			$associated_title = $associated_page->getTitle();
+			$values = PageProps::getInstance()->getProperties( $associated_title,
+				'displaytitle' );
+			if ( array_key_exists( $associated_title->getArticleID(), $values ) ) {
+				$associated_page_display_title =
+					$values[$associated_title->getArticleID()];
+			}
+		}
+
+		$extra = [
+			'comment' => $comment->getId(),
+			'comment_author_username' => $comment->getUsername(),
+			'comment_author_display_name' => $comment->getUserDisplayNameUnlinked(),
+			'comment_title' => $comment_title,
+			'associated_page_display_title' => $associated_page_display_title,
+			'comment_wikitext' => $comment->getWikitext()
+		];
+
+		if ( !is_null( $parent_id ) ) {
+			EchoEvent::create( [
+				'type' => 'commentstreams-reply-on-watched-page',
+				'title' => $associated_page->getTitle(),
+				'extra' => $extra,
+				'agent' => $this->getUser()
+			] );
+			EchoEvent::create( [
+				'type' => 'commentstreams-reply-to-author',
+				'title' => $associated_page->getTitle(),
+				'extra' => $extra,
+				'agent' => $this->getUser()
+			] );
+		} else {
+			EchoEvent::create( [
+				'type' => 'commentstreams-comment-on-watched-page',
+				'title' => $associated_page->getTitle(),
+				'extra' => $extra,
+				'agent' => $this->getUser()
+			] );
+		}
 	}
 
 	/**

@@ -103,7 +103,7 @@ class Comment {
 		$success = false;
 		while ( !$success ) {
 			$index = wfRandomString();
-			$title = Title::newFromText( (string) $index, NS_COMMENTSTREAMS );
+			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
 			if ( !$title->isDeletedQuick() && !$title->exists() ) {
 				$wikipage = new WikiPage( $title );
 				$status = $wikipage->doEditContent( $content, '', EDIT_NEW, false,
@@ -167,10 +167,10 @@ class Comment {
 			__METHOD__
 		);
 		if ( $result ) {
-			$this->assoc_page_id = (integer) $result->assoc_page_id;
+			$this->assoc_page_id = (integer)$result->assoc_page_id;
 			$this->parent_page_id = $result->parent_page_id;
 			if ( !is_null( $this->parent_page_id ) ) {
-				$this->parent_page_id = (integer) $this->parent_page_id;
+				$this->parent_page_id = (integer)$this->parent_page_id;
 			}
 			$this->comment_title = $result->comment_title;
 			$this->loaded = true;
@@ -187,10 +187,10 @@ class Comment {
 	 */
 	private function loadFromValues( $assoc_page_id, $parent_page_id,
 		$comment_title ) {
-		$this->assoc_page_id = (integer) $assoc_page_id;
+		$this->assoc_page_id = (integer)$assoc_page_id;
 		$this->parent_page_id = $parent_page_id;
 		if ( !is_null( $this->parent_page_id ) ) {
-			$this->parent_page_id = (integer) $this->parent_page_id;
+			$this->parent_page_id = (integer)$this->parent_page_id;
 		}
 		$this->comment_title = $comment_title;
 		$this->loaded = true;
@@ -288,10 +288,18 @@ class Comment {
 	}
 
 	/**
-	 * @return string username of the author of this comment
+	 * @return string display name of the author of this comment linked to
+	 * the user's user page if it exists
 	 */
 	public function getUserDisplayName() {
 		return self::getDisplayNameFromUser( $this->getUser() );
+	}
+
+	/**
+	 * @return string display name of the author of this comment
+	 */
+	public function getUserDisplayNameUnlinked() {
+		return self::getDisplayNameFromUser( $this->getUser(), false );
 	}
 
 	/**
@@ -549,9 +557,11 @@ EOT;
 	 * return the text to use to represent the user at the top of a comment
 	 *
 	 * @param User $user the user
+	 * @param boolean $linked whether to link the display name to the user page,
+	 * if it exists
 	 * @return string display name for user
 	 */
-	public static function getDisplayNameFromUser( $user ) {
+	public static function getDisplayNameFromUser( $user, $linked = true ) {
 		$userpage = $user->getUserPage();
 		$displayname = null;
 		if ( !is_null( $GLOBALS['wgCommentStreamsUserRealNamePropertyName'] ) ) {
@@ -573,7 +583,7 @@ EOT;
 		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
 			$displayname = $user->getName();
 		}
-		if ( $userpage->exists() ) {
+		if ( $linked && $userpage->exists() ) {
 			$displayname = Linker::link( $userpage, $displayname );
 		}
 		return $displayname;
@@ -640,5 +650,34 @@ EOT;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Used by Echo to locate the author of a comment being replied to.
+	 * @param EchoEvent $event the Echo event
+	 * @return array array mapping user id to User object
+	 */
+	public static function locateParentCommentAuthor( $event ) {
+		$users = [];
+		$id = $event->getExtraParam( 'comment' );
+		$wikipage = WikiPage::newFromId( $id );
+		if ( !is_null( $wikipage ) ) {
+			$comment = Comment::newFromWikiPage( $wikipage );
+			if ( !is_null( $comment ) ) {
+				$parent_id = $comment->getParentId();
+				if ( !is_null( $parent_id ) ) {
+					$parent_wikipage = WikiPage::newFromId( $parent_id );
+					if ( !is_null( $parent_wikipage ) ) {
+						$parent_comment = Comment::newFromWikiPage( $parent_wikipage );
+						if ( !is_null( $parent_comment ) ) {
+							$user = $parent_comment->getUser();
+							$userid = $user->getId();
+							$users[$userid] = $user;
+						}
+					}
+				}
+			}
+		}
+		return $users;
 	}
 }

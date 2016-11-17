@@ -64,5 +64,16 @@
 	"commentstreams-datetext-postedon": "User interface date text",
 	"commentstreams-datetext-lasteditedon": "User interface date text",
 	"commentstreams-title-field-placeholder": "Text field placeholder text",
-	"commentstreams-body-field-placeholder": "Text field placeholder text"
+	"commentstreams-body-field-placeholder": "Text field placeholder text",
+	"echo-category-title-commentstreams-notification-category": "Name of category on Prefences/Notifications page for CommentStreams notifications",
+	"notification-header-commentstreams-comment-on-watched-page": "Flyout-specific format for displaying notification header of a new comment on a watched page.\n\nParameters:\n* $1 - the formatted username of the person who commented.\n* $2 - the comment title.\n* $3 - the display name of the page being commented on.\n* $4 - the username of the person who commented (for gender).\n* $5 - the username of the viewing user (for gender).",
+	"notification-header-commentstreams-reply-on-watched-page": "Flyout-specific format for displaying notification header of a new reply on a watched page.\n\nParameters:\n* $1 - the formatted username of the person who commented.\n* $2 - the comment title.\n* $3 - the display name of the page being commented on.\n* $4 - the username of the person who commented (for gender).\n* $5 - the username of the viewing user (for gender).",
+	"notification-header-commentstreams-reply-to-author": "Flyout-specific format for displaying notification header of a reply to a comment by the user.\n\nParameters:\n* $1 - the formatted username of the person who commented.\n* $2 - the comment title.\n* $3 - the display name of the page being commented on.\n* $4 - the username of the person who commented (for gender).\n* $5 - the username of the viewing user (for gender).",
+	"commentstreams-email-subject-message-comment-on-watched-page": "Echo email subject.",
+	"commentstreams-email-body-message-comment-on-watched-page": "Echo email body.\n\nParameters:\n*$1 - the username of the user authoring the new comment.\n* $2 - the display name of the comment author.\n* $3 - the title of the comment.\n* $4 - the display title of the page being commented on.\n* $5 - a link to that page.\n* $6 - the wikitext of the new comment.",
+	"commentstreams-email-subject-message-reply-on-watched-page": "Echo email subject.",
+	"commentstreams-email-body-message-reply-on-watched-page": "Echo email body.\n\nParameters:\n*$1 - the username of the user authoring the new comment.\n* $2 - the display name of the comment author.\n* $3 - the title of the comment.\n* $4 - the display title of the page being commented on.\n* $5 - a link to that page.\n* $6 - the wikitext of the new comment.",
+	"commentstreams-email-subject-message-reply-to-author": "Echo email subject.",
+	"commentstreams-email-body-message-reply-to-author": "Echo email body.\n\nParameters:\n*$1 - the username of the user authoring the new comment.\n* $2 - the display name of the comment author.\n* $3 - the title of the comment.\n* $4 - the display title of the page being commented on.\n* $5 - a link to that page.\n* $6 - the wikitext of the new comment.",
+	"notification-commentstreams-page": "Visit page"
 }
