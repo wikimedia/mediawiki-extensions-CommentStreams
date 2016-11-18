@@ -310,12 +310,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.addClass( 'cs-comment-details' )
 				.text('|');
 		},
-		formatEditBox: function( stream ) {
+		formatEditBox: function( is_stream ) {
 			var commentBox = $( '<div>' )
 				.addClass( 'cs-edit-box' )
 				.attr( 'id', 'cs-edit-box' );
 
-			if ( stream ) {
+			if ( is_stream ) {
 				var titleField = $( '<input>' )
 					.attr({
 						'id': 'cs-title-edit-field',
@@ -324,7 +324,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					});
 				commentBox.append( titleField );
 			} else {
-				commentBox.addClass(  'cs-reply-edit-box' );
+				commentBox.addClass( 'cs-reply-edit-box' );
 			}
 
 			var bodyField = $( '<textarea>' )
@@ -380,6 +380,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				self.hideEditBox( true );
 			} );
 			this.disableAllButtons();
+			var titleField = $( '#cs-title-edit-field' );
+			if ( titleField !== null ) {
+				titleField.focus();
+			}
 		},
 		showNewReplyBox: function( element, topCommentId ) {
 			var self = this;
@@ -396,6 +400,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				self.hideEditBox( true );
 			} );
 			this.disableAllButtons();
+			var editField = $( '#cs-body-edit-field' );
+			if ( editField !== null ) {
+				editField.focus();
+			}
 		},
 		hideEditBox: function( animated ) {
 			var self = this;
@@ -477,6 +485,36 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		deleteComment: function( element, pageId ) {
 			var self = this;
+			var title_string = mw.message( 'commentstreams-dialog-delete-title' );
+			var message_string = mw.message( 'commentstreams-dialog-delete-message' );
+			var dialog = $( '<div>' )
+				.attr( 'title', title_string )
+				.text( message_string );
+			$( '#cs-comments' ).append( dialog );
+			var dialog_attrs = {
+				resizable: false,
+				height: 'auto',
+				width: 400,
+				modal: true,
+				buttons: {}
+			};
+			var yes_string =
+				mw.message( 'commentstreams-dialog-buttontext-yes' ).text();
+			dialog_attrs.buttons[yes_string] = function () {
+				$( this ).dialog( 'close' );
+				$( dialog ).remove();
+				self.realDeleteComment( element, pageId );
+			};
+			var no_string =
+				mw.message( 'commentstreams-dialog-buttontext-no' ).text();
+			dialog_attrs.buttons[no_string] = function () {
+				$( this ).dialog( 'close' );
+				$( dialog ).remove();
+			};
+			dialog.dialog( dialog_attrs );
+		},
+		realDeleteComment: function( element, pageId ) {
+			var self = this;
 			this.disableAllButtons();
 			element.fadeTo( 100, 0.2, function() {
 				new Spinner( self.spinnerOptions )
@@ -531,17 +569,21 @@ var commentstreams_controller = ( function( mw, $ ) {
 					$( '.spinner' ).remove();
 
 					if ( result.error === undefined ) {
-						var commentBox =
-							self.formatEditBox( element.hasClass( 'cs-head-comment' ) );
+						var is_stream = element.hasClass( 'cs-head-comment' );
+						var commentBox = self.formatEditBox( is_stream );
 						commentBox.insertAfter( element );
 						element.hide();
 						commentBox.slideDown();
 
-						var titleField = $( '#cs-title-edit-field' );
-						if ( titleField !== null ) {
+						var editField = $( '#cs-body-edit-field' );
+						editField.val( result.wikitext );
+						if ( is_stream ) {
+							var titleField = $( '#cs-title-edit-field' );
 							titleField.val( result.commenttitle );
+							titleField.focus();
+						} else {
+							editField.focus();
 						}
-						$( '#cs-body-edit-field' ).val( result.wikitext );
 
 						$( '#cs-cancel-button' ).click( function() {
 							commentBox.slideUp( 'normal', function() {
@@ -631,8 +673,26 @@ var commentstreams_controller = ( function( mw, $ ) {
 			} );
 		},
 		reportError: function( message ) {
+			var title_string = mw.message( 'commentstreams-dialog-error-title' );
 			var message_string = mw.message( message );
-			alert( message_string );
+			var dialog = $( '<div>' )
+				.attr( 'title', title_string )
+				.text( message_string );
+			$( '#cs-comments' ).append( dialog );
+			var dialog_attrs = {
+				resizable: false,
+				height: 'auto',
+				width: 400,
+				modal: true,
+				buttons: {}
+			};
+			var ok_string =
+				mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
+			dialog_attrs.buttons[ok_string] = function () {
+				$( this ).dialog( 'close' );
+				$( dialog ).remove();
+			};
+			dialog.dialog( dialog_attrs );
 			if ( ( window.console !== undefined ) )
 				window.console.log( message_string );
 		}

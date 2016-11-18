@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "2.0",
+	"version": "2.1",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -22,6 +22,9 @@
 				"CommentStreamsQuerier.js",
 				"CommentStreams.js",
 				"spin.min.js"
+			],
+			"dependencies": [
+				"jquery.ui.dialog"
 			],
 			"position": "top",
 			"targets": [
@@ -53,6 +56,12 @@
 				"commentstreams-buttontext-expand",
 				"commentstreams-buttontext-submit",
 				"commentstreams-buttontext-cancel",
+				"commentstreams-dialog-delete-title",
+				"commentstreams-dialog-delete-message",
+				"commentstreams-dialog-error-title",
+				"commentstreams-dialog-buttontext-ok",
+				"commentstreams-dialog-buttontext-yes",
+				"commentstreams-dialog-buttontext-no",
 				"commentstreams-datetext-postedon",
 				"commentstreams-datetext-lasteditedon",
 				"commentstreams-title-field-placeholder",
