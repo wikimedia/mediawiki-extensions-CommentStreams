@@ -422,14 +422,14 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var titleField = $( '#cs-title-edit-field' );
 			if ( titleField !== null ) {
 				var commentTitle = titleField .val();
-				if ( commentTitle === null || commentTitle === "" ) {
+				if ( commentTitle === null || commentTitle.trim() === "" ) {
 					this.reportError( 'commentstreams-validation-error-nocommenttitle' );
 					return;
 				}
 			}
 
 			var commentText = $( '#cs-body-edit-field' ).val();
-			if ( commentText === null || commentText === "" ) {
+			if ( commentText === null || commentText.trim() === "" ) {
 				this.reportError( 'commentstreams-validation-error-nocommenttext' );
 				return;
 			}
@@ -598,7 +598,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 							var titleField = $( '#cs-title-edit-field' );
 							if ( titleField !== null ) {
 								var commentTitle = $( '#cs-title-edit-field' ).val();
-								if ( commentTitle === null || commentTitle === "" ) {
+								if ( commentTitle === null || commentTitle.trim() === "" ) {
 									self.reportError(
 										'commentstreams-validation-error-nocommenttitle' );
 									return;
@@ -606,7 +606,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 							}
 
 							var commentText = $( '#cs-body-edit-field' ).val();
-							if ( commentText === null || commentText === "" ) {
+							if ( commentText === null || commentText.trim() === "" ) {
 								self.reportError(
 									'commentstreams-validation-error-nocommenttext' );
 								return;
