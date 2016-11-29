@@ -26,7 +26,7 @@
 	"apihelp-csPostComment-param-wikitext": "{{doc-apihelp-param|csPostComment|wikitext}}",
 	"apihelp-csPostComment-param-associatedid": "{{doc-apihelp-param|csPostComment|associatedid}}",
 	"apihelp-csPostComment-param-parentid": "{{doc-apihelp-param|csPostComment|parentid}}",
-	"apihelp-cdEditComment-description": "{{doc-apihelp-description|csEditComment}}",
+	"apihelp-csEditComment-description": "{{doc-apihelp-description|csEditComment}}",
 	"apihelp-csEditComment-param-pageid": "{{doc-apihelp-param|csEditComment|pageid}}",
 	"apihelp-csEditComment-param-title": "{{doc-apihelp-param|csEditComment|title}}",
 	"apihelp-csEditComment-param-commenttitle": "{{doc-apihelp-param|csEditComment|commenttitle}}",

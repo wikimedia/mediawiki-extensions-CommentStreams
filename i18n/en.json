@@ -26,7 +26,7 @@
 	"apihelp-csPostComment-param-wikitext": "wikitext for comment.",
 	"apihelp-csPostComment-param-associatedid": "page with which this comment is associated.",
 	"apihelp-csPostComment-param-parentid": "page ID of parent comment if this is a reply.",
-	"apihelp-cdEditComment-description": "Edit an existing comment. Either pageid or title must be provided.",
+	"apihelp-csEditComment-description": "Edit an existing comment. Either pageid or title must be provided.",
 	"apihelp-csEditComment-param-pageid": "page ID of the page which holds the comment to query",
 	"apihelp-csEditComment-param-title": "title of the page which holds the comment to query",
 	"apihelp-csEditComment-param-commenttitle": "optional title for comment.",
