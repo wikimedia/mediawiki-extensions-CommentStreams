@@ -485,33 +485,31 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		deleteComment: function( element, pageId ) {
 			var self = this;
-			var title_string = mw.message( 'commentstreams-dialog-delete-title' );
-			var message_string = mw.message( 'commentstreams-dialog-delete-message' );
-			var dialog = $( '<div>' )
-				.attr( 'title', title_string )
-				.text( message_string );
-			$( '#cs-comments' ).append( dialog );
-			var dialog_attrs = {
-				resizable: false,
-				height: 'auto',
-				width: 400,
-				modal: true,
-				buttons: {}
-			};
-			var yes_string =
+			var message_text =
+				mw.message( 'commentstreams-dialog-delete-message' ).text();
+			var yes_text =
 				mw.message( 'commentstreams-dialog-buttontext-yes' ).text();
-			dialog_attrs.buttons[yes_string] = function () {
-				$( this ).dialog( 'close' );
-				$( dialog ).remove();
-				self.realDeleteComment( element, pageId );
-			};
-			var no_string =
+			var no_text =
 				mw.message( 'commentstreams-dialog-buttontext-no' ).text();
-			dialog_attrs.buttons[no_string] = function () {
-				$( this ).dialog( 'close' );
-				$( dialog ).remove();
-			};
-			dialog.dialog( dialog_attrs );
+			var dialog = new OO.ui.MessageDialog();
+			var window_manager = new OO.ui.WindowManager();
+			$( '#cs-comments' ).append( window_manager.$element );
+			window_manager.addWindows( [ dialog ] );
+			window_manager.openWindow( dialog, {
+				message: message_text,
+				actions: [
+					{ label: yes_text, action: 'yes' },
+					{ label: no_text, flags: 'primary' }
+				]
+			} ).then( function ( opened ) {
+				opened.then( function ( closing, data ) {
+					if ( data && data.action ) {
+						if ( data.action === 'yes' ) {
+							self.realDeleteComment( element, pageId );
+						}
+					}
+				} );
+			} );
 		},
 		realDeleteComment: function( element, pageId ) {
 			var self = this;
@@ -673,28 +671,20 @@ var commentstreams_controller = ( function( mw, $ ) {
 			} );
 		},
 		reportError: function( message ) {
-			var title_string = mw.message( 'commentstreams-dialog-error-title' );
-			var message_string = mw.message( message );
-			var dialog = $( '<div>' )
-				.attr( 'title', title_string )
-				.text( message_string );
-			$( '#cs-comments' ).append( dialog );
-			var dialog_attrs = {
-				resizable: false,
-				height: 'auto',
-				width: 400,
-				modal: true,
-				buttons: {}
-			};
-			var ok_string =
-				mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
-			dialog_attrs.buttons[ok_string] = function () {
-				$( this ).dialog( 'close' );
-				$( dialog ).remove();
-			};
-			dialog.dialog( dialog_attrs );
-			if ( ( window.console !== undefined ) )
-				window.console.log( message_string );
+			var message_text = mw.message( message ).text();
+			var ok_text = mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
+			var dialog = new OO.ui.MessageDialog();
+			var window_manager = new OO.ui.WindowManager();
+			$( '#cs-comments' ).append( window_manager.$element );
+			window_manager.addWindows( [ dialog ] );
+			window_manager.openWindow( dialog, {
+				message: message_text,
+				actions: [ {
+					action: 'accept',
+					label: ok_text,
+					flags: 'primary'
+				} ]
+			} );
 		}
 	};
 }( mediaWiki, jQuery ) );

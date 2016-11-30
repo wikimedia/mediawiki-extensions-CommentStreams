@@ -5,7 +5,7 @@
 			"Cindy Cicalese"
 		]
 	},
-	"commentstreams-desc": "An extension to allow commenting on wiki pages",
+	"commentstreams-desc": "Allows commenting on wiki pages",
 	"apihelp-csQueryComment-description": "Return the title, user, creation timestamp, and wikitext of a comment. Either pageid or title must be provided.",
 	"apihelp-csQueryComment-param-pageid": "page ID of the page which holds the comment to query",
 	"apihelp-csQueryComment-param-title": "title of the page which holds the comment to query",
@@ -55,9 +55,7 @@
 	"commentstreams-buttontext-expand": "EXPAND",
 	"commentstreams-buttontext-submit": "SUBMIT",
 	"commentstreams-buttontext-cancel": "CANCEL",
-	"commentstreams-dialog-delete-title": "Delete",
 	"commentstreams-dialog-delete-message": "Are you sure you want to delete this comment?",
-	"commentstreams-dialog-error-title": "Error",
 	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-yes": "Yes",
 	"commentstreams-dialog-buttontext-no": "No",
@@ -65,8 +63,7 @@
 	"commentstreams-datetext-lasteditedon": "Last edited on",
 	"commentstreams-title-field-placeholder": "Enter title...",
 	"commentstreams-body-field-placeholder": "Enter new comment text...",
-	"echo-category-title-commentstreams-notification-category":
-		"New comments and replies",
+	"echo-category-title-commentstreams-notification-category": "New comments and replies",
 	"notification-header-commentstreams-comment-on-watched-page": "$1 {{GENDER:$4|commented}} <i>$2</i> on <i>$3</i>, which {{GENDER:$5|you}} are watching.",
 	"notification-header-commentstreams-reply-on-watched-page": "$1 {{GENDER:$4|replied}} to <i>$2</i> on <i>$3</i>, which {{GENDER:$5|you}} are watching.",
 	"notification-header-commentstreams-reply-to-author": "$1 {{GENDER:$4|replied}} to {{GENDER:$5|your}} comment <i>$2</i> on <i>$3</i>.",
