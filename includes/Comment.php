@@ -140,8 +140,10 @@ class Comment {
 		}
 		$comment->loadFromValues( $assoc_page_id, $parent_page_id, $comment_title );
 
-		$job = new SMWUpdateJob( $title );
-		JobQueueGroup::singleton()->push( $job );
+		if ( defined( 'SMW_VERSION' ) ) {
+			$job = new SMWUpdateJob( $title );
+			JobQueueGroup::singleton()->push( $job );
+		}
 
 		return $comment;
 	}
