@@ -70,11 +70,13 @@ var commentstreams_querier = ( function( mw ) {
 			var api = new mw.Api();
 			var data = {
 				action: 'csPostComment',
-				commenttitle: commenttitle,
 				wikitext: wikitext,
 				associatedid: associatedid,
 				token: mw.user.tokens.get( 'editToken' )
 			};
+			if ( commenttitle !== null ) {
+				data.commenttitle = commenttitle;
+			}
 			if ( parentid !== null ) {
 				data.parentid = parentid;
 			}

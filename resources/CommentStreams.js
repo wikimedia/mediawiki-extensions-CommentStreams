@@ -419,13 +419,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 		postComment: function( parentPageId ) {
 			var self = this;
 
-			var titleField = $( '#cs-title-edit-field' );
-			if ( titleField !== null ) {
-				var commentTitle = titleField .val();
-				if ( commentTitle === null || commentTitle.trim() === "" ) {
-					this.reportError( 'commentstreams-validation-error-nocommenttitle' );
-					return;
+			var commentTitle;
+			if ( parentPageId === null ) {
+				var titleField = $( '#cs-title-edit-field' );
+				if ( titleField !== null ) {
+					commentTitle = titleField .val();
+					if ( commentTitle === null || commentTitle.trim() === "" ) {
+						this.reportError( 'commentstreams-validation-error-nocommenttitle' );
+						return;
+					}
 				}
+			} else {
+				commentTitle = null;
 			}
 
 			var commentText = $( '#cs-body-edit-field' ).val();
