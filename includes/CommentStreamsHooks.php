@@ -33,7 +33,7 @@ class CommentStreamsHooks {
 	 */
 	public static function addCommentTableToDatabase( DatabaseUpdater $updater ) {
 		$dir = $GLOBALS['wgExtensionDirectory'] . DIRECTORY_SEPARATOR .
-			'CommentStreams' . DIRECTORY_SEPARATOR . sql . DIRECTORY_SEPARATOR;
+			'CommentStreams' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
 		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql',
 			true );
 		return true;
