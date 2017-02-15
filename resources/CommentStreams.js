@@ -598,8 +598,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 						} );
 
 						$( '#cs-submit-button' ).click( function() {
-							var titleField = $( '#cs-title-edit-field' );
-							if ( titleField !== null ) {
+							if ( element.hasClass( 'cs-head-comment' ) ) {
 								var commentTitle = $( '#cs-title-edit-field' ).val();
 								if ( commentTitle === null || commentTitle.trim() === "" ) {
 									self.reportError(
