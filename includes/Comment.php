@@ -397,7 +397,7 @@ class Comment {
 				'avatar' => $this->getAvatar(),
 				'created' => $this->getCreationDate(),
 				'modified' => $this->getModificationDate(),
-				'moderated' => $this->isLastEditModerated(),
+				'moderated' => $this->isLastEditModerated() ? "moderated" : null,
 				'wikitext' => $this->getWikiText(),
 				'html' => $this->getHTML(),
 				'pageid' => $this->getId(),
