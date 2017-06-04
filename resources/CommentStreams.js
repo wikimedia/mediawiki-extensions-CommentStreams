@@ -24,8 +24,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 	'use strict';
 
 	return {
-		username: null,
 		isLoggedIn: false,
+		moderatorEdit: false,
+		moderatorDelete: false,
+		moderatorFastDelete: false,
 		userDisplayName: null,
 		newestStreamsOnTop: false,
 		initiallyCollapsed: false,
@@ -51,11 +53,13 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		initialize: function() {
 			var self = this;
-			this.username = mw.config.get( 'wgUserName' );
 			this.isLoggedIn = mw.config.get( 'wgUserName' ) !== null;
 			var config = mw.config.get( 'CommentStreams' );
+			this.moderatorEdit = config.moderatorEdit;
+			this.moderatorDelete = config.moderatorDelete;
+			this.moderatorFastDelete = config.moderatorFastDelete;
 			this.userDisplayName = config.userDisplayName;
-			this.newestStreamsOnTop = config.newestStreamsOnTop === 1 ? true : false;
+			this.newestStreamsOnTop = config.newestStreamsOnTop;
 			this.initiallyCollapsed = config.initiallyCollapsed;
 			this.comments = config.comments;
 			this.setupDivs();
@@ -236,31 +240,25 @@ var commentstreams_controller = ( function( mw, $ ) {
 			commentHeader.append( created );
 
 			if ( commentData.modified !== null ) {
+				var text =  mw.message( 'commentstreams-datetext-lasteditedon' ) +
+					' ' + commentData.modified;
+				if ( commentData.moderated ) {
+					text += ' (' + mw.message( 'commentstreams-datetext-moderated' ) +
+						')';
+				}
 				var modified = $( '<span>' )
 					.addClass( 'cs-comment-details' )
-					.text( mw.message( 'commentstreams-datetext-lasteditedon' ) +
-					' ' + commentData.modified );
+					.text( text );
 				commentHeader.append( this.createDivider() );
 				commentHeader.append( modified );
 			}
 
-			if ( this.username === commentData.username ) {
-				var editButton = $( '<button>' )
-					.addClass( 'cs-button' )
-					.addClass( 'cs-edit-button' )
-					.attr( 'type', 'button' )
-					.text( mw.message( 'commentstreams-buttontext-edit' ) );
-				commentHeader.append( this.createDivider() );
-				commentHeader.append( editButton );
-				editButton.click( function() {
-					var comment = $( this ).closest( '.cs-comment' );
-					var pageId = $( comment ).attr( 'data-id' );
-					self.editComment( $( comment ), pageId );
-				} );
+			if ( this.canEdit( commentData ) ) {
+				commentHeader.append( this.createEditButton( commentData.username) );
+			}
 
-				if ( commentData.numreplies === 0 ) {
-					commentHeader.append( this.createDeleteButton() );
-				}
+			if ( this.canDelete( commentData ) ) {
+				commentHeader.append( this.createDeleteButton( commentData.username) );
 			}
 
 			var commentBody = $( '<div>' )
@@ -286,7 +284,30 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			return comment;
 		},
-		createDeleteButton: function() {
+		createEditButton: function( username ) {
+			var self = this;
+			var editSpan = $( '<span>' )
+				.addClass( 'cs-edit-span' );
+			var divider = this.createDivider();
+			editSpan.append( divider );
+			var editButton = $( '<button>' )
+				.addClass( 'cs-button' )
+				.addClass( 'cs-edit-button' )
+				.attr( 'type', 'button' )
+				.text( mw.message( 'commentstreams-buttontext-edit' ) );
+			if ( mw.user.getName() !== username ) {
+				editButton
+					.addClass( 'cs-moderator-button' )
+			}
+			editSpan.append( editButton );
+			editButton.click( function() {
+				var comment = $( this ).closest( '.cs-comment' );
+				var pageId = $( comment ).attr( 'data-id' );
+				self.editComment( $( comment ), pageId );
+			} );
+			return editSpan;
+		},
+		createDeleteButton: function( username ) {
 			var self = this;
 			var deleteSpan = $( '<span>' )
 				.addClass( 'cs-delete-span' );
@@ -297,6 +318,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.addClass( 'cs-delete-button' )
 				.attr( 'type', 'button' )
 				.text( mw.message( 'commentstreams-buttontext-delete' ) );
+			if ( mw.user.getName() !== username ) {
+				deleteButton
+					.addClass( 'cs-moderator-button' )
+			}
 			deleteSpan.append( deleteButton );
 			deleteButton.click( function() {
 				var comment = $( this ).closest( '.cs-comment' );
@@ -538,9 +563,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 								.find( '.cs-head-comment' )
 								.attr( 'data-id' );
 							CommentStreamsQuerier.queryComment( parentId, function( result ) {
-								if ( result.error === undefined &&
-									self.username === result.username &&
-									result.numreplies === 0 ) {
+								if ( result.error === undefined && self.canDelete( result ) ) {
 									element
 										.closest( '.cs-stream' )
 										.find( '.cs-head-comment' )
@@ -640,8 +663,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 											.attr( 'data-id' );
 										CommentStreamsQuerier.queryComment( parentId, function( result ) {
 											if ( result.error === undefined &&
-												self.username === result.username &&
-												result.numreplies === 0 ) {
+												self.canDelete( result ) ) {
 												element
 													.closest( '.cs-stream' )
 													.find( '.cs-head-comment' )
@@ -673,6 +695,23 @@ var commentstreams_controller = ( function( mw, $ ) {
 					}
 				} );
 			} );
+		},
+		canEdit: function( comment ) {
+			var username = comment.username;
+			if ( !mw.user.isAnon() && ( mw.user.getName() === username ||
+				this.moderatorEdit ) ) {
+				return true;
+			}
+			return false;
+		},
+		canDelete: function( comment ) {
+			var username = comment.username;
+			if ( !mw.user.isAnon() &&
+				( mw.user.getName() === username || this.moderatorDelete ) &&
+				( comment.numreplies === 0 || this.moderatorFastDelete ) ) {
+				return true;
+			}
+			return false;
 		},
 		reportError: function( message ) {
 			var message_text = mw.message( message ).text();

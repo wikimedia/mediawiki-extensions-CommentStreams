@@ -56,6 +56,7 @@
 	"commentstreams-dialog-buttontext-no": "No",
 	"commentstreams-datetext-postedon": "Posted on",
 	"commentstreams-datetext-lasteditedon": "Last edited on",
+	"commentstreams-datetext-moderated": "moderated",
 	"commentstreams-title-field-placeholder": "Enter title...",
 	"commentstreams-body-field-placeholder": "Enter new comment text...",
 	"echo-category-title-commentstreams-notification-category": "New comments and replies",
@@ -68,5 +69,12 @@
 	"commentstreams-email-body-message-reply-on-watched-page": "$2 has replied to \"$3\" on $4, a page you are watching. Click the link to visit the page: $5. The reply is:\n\n$6",
 	"commentstreams-email-subject-message-reply-to-author": "Somebody has replied to one of your comments",
 	"commentstreams-email-body-message-reply-to-author": "$2 has replied to your comment \"$3\" on $4. Click the link to visit the page: $5. The reply is:\n\n$6",
-	"notification-commentstreams-page": "Visit page"
+	"notification-commentstreams-page": "Visit page",
+	"group-csmoderator": "Moderators (CommentStreams)",
+	"group-csmoderator-member": "{{GENDER:$1|moderator (CommentStreams)}}",
+	"grouppage-csmoderator": "{{ns:project}}:Moderators (CommentStreams)",
+	"right-csedit": "Edit comments by any user",
+	"action-csedit": "edit comments by other users",
+	"right-csdelete": "Delete comments by any user",
+	"action-csdelete": "delete comments by other users"
 }

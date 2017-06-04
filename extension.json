@@ -63,6 +63,7 @@
 				"commentstreams-dialog-buttontext-no",
 				"commentstreams-datetext-postedon",
 				"commentstreams-datetext-lasteditedon",
+				"commentstreams-datetext-moderated",
 				"commentstreams-title-field-placeholder",
 				"commentstreams-body-field-placeholder"
 			]
@@ -111,6 +112,7 @@
 		"CommentStreamsAllowedNamespaces" : null,
 		"CommentStreamsEnableTalk": false,
 		"CommentStreamsNewestStreamsOnTop": true,
+		"CommentStreamsModeratorFastDelete": false,
 		"CommentStreamsInitiallyCollapsedNamespaces" : [],
 		"CommentStreamsUserRealNamePropertyName" : null,
 		"CommentStreamsUserAvatarPropertyName" : null

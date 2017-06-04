@@ -283,6 +283,16 @@ class Comment {
 	}
 
 	/**
+	 * @return boolean true if the last edit to this comment was not done by the
+	 * original author
+	 */
+	public function isLastEditModerated() {
+		$author = $this->wikipage->getOldestRevision()->getUser();
+		$lastEditor = $this->wikipage->getRevision()->getUser();
+		return $author !== $lastEditor;
+	}
+
+	/**
 	 * @return string username of the author of this comment
 	 */
 	public function getUsername() {
@@ -387,6 +397,7 @@ class Comment {
 				'avatar' => $this->getAvatar(),
 				'created' => $this->getCreationDate(),
 				'modified' => $this->getModificationDate(),
+				'moderated' => $this->isLastEditModerated(),
 				'wikitext' => $this->getWikiText(),
 				'html' => $this->getHTML(),
 				'pageid' => $this->getId(),
@@ -404,9 +415,10 @@ class Comment {
 	 *
 	 * @param string $comment_title the new title for the comment
 	 * @param string $wikitext the wikitext to add
+	 * @param User $user the author of the edit
 	 * @return boolean true if successful
 	 */
-	public function update( $comment_title, $wikitext ) {
+	public function update( $comment_title, $wikitext, $user ) {
 		if ( is_null( $comment_title ) && is_null( $this->getParentId() ) ) {
 			return false;
 		}
@@ -418,7 +430,7 @@ class Comment {
 				$this->getAssociatedId() );
 		$content = new WikitextContent( $annotated_wikitext );
 		$status = $this->wikipage->doEditContent( $content, '', EDIT_UPDATE, false,
-			$this->getUser(), null );
+			$user, null );
 		if ( !$status->isOK() && !$status->isGood() ) {
 			return false;
 		}

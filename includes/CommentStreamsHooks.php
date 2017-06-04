@@ -142,10 +142,6 @@ class CommentStreamsHooks {
 	 */
 	public static function userCan( Title &$title, User &$user, $action,
 		&$result ) {
-		if ( $action != 'edit' ) {
-			return true;
-		}
-
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return true;
 		}
@@ -156,8 +152,23 @@ class CommentStreamsHooks {
 			return true;
 		}
 
-		if ( $user->getId() !== $wikipage->getOldestRevision()->getUser() ) {
-			$result = false;
+		if ( $action == 'edit' ) {
+			if ( in_array( 'csedit', $user->getRights() ) ||
+				$user->getId() === $wikipage->getOldestRevision()->getUser() ) {
+				$result = true;
+			} else {
+				$result = false;
+			}
+			return false;
+		}
+
+		else if ( $action == 'delete' ) {
+			if ( in_array( 'csdelete', $user->getRights() ) ||
+				$user->getId() === $wikipage->getOldestRevision()->getUser() ) {
+				$result = true;
+			} else {
+				$result = false;
+			}
 			return false;
 		}
 
@@ -267,6 +278,14 @@ class CommentStreamsHooks {
 			$GLOBALS['wgCommentStreamsNamespaceIndex'] + 1 );
 		$GLOBALS['wgNamespacesToBeSearchedDefault'][NS_COMMENTSTREAMS] = true;
 		$GLOBALS['smwgNamespacesWithSemanticLinks'][NS_COMMENTSTREAMS] = true;
+		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['csdelete'] ) ) {
+			$GLOBALS['wgGroupPermissions']['csmoderator']['csdelete'] = true;
+		}
+		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['csedit'] ) ) {
+			$GLOBALS['wgGroupPermissions']['csmoderator']['csedit'] = false;
+		}
+		$GLOBALS['wgAvailableRights'][] = 'csedit';
+		$GLOBALS['wgAvailableRights'][] = 'csdelete';
 	}
 
 	/**

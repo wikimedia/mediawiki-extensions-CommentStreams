@@ -56,6 +56,7 @@
 	"commentstreams-dialog-buttontext-no": "User interface dialog button text.",
 	"commentstreams-datetext-postedon": "User interface date text",
 	"commentstreams-datetext-lasteditedon": "User interface date text",
+	"commentstreams-datetext-moderated": "User interface date text",
 	"commentstreams-title-field-placeholder": "Text field placeholder text",
 	"commentstreams-body-field-placeholder": "Text field placeholder text",
 	"echo-category-title-commentstreams-notification-category": "Name of category on Prefences/Notifications page for CommentStreams notifications",
@@ -68,5 +69,12 @@
 	"commentstreams-email-body-message-reply-on-watched-page": "Echo email body.\n\nParameters:\n*$1 - the username of the user authoring the new comment.\n* $2 - the display name of the comment author.\n* $3 - the title of the comment.\n* $4 - the display title of the page being commented on.\n* $5 - a link to that page.\n* $6 - the wikitext of the new comment.",
 	"commentstreams-email-subject-message-reply-to-author": "Echo email subject.",
 	"commentstreams-email-body-message-reply-to-author": "Echo email body.\n\nParameters:\n*$1 - the username of the user authoring the new comment.\n* $2 - the display name of the comment author.\n* $3 - the title of the comment.\n* $4 - the display title of the page being commented on.\n* $5 - a link to that page.\n* $6 - the wikitext of the new comment.",
-	"notification-commentstreams-page": "Visit page"
+	"notification-commentstreams-page": "Visit page",
+	"group-csmoderator": "{{doc-group|csmoderator|group}}",
+	"group-csmoderator-member": "{{doc-group|csmoderator|member}}",
+	"grouppage-csmoderator": "{{doc-group|csmoderator|page}}",
+	"right-csedit": "{{doc-right|csedit}}",
+	"action-csedit": "{{doc-action|csedit}}",
+	"right-csdelete": "{{doc-right|csdelete}}",
+	"action-csdelete": "{{doc-action|csdelete}}"
 }

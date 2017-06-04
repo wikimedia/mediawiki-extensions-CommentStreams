@@ -52,7 +52,7 @@ class ApiCSEditComment extends ApiCSBase {
 				'commentstreams-api-error-missingcommenttitle' );
 		}
 
-		$result = $comment->update( $comment_title, $wikitext );
+		$result = $comment->update( $comment_title, $wikitext, $this->getUser() );
 		if ( !$result ) {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-edit' );
 		}

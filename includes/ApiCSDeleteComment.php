@@ -39,23 +39,45 @@ class ApiCSDeleteComment extends ApiCSBase {
 	 */
 	protected function executeBody( $comment ) {
 		$wikipage = $comment->getWikiPage();
-		if ( !$wikipage->getTitle()->userCan( 'edit', $this->getUser() ) ) {
+		if ( !$wikipage->getTitle()->userCan( 'delete', $this->getUser() ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-delete-permissions' );
 		}
 
 		$childCount = $comment->getNumReplies();
 		if ( $childCount > 0 ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-delete-haschildren' );
+			if ( $GLOBALS['wgCommentStreamsModeratorFastDelete'] ) {
+				$result = $this->recursiveDelete( $comment );
+			} else {
+				$this->dieCustomUsageMessage(
+					'commentstreams-api-error-delete-haschildren' );
+			}
+		} else {
+			$result = $comment->delete();
 		}
 
-		$result = $comment->delete();
 		if ( !$result ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-delete' );
 		}
 
 		return null;
+	}
+
+	/**
+	 * recursively delete comment and replies
+	 *
+	 * @param Comment $comment the comment to recursively delete
+	 */
+	private function recursiveDelete( $comment ) {
+		$replies = Comment::getReplies( $comment->getId() );
+		foreach ( $replies as $reply ) {
+			$result = $this->recursiveDelete( $reply );
+			if ( !$result ) {
+				return $result;
+			}
+		}
+		$result = $comment->delete();
+		return $result;
 	}
 }
