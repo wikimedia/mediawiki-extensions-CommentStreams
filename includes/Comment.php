@@ -56,6 +56,12 @@ class Comment {
 	// number of replies to this comment
 	private $num_replies = null;
 
+	// number of up votes for this comment
+	private $num_up_votes = null;
+
+	// number of dow votes for this comment
+	private $num_down_votes = null;
+
 	/**
 	 * create a new Comment object from existing wiki page
 	 *
@@ -389,22 +395,160 @@ class Comment {
 	 * @return array get comment data in array suitable for JSON
 	 */
 	public function getJSON() {
-		return
+		$json = [
+			'commenttitle' => $this->getCommentTitle(),
+			'username' => $this->getUsername(),
+			'userdisplayname' => $this->getUserDisplayName(),
+			'avatar' => $this->getAvatar(),
+			'created' => $this->getCreationDate(),
+			'created_timestamp' => $this->getCreationTimestamp()->format( "U" ),
+			'modified' => $this->getModificationDate(),
+			'moderated' => $this->isLastEditModerated() ? "moderated" : null,
+			'wikitext' => $this->getWikiText(),
+			'html' => $this->getHTML(),
+			'pageid' => $this->getId(),
+			'associatedid' => $this->getAssociatedId(),
+			'parentid' => $this->getParentId(),
+			'numreplies' => $this->getNumReplies(),
+		];
+		if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
+			$json['numupvotes'] = $this->getNumUpVotes();
+			$json['numdownvotes'] = $this->getNumDownVotes();
+		}
+		return $json;
+	}
+
+	/**
+	 * get vote for user
+	 *
+	 * @param User $user the author of the edit
+	 * @return +1 for up vote, -1 for down vote, 0 for no vote
+	 */
+	public function getVote( $user ) {
+		$dbr = wfGetDB( DB_SLAVE );
+		$result = $dbr->selectRow(
+			'cs_votes',
+			[ 'vote' ],
 			[
-				'commenttitle' => $this->getCommentTitle(),
-				'username' => $this->getUsername(),
-				'userdisplayname' => $this->getUserDisplayName(),
-				'avatar' => $this->getAvatar(),
-				'created' => $this->getCreationDate(),
-				'modified' => $this->getModificationDate(),
-				'moderated' => $this->isLastEditModerated() ? "moderated" : null,
-				'wikitext' => $this->getWikiText(),
-				'html' => $this->getHTML(),
-				'pageid' => $this->getId(),
-				'associatedid' => $this->getAssociatedId(),
-				'parentid' => $this->getParentId(),
-				'numreplies' => $this->getNumReplies()
-			];
+				'page_id' => $this->getId(),
+				'user_id' => $user->getId()
+			],
+			__METHOD__
+		);
+		if ( $result ) {
+			$vote = (integer)$result->vote;
+			if ( $vote > 0 ) {
+				return 1;
+			}
+			if ( $vote < 0 ) {
+				return -1;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * @return int number of up votes
+	 */
+	public function getNumUpVotes() {
+		if ( is_null( $this->num_up_votes ) ) {
+			$dbr = wfGetDB( DB_SLAVE );
+			$this->num_up_votes = $dbr->selectRowCount(
+				'cs_votes',
+				'*',
+				[
+					'page_id' => $this->getId(),
+					'vote' => 1
+				],
+				__METHOD__
+			);
+		}
+		return $this->num_up_votes;
+	}
+
+	/**
+	 * @return int number of down votes
+	 */
+	public function getNumDownVotes() {
+		if ( is_null( $this->num_down_votes ) ) {
+			$dbr = wfGetDB( DB_SLAVE );
+			$this->num_down_votes = $dbr->selectRowCount(
+				'cs_votes',
+				'*',
+				[
+					'page_id' => $this->getId(),
+					'vote' => -1
+				],
+				__METHOD__
+			);
+		}
+		return $this->num_down_votes;
+	}
+
+	/**
+	 * record a vote
+	 *
+	 * @param vote 1 for up vote, -1 for down vote, 0 for no vote
+	 * @param User $user the author of the edit
+	 * @return +1 for up vote, -1 for down vote, 0 for no vote
+	 */
+	public function vote( $vote, $user ) {
+		if ( $vote !== "-1" && $vote !== "0" && $vote !== "1" ) {
+			return false;
+		}
+		$vote = (integer)$vote;
+		$dbr = wfGetDB( DB_SLAVE );
+		$result = $dbr->selectRow(
+			'cs_votes',
+			[ 'vote' ],
+			[
+				'page_id' => $this->getId(),
+				'user_id' => $user->getId()
+			],
+			__METHOD__
+		);
+		if ( $result ) {
+			if ( $vote === (integer)$result->vote ) {
+				return true;
+			}
+			if ( $vote === 1 || $vote === -1 ) {
+				$dbw = wfGetDB( DB_MASTER );
+				$result = $dbw->update(
+					'cs_votes',
+					[ 'vote' => $vote ],
+					[
+						'page_id' => $this->getId(),
+						'user_id' => $user->getId()
+					],
+					__METHOD__
+				);
+			} else {
+				$dbw = wfGetDB( DB_MASTER );
+				$result = $dbw->delete(
+					'cs_votes',
+					[
+						'page_id' => $this->getId(),
+						'user_id' => $user->getId()
+					],
+					__METHOD__
+				);
+			}
+		} else {
+			if ( $vote === 0 ) {
+				return true;
+			}
+			$dbw = wfGetDB( DB_MASTER );
+			$result = $dbw-> insert(
+				'cs_votes',
+				[
+					'page_id' => $this->getId(),
+					'user_id' => $user->getId(),
+					'vote' => $vote
+				],
+				__METHOD__
+			);
+		}
+		return $result;
 	}
 
 	/**

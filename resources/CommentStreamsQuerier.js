@@ -23,6 +23,7 @@
 var commentstreams_querier = ( function( mw ) {
 	return {
 		queryComment: function( pageid, reply ) {
+			var self = this;
 			var api = new mw.Api();
 			api.get( {
 					action: 'csQueryComment',
@@ -32,18 +33,11 @@ var commentstreams_querier = ( function( mw ) {
 					reply( data.csQueryComment );
 				} )
 				.fail( function( data ) {
-					if ( data === 'nosuchpageid' ) {
-						reply( {
-							'error': 'commentstreams-api-error-commentnotfound'
-						} );
-					} else {
-						reply( {
-							'error': data
-						} );
-					}
+					self.reportError( data, reply );
 				} );
 		},
 		deleteComment: function( pageid, reply ) {
+			var self = this;
 			var api = new mw.Api();
 			api.post( {
 					action: 'csDeleteComment',
@@ -54,19 +48,12 @@ var commentstreams_querier = ( function( mw ) {
 					reply( data );
 				} )
 				.fail( function( data ) {
-					if ( data === 'nosuchpageid' ) {
-						reply( {
-							'error': 'commentstreams-api-error-commentnotfound'
-						} );
-					} else {
-						reply( {
-							'error': data
-						} );
-					}
+					self.reportError( data, reply );
 				} );
 		},
 		postComment: function( commenttitle, wikitext, associatedid, parentid,
 			reply ) {
+			var self = this;
 			var api = new mw.Api();
 			var data = {
 				action: 'csPostComment',
@@ -87,12 +74,11 @@ var commentstreams_querier = ( function( mw ) {
 					reply( data.csPostComment );
 				} )
 				.fail( function( data ) {
-					reply( {
-						'error': data
-					} );
+					self.reportError( data, reply );
 				} );
 		},
 		editComment: function( commenttitle, wikitext, pageid, reply ) {
+			var self = this;
 			var api = new mw.Api();
 			api.post( {
 					action: 'csEditComment',
@@ -105,16 +91,39 @@ var commentstreams_querier = ( function( mw ) {
 					reply( data.csEditComment );
 				} )
 				.fail( function( data ) {
-					if ( data === 'nosuchpageid' ) {
-						reply( {
-							'error': 'commentstreams-api-error-commentnotfound'
-						} );
-					} else {
-						reply( {
-							'error': data
-						} );
-					}
+					self.reportError( data, reply );
 				} );
+		},
+		vote: function( pageid, vote, reply ) {
+			var self = this;
+			var api = new mw.Api();
+			api.post( {
+					action: 'csVote',
+					pageid: pageid,
+					vote: vote,
+					token: mw.user.tokens.get( 'editToken' )
+				} )
+				.done( function( data ) {
+					reply( data.csVote );
+				} )
+				.fail( function( data ) {
+					self.reportError( data, reply );
+				} );
+		},
+		reportError: function( data, reply ) {
+			if ( data === 'nosuchpageid' ) {
+				reply( {
+					'error': 'commentstreams-api-error-commentnotfound'
+				} );
+			} else if ( data === 'badtoken' ) {
+				reply( {
+					'error': 'commentstreams-api-error-notloggedin'
+				} );
+			} else {
+				reply( {
+					'error': data
+				} );
+			}
 		}
 	};
 }( mediaWiki ) );

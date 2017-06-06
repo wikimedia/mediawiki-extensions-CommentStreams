@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class ApiCSEditComment extends ApiCSBase {
+class ApiCSVote extends ApiCSBase {
 
 	/**
 	 * @param ApiMain $main main module
@@ -38,33 +38,24 @@ class ApiCSEditComment extends ApiCSBase {
 	 * @return result of API request
 	 */
 	protected function executeBody( $comment ) {
-		if ( !$comment->getWikiPage()->getTitle()->userCan( 'edit',
-			$this->getUser() ) ) {
+		if ( $this->getUser()->isAnon() ) {
 			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-edit-permissions' );
+				'commentstreams-api-error-vote-notloggedin' );
 		}
 
-		$comment_title = $this->getMain()->getVal( 'commenttitle' );
-		$wikitext = $this->getMain()->getVal( 'wikitext' );
+		$vote = $this->getMain()->getVal( 'vote' );
 
-		if ( is_null( $comment->getParentId() ) && is_null( $comment_title ) ) {
+		if ( !is_null( $comment->getParentId() ) ) {
 			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-missingcommenttitle' );
+				'commentstreams-api-error-vote-novoteonreply' );
 		}
 
-		$result = $comment->update( $comment_title, $wikitext, $this->getUser() );
+		$result = $comment->vote( $vote, $this->getUser() );
 		if ( !$result ) {
-			$this->dieCustomUsageMessage( 'commentstreams-api-error-edit' );
+			$this->dieCustomUsageMessage( 'commentstreams-api-error-vote' );
 		}
 
-		$json = $comment->getJSON();
-
-		if ( is_null( $comment->getParentId() ) &&
-			$GLOBALS['wgCommentStreamsEnableVoting'] ) {
-			$json['vote'] = $comment->getVote( $this->getUser() );
-		}
-
-		$this->getResult()->addValue( null, $this->getModuleName(), $json );
+		$this->getResult()->addValue( null, $this->getModuleName(), '' );
 	}
 
 	/**
@@ -73,14 +64,9 @@ class ApiCSEditComment extends ApiCSBase {
 	public function getAllowedParams() {
 		return array_merge( parent::getAllowedParams(),
 			[
-				'commenttitle' =>
+				'vote' =>
 					[
-						ApiBase::PARAM_TYPE => 'string',
-						ApiBase::PARAM_REQUIRED => false
-					],
-				'wikitext' =>
-					[
-						ApiBase::PARAM_TYPE => 'string',
+						ApiBase::PARAM_TYPE => 'integer',
 						ApiBase::PARAM_REQUIRED => true
 					]
 			]
@@ -91,7 +77,12 @@ class ApiCSEditComment extends ApiCSBase {
 	 * @return array examples of the use of this API module
 	 */
 	public function getExamplesMessages() {
-		return [];
+		return [
+			'action=' . $this->getModuleName() . '&pageid=3&vote=1' =>
+			'apihelp-' . $this->getModuleName() . '-pageid-example',
+			'action=' . $this->getModuleName() . '&title=CommentStreams:3&vote=-1' =>
+			'apihelp-' . $this->getModuleName() . '-title-example'
+		];
 	}
 
 	/**
