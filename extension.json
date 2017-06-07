@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "3.4",
+	"version": "3.5",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -33,6 +33,7 @@
 				"mobile"
 			],
 			"messages": [
+				"commentstreams-api-error-notloggedin",
 				"commentstreams-api-error-commentnotfound",
 				"commentstreams-api-error-notacomment",
 				"commentstreams-api-error-missingcommenttitle",
@@ -47,6 +48,9 @@
 				"commentstreams-api-error-delete-haschildren",
 				"commentstreams-api-error-delete-permissions",
 				"commentstreams-api-error-delete",
+				"commentstreams-api-error-vote-notloggedin",
+				"commentstreams-api-error-vote-novoteonreply",
+				"commentstreams-api-error-vote",
 				"commentstreams-validation-error-nocommenttitle",
 				"commentstreams-validation-error-nocommenttext",
 				"commentstreams-buttontext-add",
@@ -82,6 +86,7 @@
 		"ApiCSQueryComment": "includes/ApiCSQueryComment.php",
 		"ApiCSEditComment": "includes/ApiCSEditComment.php",
 		"ApiCSDeleteComment": "includes/ApiCSDeleteComment.php",
+		"ApiCSVote": "includes/ApiCSVote.php",
 		"EchoCSFormatter": "includes/EchoCSFormatter.php",
 		"EchoCSReplyPresentationModel": "includes/EchoCSReplyPresentationModel.php",
 		"EchoCSWatchedPresentationModel":
@@ -91,7 +96,8 @@
 		"csPostComment": "ApiCSPostComment",
 		"csQueryComment": "ApiCSQueryComment",
 		"csEditComment": "ApiCSEditComment",
-		"csDeleteComment": "ApiCSDeleteComment"
+		"csDeleteComment": "ApiCSDeleteComment",
+		"csVote": "ApiCSVote"
 	},
 	"Hooks": {
 		"LoadExtensionSchemaUpdates": "CommentStreamsHooks::addCommentTableToDatabase",
@@ -113,6 +119,7 @@
 		"CommentStreamsEnableTalk": false,
 		"CommentStreamsNewestStreamsOnTop": true,
 		"CommentStreamsModeratorFastDelete": false,
+		"CommentStreamsEnableVoting": false,
 		"CommentStreamsInitiallyCollapsedNamespaces" : [],
 		"CommentStreamsUserRealNamePropertyName" : null,
 		"CommentStreamsUserAvatarPropertyName" : null

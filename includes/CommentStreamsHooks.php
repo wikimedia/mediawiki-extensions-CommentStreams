@@ -36,6 +36,7 @@ class CommentStreamsHooks {
 			'CommentStreams' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
 		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql',
 			true );
+		$updater->addExtensionTable( 'cs_votes', $dir . 'votes.sql', true );
 		return true;
 	}
 

@@ -137,9 +137,13 @@ class CommentStreams {
 		$pageId = $output->getTitle()->getArticleID();
 		$allComments = Comment::getAssociatedComments( $pageId );
 		$parentComments = $this->getDiscussions( $allComments,
-			$GLOBALS['wgCommentStreamsNewestStreamsOnTop'] );
+			$GLOBALS['wgCommentStreamsNewestStreamsOnTop'],
+			$GLOBALS['wgCommentStreamsEnableVoting'] );
 		foreach ( $parentComments as $parentComment ) {
 			$parentJSON = $parentComment->getJSON();
+			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
+				$parentJSON['vote'] = $parentComment->getVote( $output->getUser() );
+			}
 			$childComments = $this->getReplies( $allComments,
 				$parentComment->getId() );
 			foreach ( $childComments as $childComment ) {
@@ -185,6 +189,8 @@ class CommentStreams {
 			'newestStreamsOnTop' =>
 				$GLOBALS['wgCommentStreamsNewestStreamsOnTop'] ? 1 : 0,
 			'initiallyCollapsed' => $initiallyCollapsed,
+			'enableVoting' =>
+				$GLOBALS['wgCommentStreamsEnableVoting'] ? 1 : 0,
 			'comments' => $comments
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
@@ -199,29 +205,45 @@ class CommentStreams {
 	 * @return array an array of all discussions
 	 * oldest
 	 */
-	private function getDiscussions( $allComments, $newestOnTop = false ) {
+	private function getDiscussions( $allComments, $newestOnTop, $enableVoting ) {
 		$array = array_filter(
 			$allComments, function ( $comment ) {
 				return is_null( $comment->getParentId() );
 			}
 		);
-		if ( $newestOnTop ) {
-			usort(
-				$array, function ( $comment1, $comment2 ) {
-					$date1 = $comment1->getCreationTimestamp()->timestamp;
-					$date2 = $comment2->getCreationTimestamp()->timestamp;
-					return $date1 > $date2 ? -1 : 1;
+		usort( $array, function ( $comment1, $comment2 )
+			use ( $newestOnTop, $enableVoting ) {
+				$date1 = $comment1->getCreationTimestamp()->timestamp;
+				$date2 = $comment2->getCreationTimestamp()->timestamp;
+				if ( $enableVoting ) {
+					$upvotes1 = $comment1->getNumUpVotes();
+					$downvotes1 = $comment1->getNumDownVotes();
+					$votediff1 = $upvotes1 - $downvotes1;
+					$upvotes2 = $comment2->getNumUpVotes();
+					$downvotes2 = $comment2->getNumDownVotes();
+					$votediff2 = $upvotes2 - $downvotes2;
+					if ( $votediff1 === $votediff2 ) {
+						if ( $upvotes1 === $upvotes2 ) {
+							if ( $newestOnTop ) {
+								return $date1 > $date2 ? -1 : 1;
+							} else {
+								return $date1 < $date2 ? -1 : 1;
+							}
+						} else {
+							return $upvotes1 > $upvotes2 ? -1 : 1;
+						}
+					} else {
+						return $votediff1 > $votediff2 ? -1 : 1;
+					}
+				} else {
+					if ( $newestOnTop ) {
+						return $date1 > $date2 ? -1 : 1;
+					} else {
+						return $date1 < $date2 ? -1 : 1;
+					}
 				}
-			);
-		} else {
-			usort(
-				$array, function ( $comment1, $comment2 ) {
-					$date1 = $comment1->getCreationTimestamp()->timestamp;
-					$date2 = $comment2->getCreationTimestamp()->timestamp;
-					return $date1 < $date2 ? -1 : 1;
-				}
-			);
-		}
+			}
+		);
 		return $array;
 	}
 
