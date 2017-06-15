@@ -24,6 +24,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 	'use strict';
 
 	return {
+		baseUrl: null,
+		targetComment: null,
 		isLoggedIn: false,
 		moderatorEdit: false,
 		moderatorDelete: false,
@@ -53,6 +55,15 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		initialize: function() {
 			var self = this;
+			this.baseUrl = window.location.href.split(/[?#]/)[0];
+			if ( window.location.hash ) {
+				var hash = window.location.hash.substring( 1 );
+				var queryIndex = hash.indexOf( '?' );
+				if ( queryIndex !== -1 ) {
+					hash = hash.substring( 0, queryIndex );
+				}
+				this.targetComment = hash;
+			}
 			this.isLoggedIn = mw.config.get( 'wgUserName' ) !== null;
 			var config = mw.config.get( 'CommentStreams' );
 			this.moderatorEdit = config.moderatorEdit;
@@ -66,6 +77,15 @@ var commentstreams_controller = ( function( mw, $ ) {
 			this.comments = config.comments;
 			this.setupDivs();
 			this.addInitialComments();
+			if ( this.targetComment ) {
+				this.scrollToAnchor( this.targetComment );
+			}
+		},
+		scrollToAnchor: function( id ){
+			var element = $( '#' + id );
+			if ( element.length ) {
+				$('html,body').animate({scrollTop: element.offset().top},'slow');
+			}
 		},
 		setupDivs: function() {
 			var self = this;
@@ -270,6 +290,27 @@ var commentstreams_controller = ( function( mw, $ ) {
 				commentHeader.append( this.createVotingButtons( commentData ) );
 			}
 
+			var id = 'cs-comment-' + commentData.pageid;
+			var permalinkButton = $( '<button>' )
+				.addClass( 'cs-button' )
+				.addClass( 'cs-link-button' )
+				.click( function() {
+					$( '.cs-target-comment' )
+						.removeClass( 'cs-target-comment' );
+					self.scrollToAnchor( id )
+					var comment = $( this ).closest( '.cs-comment' );
+					comment
+						.addClass( 'cs-target-comment' );
+					self.showUrlDialog( id );
+					window.location.hash = '#' + id;
+				} );
+			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
+				'/CommentStreams/images/';
+			var permalinkimage = $( '<img>' )
+				.attr( 'src', path + 'link.png' );
+			permalinkButton.append( permalinkimage );
+			commentHeader.append( permalinkButton );
+
 			var commentBody = $( '<div>' )
 				.addClass( 'cs-comment-body' )
 				.html( commentData.html );
@@ -286,12 +327,49 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.addClass( 'cs-comment' )
 				.addClass( commentClass )
 				.attr({
-					'id': 'cs-comment-' + commentData.pageid,
+					'id': id,
 					'data-id': commentData.pageid
-				})
+				});
+			if ( this.targetComment === id ) {
+				comment
+					.addClass( 'cs-target-comment' );
+			}
+			comment
 				.append( [ commentHeader, commentBody, commentFooter ] );
 
 			return comment;
+		},
+		showUrlDialog: function ( id ) {
+			var instructions =
+				mw.message( 'commentstreams-urldialog-instructions' ).text();
+			var textInput = new OO.ui.TextInputWidget( {
+				value: this.baseUrl + '#' + id
+			} );
+			function UrlDialog( config ) {
+				UrlDialog.super.call( this, config );
+			}
+			OO.inheritClass( UrlDialog, OO.ui.Dialog );
+			UrlDialog.static.name = 'urlDialog';
+			UrlDialog.static.title = 'Simple dialog';
+			UrlDialog.prototype.initialize = function () {
+				UrlDialog.super.prototype.initialize.call( this );
+				this.content =
+					new OO.ui.PanelLayout( { padded: true, expanded: false } );
+				this.content.$element.append( '<p>' + instructions + '</p>' );
+				this.content.$element.append( textInput.$element );
+				this.$body.append( this.content.$element );
+			};
+			UrlDialog.prototype.getBodyHeight = function () {
+				return this.content.$element.outerHeight( true );
+			};
+			var urlDialog = new UrlDialog( {
+				size: 'medium'
+			} );
+			var windowManager = new OO.ui.WindowManager();
+			$( 'body' ).append( windowManager.$element );
+			windowManager.addWindows( [ urlDialog ] );
+			windowManager.openWindow( urlDialog );
+			textInput.select();
 		},
 		createEditButton: function( username ) {
 			var self = this;
@@ -360,10 +438,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var upimage = $( '<img>' )
 				.addClass( 'cs-vote-upimage' );
 			if ( commentData.vote > 0 ) {
-				upimage.attr( 'src', path + 'upvote-enabled.png');
+				upimage.attr( 'src', path + 'upvote-enabled.png' );
 				upimage.addClass( 'cs-vote-enabled' );
 			} else {
-				upimage.attr( 'src', path + 'upvote-disabled.png');
+				upimage.attr( 'src', path + 'upvote-disabled.png' );
 			}
 			var upcountspan = $( '<span>' )
 				.addClass( 'cs-comment-details' )
@@ -388,10 +466,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var downimage = $( '<img>' )
 				.addClass( 'cs-vote-downimage' );
 			if ( commentData.vote < 0 ) {
-				downimage.attr( 'src', path + 'downvote-enabled.png');
+				downimage.attr( 'src', path + 'downvote-enabled.png' );
 				downimage.addClass( 'cs-vote-enabled' );
 			} else {
-				downimage.attr( 'src', path + 'downvote-disabled.png');
+				downimage.attr( 'src', path + 'downvote-disabled.png' );
 			}
 			var downcountspan = $( '<span>' )
 				.addClass( 'cs-comment-details' )
@@ -456,17 +534,17 @@ var commentstreams_controller = ( function( mw, $ ) {
 				if ( result.error === undefined ) {
 					if ( up ) {
 						if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
-							upimage.attr( 'src', path + 'upvote-disabled.png');
+							upimage.attr( 'src', path + 'upvote-disabled.png' );
 							upimage.removeClass( 'cs-vote-enabled' );
 							upcount = upcount - 1;
 							upcountspan.text( upcount );
 						} else {
-							upimage.attr( 'src', path + 'upvote-enabled.png');
+							upimage.attr( 'src', path + 'upvote-enabled.png' );
 							upimage.addClass( 'cs-vote-enabled' );
 							upcount = upcount + 1;
 							upcountspan.text( upcount );
 							if ( downimage.hasClass( 'cs-vote-enabled' ) ) {
-								downimage.attr( 'src', path + 'downvote-disabled.png');
+								downimage.attr( 'src', path + 'downvote-disabled.png' );
 								downimage.removeClass( 'cs-vote-enabled' );
 								downcount = downcount - 1;
 								downcountspan.text( downcount );
@@ -474,17 +552,17 @@ var commentstreams_controller = ( function( mw, $ ) {
 						}
 					} else {
 						if ( downimage.hasClass( 'cs-vote-enabled' ) ) {
-							downimage.attr( 'src', path + 'downvote-disabled.png');
+							downimage.attr( 'src', path + 'downvote-disabled.png' );
 							downimage.removeClass( 'cs-vote-enabled' );
 							downcount = downcount - 1;
 							downcountspan.text( downcount );
 						} else {
-							downimage.attr( 'src', path + 'downvote-enabled.png');
+							downimage.attr( 'src', path + 'downvote-enabled.png' );
 							downimage.addClass( 'cs-vote-enabled' );
 							downcount = downcount + 1;
 							downcountspan.text( downcount );
 							if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
-								upimage.attr( 'src', path + 'upvote-disabled.png');
+								upimage.attr( 'src', path + 'upvote-disabled.png' );
 								upimage.removeClass( 'cs-vote-enabled' );
 								upcount = upcount - 1;
 								upcountspan.text( upcount );

@@ -22,13 +22,17 @@
 	border-top: 1px solid #00a7d8;
 }
 
-.cs-expanded .cs-comment-header{
+.cs-expanded .cs-comment-header {
 	background-color: #e4f1fe;
 }
 
-.cs-collapsed .cs-comment-header{
+.cs-collapsed .cs-comment-header {
 	background-color: #eeeeee;
 	margin-bottom: 10px;
+}
+
+.cs-target-comment .cs-comment-header {
+	border: 2px solid green;
 }
 
 .cs-comment-header {
@@ -107,6 +111,13 @@
 }
 
 .cs-toggle-button {
+	float: right;
+	border: none;
+	border-style: none;
+	padding-left: 10px;
+}
+
+.cs-link-button {
 	float: right;
 	border: none;
 	border-style: none;

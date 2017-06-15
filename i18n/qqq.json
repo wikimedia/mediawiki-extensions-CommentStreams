@@ -64,6 +64,7 @@
 	"commentstreams-dialog-buttontext-ok": "User interface dialog button text.",
 	"commentstreams-dialog-buttontext-yes": "User interface dialog button text.",
 	"commentstreams-dialog-buttontext-no": "User interface dialog button text.",
+	"commentstreams-urldialog-instructions": "User interface dialog button text.",
 	"commentstreams-datetext-postedon": "User interface date text",
 	"commentstreams-datetext-lasteditedon": "User interface date text",
 	"commentstreams-datetext-moderated": "User interface date text",

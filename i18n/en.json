@@ -64,6 +64,7 @@
 	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-yes": "Yes",
 	"commentstreams-dialog-buttontext-no": "No",
+	"commentstreams-urldialog-instructions": "Copy and paste the URL below to share a permalink to this comment. Press escape to dismiss this dialog.",
 	"commentstreams-datetext-postedon": "Posted on",
 	"commentstreams-datetext-lasteditedon": "Last edited on",
 	"commentstreams-datetext-moderated": "moderated",
