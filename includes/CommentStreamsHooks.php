@@ -298,6 +298,9 @@ class CommentStreamsHooks {
 		$pr->registerProperty( '___CS_ASSOCPG', '_wpg', 'Comment on' );
 		$pr->registerProperty( '___CS_REPLYTO', '_wpg', 'Reply to' );
 		$pr->registerProperty( '___CS_TITLE', '_txt', 'Comment title of' );
+		$pr->registerProperty( '___CS_UPVOTES', '_num', 'Comment up votes' );
+		$pr->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );
+		$pr->registerProperty( '___CS_VOTEDIFF', '_num', 'Comment vote diff' );
 	}
 
 	/**
@@ -349,6 +352,21 @@ class CommentStreamsHooks {
 			if ( !is_null( $commentTitle ) ) {
 				$propertyDI = new SMW\DIProperty( '___CS_TITLE' );
 				$dataItem = new SMWDIBlob( $comment->getCommentTitle() );
+				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+			}
+
+			if ( $GLOBALS['wgCommentStreamsEnableVoting'] === true ) {
+				$upvotes = $comment->getNumUpVotes();
+				$propertyDI = new SMW\DIProperty( '___CS_UPVOTES' );
+				$dataItem = new SMWDINumber( $upvotes );
+				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+				$downvotes = $comment->getNumDownVotes();
+				$propertyDI = new SMW\DIProperty( '___CS_DOWNVOTES' );
+				$dataItem = new SMWDINumber( $downvotes );
+				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+				$votediff = $upvotes - $downvotes;
+				$propertyDI = new SMW\DIProperty( '___CS_VOTEDIFF' );
+				$dataItem = new SMWDINumber( $votediff );
 				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 			}
 		}
