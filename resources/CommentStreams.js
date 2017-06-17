@@ -894,6 +894,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 							}
 							self.adjustCommentOrder( comment, 0, 0,
 								result.created_timestamp );
+							var id = 'cs-comment-' + result.pageid;
+							self.scrollToAnchor( id );
 						}
 					} else {
 						self.reportError( result.error );
