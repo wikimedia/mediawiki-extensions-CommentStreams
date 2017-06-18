@@ -38,8 +38,20 @@ class ApiCSDeleteComment extends ApiCSBase {
 	 * @return result of API request
 	 */
 	protected function executeBody( $comment ) {
-		$wikipage = $comment->getWikiPage();
-		if ( !$wikipage->getTitle()->userCan( 'delete', $this->getUser() ) ) {
+		if ( $this->getUser()->isAnon() ) {
+			$this->dieCustomUsageMessage(
+				'commentstreams-api-error-delete-notloggedin' );
+		}
+
+		if ( $this->getUser()->getId() ===
+			$comment->getWikiPage()->getOldestRevision()->getUser() ) {
+			$action = 'edit'; // need edit but not delete to delete a comment
+		} else {
+			$action = 'cs-moderator-delete';
+		}
+
+		if ( !$comment->getWikiPage()->getTitle()->userCan( $action,
+			$this->getUser() ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-delete-permissions' );
 		}

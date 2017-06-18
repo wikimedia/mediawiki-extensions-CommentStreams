@@ -38,7 +38,18 @@ class ApiCSEditComment extends ApiCSBase {
 	 * @return result of API request
 	 */
 	protected function executeBody( $comment ) {
-		if ( !$comment->getWikiPage()->getTitle()->userCan( 'edit',
+		if ( $this->getUser()->isAnon() ) {
+			$this->dieCustomUsageMessage(
+				'commentstreams-api-error-edit-notloggedin' );
+		}
+
+		if ( $this->getUser()->getId() ===
+			$comment->getWikiPage()->getOldestRevision()->getUser() ) {
+			$action = 'edit';
+		} else {
+			$action = 'cs-moderator-edit';
+		}
+		if ( !$comment->getWikiPage()->getTitle()->userCan( $action,
 			$this->getUser() ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-edit-permissions' );

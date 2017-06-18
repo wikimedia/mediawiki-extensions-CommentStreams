@@ -178,8 +178,10 @@ class CommentStreams {
 		}
 
 		$commentStreamsParams = [
-			'moderatorEdit' => in_array( 'csedit', $output->getUser()->getRights() ),
-			'moderatorDelete' => in_array( 'csdelete', $output->getUser()->getRights() ),
+			'moderatorEdit' => in_array( 'cs-moderator-edit',
+				$output->getUser()->getRights() ),
+			'moderatorDelete' => in_array( 'cs-moderator-delete',
+				$output->getUser()->getRights() ),
 			'moderatorFastDelete' =>
 				$GLOBALS['wgCommentStreamsModeratorFastDelete'] ? 1 : 0,
 			'userDisplayName' =>

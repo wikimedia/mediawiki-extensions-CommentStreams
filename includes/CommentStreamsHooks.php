@@ -153,9 +153,13 @@ class CommentStreamsHooks {
 			return true;
 		}
 
-		if ( $action == 'edit' ) {
-			if ( in_array( 'csedit', $user->getRights() ) ||
-				$user->getId() === $wikipage->getOldestRevision()->getUser() ) {
+		if ( $user->isBlocked() ) {
+			$result = false;
+			return false;
+		}
+
+		if ( $action === 'edit' ) {
+			if ( $user->getId() === $wikipage->getOldestRevision()->getUser() ) {
 				$result = true;
 			} else {
 				$result = false;
@@ -163,9 +167,17 @@ class CommentStreamsHooks {
 			return false;
 		}
 
-		else if ( $action == 'delete' ) {
-			if ( in_array( 'csdelete', $user->getRights() ) ||
-				$user->getId() === $wikipage->getOldestRevision()->getUser() ) {
+		if ( $action === 'cs-moderator-edit' ) {
+			if ( in_array( 'cs-moderator-edit', $user->getRights() ) ) {
+				$result = true;
+			} else {
+				$result = false;
+			}
+			return false;
+		}
+
+		if ( $action === 'cs-moderator-delete' ) {
+			if ( in_array( 'cs-moderator-delete', $user->getRights() ) ) {
 				$result = true;
 			} else {
 				$result = false;
@@ -279,14 +291,18 @@ class CommentStreamsHooks {
 			$GLOBALS['wgCommentStreamsNamespaceIndex'] + 1 );
 		$GLOBALS['wgNamespacesToBeSearchedDefault'][NS_COMMENTSTREAMS] = true;
 		$GLOBALS['smwgNamespacesWithSemanticLinks'][NS_COMMENTSTREAMS] = true;
-		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['csdelete'] ) ) {
-			$GLOBALS['wgGroupPermissions']['csmoderator']['csdelete'] = true;
+		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']
+			['cs-moderator-delete'] ) ) {
+			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] =
+				true;
 		}
-		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['csedit'] ) ) {
-			$GLOBALS['wgGroupPermissions']['csmoderator']['csedit'] = false;
+		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']
+			['cs-moderator-edit'] ) ) {
+			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-edit'] =
+				false;
 		}
-		$GLOBALS['wgAvailableRights'][] = 'csedit';
-		$GLOBALS['wgAvailableRights'][] = 'csdelete';
+		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-edit';
+		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
 	}
 
 	/**

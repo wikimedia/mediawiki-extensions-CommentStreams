@@ -35,9 +35,10 @@ class ApiCSPostComment extends ApiBase {
 	 * execute the API request
 	 */
 	public function execute() {
-		if ( $this->getUser()->isAnon() ) {
+		if ( !in_array( 'edit', $this->getUser()->getRights() ) ||
+			$this->getUser()->isBlocked() ) {
 			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-post-notloggedin' );
+				'commentstreams-api-error-post-permissions' );
 		}
 
 		$associatedid = $this->getMain()->getVal( 'associatedid' );
