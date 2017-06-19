@@ -6,6 +6,7 @@
 		]
 	},
 	"commentstreams-desc": "{{desc|name=CommentStreams|url=http://gestalt.mitre.org/gestaltd/index.php/CommentStreams}}",
+	"commentstreams-error-prohibitedaction": "Error message.",
 	"apihelp-csQueryComment-description": "{{doc-apihelp-description|csQueryComment}}",
 	"apihelp-csQueryComment-summary": "{{doc-apihelp-summary|csQueryComment}}",
 	"apihelp-csQueryComment-param-pageid": "{{doc-apihelp-param|csQueryComment|pageid}}",

@@ -6,6 +6,7 @@
 		]
 	},
 	"commentstreams-desc": "Allows commenting on wiki pages",
+	"commentstreams-error-prohibitedaction": "Action $1 is not allowed on comment pages.",
 	"apihelp-csQueryComment-description": "Return the title, user, creation timestamp, and wikitext of a comment. Either pageid or title must be provided.",
 	"apihelp-csQueryComment-summary": "Return the title, user, creation timestamp, and wikitext of a comment. Either pageid or title must be provided.",
 	"apihelp-csQueryComment-param-pageid": "page ID of the page which holds the comment to query",

@@ -78,9 +78,12 @@ class CommentStreamsHooks {
 		$action = $wiki->getAction();
 		switch ( $action ) {
 		case 'info':
-			return true;
 		case 'history':
 			return true;
+		default:
+			$message =
+				wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
+			$output->addHTML( '<p class="error">' . $message . '</p>' );
 		}
 		$wikipage = new WikiPage( $title );
 		$comment = Comment::newFromWikiPage( $wikipage );
@@ -123,7 +126,8 @@ class CommentStreamsHooks {
 		Title $newTitle, Status $status ) {
 		if ( $oldTitle->getNamespace() === NS_COMMENTSTREAMS ||
 			$newTitle->getNamespace() === NS_COMMENTSTREAMS ) {
-			$status->setResult( false );
+			$status->fatal( wfMessage( 'commentstreams-error-prohibitedaction',
+				'move' ) );
 			return false;
 		}
 		return true;
