@@ -79,6 +79,7 @@ class CommentStreamsHooks {
 		switch ( $action ) {
 		case 'info':
 		case 'history':
+		case 'view':
 			return true;
 		default:
 			$message =
@@ -307,6 +308,8 @@ class CommentStreamsHooks {
 		}
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-edit';
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
+		$GLOBALS['wgLogTypes'][] = 'commentstreams';
+		$GLOBALS['wgLogActionsHandlers']['commentstreams/*'] = 'LogFormatter';
 	}
 
 	/**

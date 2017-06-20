@@ -34,22 +34,21 @@ class ApiCSEditComment extends ApiCSBase {
 	/**
 	 * the real body of the execute function
 	 *
-	 * @param Comment $comment the comment to execute the action upon
 	 * @return result of API request
 	 */
-	protected function executeBody( $comment ) {
+	protected function executeBody() {
 		if ( $this->getUser()->isAnon() ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-edit-notloggedin' );
 		}
 
 		if ( $this->getUser()->getId() ===
-			$comment->getWikiPage()->getOldestRevision()->getUser() ) {
+			$this->comment->getWikiPage()->getOldestRevision()->getUser() ) {
 			$action = 'edit';
 		} else {
 			$action = 'cs-moderator-edit';
 		}
-		if ( !$comment->getWikiPage()->getTitle()->userCan( $action,
+		if ( !$this->comment->getWikiPage()->getTitle()->userCan( $action,
 			$this->getUser() ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-edit-permissions' );
@@ -58,21 +57,35 @@ class ApiCSEditComment extends ApiCSBase {
 		$comment_title = $this->getMain()->getVal( 'commenttitle' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
-		if ( is_null( $comment->getParentId() ) && is_null( $comment_title ) ) {
+		if ( is_null( $this->comment->getParentId() ) && is_null( $comment_title ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-missingcommenttitle' );
 		}
 
-		$result = $comment->update( $comment_title, $wikitext, $this->getUser() );
+		$result = $this->comment->update( $comment_title, $wikitext, $this->getUser() );
 		if ( !$result ) {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-edit' );
 		}
 
-		$json = $comment->getJSON();
+		if ( $action === 'edit' ) {
+			if ( is_null( $this->comment->getParentId() ) ) {
+				$this->logAction( 'comment-edit' );
+			} else {
+				$this->logAction( 'reply-edit' );
+			}
+		} else {
+			if ( is_null( $this->comment->getParentId() ) ) {
+				$this->logAction( 'comment-moderator-edit' );
+			} else {
+				$this->logAction( 'reply-moderator-edit' );
+			}
+		}
 
-		if ( is_null( $comment->getParentId() ) &&
+		$json = $this->comment->getJSON();
+
+		if ( is_null( $this->comment->getParentId() ) &&
 			$GLOBALS['wgCommentStreamsEnableVoting'] ) {
-			$json['vote'] = $comment->getVote( $this->getUser() );
+			$json['vote'] = $this->comment->getVote( $this->getUser() );
 		}
 
 		$this->getResult()->addValue( null, $this->getModuleName(), $json );

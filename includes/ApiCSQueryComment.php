@@ -34,10 +34,9 @@ class ApiCSQueryComment extends ApiCSBase {
 	/**
 	 * the real body of the execute function
 	 *
-	 * @param Comment $comment the comment to execute the action upon
 	 * @return result of API request
 	 */
-	protected function executeBody( $comment ) {
-		return $comment->getJSON();
+	protected function executeBody() {
+		return $this->comment->getJSON();
 	}
 }

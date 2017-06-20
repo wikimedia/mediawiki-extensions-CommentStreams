@@ -94,5 +94,17 @@
 	"right-cs-moderator-edit": "{{doc-right|csedit}}",
 	"action-cs-moderator-edit": "{{doc-action|csedit}}",
 	"right-cs-moderator-delete": "{{doc-right|csdelete}}",
-	"action-cs-moderator-delete": "{{doc-action|csdelete}}"
+	"action-cs-moderator-delete": "{{doc-action|csdelete}}",
+	"log-name-commentstreams": "The Special:Log log name that appears in the drop-down on the Special:Log page",
+	"log-description-commentstreams": "The Special:Log description that appears on the Special:Log page when you filter logs on this specific log name",
+	"logentry-commentstreams-comment-create": "The template of the log entry message",
+	"logentry-commentstreams-reply-create": "The template of the log entry message",
+	"logentry-commentstreams-comment-edit": "The template of the log entry message",
+	"logentry-commentstreams-comment-moderator-edit": "The template of the log entry message",
+	"logentry-commentstreams-reply-edit": "The template of the log entry message",
+	"logentry-commentstreams-reply-moderator-edit": "The template of the log entry message",
+	"logentry-commentstreams-comment-delete": "The template of the log entry message",
+	"logentry-commentstreams-comment-moderator-delete": "The template of the log entry message",
+	"logentry-commentstreams-reply-delete": "The template of the log entry message",
+	"logentry-commentstreams-reply-moderator-delete": "The template of the log entry message"
 }

@@ -34,10 +34,9 @@ class ApiCSVote extends ApiCSBase {
 	/**
 	 * the real body of the execute function
 	 *
-	 * @param Comment $comment the comment to execute the action upon
 	 * @return result of API request
 	 */
-	protected function executeBody( $comment ) {
+	protected function executeBody() {
 		if ( $this->getUser()->isAnon() ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-vote-notloggedin' );
@@ -45,12 +44,12 @@ class ApiCSVote extends ApiCSBase {
 
 		$vote = $this->getMain()->getVal( 'vote' );
 
-		if ( !is_null( $comment->getParentId() ) ) {
+		if ( !is_null( $this->comment->getParentId() ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-vote-novoteonreply' );
 		}
 
-		$result = $comment->vote( $vote, $this->getUser() );
+		$result = $this->comment->vote( $vote, $this->getUser() );
 		if ( !$result ) {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-vote' );
 		}

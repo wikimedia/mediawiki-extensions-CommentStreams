@@ -82,6 +82,13 @@ class ApiCSPostComment extends ApiBase {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-post' );
 		}
 
+        $title = $comment->getWikiPage()->getTitle();
+		if ( is_null( $comment->getParentId() ) ) {
+			$this->logAction( 'comment-create', $title );
+		} else {
+			$this->logAction( 'reply-create', $title );
+		}
+
 		$this->getResult()->addValue( null, $this->getModuleName(),
 			$comment->getJSON() );
 
@@ -189,6 +196,17 @@ class ApiCSPostComment extends ApiBase {
 				'agent' => $this->getUser()
 			] );
 		}
+	}
+
+	/**
+	 * log action
+	 * @param string $action the name of the action to be logged
+	 */
+	protected function logAction( $action, $title ) {
+		$logEntry = new ManualLogEntry( 'commentstreams', $action );
+		$logEntry->setPerformer( $this->getUser() );
+		$logEntry->setTarget( $title );
+		$logid = $logEntry->insert();
 	}
 
 	/**

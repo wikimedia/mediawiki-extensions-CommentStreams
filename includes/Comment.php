@@ -112,8 +112,8 @@ class Comment {
 			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
 			if ( !$title->isDeletedQuick() && !$title->exists() ) {
 				$wikipage = new WikiPage( $title );
-				$status = $wikipage->doEditContent( $content, '', EDIT_NEW, false,
-					$user, null );
+				$status = $wikipage->doEditContent( $content, '',
+					EDIT_NEW | EDIT_SUPPRESS_RC , false, $user, null );
 				if ( !$status->isOK() && !$status->isGood() ) {
 					if ( $status->getMessage()->getKey() == 'edit-already-exists' ) {
 						$index = wfRandomString();
@@ -573,8 +573,8 @@ class Comment {
 			self::addAnnotations( $wikitext, $comment_title,
 				$this->getAssociatedId() );
 		$content = new WikitextContent( $annotated_wikitext );
-		$status = $this->wikipage->doEditContent( $content, '', EDIT_UPDATE, false,
-			$user, null );
+		$status = $this->wikipage->doEditContent( $content, '',
+			EDIT_UPDATE | EDIT_SUPPRESS_RC , false, $user, null );
 		if ( !$status->isOK() && !$status->isGood() ) {
 			return false;
 		}
@@ -606,7 +606,7 @@ class Comment {
 		$pageid = $this->getId();
 
 		$status = $this->getWikiPage()->doDeleteArticleReal( 'comment deleted',
-			false, 0 );
+			true, 0 );
 		if ( !$status->isOK() && !$status->isGood() ) {
 			return false;
 		}

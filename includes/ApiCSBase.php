@@ -21,9 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class ApiCSBase extends ApiBase {
+abstract class ApiCSBase extends ApiBase {
 
 	private $edit;
+	protected $comment;
 
 	/**
 	 * @param ApiMain $main main module
@@ -42,11 +43,11 @@ class ApiCSBase extends ApiBase {
 		$params = $this->extractRequestParams();
 		$wikipage = $this->getTitleOrPageId( $params,
 			$this->edit ? 'frommasterdb' : 'fromdb' );
-		$comment = Comment::newFromWikiPage( $wikipage );
-		if ( is_null( $comment ) ) {
+		$this->comment = Comment::newFromWikiPage( $wikipage );
+		if ( is_null( $this->comment ) ) {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-notacomment' );
 		}
-		$result = $this->executeBody( $comment );
+		$result = $this->executeBody();
 		if ( !is_null( $result ) ) {
 			$this->getResult()->addValue( null, $this->getModuleName(), $result );
 		}
@@ -54,8 +55,8 @@ class ApiCSBase extends ApiBase {
 
 	/**
 	 * the real body of the execute function
-	 /
-	protected abstract function executeBody( $comment );
+	 */
+	protected abstract function executeBody();
 
 	/**
 	 * @return array allowed parameters
@@ -94,6 +95,21 @@ class ApiCSBase extends ApiBase {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * log action
+	 * @param string $action the name of the action to be logged
+	 */
+	protected function logAction( $action, $title = null ) {
+		$logEntry = new ManualLogEntry( 'commentstreams', $action );
+		$logEntry->setPerformer( $this->getUser() );
+		if ( $title ) {
+			$logEntry->setTarget( $title );
+		} else {
+			$logEntry->setTarget( $this->comment->getWikiPage()->getTitle() );
+		}
+		$logid = $logEntry->insert();
 	}
 
 	/**

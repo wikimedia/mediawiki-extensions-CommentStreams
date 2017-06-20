@@ -94,5 +94,17 @@
 	"right-cs-moderator-edit": "Edit comments by any user",
 	"action-cs-moderator-edit": "edit comments by other users",
 	"right-cs-moderator-delete": "Delete comments by any user",
-	"action-cs-moderator-delete": "delete comments by other users"
+	"action-cs-moderator-delete": "delete comments by other users",
+	"log-name-commentstreams": "CommentStreams log",
+	"log-description-commentstreams": "These events track when CommentStreams events happen.",
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|created}} comment $3",
+	"logentry-commentstreams-reply-create": "$1 {{GENDER:$2|created}} reply $3",
+	"logentry-commentstreams-comment-edit": "$1 {{GENDER:$2|edited}} comment $3",
+	"logentry-commentstreams-comment-moderator-edit": "$1 {{GENDER:$2|(moderator) edited}} comment $3",
+	"logentry-commentstreams-reply-edit": "$1 {{GENDER:$2|edited}} reply $3",
+	"logentry-commentstreams-reply-moderator-edit": "$1 {{GENDER:$2|(moderator) edited}} reply $3",
+	"logentry-commentstreams-comment-delete": "$1 {{GENDER:$2|deleted}} comment $3",
+	"logentry-commentstreams-comment-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} comment $3",
+	"logentry-commentstreams-reply-delete": "$1 {{GENDER:$2|deleted}} reply $3",
+	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} reply $3"
 }

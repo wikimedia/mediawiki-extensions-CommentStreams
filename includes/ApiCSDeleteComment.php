@@ -34,38 +34,50 @@ class ApiCSDeleteComment extends ApiCSBase {
 	/**
 	 * the real body of the execute function
 	 *
-	 * @param Comment $comment the comment to execute the action upon
 	 * @return result of API request
 	 */
-	protected function executeBody( $comment ) {
+	protected function executeBody() {
 		if ( $this->getUser()->isAnon() ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-delete-notloggedin' );
 		}
 
 		if ( $this->getUser()->getId() ===
-			$comment->getWikiPage()->getOldestRevision()->getUser() ) {
+			$this->comment->getWikiPage()->getOldestRevision()->getUser() ) {
 			$action = 'edit'; // need edit but not delete to delete a comment
 		} else {
 			$action = 'cs-moderator-delete';
 		}
 
-		if ( !$comment->getWikiPage()->getTitle()->userCan( $action,
+		if ( !$this->comment->getWikiPage()->getTitle()->userCan( $action,
 			$this->getUser() ) ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-delete-permissions' );
 		}
 
-		$childCount = $comment->getNumReplies();
+		$childCount = $this->comment->getNumReplies();
 		if ( $childCount > 0 ) {
 			if ( $GLOBALS['wgCommentStreamsModeratorFastDelete'] ) {
-				$result = $this->recursiveDelete( $comment );
+				$result = $this->recursiveDelete( $this->comment );
 			} else {
 				$this->dieCustomUsageMessage(
 					'commentstreams-api-error-delete-haschildren' );
 			}
 		} else {
-			$result = $comment->delete();
+			$result = $this->comment->delete();
+			if ( $action === 'edit' ) {
+				if ( is_null( $this->comment->getParentId() ) ) {
+					$this->logAction( 'comment-delete' );
+				} else {
+					$this->logAction( 'reply-delete' );
+				}
+			} else {
+				if ( is_null( $this->comment->getParentId() ) ) {
+					$this->logAction( 'comment-moderator-delete' );
+				} else {
+					$this->logAction( 'reply-moderator-delete' );
+				}
+			}
 		}
 
 		if ( !$result ) {
@@ -90,6 +102,12 @@ class ApiCSDeleteComment extends ApiCSBase {
 			}
 		}
 		$result = $comment->delete();
+		$title = $comment->getWikiPage()->getTitle();
+		if ( is_null( $comment->getParentId() ) ) {
+			$this->logAction( 'comment-moderator-delete', $title  );
+		} else {
+			$this->logAction( 'reply-moderator-delete', $title  );
+		}
 		return $result;
 	}
 }
