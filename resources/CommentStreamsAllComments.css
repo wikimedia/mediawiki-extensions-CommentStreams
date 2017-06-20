@@ -1,0 +1,26 @@
+.csall-message {
+	background-color: #ddd;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.csall-wikitable {
+	width: 100%;
+}
+
+.csall-navigationtable {
+	width: 100%;
+}
+
+.csall-button {
+	font-size: 1em;
+	padding:5px 15px;
+	margin:5px 5px;
+	background:#ccc;
+	border:0 none;
+	cursor:pointer;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}

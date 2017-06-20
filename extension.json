@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "3.6",
+	"version": "3.7",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -9,10 +9,16 @@
 	"descriptionmsg": "commentstreams-desc",
 	"manifest_version": 1,
 	"type": "parserhook",
+	"SpecialPages": {
+		"CommentStreamsAllComments": "CommentStreamsAllComments"
+	},
 	"MessagesDirs": {
 		"CommentStreams": [
 			"i18n"
 		]
+	},
+	"ExtensionMessagesFiles": {
+		"CommentStreamsAlias": "includes/CommentStreamsAllComments.alias.php"
 	},
 	"ResourceModules": {
 		"ext.CommentStreams": {
@@ -75,6 +81,17 @@
 			]
 		}
 	},
+	"ResourceModules": {
+		"ext.CommentStreamsAllComments": {
+			"styles": [
+				"CommentStreamsAllComments.css"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		}
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",
 		"remoteExtPath": "CommentStreams/resources"
@@ -92,7 +109,8 @@
 		"EchoCSFormatter": "includes/EchoCSFormatter.php",
 		"EchoCSReplyPresentationModel": "includes/EchoCSReplyPresentationModel.php",
 		"EchoCSWatchedPresentationModel":
-			"includes/EchoCSWatchedPresentationModel.php"
+			"includes/EchoCSWatchedPresentationModel.php",
+		"CommentStreamsAllComments": "includes/CommentStreamsAllComments.php"
 	},
 	"APIModules": {
 		"csPostComment": "ApiCSPostComment",

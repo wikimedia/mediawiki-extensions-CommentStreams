@@ -106,5 +106,16 @@
 	"logentry-commentstreams-comment-delete": "$1 {{GENDER:$2|deleted}} comment $3",
 	"logentry-commentstreams-comment-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} comment $3",
 	"logentry-commentstreams-reply-delete": "$1 {{GENDER:$2|deleted}} reply $3",
-	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} reply $3"
+	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} reply $3",
+	"commentstreamsallcomments": "All Comments",
+	"commentstreams-allcomments-label-page": "Comment Page",
+	"commentstreams-allcomments-label-associatedpage": "Associated Page",
+	"commentstreams-allcomments-label-commenttitle": "Comment Title",
+	"commentstreams-allcomments-label-wikitext": "Comment",
+	"commentstreams-allcomments-label-author": "Author",
+	"commentstreams-allcomments-label-created": "Created",
+	"commentstreams-allcomments-label-lasteditor": "Last Editor",
+	"commentstreams-allcomments-label-lastedited": "Last Edited",
+	"commentstreams-allcomments-button-next": "Next",
+	"commentstreams-allcomments-button-previous": "Previous"
 }

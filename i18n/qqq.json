@@ -106,5 +106,16 @@
 	"logentry-commentstreams-comment-delete": "The template of the log entry message",
 	"logentry-commentstreams-comment-moderator-delete": "The template of the log entry message",
 	"logentry-commentstreams-reply-delete": "The template of the log entry message",
-	"logentry-commentstreams-reply-moderator-delete": "The template of the log entry message"
+	"logentry-commentstreams-reply-moderator-delete": "The template of the log entry message",
+	"commentstreamsallcomments": "Special page title",
+	"commentstreams-allcomments-label-page": "Table column label",
+	"commentstreams-allcomments-label-associatedpage": "Table column label",
+	"commentstreams-allcomments-label-commenttitle": "Table column label",
+	"commentstreams-allcomments-label-wikitext": "Table column label",
+	"commentstreams-allcomments-label-author": "Table column label",
+	"commentstreams-allcomments-label-created": "Table column label",
+	"commentstreams-allcomments-label-lasteditor": "Table column label",
+	"commentstreams-allcomments-label-lastedited": "Table column label",
+	"commentstreams-allcomments-button-next": "Button label",
+	"commentstreams-allcomments-button-previous": "Button label"
 }
