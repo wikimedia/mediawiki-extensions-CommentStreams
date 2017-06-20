@@ -76,12 +76,11 @@ class CommentStreamsHooks {
 			return true;
 		}
 		$action = $wiki->getAction();
-		switch ( $action ) {
-		case 'info':
-		case 'history':
-		case 'view':
+		if ( $action === 'info' || $action === 'history' ) {
 			return true;
-		default:
+		}
+
+		if ( $action !== 'view' ) {
 			$message =
 				wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
 			$output->addHTML( '<p class="error">' . $message . '</p>' );
