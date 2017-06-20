@@ -47,6 +47,9 @@ class Comment {
 	// User user object for the author of this comment
 	private $user = null;
 
+	// Avatar for author of this comment
+	private $avatar = null;
+
 	// MWTimestamp the earliest revision date for this comment
 	private $creation_timestamp = null;
 
@@ -324,7 +327,16 @@ class Comment {
 	 * @return string the URL of the avatar of the author of this comment
 	 */
 	public function getAvatar() {
-		return self::getAvatarFromUser( $this->getUser() );
+		if ( is_null( $this->avatar ) ) {
+			if ( class_exists( 'wAvatar' ) ) { // from Extension:SocialProfile
+				$avatar = new wAvatar( $this->getUser()->getId(), 'l' );
+				$this->avatar = $GLOBALS['wgUploadPath'] . '/avatars/' .
+					$avatar->getAvatarImage();
+			} else {
+				$this->avatar = self::getAvatarFromUser( $this->getUser() );
+			}
+		}
+		return $this->avatar;
 	}
 
 	/**
