@@ -76,13 +76,17 @@ class CommentStreamsAllComments extends SpecialPage {
 				$associatedpageid = $comment->getAssociatedId();
 				$associatedpagename =
 					WikiPage::newFromId( $associatedpageid )->getTitle()->getPrefixedText();
+				$author = $comment->getUser()->getName();
 				$lasteditor = User::newFromId( $wikipage->getRevision()->getUser() )->getName();
+				if ( $lasteditor === $author ) {
+					$lasteditor = '';
+				}
 				$wikitext .= '|-' . PHP_EOL;
 				$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
 				$wikitext .= '|[[' . $associatedpagename . ']]' . PHP_EOL;
 				$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
 				$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
-				$wikitext .= '|' . $comment->getUser()->getName() . PHP_EOL;
+				$wikitext .= '|' . $author . PHP_EOL;
 				$wikitext .= '|' . $lasteditor . PHP_EOL;
 				$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
 				$wikitext .= '|' . $comment->getModificationDate() . PHP_EOL;

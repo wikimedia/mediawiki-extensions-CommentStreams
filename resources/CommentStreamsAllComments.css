@@ -10,6 +10,10 @@
 	width: 100%;
 }
 
+.csall-wikitable th {
+	text-align: center;
+}
+
 .csall-navigationtable {
 	width: 100%;
 }
