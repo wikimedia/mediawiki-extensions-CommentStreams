@@ -79,9 +79,7 @@
 				"commentstreams-title-field-placeholder",
 				"commentstreams-body-field-placeholder"
 			]
-		}
-	},
-	"ResourceModules": {
+		},
 		"ext.CommentStreamsAllComments": {
 			"styles": [
 				"CommentStreamsAllComments.css"
