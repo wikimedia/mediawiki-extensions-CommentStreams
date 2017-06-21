@@ -1,3 +1,7 @@
+.cs-hidden {
+	display: none;
+}
+
 #cs-comments {
 	margin-top: 10px;
 	font-family: sans-serif;
@@ -22,8 +26,12 @@
 	border-top: 1px solid #00a7d8;
 }
 
+.cs-target-comment .cs-comment-header {
+	border: 2px solid green;
+}
+
 .cs-expanded .cs-comment-header {
-	background-color: #e4f1fe;
+	background-color: #e4f1ff;
 }
 
 .cs-collapsed .cs-comment-header {
@@ -31,27 +39,39 @@
 	margin-bottom: 10px;
 }
 
-.cs-target-comment .cs-comment-header {
-	border: 2px solid green;
+.cs-reply-comment > .cs-comment-header {
+	background-color: #f5faff;
 }
 
 .cs-comment-header {
 	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.cs-comment-header-left {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.cs-comment-header-center {
+	display: inline-block;
+	vertical-align: middle;
 	padding-left: 5px;
-	padding-bottom: 5px;
-	overflow: auto;
+}
+
+.cs-comment-header-right {
+	display: inline-block;
+	float: right;
+}
+
+.cs-avatar {
+	height: 48px;
+	padding: 5px;
 }
 
 .cs-comment-title {
 	font-size: 16px;
 	font-weight: bold;
-}
-
-.cs-avatar {
-	width: 30px;
-	height: 30px;
-	padding-right: 5px;
-	margin-top: 3px;
 }
 
 .cs-comment-author {
@@ -75,6 +95,10 @@
 	font-size: 12px;
 	padding-right: 5px;
 	padding-left: 5px;
+}
+
+button:hover {
+	background-color: #8eddf5;
 }
 
 .cs-button {
@@ -111,14 +135,12 @@
 }
 
 .cs-toggle-button {
-	float: right;
 	border: none;
 	border-style: none;
 	padding-left: 10px;
 }
 
 .cs-link-button {
-	float: right;
 	border: none;
 	border-style: none;
 	padding-left: 10px;
@@ -131,7 +153,7 @@
 
 #cs-edit-box {
 	position: relative;
-	background-color: #e4f1fe;
+	background-color: #e4f1ff;
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 7px;
 }
