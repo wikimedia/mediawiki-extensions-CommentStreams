@@ -39,6 +39,7 @@
 				"mobile"
 			],
 			"messages": [
+				"commentstreams-api-error-notloggedin",
 				"commentstreams-api-error-commentnotfound",
 				"commentstreams-api-error-notacomment",
 				"commentstreams-api-error-missingcommenttitle",
@@ -58,6 +59,12 @@
 				"commentstreams-api-error-vote-notloggedin",
 				"commentstreams-api-error-vote-novoteonreply",
 				"commentstreams-api-error-vote",
+				"commentstreams-api-error-watch-notloggedin",
+				"commentstreams-api-error-watch-nowatchreply",
+				"commentstreams-api-error-watch",
+				"commentstreams-api-error-unwatch-notloggedin",
+				"commentstreams-api-error-unwatch-nounwatchreply",
+				"commentstreams-api-error-unwatch",
 				"commentstreams-validation-error-nocommenttitle",
 				"commentstreams-validation-error-nocommenttext",
 				"commentstreams-buttontooltip-add",
@@ -71,6 +78,8 @@
 				"commentstreams-buttontooltip-expand",
 				"commentstreams-buttontooltip-upvote",
 				"commentstreams-buttontooltip-downvote",
+				"commentstreams-buttontooltip-watch",
+				"commentstreams-buttontooltip-unwatch",
 				"commentstreams-buttontooltip-submit",
 				"commentstreams-buttontooltip-cancel",
 				"commentstreams-dialog-delete-message",
@@ -109,10 +118,9 @@
 		"ApiCSEditComment": "includes/ApiCSEditComment.php",
 		"ApiCSDeleteComment": "includes/ApiCSDeleteComment.php",
 		"ApiCSVote": "includes/ApiCSVote.php",
-		"EchoCSFormatter": "includes/EchoCSFormatter.php",
-		"EchoCSReplyPresentationModel": "includes/EchoCSReplyPresentationModel.php",
-		"EchoCSWatchedPresentationModel":
-			"includes/EchoCSWatchedPresentationModel.php",
+		"ApiCSWatch": "includes/ApiCSWatch.php",
+		"ApiCSUnwatch": "includes/ApiCSUnwatch.php",
+		"EchoCSPresentationModel": "includes/EchoCSPresentationModel.php",
 		"CommentStreamsAllComments": "includes/CommentStreamsAllComments.php"
 	},
 	"APIModules": {
@@ -120,7 +128,9 @@
 		"csQueryComment": "ApiCSQueryComment",
 		"csEditComment": "ApiCSEditComment",
 		"csDeleteComment": "ApiCSDeleteComment",
-		"csVote": "ApiCSVote"
+		"csVote": "ApiCSVote",
+		"csWatch": "ApiCSWatch",
+		"csUnwatch": "ApiCSUnwatch"
 	},
 	"Hooks": {
 		"LoadExtensionSchemaUpdates": "CommentStreamsHooks::addCommentTableToDatabase",

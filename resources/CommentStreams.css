@@ -104,7 +104,6 @@ button:hover {
 .cs-button {
 	background-color: transparent;
 	border: none;
-	color: #00a7d8;
 	font-family: sans-serif;
 	font-weight: bold;
 	text-decoration: none;
@@ -137,13 +136,16 @@ button:hover {
 .cs-toggle-button {
 	border: none;
 	border-style: none;
-	padding-left: 10px;
+}
+
+.cs-vote-upcount, .cs-vote-downcount {
+	color: #555555;
+	padding-left: 3px;
 }
 
 .cs-link-button {
 	border: none;
 	border-style: none;
-	padding-left: 10px;
 }
 
 #cs-add-button, .cs-reply-button {

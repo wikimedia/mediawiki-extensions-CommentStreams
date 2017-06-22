@@ -134,7 +134,7 @@ class Comment {
 		$comment->wikitext = $wikitext;
 
 		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw-> insert(
+		$result = $dbw->insert(
 			'cs_comment_data',
 			[
 				'page_id' => $wikipage->getId(),
@@ -148,6 +148,12 @@ class Comment {
 			return null;
 		}
 		$comment->loadFromValues( $assoc_page_id, $parent_page_id, $comment_title );
+
+		if ( is_null( $parent_page_id ) ) {
+			$comment->watch( $user );
+		} else {
+			self::watchComment( $parent_page_id, $user );
+		}
 
 		if ( defined( 'SMW_VERSION' ) ) {
 			$job = new SMWUpdateJob( $title );
@@ -501,8 +507,8 @@ class Comment {
 	 * record a vote
 	 *
 	 * @param vote 1 for up vote, -1 for down vote, 0 for no vote
-	 * @param User $user the author of the edit
-	 * @return +1 for up vote, -1 for down vote, 0 for no vote
+	 * @param User $user the user voting on the comment
+	 * @return database status code
 	 */
 	public function vote( $vote, $user ) {
 		if ( $vote !== "-1" && $vote !== "0" && $vote !== "1" ) {
@@ -550,7 +556,7 @@ class Comment {
 				return true;
 			}
 			$dbw = wfGetDB( DB_MASTER );
-			$result = $dbw-> insert(
+			$result = $dbw->insert(
 				'cs_votes',
 				[
 					'page_id' => $this->getId(),
@@ -561,6 +567,117 @@ class Comment {
 			);
 		}
 		return $result;
+	}
+
+	/**
+	 * watch a comment (get page ID from this comment)
+	 *
+	 * @param User $user the user watching the comment
+	 * @return database true for OK, false for error
+	 */
+	public function watch( $user ) {
+		return self::watchComment( $this->getID(), $user );
+	}
+
+	/**
+	 * watch a comment (get page ID from parameter)
+	 *
+	 * @param $pageid the page ID of the comment to watch
+	 * @param User $user the user watching the comment
+	 * @return database true for OK, false for error
+	 */
+	private static function watchComment( $pageid, $user ) {
+		if ( self::isWatchingComment( $pageid, $user ) ) {
+			return true;
+		}
+		$dbw = wfGetDB( DB_MASTER );
+		$result = $dbw->insert(
+			'cs_watchlist',
+			[
+				'page_id' => $pageid,
+				'user_id' => $user->getId()
+			],
+			__METHOD__
+		);
+		return $result;
+	}
+
+	/**
+	 * unwatch a comment
+	 *
+	 * @param User $user the user unwatching the comment
+	 * @return database true for OK, false for error
+	 */
+	public function unwatch( $user ) {
+		if ( !$this->isWatching( $user ) ) {
+			return true;
+		}
+		$dbw = wfGetDB( DB_MASTER );
+		$result = $dbw->delete (
+			'cs_watchlist',
+			[
+				'page_id' => $this->getId(),
+				'user_id' => $user->getId()
+			],
+			__METHOD__
+		);
+		return $result;
+	}
+
+	/**
+	 * Check if a particular user is watching this comment
+	 *
+	 * @param User $user the user watching the comment
+	 * @return database true for OK, false for error
+	 */
+	public function isWatching( $user ) {
+		return self::isWatchingComment( $this->getId(), $user );
+	}
+
+	/**
+	 * Check if a particular user is watching a comment
+	 *
+	 * @param $pageid the page ID of the comment to check
+	 * @param User $user the user watching the comment
+	 * @return database true for OK, false for error
+	 */
+	private static function isWatchingComment( $pageid, $user ) {
+		$dbr = wfGetDB( DB_SLAVE );
+		$result = $dbr->selectRow(
+			'cs_watchlist',
+			[ 'page_id' ],
+			[
+				'page_id' => $pageid,
+				'user_id' => $user->getId()
+			],
+			__METHOD__
+		);
+		if ( $result ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get an array of watchers for this comment
+	 *
+	 * @return array of user IDs
+	 */
+	public function getWatchers() {
+		$dbr = wfGetDB( DB_SLAVE );
+		$result = $dbr->select(
+			'cs_watchlist',
+			[ 'user_id' ],
+			[ 'page_id' => $this->getId() ],
+			__METHOD__
+		);
+		$users = [];
+		foreach ( $result as $row ) {
+			$user_id = $row->user_id;
+			$user = User::newFromId( $user_id );
+			$users[$user_id] = $user; 
+		}
+		return $users;
 	}
 
 	/**
@@ -823,31 +940,19 @@ EOT;
 	}
 
 	/**
-	 * Used by Echo to locate the author of a comment being replied to.
+	 * Used by Echo to locate the users watching a comment being replied to.
 	 * @param EchoEvent $event the Echo event
 	 * @return array array mapping user id to User object
 	 */
-	public static function locateParentCommentAuthor( $event ) {
-		$users = [];
+	public static function locateUsersWatchingComment( $event ) {
 		$id = $event->getExtraParam( 'comment' );
 		$wikipage = WikiPage::newFromId( $id );
 		if ( !is_null( $wikipage ) ) {
 			$comment = Comment::newFromWikiPage( $wikipage );
 			if ( !is_null( $comment ) ) {
-				$parent_id = $comment->getParentId();
-				if ( !is_null( $parent_id ) ) {
-					$parent_wikipage = WikiPage::newFromId( $parent_id );
-					if ( !is_null( $parent_wikipage ) ) {
-						$parent_comment = Comment::newFromWikiPage( $parent_wikipage );
-						if ( !is_null( $parent_comment ) ) {
-							$user = $parent_comment->getUser();
-							$userid = $user->getId();
-							$users[$userid] = $user;
-						}
-					}
-				}
+				return $comment->getWatchers();
 			}
 		}
-		return $users;
+		return [];
 	}
 }

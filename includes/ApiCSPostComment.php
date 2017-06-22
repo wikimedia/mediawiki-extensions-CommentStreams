@@ -82,15 +82,18 @@ class ApiCSPostComment extends ApiBase {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-post' );
 		}
 
-        $title = $comment->getWikiPage()->getTitle();
+		$title = $comment->getWikiPage()->getTitle();
 		if ( is_null( $comment->getParentId() ) ) {
 			$this->logAction( 'comment-create', $title );
 		} else {
 			$this->logAction( 'reply-create', $title );
 		}
 
-		$this->getResult()->addValue( null, $this->getModuleName(),
-			$comment->getJSON() );
+		$json = $comment->getJSON();
+		if ( class_exists( 'EchoEvent' ) && is_null( $comment->getParentId() ) ) {
+			$json['watching'] = 1;
+		}
+		$this->getResult()->addValue( null, $this->getModuleName(), $json );
 
 		$this->sendNotifications( $comment, $associated_page );
 	}
@@ -183,7 +186,7 @@ class ApiCSPostComment extends ApiBase {
 				'agent' => $this->getUser()
 			] );
 			EchoEvent::create( [
-				'type' => 'commentstreams-reply-to-author',
+				'type' => 'commentstreams-reply-to-watched-comment',
 				'title' => $associated_page->getTitle(),
 				'extra' => $extra,
 				'agent' => $this->getUser()

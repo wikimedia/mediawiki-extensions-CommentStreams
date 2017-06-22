@@ -144,6 +144,9 @@ class CommentStreams {
 			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
 				$parentJSON['vote'] = $parentComment->getVote( $output->getUser() );
 			}
+			if ( class_exists( 'EchoEvent' ) ) {
+				$parentJSON['watching'] = $parentComment->isWatching( $output->getUser() );
+			}
 			$childComments = $this->getReplies( $allComments,
 				$parentComment->getId() );
 			foreach ( $childComments as $childComment ) {
@@ -193,6 +196,8 @@ class CommentStreams {
 			'initiallyCollapsed' => $initiallyCollapsed,
 			'enableVoting' =>
 				$GLOBALS['wgCommentStreamsEnableVoting'] ? 1 : 0,
+			'enableWatchlist' =>
+				class_exists( 'EchoEvent' ) ? 1 : 0,
 			'comments' => $comments
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );

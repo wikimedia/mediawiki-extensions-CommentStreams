@@ -110,6 +110,25 @@ var commentstreams_querier = ( function( mw ) {
 					self.reportError( data, reply );
 				} );
 		},
+		watch: function( pageid, action, reply ) {
+			var self = this;
+			var api = new mw.Api();
+			api.post( {
+					action: action ? 'csWatch' : 'csUnwatch',
+					pageid: pageid,
+					token: mw.user.tokens.get( 'editToken' )
+				} )
+				.done( function( data ) {
+					if ( action ) {
+						reply( data.csWatch );
+					} else {
+						reply( data.csUnwatch );
+					}
+				} )
+				.fail( function( data ) {
+					self.reportError( data, reply );
+				} );
+		},
 		reportError: function( data, reply ) {
 			if ( data === 'nosuchpageid' ) {
 				reply( {

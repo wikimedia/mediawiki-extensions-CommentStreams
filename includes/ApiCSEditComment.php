@@ -83,9 +83,11 @@ class ApiCSEditComment extends ApiCSBase {
 
 		$json = $this->comment->getJSON();
 
-		if ( is_null( $this->comment->getParentId() ) &&
-			$GLOBALS['wgCommentStreamsEnableVoting'] ) {
-			$json['vote'] = $this->comment->getVote( $this->getUser() );
+		if ( is_null( $this->comment->getParentId() ) ) {
+			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
+				$json['vote'] = $this->comment->getVote( $this->getUser() );
+			}
+			$json['watching'] = $this->comment->isWatching( $this->getUser() ) ? 1 : 0;
 		}
 
 		$this->getResult()->addValue( null, $this->getModuleName(), $json );

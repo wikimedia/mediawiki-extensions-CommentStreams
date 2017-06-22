@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class EchoCSWatchedPresentationModel extends EchoEventPresentationModel {
+class EchoCSPresentationModel extends EchoEventPresentationModel {
 
 	/**
 	 * @return string The symbolic icon name as defined in $wgEchoNotificationIcons
@@ -37,9 +37,10 @@ class EchoCSWatchedPresentationModel extends EchoEventPresentationModel {
 	 *                    ['url' => (string) url, 'label' => (string) link text (non-escaped)]
 	 */
 	public function getPrimaryLink() {
+		$id = $this->event->getExtraParam( 'comment' );
 		return [
-			'url' => $this->event->getTitle()->getFullURL(),
-			'label' => $this->msg( 'notification-commentstreams-page' )
+			'url' => $this->event->getTitle()->getFullURL() . '#cs-comment-' . $id,
+			'label' => $this->msg( "notification-link-label-{$this->type}" )
 		];
 	}
 
@@ -51,14 +52,7 @@ class EchoCSWatchedPresentationModel extends EchoEventPresentationModel {
 	 * @return Message
 	 */
 	public function getHeaderMessage() {
-		$reply = $this->event->getExtraParam( 'reply' );
-		if ( $reply ) {
-			$msg = $this->msg(
-				'notification-header-commentstreams-reply-on-watched-page' );
-		} else {
-			$msg = $this->msg(
-				'notification-header-commentstreams-comment-on-watched-page' );
-		}
+		$msg = wfMessage( "notification-header-{$this->type}" );
 		$msg->params( $this->event->getExtraParam(
 			'comment_author_display_name' ) );
 		$msg->params( $this->event->getExtraParam( 'comment_title' ) );
@@ -66,6 +60,23 @@ class EchoCSWatchedPresentationModel extends EchoEventPresentationModel {
 			'associated_page_display_title' ) );
 		$msg->params( $this->event->getExtraParam(
 			'comment_author_username' ) );
+		$msg->params( $this->event->getExtraParam(
+			'comment_wikitext' ) );
+		$msg->params( $this->getViewingUserForGender() );
+		return $msg;
+	}
+
+	public function getBodyMessage() {
+		$msg = wfMessage( "notification-body-{$this->type}" );
+		$msg->params( $this->event->getExtraParam(
+			'comment_author_display_name' ) );
+		$msg->params( $this->event->getExtraParam( 'comment_title' ) );
+		$msg->params( $this->event->getExtraParam(
+			'associated_page_display_title' ) );
+		$msg->params( $this->event->getExtraParam(
+			'comment_author_username' ) );
+		$msg->params( $this->event->getExtraParam(
+			'comment_wikitext' ) );
 		$msg->params( $this->getViewingUserForGender() );
 		return $msg;
 	}

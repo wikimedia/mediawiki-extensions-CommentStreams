@@ -25,6 +25,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 	return {
 		baseUrl: null,
+		imagepath: null,
 		targetComment: null,
 		isLoggedIn: false,
 		moderatorEdit: false,
@@ -34,6 +35,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		newestStreamsOnTop: false,
 		initiallyCollapsed: false,
 		enableVoting: false,
+		enableWatchlist: false,
 		comments: [],
 		spinnerOptions: {
 			lines: 11, // The number of lines to draw
@@ -56,6 +58,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 		initialize: function() {
 			var self = this;
 			this.baseUrl = window.location.href.split(/[?#]/)[0];
+			this.imagepath = mw.config.get( 'wgExtensionAssetsPath' ) +
+				'/CommentStreams/images/';
 			if ( window.location.hash ) {
 				var hash = window.location.hash.substring( 1 );
 				var queryIndex = hash.indexOf( '?' );
@@ -74,6 +78,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			this.newestStreamsOnTop = config.newestStreamsOnTop;
 			this.initiallyCollapsed = config.initiallyCollapsed;
 			this.enableVoting = config.enableVoting;
+			this.enableWatchlist = config.enableWatchlist;
 			this.comments = config.comments;
 			this.setupDivs();
 			this.addInitialComments();
@@ -105,12 +110,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 						id: 'cs-add-button'
 					} )
 					.addClass( 'cs-button' );
-				var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-					'/CommentStreams/images/';
 				var addimage = $( '<img>' )
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-add' ),
-						src: path + 'comment_add.png'
+						src: this.imagepath + 'comment_add.png'
 					} );
 				addButton.append( addimage );
 
@@ -157,12 +160,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			stream.find( '.cs-stream-footer .cs-reply-button' ).addClass( 'cs-hidden' );
 			$( stream ).addClass( 'cs-collapsed' );
 			$( stream ).removeClass( 'cs-expanded' );
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
 			$( button ).find( 'img' )
 				.attr( {
 					title: mw.message( 'commentstreams-buttontooltip-expand' ),
-					src: path + 'expand.png'
+					src: this.imagepath + 'expand.png'
 				} );
 		},
 		expandStream: function( stream, button ) {
@@ -171,12 +172,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			stream.find( '.cs-stream-footer .cs-reply-button' ).removeClass( 'cs-hidden' );
 			$( stream ).addClass( 'cs-expanded' );
 			$( stream ).removeClass( 'cs-collapsed' );
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
 			$( button ).find( 'img' )
 				.attr( {
 					title: mw.message( 'commentstreams-buttontooltip-collapse' ),
-					src: path + 'collapse.png'
+					src: this.imagepath + 'collapse.png'
 				} );
 		},
 		disableAllButtons: function() {
@@ -187,6 +186,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			$( '.cs-toggle-button' ).attr( 'disabled', 'disabled' );
 			$( '.cs-link-button' ).attr( 'disabled', 'disabled' );
 			$( '.cs-vote-button' ).attr( 'disabled', 'disabled' );
+			$( '.cs-watch-button' ).attr( 'disabled', 'disabled' );
 		},
 		enableAllButtons: function() {
 			$( '.cs-edit-button' ).attr( 'disabled', false );
@@ -196,6 +196,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			$( '.cs-toggle-button' ).attr( 'disabled', false );
 			$( '.cs-link-button' ).attr( 'disabled', false );
 			$( '.cs-vote-button' ).attr( 'disabled', false );
+			$( '.cs-watch-button' ).attr( 'disabled', false );
 		},
 		formatComment: function( commentData ) {
 			var self = this;
@@ -220,12 +221,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 							type: 'button',
 							'data-stream-id': commentData.pageid
 						} );
-					var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-						'/CommentStreams/images/';
 					var replyimage = $( '<img>' )
 						.attr( {
 							title: mw.message( 'commentstreams-buttontooltip-reply' ),
-							src: path + 'comment_reply.png'
+							src: this.imagepath + 'comment_reply.png'
 						} );
 					replyButton.append( replyimage );
 					streamFooter.append( replyButton );
@@ -289,6 +288,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 				centerDiv.append( modified );
 			}
 
+			var divider = this.createDivider();
+			centerDiv.append( divider );
+
 			if ( this.canEdit( commentData ) ) {
 				centerDiv.append( this.createEditButton( commentData.username) );
 			}
@@ -297,38 +299,21 @@ var commentstreams_controller = ( function( mw, $ ) {
 				centerDiv.append( this.createDeleteButton( commentData.username) );
 			}
 
-			if ( commentData.parentid === null && this.enableVoting ) {
-				centerDiv.append( this.createVotingButtons( commentData ) );
-			}
+			centerDiv.append( this.createPermalinkButton( commentData.pageid ) );
 
 			commentHeader.append( centerDiv );
 
 			var rightDiv = $( '<div>' )
 				.addClass( 'cs-comment-header-right' );
 
-			var id = 'cs-comment-' + commentData.pageid;
-			var permalinkButton = $( '<button>' )
-				.addClass( 'cs-button' )
-				.addClass( 'cs-link-button' )
-				.click( function() {
-					$( '.cs-target-comment' )
-						.removeClass( 'cs-target-comment' );
-					self.scrollToAnchor( id )
-					var comment = $( this ).closest( '.cs-comment' );
-					comment
-						.addClass( 'cs-target-comment' );
-					self.showUrlDialog( id );
-					window.location.hash = '#' + id;
-				} );
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
-			var permalinkimage = $( '<img>' )
-				.attr( {
-					title: mw.message( 'commentstreams-buttontooltip-permalink' ),
-					src: path + 'link.png'
-				} );
-			permalinkButton.append( permalinkimage );
-			rightDiv.append( permalinkButton );
+			if ( commentData.parentid === null && this.enableWatchlist &&
+				!mw.user.isAnon() ) {
+				rightDiv.append( this.createWatchButton( commentData ) );
+			}
+
+			if ( commentData.parentid === null && this.enableVoting ) {
+				rightDiv.append( this.createVotingButtons( commentData ) );
+			}
 
 			if ( commentData.parentid === null ) {
 				var collapseButton = $( '<button>' )
@@ -338,7 +323,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var collapseimage = $( '<img>' )
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-collapse' ),
-						src: path + 'collapse.png'
+						src: this.imagepath + 'collapse.png'
 					} );
 				collapseButton.append( collapseimage );
 				rightDiv.append( collapseButton );
@@ -366,6 +351,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			} else {
 				commentClass = 'cs-head-comment';
 			}
+			var id = 'cs-comment-' + commentData.pageid;
 			var comment = $( '<div>' )
 				.addClass( 'cs-comment' )
 				.addClass( commentClass )
@@ -416,22 +402,16 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		createEditButton: function( username ) {
 			var self = this;
-			var editSpan = $( '<span>' )
-				.addClass( 'cs-edit-span' );
-			var divider = this.createDivider();
-			editSpan.append( divider );
 			var editButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-edit-button' )
 				.attr( 'type', 'button' );
 			var editimage = $( '<img>' );
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
 			if ( mw.user.getName() !== username ) {
 				editimage
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-moderator-edit' ),
-						src: path + 'comment_moderator_edit.png'
+						src: this.imagepath + 'comment_moderator_edit.png'
 					} );
 				editButton
 					.addClass( 'cs-moderator-button' )
@@ -439,36 +419,29 @@ var commentstreams_controller = ( function( mw, $ ) {
 				editimage
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-edit' ),
-						src: path + 'comment_edit.png'
+						src: this.imagepath + 'comment_edit.png'
 					} );
 			}
 			editButton.append( editimage );
-			editSpan.append( editButton );
 			editButton.click( function() {
 				var comment = $( this ).closest( '.cs-comment' );
 				var pageId = $( comment ).attr( 'data-id' );
 				self.editComment( $( comment ), pageId );
 			} );
-			return editSpan;
+			return editButton;
 		},
 		createDeleteButton: function( username ) {
 			var self = this;
-			var deleteSpan = $( '<span>' )
-				.addClass( 'cs-delete-span' );
-			var divider = this.createDivider();
-			deleteSpan.append( divider );
 			var deleteButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-delete-button' )
 				.attr( 'type', 'button' );
 			var deleteimage = $( '<img>' );
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
 			if ( mw.user.getName() !== username ) {
 				deleteimage
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-moderator-delete' ),
-						src: path + 'comment_moderator_delete.png'
+						src: this.imagepath + 'comment_moderator_delete.png'
 					} );
 				deleteButton
 					.addClass( 'cs-moderator-button' )
@@ -476,22 +449,70 @@ var commentstreams_controller = ( function( mw, $ ) {
 				deleteimage
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-delete' ),
-						src: path + 'comment_delete.png'
+						src: this.imagepath + 'comment_delete.png'
 					} );
 			}
 			deleteButton.append( deleteimage );
-			deleteSpan.append( deleteButton );
 			deleteButton.click( function() {
 				var comment = $( this ).closest( '.cs-comment' );
 				var pageId = $( comment ).attr( 'data-id' );
 				self.deleteComment( $( comment ), pageId );
 			} );
-			return deleteSpan;
+			return deleteButton;
+		},
+		createPermalinkButton( pageid ) {
+			var self = this;
+			var id = 'cs-comment-' + pageid;
+			var permalinkButton = $( '<button>' )
+				.addClass( 'cs-button' )
+				.addClass( 'cs-link-button' )
+				.click( function() {
+					$( '.cs-target-comment' )
+						.removeClass( 'cs-target-comment' );
+					self.scrollToAnchor( id )
+					var comment = $( this ).closest( '.cs-comment' );
+					comment
+						.addClass( 'cs-target-comment' );
+					self.showUrlDialog( id );
+					window.location.hash = '#' + id;
+				} );
+			var permalinkimage = $( '<img>' )
+				.attr( {
+					title: mw.message( 'commentstreams-buttontooltip-permalink' ),
+					src: this.imagepath + 'link.png'
+				} );
+			permalinkButton.append( permalinkimage );
+			return permalinkButton;
+		},
+		createWatchButton( commentData ) {
+			var self = this;
+			var watchButton = $( '<button>' )
+				.addClass( 'cs-button' )
+				.addClass( 'cs-watch-button' )
+				.click( function() {
+					self.watch( $( this ), commentData.pageid );
+				} );
+			var watchimage = $( '<img>' )
+				.addClass( 'cs-watch-image' );
+			if ( commentData.watching ) {
+				watchimage
+					.attr( {
+						title: mw.message( 'commentstreams-buttontooltip-unwatch' ),
+						src: this.imagepath + 'watching.png'
+					} )
+					.addClass( 'cs-watch-watching' );
+			} else {
+				watchimage
+					.attr( {
+						title: mw.message( 'commentstreams-buttontooltip-watch' ),
+						src: this.imagepath + 'notwatching.png'
+					} )
+			}
+			watchButton.append( watchimage );
+			return watchButton;
 		},
 		createVotingButtons( commentData ) {
 			var self = this;
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
 
 			var upButton;
 			if ( mw.user.isAnon() ) {
@@ -502,7 +523,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					.addClass( 'cs-button' )
 					.addClass( 'cs-vote-button' )
 					.click( function() {
-						self.vote( $( this ), commentData.pageid, path, true,
+						self.vote( $( this ), commentData.pageid, true,
 							commentData.created_timestamp );
 					} );
 			}
@@ -510,13 +531,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.attr( 'title', mw.message( 'commentstreams-buttontooltip-upvote' ) )
 				.addClass( 'cs-vote-upimage' );
 			if ( commentData.vote > 0 ) {
-				upimage.attr( 'src', path + 'upvote-enabled.png' );
+				upimage.attr( 'src', this.imagepath + 'upvote-enabled.png' );
 				upimage.addClass( 'cs-vote-enabled' );
 			} else {
-				upimage.attr( 'src', path + 'upvote-disabled.png' );
+				upimage.attr( 'src', this.imagepath + 'upvote-disabled.png' );
 			}
 			var upcountspan = $( '<span>' )
-				.addClass( 'cs-comment-details' )
 				.addClass( 'cs-vote-upcount' )
 				.text( commentData.numupvotes );
 			upButton.append( upimage );
@@ -531,7 +551,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					.addClass( 'cs-button' )
 					.addClass( 'cs-vote-button' )
 					.click( function() {
-						self.vote( $( this ), commentData.pageid, path, false,
+						self.vote( $( this ), commentData.pageid, false,
 							commentData.created_timestamp );
 					} );
 			}
@@ -539,13 +559,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.attr( 'title', mw.message( 'commentstreams-buttontooltip-downvote' ) )
 				.addClass( 'cs-vote-downimage' );
 			if ( commentData.vote < 0 ) {
-				downimage.attr( 'src', path + 'downvote-enabled.png' );
+				downimage.attr( 'src', this.imagepath + 'downvote-enabled.png' );
 				downimage.addClass( 'cs-vote-enabled' );
 			} else {
-				downimage.attr( 'src', path + 'downvote-disabled.png' );
+				downimage.attr( 'src', this.imagepath + 'downvote-disabled.png' );
 			}
 			var downcountspan = $( '<span>' )
-				.addClass( 'cs-comment-details' )
 				.addClass( 'cs-vote-downcount' )
 				.text( commentData.numdownvotes );
 			downButton.append( downimage );
@@ -553,13 +572,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			var votingSpan = $( '<span>' )
 				.addClass( 'cs-voting-span' );
-			var divider = this.createDivider();
-			votingSpan.append( divider );
 			votingSpan.append( upButton );
 			votingSpan.append( downButton );
 			return votingSpan;
 		},
-		vote: function( button, pageid, path, up, created_timestamp ) {
+		vote: function( button, pageid, up, created_timestamp ) {
 
 			var self = this;
 			var votespan = button.closest( '.cs-voting-span' );
@@ -607,17 +624,17 @@ var commentstreams_controller = ( function( mw, $ ) {
 				if ( result.error === undefined ) {
 					if ( up ) {
 						if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
-							upimage.attr( 'src', path + 'upvote-disabled.png' );
+							upimage.attr( 'src', self.imagepath + 'upvote-disabled.png' );
 							upimage.removeClass( 'cs-vote-enabled' );
 							upcount = upcount - 1;
 							upcountspan.text( upcount );
 						} else {
-							upimage.attr( 'src', path + 'upvote-enabled.png' );
+							upimage.attr( 'src', self.imagepath + 'upvote-enabled.png' );
 							upimage.addClass( 'cs-vote-enabled' );
 							upcount = upcount + 1;
 							upcountspan.text( upcount );
 							if ( downimage.hasClass( 'cs-vote-enabled' ) ) {
-								downimage.attr( 'src', path + 'downvote-disabled.png' );
+								downimage.attr( 'src', self.imagepath + 'downvote-disabled.png' );
 								downimage.removeClass( 'cs-vote-enabled' );
 								downcount = downcount - 1;
 								downcountspan.text( downcount );
@@ -625,17 +642,17 @@ var commentstreams_controller = ( function( mw, $ ) {
 						}
 					} else {
 						if ( downimage.hasClass( 'cs-vote-enabled' ) ) {
-							downimage.attr( 'src', path + 'downvote-disabled.png' );
+							downimage.attr( 'src', self.imagepath + 'downvote-disabled.png' );
 							downimage.removeClass( 'cs-vote-enabled' );
 							downcount = downcount - 1;
 							downcountspan.text( downcount );
 						} else {
-							downimage.attr( 'src', path + 'downvote-enabled.png' );
+							downimage.attr( 'src', self.imagepath + 'downvote-enabled.png' );
 							downimage.addClass( 'cs-vote-enabled' );
 							downcount = downcount + 1;
 							downcountspan.text( downcount );
 							if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
-								upimage.attr( 'src', path + 'upvote-disabled.png' );
+								upimage.attr( 'src', self.imagepath + 'upvote-disabled.png' );
 								upimage.removeClass( 'cs-vote-enabled' );
 								upcount = upcount - 1;
 								upcountspan.text( upcount );
@@ -650,6 +667,38 @@ var commentstreams_controller = ( function( mw, $ ) {
 					self.reportError( result.error );
 					self.enableAllButtons();
 				}
+			} );
+		},
+		watch: function( button, pageid ) {
+			var self = this;
+			var image = button.find( '.cs-watch-image');
+			var watchaction = !image.hasClass( 'cs-watch-watching' );
+			var comment = button.closest( '.cs-comment' );
+			this.disableAllButtons();
+			new Spinner( self.spinnerOptions )
+				.spin( document.getElementById( comment.attr( 'id' ) ) );
+			CommentStreamsQuerier.watch( pageid, watchaction, function( result ) {
+				$( '.spinner' ).remove();
+				if ( result.error === undefined ) {
+					if ( watchaction ) {
+						image
+							.attr( {
+								title: mw.message( 'commentstreams-buttontooltip-unwatch' ),
+								src: self.imagepath + 'watching.png'
+							} )
+							.addClass( 'cs-watch-watching' );
+					} else {
+						image
+							.attr( {
+								title: mw.message( 'commentstreams-buttontooltip-watch' ),
+								src: self.imagepath + 'notwatching.png'
+							} )
+							.removeClass( 'cs-watch-watching' );
+					}
+				} else {
+					self.reportError( result.error );
+				}
+				self.enableAllButtons();
 			} );
 		},
 		adjustCommentOrder: function( stream, votediff, upcount,
@@ -823,9 +872,6 @@ var commentstreams_controller = ( function( mw, $ ) {
 				} );
 			commentBox.append( bodyField );
 
-			var path = mw.config.get( 'wgExtensionAssetsPath' ) +
-				'/CommentStreams/images/';
-
 			var submitButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-submit-button' )
@@ -836,7 +882,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var submitimage = $( '<img>' )
 				.attr( {
 					title: mw.message( 'commentstreams-buttontooltip-submit' ),
-					src: path + 'submit.png'
+					src: this.imagepath + 'submit.png'
 				} );
 			submitButton.append( submitimage );
 
@@ -852,7 +898,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var cancelimage = $( '<img>' )
 				.attr( {
 					title: mw.message( 'commentstreams-buttontooltip-cancel' ),
-					src: path + 'cancel.png'
+					src: this.imagepath + 'cancel.png'
 				} );
 			cancelButton.append( cancelimage );
 
@@ -959,7 +1005,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 									.closest( '.cs-stream' )
 									.find( '.cs-head-comment' )
 									.find( '.cs-comment-header' )
-									.find( '.cs-delete-span' );
+									.find( '.cs-delete-button' );
 								deleteSpan.remove();
 							}
 							var location = $( '#cs-edit-box' )
@@ -1050,7 +1096,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 											.closest( '.cs-stream' )
 											.find( '.cs-head-comment' )
 											.find( '.cs-comment-header' )
-											.find( '.cs-edit-span' ) );
+											.find( '.cs-edit-button' ) );
 								}
 								element.slideUp( 'normal', function() {
 									element.remove();
@@ -1155,7 +1201,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 														.closest( '.cs-stream' )
 														.find( '.cs-head-comment' )
 														.find( '.cs-comment-header' )
-														.find( '.cs-edit-span' ) );
+														.find( '.cs-edit-button' ) );
 											}
 											commentBox.slideUp( 'normal', function() {
 												commentBox.remove();
@@ -1188,7 +1234,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 										.closest( '.cs-stream' )
 										.find( '.cs-head-comment' )
 										.find( '.cs-comment-header' )
-										.find( '.cs-edit-span' ) );
+										.find( '.cs-edit-button' ) );
 							}
 							element.remove();
 							self.enableAllButtons();
