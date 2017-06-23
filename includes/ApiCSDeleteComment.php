@@ -43,7 +43,8 @@ class ApiCSDeleteComment extends ApiCSBase {
 		}
 
 		if ( $this->getUser()->getId() ===
-			$this->comment->getWikiPage()->getOldestRevision()->getUser() ) {
+			$this->comment->getWikiPage()->getOldestRevision()->getUser() &&
+			$this->comment->getNumReplies() === 0 ) {
 			$action = 'edit'; // need edit but not delete to delete a comment
 		} else {
 			$action = 'cs-moderator-delete';

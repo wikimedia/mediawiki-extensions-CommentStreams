@@ -945,7 +945,7 @@ EOT;
 	 * @return array array mapping user id to User object
 	 */
 	public static function locateUsersWatchingComment( $event ) {
-		$id = $event->getExtraParam( 'comment' );
+		$id = $event->getExtraParam( 'parent_id' );
 		$wikipage = WikiPage::newFromId( $id );
 		if ( !is_null( $wikipage ) ) {
 			$comment = Comment::newFromWikiPage( $wikipage );

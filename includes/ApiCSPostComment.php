@@ -170,7 +170,8 @@ class ApiCSPostComment extends ApiBase {
 		}
 
 		$extra = [
-			'comment' => $comment->getId(),
+			'comment_id' => $comment->getId(),
+			'parent_id' => $comment->getParentId(),
 			'comment_author_username' => $comment->getUsername(),
 			'comment_author_display_name' => $comment->getUserDisplayNameUnlinked(),
 			'comment_title' => $comment_title,

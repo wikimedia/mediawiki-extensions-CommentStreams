@@ -37,7 +37,7 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	 *                    ['url' => (string) url, 'label' => (string) link text (non-escaped)]
 	 */
 	public function getPrimaryLink() {
-		$id = $this->event->getExtraParam( 'comment' );
+		$id = $this->event->getExtraParam( 'comment_id' );
 		return [
 			'url' => $this->event->getTitle()->getFullURL() . '#cs-comment-' . $id,
 			'label' => $this->msg( "notification-link-label-{$this->type}" )
