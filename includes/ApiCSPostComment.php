@@ -123,7 +123,7 @@ class ApiCSPostComment extends ApiBase {
 	}
 
 	/**
-	 * @return string indicates that this API module requires a CSRF toekn
+	 * @return string indicates that this API module requires a CSRF token
 	 */
 	public function needstoken() {
 		return 'csrf';
