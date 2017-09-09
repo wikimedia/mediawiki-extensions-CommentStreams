@@ -80,7 +80,6 @@ class CommentStreamsHooks {
 		if ( $action === 'info' || $action === 'history' ) {
 			return true;
 		}
-
 		if ( $action !== 'view' ) {
 			$message =
 				wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
@@ -163,7 +162,7 @@ class CommentStreamsHooks {
 			return false;
 		}
 
-		if ( $action === 'edit' ) {
+		if ( $action === 'cs-comment' ) {
 			if ( $user->getId() === $wikipage->getOldestRevision()->getUser() ) {
 				$result = true;
 			} else {
@@ -249,7 +248,7 @@ class CommentStreamsHooks {
 	/**
 	 * Implements BeforePageDisplay hook.
 	 * See https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
-	 * Updates database schema.
+	 * Gets comments for page and initializes variables to be passed to JavaScript.
 	 *
 	 * @param OutputPage &$output OutputPage object
 	 * @param Skin &$skin Skin object that will be used to generate the page
@@ -296,6 +295,21 @@ class CommentStreamsHooks {
 			$GLOBALS['wgCommentStreamsNamespaceIndex'] + 1 );
 		$GLOBALS['wgNamespacesToBeSearchedDefault'][NS_COMMENTSTREAMS] = true;
 		$GLOBALS['smwgNamespacesWithSemanticLinks'][NS_COMMENTSTREAMS] = true;
+		$found = false;
+		foreach ( $GLOBALS['wgGroupPermissions'] as $groupperms ) {
+			if ( isset( $groupperms['cs-comment'] ) ) {
+				$found = true;
+				break;
+			}
+		}
+		if ( !$found ) {
+			foreach ( $GLOBALS['wgGroupPermissions'] as $group => $groupperms) {
+				if ( isset( $groupperms['edit'] ) ) {
+					$GLOBALS['wgGroupPermissions'][$group]['cs-comment'] =
+						$groupperms['edit'];
+				}
+			}
+		}
 		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']
 			['cs-moderator-delete'] ) ) {
 			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] =

@@ -44,7 +44,7 @@ class ApiCSEditComment extends ApiCSBase {
 
 		if ( $this->getUser()->getId() ===
 			$this->comment->getWikiPage()->getOldestRevision()->getUser() ) {
-			$action = 'edit';
+			$action = 'cs-comment';
 		} else {
 			$action = 'cs-moderator-edit';
 		}
@@ -67,7 +67,7 @@ class ApiCSEditComment extends ApiCSBase {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-edit' );
 		}
 
-		if ( $action === 'edit' ) {
+		if ( $action === 'cs-comment' ) {
 			if ( is_null( $this->comment->getParentId() ) ) {
 				$this->logAction( 'comment-edit' );
 			} else {

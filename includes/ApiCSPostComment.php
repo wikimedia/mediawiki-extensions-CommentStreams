@@ -35,7 +35,7 @@ class ApiCSPostComment extends ApiBase {
 	 * execute the API request
 	 */
 	public function execute() {
-		if ( !in_array( 'edit', $this->getUser()->getRights() ) ||
+		if ( !in_array( 'cs-comment', $this->getUser()->getRights() ) ||
 			$this->getUser()->isBlocked() ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-post-permissions' );

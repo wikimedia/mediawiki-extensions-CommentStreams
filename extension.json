@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "3.9.1",
+	"version": "3.10",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -83,7 +83,9 @@
 				"commentstreams-buttontooltip-submit",
 				"commentstreams-buttontooltip-cancel",
 				"commentstreams-dialog-delete-message",
+				"commentstreams-dialog-anonymous-message",
 				"commentstreams-dialog-buttontext-ok",
+				"commentstreams-dialog-buttontext-cancel",
 				"commentstreams-dialog-buttontext-yes",
 				"commentstreams-dialog-buttontext-no",
 				"commentstreams-urldialog-instructions",

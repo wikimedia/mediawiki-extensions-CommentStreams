@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS cs_watchlist
+CREATE TABLE IF NOT EXISTS /*_*/cs_watchlist
 (
 page_id int(10) unsigned NOT NULL,
 user_id int(10) unsigned NOT NULL,

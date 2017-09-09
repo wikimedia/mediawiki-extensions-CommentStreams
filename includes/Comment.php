@@ -114,6 +114,9 @@ class Comment {
 			$index = wfRandomString();
 			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
 			if ( !$title->isDeletedQuick() && !$title->exists() ) {
+				if ( !$title->userCan( 'cs-comment' ) ) {
+					return null;
+				}
 				$wikipage = new WikiPage( $title );
 				$status = $wikipage->doEditContent( $content, '',
 					EDIT_NEW | EDIT_SUPPRESS_RC , false, $user, null );
@@ -692,6 +695,9 @@ class Comment {
 	 * @return boolean true if successful
 	 */
 	public function update( $comment_title, $wikitext, $user ) {
+		if ( !$this->wikipage->getTitle()->userCan( 'cs-comment' ) ) {
+			return false;
+		}
 		if ( is_null( $comment_title ) && is_null( $this->getParentId() ) ) {
 			return false;
 		}
@@ -849,6 +855,14 @@ EOT;
 	 * @return string display name for user
 	 */
 	public static function getDisplayNameFromUser( $user, $linked = true ) {
+		if ( $user->isAnon() ) {
+			$html = Html::openElement( 'span', [
+					'class' => 'cs-comment-author-anonymous'
+				] )
+				. wfMessage( 'commentstreams-author-anonymous' )
+				. Html::closeElement( 'span' );
+			return $html;
+		}
 		$userpage = $user->getUserPage();
 		$displayname = null;
 		if ( !is_null( $GLOBALS['wgCommentStreamsUserRealNamePropertyName'] ) ) {

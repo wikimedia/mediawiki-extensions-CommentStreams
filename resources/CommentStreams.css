@@ -79,6 +79,12 @@
 	font-size: 12px;
 }
 
+.cs-comment-author-anonymous {
+	font-style: italic;
+	opacity: 0.8;
+	color: #555555;
+}
+
 .cs-comment-author a {
 	color: #00a7d8;
 	font-weight: bold;

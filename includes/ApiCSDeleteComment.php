@@ -45,7 +45,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 		if ( $this->getUser()->getId() ===
 			$this->comment->getWikiPage()->getOldestRevision()->getUser() &&
 			$this->comment->getNumReplies() === 0 ) {
-			$action = 'edit'; // need edit but not delete to delete a comment
+			$action = 'cs-comment';
 		} else {
 			$action = 'cs-moderator-delete';
 		}
@@ -66,7 +66,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 			}
 		} else {
 			$result = $this->comment->delete();
-			if ( $action === 'edit' ) {
+			if ( $action === 'cs-comment' ) {
 				if ( is_null( $this->comment->getParentId() ) ) {
 					$this->logAction( 'comment-delete' );
 				} else {

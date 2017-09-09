@@ -97,21 +97,8 @@ class CommentStreams {
 			$csAllowedNamespaces = [ $csAllowedNamespaces ];
 		}
 
-		// don't display comments in a talk namespace unless:
-		// 1) $wgCommentStreamsEnableTalk is true, OR
-		// 2) the namespace is a talk namespace for a namespace in the array of
-		// allowed namespaces
 		$title = $output->getTitle();
 		$namespace = $title->getNamespace();
-		if ( $title->isTalkPage() ) {
-			$subject_namespace = MWNamespace::getSubject( $namespace );
-			if ( !$GLOBALS['wgCommentStreamsEnableTalk'] &&
-				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
-				return false;
-			}
-		} elseif ( !in_array( $namespace, $csAllowedNamespaces ) ) {
-			return false;
-		}
 
 		// don't display comments in CommentStreams namespace
 		if ( $namespace === NS_COMMENTSTREAMS ) {
@@ -120,6 +107,29 @@ class CommentStreams {
 
 		// don't display comments on pages that do not exist
 		if ( !$title->exists() ) {
+			return false;
+		}
+
+		// don't display comments on redirect pages
+		if ( $title->isRedirect() ) {
+			return false;
+		}
+
+		// don't display comments in a talk namespace unless:
+		// 1) $wgCommentStreamsEnableTalk is true, OR
+		// 2) the namespace is a talk namespace for a namespace in the array of
+		// allowed namespaces
+		if ( $title->isTalkPage() ) {
+			$subject_namespace = MWNamespace::getSubject( $namespace );
+			if ( !$GLOBALS['wgCommentStreamsEnableTalk'] &&
+				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
+				return false;
+			}
+		}
+
+		// only display comments in subject namespaces in the list of allowed
+		// namespaces
+		elseif ( !in_array( $namespace, $csAllowedNamespaces ) ) {
 			return false;
 		}
 
@@ -180,7 +190,14 @@ class CommentStreams {
 				$GLOBALS['wgCommentStreamsInitiallyCollapsedNamespaces'] );
 		}
 
+		$canComment = true;
+		if ( !in_array( 'cs-comment', $output->getUser()->getRights() ) ||
+			$output->getUser()->isBlocked() ) {
+			$canComment = false;
+		}
+
 		$commentStreamsParams = [
+			'canComment' => $canComment,
 			'moderatorEdit' => in_array( 'cs-moderator-edit',
 				$output->getUser()->getRights() ),
 			'moderatorDelete' => in_array( 'cs-moderator-delete',

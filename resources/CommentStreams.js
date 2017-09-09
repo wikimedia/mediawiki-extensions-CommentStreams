@@ -28,6 +28,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		imagepath: null,
 		targetComment: null,
 		isLoggedIn: false,
+		canComment: false,
 		moderatorEdit: false,
 		moderatorDelete: false,
 		moderatorFastDelete: false,
@@ -70,6 +71,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			}
 			this.isLoggedIn = mw.config.get( 'wgUserName' ) !== null;
 			var config = mw.config.get( 'CommentStreams' );
+			this.canComment = config.canComment;
 			this.moderatorEdit = config.moderatorEdit;
 			this.moderatorDelete = config.moderatorDelete;
 			this.moderatorFastDelete = this.moderatorDelete ?
@@ -103,7 +105,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var footerDiv = $( '<div> ').attr( 'id', 'cs-footer');
 			mainDiv.append( footerDiv );
 
-			if ( this.isLoggedIn ) {
+			if ( this.canComment ) {
 				var addButton = $( '<button>' )
 					.attr( {
 						type: 'button',
@@ -213,7 +215,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					.addClass( 'cs-stream-footer' );
 				comment.append( streamFooter );
 
-				if ( this.isLoggedIn ) {
+				if ( this.canComment ) {
 					var replyButton = $( '<button>' )
 						.addClass( 'cs-button' )
 						.addClass( 'cs-reply-button' )
@@ -964,6 +966,38 @@ var commentstreams_controller = ( function( mw, $ ) {
 			this.enableAllButtons();
 		},
 		postComment: function( parentPageId ) {
+			var self = this;
+			if ( this.isLoggedIn ) {
+				self.realPostComment( parentPageId );
+			} else {
+				var message_text =
+					mw.message( 'commentstreams-dialog-anonymous-message' ).text();
+				var ok_text =
+					mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
+				var cancel_text =
+					mw.message( 'commentstreams-dialog-buttontext-cancel' ).text();
+				var dialog = new OO.ui.MessageDialog();
+				var window_manager = new OO.ui.WindowManager();
+				$( '#cs-comments' ).append( window_manager.$element );
+				window_manager.addWindows( [ dialog ] );
+				window_manager.openWindow( dialog, {
+					message: message_text,
+					actions: [
+						{ label: ok_text, action: 'ok' },
+						{ label: cancel_text, flags: 'primary' }
+					]
+				} ).then( function ( opened ) {
+					opened.then( function ( closing, data ) {
+						if ( data && data.action ) {
+							if ( data.action === 'ok' ) {
+								self.realPostComment( parentPageId );
+							}
+						}
+					} );
+				} );
+			}
+		},
+		realPostComment: function( parentPageId ) {
 			var self = this;
 
 			var commentTitle;

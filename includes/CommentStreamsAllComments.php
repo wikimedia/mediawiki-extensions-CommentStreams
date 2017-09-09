@@ -72,25 +72,31 @@ class CommentStreamsAllComments extends SpecialPage {
 			if ( $index < $limit ) {
 				$wikipage = WikiPage::newFromId( $page->page_id );
 				$comment = Comment::newFromWikiPage( $wikipage );
-				$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText() ;
-				$associatedpageid = $comment->getAssociatedId();
-				$associatedpagename =
-					WikiPage::newFromId( $associatedpageid )->getTitle()->getPrefixedText();
-				$author = $comment->getUser()->getName();
-				$lasteditor = User::newFromId( $wikipage->getRevision()->getUser() )->getName();
-				if ( $lasteditor === $author ) {
-					$lasteditor = '';
+				if ( !is_null( $comment ) ) {
+					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText() ;
+					$associatedpageid = $comment->getAssociatedId();
+					$associatedpage = WikiPage::newFromId( $associatedpageid );
+					if ( !is_null( $associatedpage ) ) {
+						$associatedpagename =
+							$associatedpage->getTitle()->getPrefixedText();
+						$author = $comment->getUser()->getName();
+						$lasteditor =
+							User::newFromId( $wikipage->getRevision()->getUser() )->getName();
+						if ( $lasteditor === $author ) {
+							$lasteditor = '';
+						}
+						$wikitext .= '|-' . PHP_EOL;
+						$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
+						$wikitext .= '|[[' . $associatedpagename . ']]' . PHP_EOL;
+						$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
+						$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
+						$wikitext .= '|' . $author . PHP_EOL;
+						$wikitext .= '|' . $lasteditor . PHP_EOL;
+						$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
+						$wikitext .= '|' . $comment->getModificationDate() . PHP_EOL;
+						$index ++;
+					}
 				}
-				$wikitext .= '|-' . PHP_EOL;
-				$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
-				$wikitext .= '|[[' . $associatedpagename . ']]' . PHP_EOL;
-				$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
-				$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
-				$wikitext .= '|' . $author . PHP_EOL;
-				$wikitext .= '|' . $lasteditor . PHP_EOL;
-				$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
-				$wikitext .= '|' . $comment->getModificationDate() . PHP_EOL;
-				$index ++;
 			} else {
 				$more = true;
 			}
