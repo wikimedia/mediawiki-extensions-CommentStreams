@@ -460,7 +460,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			} );
 			return deleteButton;
 		},
-		createPermalinkButton( pageid ) {
+		createPermalinkButton: function( pageid ) {
 			var self = this;
 			var id = 'cs-comment-' + pageid;
 			var permalinkButton = $( '<button>' )
@@ -484,7 +484,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			permalinkButton.append( permalinkimage );
 			return permalinkButton;
 		},
-		createWatchButton( commentData ) {
+		createWatchButton: function( commentData ) {
 			var self = this;
 			var watchButton = $( '<button>' )
 				.addClass( 'cs-button' )
@@ -511,7 +511,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			watchButton.append( watchimage );
 			return watchButton;
 		},
-		createVotingButtons( commentData ) {
+		createVotingButtons: function( commentData ) {
 			var self = this;
 
 			var upButton;
