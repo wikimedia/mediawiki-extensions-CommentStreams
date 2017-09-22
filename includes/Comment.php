@@ -695,9 +695,6 @@ class Comment {
 	 * @return boolean true if successful
 	 */
 	public function update( $comment_title, $wikitext, $user ) {
-		if ( !$this->wikipage->getTitle()->userCan( 'cs-comment' ) ) {
-			return false;
-		}
 		if ( is_null( $comment_title ) && is_null( $this->getParentId() ) ) {
 			return false;
 		}

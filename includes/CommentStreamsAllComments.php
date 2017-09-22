@@ -76,26 +76,27 @@ class CommentStreamsAllComments extends SpecialPage {
 					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText() ;
 					$associatedpageid = $comment->getAssociatedId();
 					$associatedpage = WikiPage::newFromId( $associatedpageid );
+					$associatedpagename = '';
 					if ( !is_null( $associatedpage ) ) {
 						$associatedpagename =
-							$associatedpage->getTitle()->getPrefixedText();
-						$author = $comment->getUser()->getName();
-						$lasteditor =
-							User::newFromId( $wikipage->getRevision()->getUser() )->getName();
-						if ( $lasteditor === $author ) {
-							$lasteditor = '';
-						}
-						$wikitext .= '|-' . PHP_EOL;
-						$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
-						$wikitext .= '|[[' . $associatedpagename . ']]' . PHP_EOL;
-						$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
-						$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
-						$wikitext .= '|' . $author . PHP_EOL;
-						$wikitext .= '|' . $lasteditor . PHP_EOL;
-						$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
-						$wikitext .= '|' . $comment->getModificationDate() . PHP_EOL;
-						$index ++;
+							'[[' . $associatedpage->getTitle()->getPrefixedText() . ']]';
 					}
+					$author = $comment->getUser()->getName();
+					$lasteditor =
+						User::newFromId( $wikipage->getRevision()->getUser() )->getName();
+					if ( $lasteditor === $author ) {
+						$lasteditor = '';
+					}
+					$wikitext .= '|-' . PHP_EOL;
+					$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
+					$wikitext .= '|' . $associatedpagename . PHP_EOL;
+					$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
+					$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
+					$wikitext .= '|' . $author . PHP_EOL;
+					$wikitext .= '|' . $lasteditor . PHP_EOL;
+					$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
+					$wikitext .= '|' . $comment->getModificationDate() . PHP_EOL;
+					$index ++;
 				}
 			} else {
 				$more = true;
@@ -164,16 +165,21 @@ class CommentStreamsAllComments extends SpecialPage {
 	private static function getCommentPages( $limit, $offset ) {
 		$dbr = wfGetDB( DB_SLAVE );
 		$pages = $dbr->select(
-			'page',
 			[
-				'page_id'
+				'cs_comment_data',
+				'page',
+				'revision'
 			],
 			[
-				'page_namespace' => $GLOBALS['wgCommentStreamsNamespaceIndex']
+				'cs_comment_data.page_id'
+			],
+			[
+				'cs_comment_data.page_id = page.page_id',
+				'page.page_latest = revision.rev_id'
 			],
 			__METHOD__,
 			[
-				'ORDER BY' => 'page_latest DESC' ,
+				'ORDER BY' => 'revision.rev_timestamp DESC' ,
 				'LIMIT' => $limit,
 				'OFFSET' => $offset
 			]

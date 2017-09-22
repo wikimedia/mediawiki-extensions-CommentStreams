@@ -278,7 +278,10 @@ class CommentStreamsHooks {
 		SearchResult $result, array $terms, SpecialSearch $page ) {
 		$comment = Comment::newFromWikiPage( WikiPage::factory( $title ) );
 		if ( !is_null( $comment ) ) {
-			$title = Title::newFromId( $comment->getAssociatedId() );
+			$t = Title::newFromId( $comment->getAssociatedId() );
+			if ( !is_null( $t ) ) {
+				$title = $t;
+			}
 		}
 		return true;
 	}
