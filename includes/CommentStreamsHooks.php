@@ -34,10 +34,11 @@ class CommentStreamsHooks {
 	public static function addCommentTableToDatabase( DatabaseUpdater $updater ) {
 		$dir = $GLOBALS['wgExtensionDirectory'] . DIRECTORY_SEPARATOR .
 			'CommentStreams' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR;
-		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql',
-			true );
-		$updater->addExtensionTable( 'cs_votes', $dir . 'votes.sql', true );
-		$updater->addExtensionTable( 'cs_watchlist', $dir . 'watch.sql', true );
+		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql' );
+		$updater->addExtensionTable( 'cs_votes', $dir . 'votes.sql' );
+		$updater->addExtensionTable( 'cs_watchlist', $dir . 'watch.sql' );
+		$updater->modifyExtensionField( 'cs_comment_data', 'page_id',
+			$dir . 'updateFieldNames.sql' );
 		return true;
 	}
 

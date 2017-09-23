@@ -76,27 +76,40 @@ class CommentStreamsAllComments extends SpecialPage {
 					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText() ;
 					$associatedpageid = $comment->getAssociatedId();
 					$associatedpage = WikiPage::newFromId( $associatedpageid );
-					$associatedpagename = '';
 					if ( !is_null( $associatedpage ) ) {
 						$associatedpagename =
 							'[[' . $associatedpage->getTitle()->getPrefixedText() . ']]';
+						$author = $comment->getUser();
+						if ( $author->isAnon() ) {
+							$author = '<i>' . wfMessage( 'commentstreams-author-anonymous' )
+								. '</i>';
+						} else {
+							$author = $author->getName();
+						}
+						$modificationdate = $comment->getModificationDate();
+						if ( is_null( $modificationdate ) ) {
+							$lasteditor = '';
+						} else {
+							$lasteditor =
+								User::newFromId( $wikipage->getRevision()->getUser() );
+							if ( $lasteditor->isAnon() ) {
+								$lasteditor = '<i>' .
+									wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
+							} else {
+								$lasteditor = $lasteditor->getName();
+							}
+						}
+						$wikitext .= '|-' . PHP_EOL;
+						$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
+						$wikitext .= '|' . $associatedpagename . PHP_EOL;
+						$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
+						$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
+						$wikitext .= '|' . $author . PHP_EOL;
+						$wikitext .= '|' . $lasteditor . PHP_EOL;
+						$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
+						$wikitext .= '|' . $modificationdate . PHP_EOL;
+						$index ++;
 					}
-					$author = $comment->getUser()->getName();
-					$lasteditor =
-						User::newFromId( $wikipage->getRevision()->getUser() )->getName();
-					if ( $lasteditor === $author ) {
-						$lasteditor = '';
-					}
-					$wikitext .= '|-' . PHP_EOL;
-					$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
-					$wikitext .= '|' . $associatedpagename . PHP_EOL;
-					$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
-					$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
-					$wikitext .= '|' . $author . PHP_EOL;
-					$wikitext .= '|' . $lasteditor . PHP_EOL;
-					$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
-					$wikitext .= '|' . $comment->getModificationDate() . PHP_EOL;
-					$index ++;
 				}
 			} else {
 				$more = true;
@@ -171,15 +184,15 @@ class CommentStreamsAllComments extends SpecialPage {
 				'revision'
 			],
 			[
-				'cs_comment_data.page_id'
+				'page_id'
 			],
 			[
-				'cs_comment_data.page_id = page.page_id',
-				'page.page_latest = revision.rev_id'
+				'cst_page_id = page_id',
+				'page_latest = rev_id'
 			],
 			__METHOD__,
 			[
-				'ORDER BY' => 'revision.rev_timestamp DESC' ,
+				'ORDER BY' => 'rev_timestamp DESC' ,
 				'LIMIT' => $limit,
 				'OFFSET' => $offset
 			]

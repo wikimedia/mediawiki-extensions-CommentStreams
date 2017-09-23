@@ -140,10 +140,10 @@ class Comment {
 		$result = $dbw->insert(
 			'cs_comment_data',
 			[
-				'page_id' => $wikipage->getId(),
-				'assoc_page_id' => $assoc_page_id,
-				'parent_page_id' => $parent_page_id,
-				'comment_title' => $comment_title
+				'cst_page_id' => $wikipage->getId(),
+				'cst_assoc_page_id' => $assoc_page_id,
+				'cst_parent_page_id' => $parent_page_id,
+				'cst_comment_title' => $comment_title
 			],
 			__METHOD__
 		);
@@ -182,17 +182,23 @@ class Comment {
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->selectRow(
 			'cs_comment_data',
-			[ 'assoc_page_id', 'parent_page_id', 'comment_title' ],
-			[ 'page_id' => $this->getId() ],
+			[
+				'cst_assoc_page_id',
+				'cst_parent_page_id',
+				'cst_comment_title'
+			],
+			[
+				'cst_page_id' => $this->getId()
+			],
 			__METHOD__
 		);
 		if ( $result ) {
-			$this->assoc_page_id = (integer)$result->assoc_page_id;
-			$this->parent_page_id = $result->parent_page_id;
+			$this->assoc_page_id = (integer)$result->cst_assoc_page_id;
+			$this->parent_page_id = $result->cst_parent_page_id;
 			if ( !is_null( $this->parent_page_id ) ) {
 				$this->parent_page_id = (integer)$this->parent_page_id;
 			}
-			$this->comment_title = $result->comment_title;
+			$this->comment_title = $result->cst_comment_title;
 			$this->loaded = true;
 		}
 	}
@@ -405,7 +411,9 @@ class Comment {
 			$this->num_replies = $dbr->selectRowCount(
 				'cs_comment_data',
 				'*',
-				[ 'parent_page_id' => $this->getId() ],
+				[
+					'cst_parent_page_id' => $this->getId()
+				],
 				__METHOD__
 			);
 		}
@@ -449,15 +457,17 @@ class Comment {
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->selectRow(
 			'cs_votes',
-			[ 'vote' ],
 			[
-				'page_id' => $this->getId(),
-				'user_id' => $user->getId()
+				'cst_v_vote'
+			],
+			[
+				'cst_v_page_id' => $this->getId(),
+				'cst_v_user_id' => $user->getId()
 			],
 			__METHOD__
 		);
 		if ( $result ) {
-			$vote = (integer)$result->vote;
+			$vote = (integer)$result->cst_v_vote;
 			if ( $vote > 0 ) {
 				return 1;
 			}
@@ -478,8 +488,8 @@ class Comment {
 				'cs_votes',
 				'*',
 				[
-					'page_id' => $this->getId(),
-					'vote' => 1
+					'cst_v_page_id' => $this->getId(),
+					'cst_v_vote' => 1
 				],
 				__METHOD__
 			);
@@ -497,8 +507,8 @@ class Comment {
 				'cs_votes',
 				'*',
 				[
-					'page_id' => $this->getId(),
-					'vote' => -1
+					'cst_v_page_id' => $this->getId(),
+					'cst_v_vote' => -1
 				],
 				__METHOD__
 			);
@@ -521,25 +531,29 @@ class Comment {
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->selectRow(
 			'cs_votes',
-			[ 'vote' ],
 			[
-				'page_id' => $this->getId(),
-				'user_id' => $user->getId()
+				'cst_v_vote'
+			],
+			[
+				'cst_v_page_id' => $this->getId(),
+				'cst_v_user_id' => $user->getId()
 			],
 			__METHOD__
 		);
 		if ( $result ) {
-			if ( $vote === (integer)$result->vote ) {
+			if ( $vote === (integer)$result->cst_v_vote ) {
 				return true;
 			}
 			if ( $vote === 1 || $vote === -1 ) {
 				$dbw = wfGetDB( DB_MASTER );
 				$result = $dbw->update(
 					'cs_votes',
-					[ 'vote' => $vote ],
 					[
-						'page_id' => $this->getId(),
-						'user_id' => $user->getId()
+						'cst_v_vote' => $vote
+					],
+					[
+						'cst_v_page_id' => $this->getId(),
+						'cst_v_user_id' => $user->getId()
 					],
 					__METHOD__
 				);
@@ -548,8 +562,8 @@ class Comment {
 				$result = $dbw->delete(
 					'cs_votes',
 					[
-						'page_id' => $this->getId(),
-						'user_id' => $user->getId()
+						'cst_v_page_id' => $this->getId(),
+						'cst_v_user_id' => $user->getId()
 					],
 					__METHOD__
 				);
@@ -562,9 +576,9 @@ class Comment {
 			$result = $dbw->insert(
 				'cs_votes',
 				[
-					'page_id' => $this->getId(),
-					'user_id' => $user->getId(),
-					'vote' => $vote
+					'cst_v_page_id' => $this->getId(),
+					'cst_v_user_id' => $user->getId(),
+					'cst_v_vote' => $vote
 				],
 				__METHOD__
 			);
@@ -597,8 +611,8 @@ class Comment {
 		$result = $dbw->insert(
 			'cs_watchlist',
 			[
-				'page_id' => $pageid,
-				'user_id' => $user->getId()
+				'cst_wl_page_id' => $pageid,
+				'cst_wl_user_id' => $user->getId()
 			],
 			__METHOD__
 		);
@@ -619,8 +633,8 @@ class Comment {
 		$result = $dbw->delete (
 			'cs_watchlist',
 			[
-				'page_id' => $this->getId(),
-				'user_id' => $user->getId()
+				'cst_wl_page_id' => $this->getId(),
+				'cst_wl_user_id' => $user->getId()
 			],
 			__METHOD__
 		);
@@ -648,10 +662,12 @@ class Comment {
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->selectRow(
 			'cs_watchlist',
-			[ 'page_id' ],
 			[
-				'page_id' => $pageid,
-				'user_id' => $user->getId()
+				'cst_wl_page_id'
+			],
+			[
+				'cst_wl_page_id' => $pageid,
+				'cst_wl_user_id' => $user->getId()
 			],
 			__METHOD__
 		);
@@ -670,15 +686,19 @@ class Comment {
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->select(
 			'cs_watchlist',
-			[ 'user_id' ],
-			[ 'page_id' => $this->getId() ],
+			[
+				'cst_wl_user_id'
+			],
+			[
+				'cst_wl_page_id' => $this->getId()
+			],
 			__METHOD__
 		);
 		$users = [];
 		foreach ( $result as $row ) {
-			$user_id = $row->user_id;
+			$user_id = $row->cst_wl_user_id;
 			$user = User::newFromId( $user_id );
-			$users[$user_id] = $user; 
+			$users[$user_id] = $user;
 		}
 		return $users;
 	}
@@ -717,8 +737,12 @@ class Comment {
 		$dbw = wfGetDB( DB_MASTER );
 		$result = $dbw->update(
 			'cs_comment_data',
-			[ 'comment_title' => $comment_title ],
-			[ 'page_id' => $this->getId() ],
+			[
+				'cst_comment_title' => $comment_title
+			],
+			[
+				'cst_page_id' => $this->getId()
+			],
 			__METHOD__
 		);
 		if ( !$result ) {
@@ -746,7 +770,9 @@ class Comment {
 		$dbw = wfGetDB( DB_MASTER );
 		$result = $dbw->delete(
 			'cs_comment_data',
-			[ 'page_id' => $pageid ],
+			[
+				'cst_page_id' => $pageid
+			],
 			__METHOD__
 		);
 		return $result;
@@ -801,13 +827,17 @@ EOT;
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->select(
 			'cs_comment_data',
-			[ 'page_id' ],
-			[ 'assoc_page_id' => $assoc_page_id ],
+			[
+				'cst_page_id'
+			],
+			[
+				'cst_assoc_page_id' => $assoc_page_id
+			],
 			__METHOD__
 		);
 		$comments = [];
 		foreach ( $result as $row ) {
-			$page_id = $row->page_id;
+			$page_id = $row->cst_page_id;
 			$wikipage = WikiPage::newFromId( $page_id );
 			$comment = self::newFromWikiPage( $wikipage );
 			if ( !is_null( $comment ) ) {
@@ -827,13 +857,17 @@ EOT;
 		$dbr = wfGetDB( DB_SLAVE );
 		$result = $dbr->select(
 			'cs_comment_data',
-			[ 'page_id' ],
-			[ 'parent_page_id' => $parent_page_id ],
+			[
+				'cst_page_id'
+			],
+			[
+				'cst_parent_page_id' => $parent_page_id
+			],
 			__METHOD__
 		);
 		$comments = [];
 		foreach ( $result as $row ) {
-			$page_id = $row->page_id;
+			$page_id = $row->cst_page_id;
 			$wikipage = WikiPage::newFromId( $page_id );
 			$comment = self::newFromWikiPage( $wikipage );
 			if ( !is_null( $comment ) ) {
