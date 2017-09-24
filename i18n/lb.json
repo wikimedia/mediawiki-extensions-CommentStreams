@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Robby"
+		]
+	},
+	"commentstreams-author-anonymous": "anonym",
+	"apihelp-csPostComment-param-commenttitle": "fakultativen Titel fir d'Bemierkung.",
+	"apihelp-csPostComment-param-wikitext": "Wikitext fir d'Bemierkung."
+}
