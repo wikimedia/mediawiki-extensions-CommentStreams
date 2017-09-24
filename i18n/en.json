@@ -141,6 +141,7 @@
 	"logentry-commentstreams-reply-delete": "$1 {{GENDER:$2|deleted}} reply $3",
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} reply $3",
 	"commentstreamsallcomments": "All Comments",
+	"commentstreams-allcomments-nocommentsfound": "No comments found.",
 	"commentstreams-allcomments-label-page": "Comment Page",
 	"commentstreams-allcomments-label-associatedpage": "Associated Page",
 	"commentstreams-allcomments-label-commenttitle": "Comment Title",

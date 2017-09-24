@@ -141,6 +141,7 @@
 	"logentry-commentstreams-reply-delete": "The template of the log entry message",
 	"logentry-commentstreams-reply-moderator-delete": "The template of the log entry message",
 	"commentstreamsallcomments": "Special page title",
+	"commentstreams-allcomments-nocommentsfound": "Message to user.",
 	"commentstreams-allcomments-label-page": "Table column label",
 	"commentstreams-allcomments-label-associatedpage": "Table column label",
 	"commentstreams-allcomments-label-commenttitle": "Table column label",
