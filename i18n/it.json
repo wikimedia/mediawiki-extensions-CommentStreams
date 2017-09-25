@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16"
+		]
+	},
+	"commentstreams-author-anonymous": "anonimo",
+	"apihelp-csVote-param-vote": "voto (1, -1, o 0).",
+	"commentstreams-api-error-delete-permissions": "L'utente non dispone dell'autorizzazione per cancellare il commento.",
+	"commentstreams-api-error-vote-notloggedin": "Devi aver effettuato l'accesso per votare.",
+	"commentstreams-buttontooltip-add": "aggiungi un commento",
+	"commentstreams-buttontooltip-reply": "rispondi",
+	"commentstreams-buttontooltip-edit": "modifica",
+	"commentstreams-buttontooltip-delete": "cancella",
+	"commentstreams-buttontooltip-collapse": "comprimi",
+	"commentstreams-buttontooltip-expand": "espandi",
+	"commentstreams-buttontooltip-cancel": "annulla",
+	"commentstreams-dialog-buttontext-cancel": "Annulla",
+	"commentstreams-dialog-buttontext-yes": "Sì",
+	"commentstreams-dialog-buttontext-no": "No",
+	"echo-category-title-commentstreams-notification-category": "Nuovi commenti e risposte",
+	"notification-body-commentstreams-reply-on-watched-page": "La risposta è:\n\n\n$5",
+	"action-cs-moderator-edit": "modificare i commenti degli altri utenti",
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|ha creato}} il commento $3",
+	"commentstreams-allcomments-nocommentsfound": "Nessun commento trovato.",
+	"commentstreams-allcomments-label-lastedited": "Ultima modifica"
+}

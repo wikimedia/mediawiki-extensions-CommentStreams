@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nikosgranturismogt"
+		]
+	},
+	"commentstreams-author-anonymous": "ανώνυμος",
+	"commentstreams-api-error-vote-notloggedin": "Πρέπει να είστε συνδεδεμένοι για να ψηφίσετε.",
+	"commentstreams-buttontooltip-edit": "επεξεργασία",
+	"commentstreams-buttontooltip-delete": "διαγραφή",
+	"commentstreams-buttontooltip-collapse": "σύμπτυξη",
+	"commentstreams-buttontooltip-expand": "επέκτεινε",
+	"commentstreams-dialog-buttontext-cancel": "Ακύρωση",
+	"commentstreams-dialog-buttontext-yes": "Ναι",
+	"commentstreams-dialog-buttontext-no": "Όχι",
+	"notification-link-label-commentstreams-comment-on-watched-page": "Επίσκεψη σχόλιου",
+	"commentstreams-allcomments-label-wikitext": "Σχολιάστε",
+	"commentstreams-allcomments-label-author": "Συγγραφέας",
+	"commentstreams-allcomments-button-next": "Επόμενο"
+}

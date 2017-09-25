@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gomoko"
+		]
+	},
+	"commentstreams-desc": "Permet de commenter les pages wiki",
+	"commentstreams-error-prohibitedaction": "L’action $1 n’est pas permise sur les pages de commentaire.",
+	"commentstreams-author-anonymous": "anonyme",
+	"apihelp-csQueryComment-description": "Renvoyer le titre, l’utilisateur, l’horodatage de création et le wikitexte d’un commentaire. Le pageid ou le titre doit être fourni.",
+	"apihelp-csQueryComment-summary": "Renvoyer le titre, l’utilisateur, l’horodatage de création et le wikitexte d’un commentaire. Le pageid ou le titre doit être fourni.",
+	"apihelp-csQueryComment-param-pageid": "ID de la page qui contient le commentaire à rechercher",
+	"apihelp-csQueryComment-param-title": "titre de la page qui contient le commentaire à rechercher",
+	"apihelp-csQueryComment-pageid-example": "rechercher le commentaire de la page d’ID 3 en wikitexte",
+	"apihelp-csQueryComment-title-example": "rechercher le commentaire de la page de titre CommentStreams:3 en wikitexte",
+	"apihelp-csDeleteComment-description": "Supprimer un commentaire. Le pageid ou le titre doit être fourni.",
+	"apihelp-csDeleteComment-summary": "Supprimer un commentaire. Le pageid ou le titre doit être fourni.",
+	"apihelp-csDeleteComment-param-pageid": "l’ID de la page qui contient le commentaire à supprimer",
+	"apihelp-csDeleteComment-param-title": "le titre de la page qui contient le commentaire à supprimer",
+	"apihelp-csDeleteComment-pageid-example": "supprimer le commentaire de la page d’ID 3",
+	"apihelp-csDeleteComment-title-example": "supprimer le commentaire de la page de titre CommentStreams:3",
+	"apihelp-csPostComment-description": "Publier un nouveau commentaire.",
+	"apihelp-csPostComment-summary": "Publier un nouveau commentaire.",
+	"apihelp-csPostComment-param-commenttitle": "titre facultatif pour le commentaire."
+}

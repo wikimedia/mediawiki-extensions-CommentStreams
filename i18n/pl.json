@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chrumps"
+		]
+	},
+	"commentstreams-api-error-notloggedin": "Musisz się zalogować.",
+	"commentstreams-api-error-post": "Błąd dodawania komentarza.",
+	"commentstreams-api-error-edit-notloggedin": "Aby edytować, musisz się zalogować.",
+	"commentstreams-api-error-delete": "Błąd usuwania komentarza.",
+	"commentstreams-api-error-vote-notloggedin": "Aby głosować, musisz się zalogować.",
+	"commentstreams-validation-error-nocommenttext": "Musisz wprowadzić tekst komentarza.",
+	"commentstreams-buttontooltip-collapse": "zwiń",
+	"commentstreams-buttontooltip-expand": "rozwiń",
+	"commentstreams-buttontooltip-submit": "wyślij",
+	"commentstreams-buttontooltip-cancel": "anuluj",
+	"commentstreams-dialog-buttontext-ok": "OK",
+	"commentstreams-dialog-buttontext-cancel": "Anuluj",
+	"commentstreams-dialog-buttontext-yes": "Tak",
+	"commentstreams-dialog-buttontext-no": "Nie",
+	"commentstreams-datetext-lasteditedon": "Ostatnio edytowano",
+	"echo-category-title-commentstreams-notification-category": "Nowe komentarze i odpowiedzi",
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|utworzył|utworzyła}} komentarz $3",
+	"logentry-commentstreams-reply-create": "$1 {{GENDER:$2|utworzył|utworzyła}} odpowiedź $3",
+	"logentry-commentstreams-comment-delete": "$1 {{GENDER:$2|usunął|usunęła}} komentarz $3",
+	"logentry-commentstreams-reply-delete": "$1 {{GENDER:$2|usunął|usunęła}} odpowiedź $3",
+	"commentstreamsallcomments": "Wszystkie komentarze",
+	"commentstreams-allcomments-nocommentsfound": "Nie znaleziono komentarzy.",
+	"commentstreams-allcomments-label-commenttitle": "Tytuł komentarza",
+	"commentstreams-allcomments-label-wikitext": "Komentarz",
+	"commentstreams-allcomments-label-author": "Autor"
+}

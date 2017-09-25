@@ -2,12 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Cindy Cicalese",
-			"Jason Ji"
+			"Jason Ji",
+			"Liuxinyu970226"
 		]
 	},
 	"commentstreams-desc": "{{desc|name=CommentStreams|url=https://www.mediawiki.org/wiki/Extension:CommentStreams}}",
 	"commentstreams-error-prohibitedaction": "Error message.",
-	"commentstreams-author-anonymous": "The name displayed for anonymous comment authors",
+	"commentstreams-author-anonymous": "The name displayed for anonymous comment authors\n{{Identical|Anonymous}}",
 	"apihelp-csQueryComment-description": "{{doc-apihelp-description|csQueryComment}}",
 	"apihelp-csQueryComment-summary": "{{doc-apihelp-summary|csQueryComment}}",
 	"apihelp-csQueryComment-param-pageid": "{{doc-apihelp-param|csQueryComment|pageid}}",
@@ -80,7 +81,7 @@
 	"commentstreams-validation-error-nocommenttitle": "Error message.",
 	"commentstreams-validation-error-nocommenttext": "Error message.",
 	"commentstreams-buttontooltip-add": "User interface button tooltip.",
-	"commentstreams-buttontooltip-reply": "User interface button tooltip.",
+	"commentstreams-buttontooltip-reply": "User interface button tooltip.\n{{Identical|Reply}}",
 	"commentstreams-buttontooltip-edit": "User interface button tooltip.",
 	"commentstreams-buttontooltip-moderator-edit": "User interface button tooltip.",
 	"commentstreams-buttontooltip-delete": "User interface button tooltip.",

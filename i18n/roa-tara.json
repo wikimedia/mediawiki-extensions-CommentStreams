@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joetaras"
+		]
+	},
+	"logentry-commentstreams-comment-create": "$1 commende {{GENDER:$2|ccrejate}} $3",
+	"commentstreams-allcomments-nocommentsfound": "Nisciune commende acchiate.",
+	"commentstreams-allcomments-label-lastedited": "Urteme cangiamende"
+}
