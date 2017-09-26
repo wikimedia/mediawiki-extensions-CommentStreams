@@ -4,11 +4,14 @@
 			"Ykhwong"
 		]
 	},
+	"commentstreams-error-prohibitedaction": "$1 동작은 댓글 문서에서 허용되지 않습니다.",
 	"commentstreams-author-anonymous": "익명",
 	"apihelp-csQueryComment-description": "댓글의 제목, 사용자, 작성 타임스탬프, 위키텍스트를 반환합니다. pageid 또는 title을 지정해야 합니다.",
+	"apihelp-csPostComment-description": "새로운 댓글을 게시합니다.",
 	"apihelp-csEditComment-description": "기존의 댓글을 편집합니다. pageid 또는 title을 지정해야 합니다.",
 	"apihelp-csUnwatch-description": "응답을 받을 때 더 이상 알림을 받지 않도록 댓글의 주시를 해제합니다",
 	"commentstreams-api-error-notloggedin": "로그인해야 합니다.",
+	"commentstreams-api-error-post-permissions": "사용자는 댓글을 게시할 권한이 없습니다.",
 	"commentstreams-api-error-post-parentpagedoesnotexist": "응답을 받는 댓글이 존재하지 않습니다.",
 	"commentstreams-api-error-edit-notloggedin": "편집하려면 로그인해야 합니다.",
 	"commentstreams-api-error-edit-permissions": "사용자는 댓글을 편집할 권한이 없습니다.",
@@ -44,6 +47,7 @@
 	"logentry-commentstreams-comment-delete": "$1님이 $3 댓글을 {{GENDER:$2|삭제했습니다}}",
 	"commentstreamsallcomments": "모든 댓글",
 	"commentstreams-allcomments-nocommentsfound": "메시지가 없습니다.",
+	"commentstreams-allcomments-label-page": "댓글 문서",
 	"commentstreams-allcomments-label-associatedpage": "관련 문서",
 	"commentstreams-allcomments-label-wikitext": "댓글",
 	"commentstreams-allcomments-label-author": "만든이",

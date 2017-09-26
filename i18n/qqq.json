@@ -147,10 +147,10 @@
 	"commentstreams-allcomments-label-associatedpage": "Table column label",
 	"commentstreams-allcomments-label-commenttitle": "Table column label",
 	"commentstreams-allcomments-label-wikitext": "Table column label",
-	"commentstreams-allcomments-label-author": "Table column label",
+	"commentstreams-allcomments-label-author": "Table column label\n{{Identical|Author}}",
 	"commentstreams-allcomments-label-created": "Table column label",
 	"commentstreams-allcomments-label-lasteditor": "Table column label",
 	"commentstreams-allcomments-label-lastedited": "Table column label",
-	"commentstreams-allcomments-button-next": "Button label",
-	"commentstreams-allcomments-button-previous": "Button label"
+	"commentstreams-allcomments-button-next": "Button label\n{{Identical|Next}}",
+	"commentstreams-allcomments-button-previous": "Button label\n{{Identical|Previous}}"
 }

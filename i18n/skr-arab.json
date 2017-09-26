@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saraiki"
+		]
+	},
+	"commentstreams-author-anonymous": "گمنام",
+	"apihelp-csPostComment-description": "نویں رائے ݙیوو",
+	"apihelp-csPostComment-summary": "نویں رائے ݙیوو",
+	"commentstreams-buttontooltip-reply": "جواب",
+	"commentstreams-buttontooltip-edit": "لکھو",
+	"commentstreams-buttontooltip-collapse": "لکاؤ",
+	"commentstreams-buttontooltip-expand": "ودھاؤ",
+	"commentstreams-buttontooltip-watch": "اکھ تلے رکھو",
+	"commentstreams-buttontooltip-unwatch": "اکھ ہیٹھوں ہٹاؤ",
+	"commentstreams-buttontooltip-submit": "جمع کرواؤ",
+	"commentstreams-buttontooltip-cancel": "منسوخ",
+	"commentstreams-dialog-buttontext-ok": "ٹھیک ہے",
+	"commentstreams-dialog-buttontext-cancel": "منسوخ",
+	"commentstreams-dialog-buttontext-yes": "جیا",
+	"commentstreams-dialog-buttontext-no": "کو",
+	"commentstreams-allcomments-label-wikitext": "رائے",
+	"commentstreams-allcomments-label-author": "مصنف",
+	"commentstreams-allcomments-label-created": "بݨ ڳیا",
+	"commentstreams-allcomments-button-next": "اڳلا",
+	"commentstreams-allcomments-button-previous": "پچھلا"
+}
