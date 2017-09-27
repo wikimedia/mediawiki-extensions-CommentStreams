@@ -1,0 +1,38 @@
+{
+	"@metadata": {
+		"authors": [
+			"Aftabuzzaman"
+		]
+	},
+	"commentstreams-desc": "উইকি পাতাগুলিতে মন্তব্য করতে দেয়",
+	"commentstreams-author-anonymous": "নামহীন",
+	"apihelp-csVote-param-vote": "ভোট (1, -1, বা 0)।",
+	"commentstreams-buttontooltip-add": "একটি মন্তব্য যোগ করুন",
+	"commentstreams-buttontooltip-reply": "প্রত্যুত্তর",
+	"commentstreams-buttontooltip-edit": "সম্পাদনা",
+	"commentstreams-buttontooltip-delete": "অপসারণ",
+	"commentstreams-buttontooltip-permalink": "স্থায়ী সংযোগ",
+	"commentstreams-buttontooltip-collapse": "সংকোচন",
+	"commentstreams-buttontooltip-expand": "প্রসারণ",
+	"commentstreams-buttontooltip-watch": "নজর রাখুন",
+	"commentstreams-buttontooltip-unwatch": "নজর সরিয়ে নিন",
+	"commentstreams-buttontooltip-submit": "জমা দিন",
+	"commentstreams-buttontooltip-cancel": "বাতিল",
+	"commentstreams-dialog-buttontext-ok": "ঠিক আছে",
+	"commentstreams-dialog-buttontext-cancel": "বাতিল",
+	"commentstreams-dialog-buttontext-yes": "হ্যাঁ",
+	"commentstreams-dialog-buttontext-no": "না",
+	"commentstreams-title-field-placeholder": "শিরোনাম লিখুন...",
+	"commentstreamsallcomments": "সকল মন্তব্য",
+	"commentstreams-allcomments-nocommentsfound": "কোন মন্তব্য পাওয়া যায়নি।",
+	"commentstreams-allcomments-label-page": "মন্তব্যের পাতা",
+	"commentstreams-allcomments-label-associatedpage": "সংযুক্ত পাতা",
+	"commentstreams-allcomments-label-commenttitle": "মন্তব্যের শিরোনাম",
+	"commentstreams-allcomments-label-wikitext": "মন্তব্য",
+	"commentstreams-allcomments-label-author": "লেখক",
+	"commentstreams-allcomments-label-created": "তৈরি হয়েছে",
+	"commentstreams-allcomments-label-lasteditor": "সর্বশেষ সম্পাদক",
+	"commentstreams-allcomments-label-lastedited": "সর্বশেষ সম্পাদিত",
+	"commentstreams-allcomments-button-next": "পরবর্তী",
+	"commentstreams-allcomments-button-previous": "পূর্ববর্তী"
+}

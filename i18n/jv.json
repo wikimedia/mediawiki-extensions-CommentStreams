@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"NoiX180"
+		]
+	},
+	"commentstreams-error-prohibitedaction": "Tumindak $1 ora diidinaké tumrap ing kaca tanggapan.",
+	"commentstreams-author-anonymous": "anonim",
+	"commentstreams-api-error-post-associatedpagedoesnotexist": "Kaca sing ditanggapi ora ana.",
+	"commentstreams-api-error-edit-notloggedin": "Panjenengan kudu mlebu log saperlu mbesut.",
+	"commentstreams-api-error-vote-notloggedin": "Panjenengan kudu mlebu log saperlu awèh swara.",
+	"commentstreams-api-error-vote-novoteonreply": "Ora diidinaké awèh swara ing wangsulan.",
+	"commentstreams-validation-error-nocommenttext": "Panjenengan kudu ngisèni tulisan tanggapan.",
+	"commentstreams-buttontooltip-delete": "busak",
+	"commentstreams-dialog-buttontext-yes": "Ya",
+	"commentstreams-dialog-buttontext-no": "Ora",
+	"commentstreams-title-field-placeholder": "Isi sesirah...",
+	"echo-category-title-commentstreams-notification-category": "Ora ana tanggapan lan wangsulané",
+	"action-cs-comment": "kirim, besut, utawa busak tanggapan",
+	"action-cs-moderator-edit": "besut tanggapané panganggo liyané",
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|awèh}} tanggapan $3",
+	"commentstreams-allcomments-nocommentsfound": "Ora ana tanggapan.",
+	"commentstreams-allcomments-label-page": "Kaca Tanggapan",
+	"commentstreams-allcomments-label-commenttitle": "Sesirah Tanggapan",
+	"commentstreams-allcomments-label-lastedited": "Dibesut Pungkasan"
+}

@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cûndûllah el-Kurdî"
+		]
+	},
+	"commentstreams-buttontooltip-edit": "biguherîne",
+	"commentstreams-buttontooltip-delete": "Jê bibe",
+	"commentstreams-buttontooltip-cancel": "betal bike",
+	"commentstreams-dialog-buttontext-cancel": "Betal bike",
+	"commentstreams-dialog-buttontext-yes": "Erê",
+	"commentstreams-dialog-buttontext-no": "Na",
+	"notification-body-commentstreams-reply-on-watched-page": "Bersiv:\n\n\n$5",
+	"commentstreams-allcomments-label-author": "Nivîskar",
+	"commentstreams-allcomments-label-lastedited": "Sererastkirina dawî",
+	"commentstreams-allcomments-button-next": "Pêşve"
+}

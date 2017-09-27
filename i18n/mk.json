@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"commentstreams-author-anonymous": "анонимен",
+	"apihelp-csQueryComment-description": "Дај го насловот, корисникот, времето и датумот и викитекстот на коментарот. Мора да се укаже назнака на страницата или наслов.",
+	"apihelp-csQueryComment-summary": "Дај го насловот, корисникот, времето и датумот и викитекстот на коментарот. Мора да се укаже назнака на страницата или наслов.",
+	"apihelp-csQueryComment-param-pageid": "назнака на страницата каде се наоѓа коментарот што се бара",
+	"apihelp-csQueryComment-param-title": "наслов на страницата каде се наоѓа коментарот што се бара",
+	"apihelp-csQueryComment-pageid-example": "побарај коментар со назнака на страницата 3 во викитекстот",
+	"apihelp-csEditComment-param-commenttitle": "незадолжителен наслов на коментарот.",
+	"apihelp-csEditComment-param-wikitext": "викитекст за коментарот.",
+	"apihelp-csVote-description": "Гласај (за, против или воздржан) по коментарот.",
+	"apihelp-csVote-summary": "Гласај (за, против или воздржан) по коментарот.",
+	"apihelp-csVote-param-vote": "глас (1, -1 или 0).",
+	"apihelp-csVote-pageid-example": "гласај за коментар со назнака на страницата 3",
+	"logentry-commentstreams-comment-create": "$1 го {{GENDER:$2|создаде}} коментарот $3",
+	"logentry-commentstreams-reply-create": "$1 го {{GENDER:$2|создаде}} одговорот $3",
+	"logentry-commentstreams-comment-edit": "$1 го {{GENDER:$2|измени}} коментарот $3",
+	"logentry-commentstreams-comment-moderator-edit": "$1 {{GENDER:$2|(модератор) го измени}} коментарот $3",
+	"logentry-commentstreams-reply-edit": "$1 го {{GENDER:$2|измени}} одговорот $3",
+	"logentry-commentstreams-reply-moderator-edit": "$1 {{GENDER:$2|(модератор) го измени}} одговорот $3",
+	"logentry-commentstreams-comment-delete": "$1 го {{GENDER:$2|избриша}} коментарот $3",
+	"logentry-commentstreams-comment-moderator-delete": "$1 {{GENDER:$2|(модератор) го избриша}} коментарот $3",
+	"logentry-commentstreams-reply-delete": "$1 го {{GENDER:$2|избриша}} одговорот $3",
+	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(модератор) го избриша}} одговорот $3",
+	"commentstreamsallcomments": "Сите коментари",
+	"commentstreams-allcomments-nocommentsfound": "Не пронајдов коментари.",
+	"commentstreams-allcomments-label-page": "Страница за коментари",
+	"commentstreams-allcomments-label-associatedpage": "Поврзана страница",
+	"commentstreams-allcomments-label-commenttitle": "Наслов на коментарот",
+	"commentstreams-allcomments-label-wikitext": "Коментар",
+	"commentstreams-allcomments-label-author": "Автор",
+	"commentstreams-allcomments-label-created": "Создадено",
+	"commentstreams-allcomments-label-lasteditor": "Последен уредник",
+	"commentstreams-allcomments-label-lastedited": "Последно уредување",
+	"commentstreams-allcomments-button-next": "Следно",
+	"commentstreams-allcomments-button-previous": "Претходно"
+}
