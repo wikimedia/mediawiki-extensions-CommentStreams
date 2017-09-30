@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": [
+			"Indus Asia"
+		]
+	},
+	"apihelp-csPostComment-description": "نيئن راءِ درج ڪيو.",
+	"apihelp-csPostComment-summary": "نيئن راءِ ڏيو",
+	"commentstreams-buttontooltip-add": "راءِ شامل ڪيو",
+	"commentstreams-buttontooltip-reply": "ورندي ڏيو",
+	"commentstreams-buttontooltip-edit": "سنواريو",
+	"commentstreams-buttontooltip-delete": "ڊاهيو",
+	"commentstreams-buttontooltip-expand": "وڌايو",
+	"commentstreams-buttontooltip-cancel": "رد",
+	"commentstreams-dialog-buttontext-ok": "ٺيڪ (او ڪي) آهي",
+	"commentstreams-dialog-buttontext-yes": "ھا",
+	"commentstreams-dialog-buttontext-no": "نه",
+	"commentstreams-datetext-postedon": "تي درجيڪاري ڪئي وئي (پوسٽيڊ آن)",
+	"commentstreams-datetext-lasteditedon": "تي آخري ڀيرو سنواريو ويو",
+	"commentstreams-title-field-placeholder": "عنوان ڏيو (اينٽر ٽائيٽل)",
+	"commentstreams-allcomments-nocommentsfound": "ڪي به رايا نه مليا.",
+	"commentstreams-allcomments-label-associatedpage": "لاڳاپيل صفحو",
+	"commentstreams-allcomments-label-author": "ليکڪ",
+	"commentstreams-allcomments-label-created": "سرجيل (Created)",
+	"commentstreams-allcomments-label-lasteditor": "آخري ايڊيٽر",
+	"commentstreams-allcomments-label-lastedited": "آخري ڀيرو سنواريل",
+	"commentstreams-allcomments-button-previous": "اڳوڻو"
+}

@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nike"
+		]
+	},
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
+	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu"
+}
