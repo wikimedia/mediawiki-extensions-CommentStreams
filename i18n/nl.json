@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mainframe98"
+		]
+	},
+	"commentstreams-author-anonymous": "anoniem",
+	"commentstreams-api-error-notloggedin": "U moet ingelogd zijn.",
+	"commentstreams-api-error-edit-notloggedin": "U moet aangemeld zijn om te kunnen bewerken.",
+	"commentstreams-api-error-delete-notloggedin": "U moet aangemeld zijn om te kunnen verwijderen.",
+	"commentstreams-buttontooltip-reply": "antwoorden",
+	"commentstreams-buttontooltip-edit": "bewerken",
+	"commentstreams-buttontooltip-delete": "verwijderen",
+	"commentstreams-buttontooltip-permalink": "permanente koppeling",
+	"commentstreams-buttontooltip-collapse": "samenvouwen",
+	"commentstreams-buttontooltip-expand": "uitvouwen",
+	"commentstreams-buttontooltip-watch": "volgen",
+	"commentstreams-buttontooltip-submit": "verzenden",
+	"commentstreams-buttontooltip-cancel": "annuleren",
+	"commentstreams-dialog-buttontext-ok": "OK",
+	"commentstreams-dialog-buttontext-cancel": "Annuleren",
+	"commentstreams-dialog-buttontext-yes": "Ja",
+	"commentstreams-dialog-buttontext-no": "Nee",
+	"commentstreams-datetext-postedon": "Geplaatst op",
+	"commentstreams-datetext-lasteditedon": "Laatste bewerkt op",
+	"commentstreams-title-field-placeholder": "Voer titel in...",
+	"notification-link-label-commentstreams-reply-on-watched-page": "Bekijk reactie",
+	"notification-link-label-commentstreams-reply-to-watched-comment": "Bekijk reactie",
+	"log-name-commentstreams": "CommentStreams logboek",
+	"commentstreams-allcomments-label-associatedpage": "Gekoppelde pagina",
+	"commentstreams-allcomments-label-author": "Auteur",
+	"commentstreams-allcomments-label-created": "Aangemaakt",
+	"commentstreams-allcomments-label-lasteditor": "Laatste bewerker",
+	"commentstreams-allcomments-label-lastedited": "Laatste bewerking",
+	"commentstreams-allcomments-button-next": "Volgende",
+	"commentstreams-allcomments-button-previous": "Vorige"
+}
