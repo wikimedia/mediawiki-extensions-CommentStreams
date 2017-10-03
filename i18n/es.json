@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Fitoschido"
+			"Fitoschido",
+			"Macofe"
 		]
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas del wiki",
@@ -44,6 +45,7 @@
 	"commentstreams-allcomments-label-commenttitle": "Título del comentario",
 	"commentstreams-allcomments-label-wikitext": "Comentario",
 	"commentstreams-allcomments-label-author": "Autor",
+	"commentstreams-allcomments-label-lasteditor": "Último editor",
 	"commentstreams-allcomments-button-next": "Siguiente",
 	"commentstreams-allcomments-button-previous": "Anterior"
 }
