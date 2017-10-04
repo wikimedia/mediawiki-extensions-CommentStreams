@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Vashgird"
+		]
+	},
+	"commentstreams-buttontooltip-edit": "вироиш",
+	"commentstreams-buttontooltip-delete": "ҳазф",
+	"commentstreams-dialog-buttontext-yes": "бале",
+	"commentstreams-dialog-buttontext-no": "не",
+	"grouppage-csmoderator": "{{ns:project}}:Мудирон(CommentStreams)",
+	"logentry-commentstreams-comment-moderator-delete": "$1 {{GENDER:$2|(мудир)}} изҳори назари $3 ҳазф кард",
+	"commentstreams-allcomments-button-next": "баъдӣ"
+}
