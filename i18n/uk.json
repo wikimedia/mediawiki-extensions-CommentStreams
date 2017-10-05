@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"SimondR"
+		]
+	},
+	"commentstreams-author-anonymous": "анонім",
+	"commentstreams-api-error-notloggedin": "Ви повинні увійти в систему.",
+	"commentstreams-api-error-post": "Помилка додавання коментаря.",
+	"commentstreams-api-error-edit-permissions": "Користувач не має права на редагування коментаря.",
+	"commentstreams-api-error-edit": "Помилка редагування коментаря.",
+	"commentstreams-api-error-delete": "Помилка видалення коментаря.",
+	"commentstreams-buttontooltip-reply": "відповісти",
+	"commentstreams-buttontooltip-edit": "редагувати",
+	"commentstreams-buttontooltip-permalink": "постійне посилання",
+	"commentstreams-buttontooltip-collapse": "згорнути",
+	"commentstreams-buttontooltip-expand": "розгорнути",
+	"commentstreams-buttontooltip-cancel": "скасувати",
+	"commentstreams-dialog-buttontext-ok": "Готово",
+	"commentstreams-dialog-buttontext-cancel": "Скасувати",
+	"commentstreams-dialog-buttontext-yes": "Так",
+	"commentstreams-dialog-buttontext-no": "Ні",
+	"commentstreams-allcomments-label-page": "Сторінка коментарів",
+	"commentstreams-allcomments-label-associatedpage": "Пов'язана сторінка",
+	"commentstreams-allcomments-label-author": "Автор",
+	"commentstreams-allcomments-label-created": "Створено",
+	"commentstreams-allcomments-label-lasteditor": "Останній редактор",
+	"commentstreams-allcomments-button-next": "Наступне",
+	"commentstreams-allcomments-button-previous": "Попереднє"
+}
