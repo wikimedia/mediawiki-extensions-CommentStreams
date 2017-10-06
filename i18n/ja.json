@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Otokoume"
+			"Otokoume",
+			"Hinaloe"
 		]
 	},
 	"commentstreams-desc": "ウィキページへのコメントを可能にする",
@@ -27,6 +28,7 @@
 	"commentstreams-buttontooltip-permalink": "固定リンク",
 	"commentstreams-buttontooltip-collapse": "折り畳む",
 	"commentstreams-buttontooltip-expand": "展開",
+	"commentstreams-buttontooltip-watch": "ウォッチ",
 	"commentstreams-buttontooltip-submit": "送信",
 	"commentstreams-buttontooltip-cancel": "キャンセル",
 	"commentstreams-dialog-delete-message": "このコメントを削除して本当によろしいですか？",
@@ -54,11 +56,14 @@
 	"logentry-commentstreams-reply-edit": "$1 が返信 $3 を{{GENDER:$2|編集しました}}",
 	"logentry-commentstreams-comment-delete": "$1 が コメント $3 を{{GENDER:$2|削除しました}}",
 	"logentry-commentstreams-reply-delete": "$1 が返信 $3 を{{GENDER:$2|削除しました}}",
+	"commentstreamsallcomments": "すべてのコメント",
 	"commentstreams-allcomments-nocommentsfound": "コメントはありません。",
+	"commentstreams-allcomments-label-page": "コメントページ",
 	"commentstreams-allcomments-label-commenttitle": "コメントのタイトル",
 	"commentstreams-allcomments-label-wikitext": "コメント",
 	"commentstreams-allcomments-label-created": "作成日時",
 	"commentstreams-allcomments-label-lasteditor": "最終編集者",
+	"commentstreams-allcomments-label-lastedited": "最終編集",
 	"commentstreams-allcomments-button-next": "次へ",
 	"commentstreams-allcomments-button-previous": "前へ"
 }
