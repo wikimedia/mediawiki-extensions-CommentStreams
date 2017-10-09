@@ -94,7 +94,7 @@
 	"commentstreams-buttontooltip-downvote": "User interface button tooltip.",
 	"commentstreams-buttontooltip-watch": "User interface button tooltip.",
 	"commentstreams-buttontooltip-unwatch": "User interface button tooltip.",
-	"commentstreams-buttontooltip-submit": "User interface button text.",
+	"commentstreams-buttontooltip-submit": "User interface button text.\n{{Identical|Submit}}",
 	"commentstreams-buttontooltip-cancel": "User interface button text.\n{{Identical|Cancel}}",
 	"commentstreams-dialog-delete-message": "User interface dialog message.",
 	"commentstreams-dialog-anonymous-message": "User interface dialog message.",
