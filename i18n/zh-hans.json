@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"NeverBehave"
 		]
 	},
 	"commentstreams-desc": "允许在wiki页面上评论",
@@ -87,8 +88,8 @@
 	"commentstreams-buttontooltip-permalink": "固定链接",
 	"commentstreams-buttontooltip-collapse": "折叠",
 	"commentstreams-buttontooltip-expand": "展开",
-	"commentstreams-buttontooltip-upvote": "上投票",
-	"commentstreams-buttontooltip-downvote": "下投票",
+	"commentstreams-buttontooltip-upvote": "赞同",
+	"commentstreams-buttontooltip-downvote": "否决",
 	"commentstreams-buttontooltip-watch": "监视",
 	"commentstreams-buttontooltip-unwatch": "取消监视",
 	"commentstreams-buttontooltip-submit": "提交",
@@ -105,7 +106,7 @@
 	"commentstreams-datetext-moderated": "已节制",
 	"commentstreams-title-field-placeholder": "输入标题...",
 	"commentstreams-body-field-placeholder": "输入新评论文本...",
-	"echo-category-title-commentstreams-notification-category": "新评论和恢复",
+	"echo-category-title-commentstreams-notification-category": "新评论和回复",
 	"notification-header-commentstreams-comment-on-watched-page": "$1在页面“<i>$3</i>”上{{GENDER:$4|评论}}了“<i>$2</i>”，这是{{GENDER:$6|您}}监视的评论。",
 	"notification-header-commentstreams-reply-on-watched-page": "$1在页面“<i>$3</i>”上{{GENDER:$4|回复}}了“<i>$2</i>”，这是{{GENDER:$6|您}}监视的页面。",
 	"notification-header-commentstreams-reply-to-watched-comment": "$1{{GENDER:$4|回复}}了“<i>$2</i>”，这是{{GENDER:$6|您}}在页面“<i>$3</i>”上监视的评论。",

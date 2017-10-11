@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Liuxinyu970226"
+		]
+	},
+	"commentstreams-author-anonymous": "匿名",
+	"commentstreams-buttontooltip-reply": "回覆",
+	"commentstreams-buttontooltip-delete": "刪除",
+	"commentstreams-buttontooltip-cancel": "取消",
+	"commentstreams-dialog-buttontext-cancel": "取消",
+	"commentstreams-allcomments-button-next": "下一個",
+	"commentstreams-allcomments-button-previous": "上一個"
+}
