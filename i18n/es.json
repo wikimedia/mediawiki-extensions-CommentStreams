@@ -52,6 +52,7 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "Visitar respuesta",
 	"action-cs-comment": "publicar, editar o borrar comentarios",
 	"action-cs-moderator-edit": "editar comentarios de otros usuarios",
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|creó}} el comentario $3",
 	"commentstreamsallcomments": "Todos los comentarios",
 	"commentstreams-allcomments-nocommentsfound": "No se encontró ningún comentario.",
 	"commentstreams-allcomments-label-page": "Página de comentarios",
