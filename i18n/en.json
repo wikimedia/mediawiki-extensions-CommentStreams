@@ -7,6 +7,7 @@
 	},
 	"commentstreams-desc": "Allows commenting on wiki pages",
 	"commentstreams-error-prohibitedaction": "Action $1 is not allowed on comment pages.",
+	"commentstreams-error-comment-on-deleted-page": "The page with which this comment is associated has been deleted.",
 	"commentstreams-author-anonymous": "anonymous",
 	"apihelp-csQueryComment-description": "Return the title, user, creation timestamp, and wikitext of a comment. Either pageid or title must be provided.",
 	"apihelp-csQueryComment-summary": "Return the title, user, creation timestamp, and wikitext of a comment. Either pageid or title must be provided.",

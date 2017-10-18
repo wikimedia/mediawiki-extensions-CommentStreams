@@ -8,6 +8,7 @@
 	},
 	"commentstreams-desc": "{{desc|name=CommentStreams|url=https://www.mediawiki.org/wiki/Extension:CommentStreams}}",
 	"commentstreams-error-prohibitedaction": "Error message.",
+	"commentstreams-error-comment-on-deleted-page": "Error message.",
 	"commentstreams-author-anonymous": "The name displayed for anonymous comment authors\n{{Identical|Anonymous}}",
 	"apihelp-csQueryComment-description": "{{doc-apihelp-description|csQueryComment}}",
 	"apihelp-csQueryComment-summary": "{{doc-apihelp-summary|csQueryComment}}",
