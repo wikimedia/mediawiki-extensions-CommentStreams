@@ -6,11 +6,16 @@
 	},
 	"commentstreams-author-anonymous": "anonīms",
 	"apihelp-csVote-param-vote": "balsot (1, -1 vai 0).",
+	"commentstreams-buttontooltip-edit": "labot",
 	"commentstreams-buttontooltip-delete": "dzēst",
+	"commentstreams-buttontooltip-cancel": "atcelt",
+	"commentstreams-dialog-buttontext-cancel": "Atcelt",
 	"commentstreams-dialog-buttontext-yes": "Jā",
 	"commentstreams-dialog-buttontext-no": "Nē",
+	"commentstreams-title-field-placeholder": "Ievadi nosaukumu...",
 	"notification-body-commentstreams-reply-on-watched-page": "Atbilde ir:\n\n\n$5",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|izveidoja}} komentāri $3",
 	"logentry-commentstreams-comment-delete": "$1 {{GENDER:$2|izdzēsa}} komentāru $3",
+	"commentstreams-allcomments-label-page": "Komentāra lapa",
 	"commentstreams-allcomments-label-author": "Autors"
 }
