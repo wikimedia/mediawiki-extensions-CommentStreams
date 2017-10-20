@@ -39,6 +39,10 @@ class CommentStreamsHooks {
 		$updater->addExtensionTable( 'cs_watchlist', $dir . 'watch.sql' );
 		$updater->modifyExtensionField( 'cs_comment_data', 'page_id',
 			$dir . 'updateFieldNames.sql' );
+		$updater->dropExtensionIndex( 'cs_comment_data', 'assoc_page_id',
+			$dir . 'dropForeignKey1.sql' );
+		$updater->dropExtensionIndex( 'cs_comment_data', 'cst_assoc_page_id',
+			$dir . 'dropForeignKey2.sql' );
 		return true;
 	}
 
@@ -107,8 +111,12 @@ class CommentStreamsHooks {
 				}
 				$link = Linker::link( $associatedTitle, '< ' . $displaytitle );
 				$output->setSubtitle( $link );
-				$output->addWikitext( $comment->getHTML() );
+			} else {
+				$message =
+					wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
+				$output->addHTML( '<p class="error">' . $message . '</p>' );
 			}
+			$output->addWikitext( $comment->getHTML() );
 		}
 		return false;
 	}
@@ -324,6 +332,7 @@ class CommentStreamsHooks {
 			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-edit'] =
 				false;
 		}
+		$GLOBALS['wgAvailableRights'][] = 'cs-comment';
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-edit';
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
 		$GLOBALS['wgLogTypes'][] = 'commentstreams';

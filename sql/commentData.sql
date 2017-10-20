@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS /*_*/cs_comment_data
 (
-page_id int(10) unsigned,
-assoc_page_id int(10) unsigned,
-parent_page_id int(10) unsigned,
-comment_title varbinary(255),
-PRIMARY KEY (page_id),
-FOREIGN KEY (assoc_page_id) REFERENCES page(page_id)
+cst_page_id int(10) unsigned,
+cst_assoc_page_id int(10) unsigned,
+cst_parent_page_id int(10) unsigned,
+cst_comment_title varbinary(255),
+PRIMARY KEY (cst_page_id)
 );
