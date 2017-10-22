@@ -7,6 +7,7 @@
 	},
 	"commentstreams-desc": "Дає можливість коментувати вікісторінки",
 	"commentstreams-error-prohibitedaction": "Дія $1 недозволена на сторінках для коментарів.",
+	"commentstreams-error-comment-on-deleted-page": "Сторінку, з якою пов'язаний цей коментар, вилучено.",
 	"commentstreams-author-anonymous": "анонім",
 	"apihelp-csQueryComment-description": "Вивести назву, користувача, час створення та вікірозмітку коментаря. Слід вказати або pageid або назву.",
 	"apihelp-csQueryComment-summary": "Вивести назву, користувача, час створення та вікірозмітку коментаря. Слід вказати або pageid або назву.",

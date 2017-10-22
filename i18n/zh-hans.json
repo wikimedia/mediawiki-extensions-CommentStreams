@@ -7,6 +7,7 @@
 	},
 	"commentstreams-desc": "允许在wiki页面上评论",
 	"commentstreams-error-prohibitedaction": "操作$1不允许在评论页面上进行。",
+	"commentstreams-error-comment-on-deleted-page": "此评论所分配的页面已删除。",
 	"commentstreams-author-anonymous": "匿名",
 	"apihelp-csQueryComment-description": "返回评论标题、用户、创建时间戳和wiki文本。必须提供页面id或标题。",
 	"apihelp-csQueryComment-summary": "返回评论标题、用户、创建时间戳和wiki文本。必须提供页面id或标题。",

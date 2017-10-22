@@ -7,6 +7,7 @@
 	},
 	"commentstreams-desc": "Permet de commenter les pages wiki",
 	"commentstreams-error-prohibitedaction": "L’action $1 n’est pas permise sur les pages de commentaire.",
+	"commentstreams-error-comment-on-deleted-page": "La page à laquelle ce commentaire est associé, a été supprimée.",
 	"commentstreams-author-anonymous": "anonyme",
 	"apihelp-csQueryComment-description": "Renvoyer le titre, l’utilisateur, l’horodatage de création et le wikitexte d’un commentaire. Le pageid ou le titre doit être fourni.",
 	"apihelp-csQueryComment-summary": "Renvoyer le titre, l’utilisateur, l’horodatage de création et le wikitexte d’un commentaire. Le pageid ou le titre doit être fourni.",

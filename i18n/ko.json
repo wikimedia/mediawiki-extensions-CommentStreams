@@ -6,6 +6,7 @@
 	},
 	"commentstreams-desc": "위키 문서에 댓글을 달 수 있게 합니다",
 	"commentstreams-error-prohibitedaction": "$1 동작은 댓글 문서에서 허용되지 않습니다.",
+	"commentstreams-error-comment-on-deleted-page": "이 댓글이 속하는 문서가 삭제되었습니다.",
 	"commentstreams-author-anonymous": "익명",
 	"apihelp-csQueryComment-description": "댓글의 제목, 사용자, 작성 타임스탬프, 위키텍스트를 반환합니다. pageid 또는 title을 지정해야 합니다.",
 	"apihelp-csQueryComment-summary": "댓글의 제목, 사용자, 작성 타임스탬프, 위키텍스트를 반환합니다. pageid나 title을 지정해야 합니다.",
