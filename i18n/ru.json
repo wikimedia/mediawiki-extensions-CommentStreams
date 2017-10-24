@@ -4,6 +4,19 @@
 			"Kareyac"
 		]
 	},
+	"commentstreams-author-anonymous": "аноним",
+	"commentstreams-buttontooltip-add": "добавить комментарий",
+	"commentstreams-buttontooltip-reply": "ответить",
+	"commentstreams-buttontooltip-edit": "править",
+	"commentstreams-buttontooltip-delete": "удалить",
+	"commentstreams-buttontooltip-expand": "развернуть",
+	"commentstreams-buttontooltip-unwatch": "не следить",
+	"commentstreams-buttontooltip-cancel": "отмена",
+	"commentstreams-dialog-buttontext-ok": "ОК",
 	"commentstreams-dialog-buttontext-yes": "Да",
-	"commentstreams-dialog-buttontext-no": "Нет"
+	"commentstreams-dialog-buttontext-no": "Нет",
+	"commentstreamsallcomments": "Все комментарии",
+	"commentstreams-allcomments-label-author": "Автор",
+	"commentstreams-allcomments-label-created": "Создано",
+	"commentstreams-allcomments-button-previous": "Предыдущая"
 }
