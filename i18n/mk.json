@@ -6,6 +6,7 @@
 	},
 	"commentstreams-desc": "Овозможува коментирање во викистраници",
 	"commentstreams-error-prohibitedaction": "Дејството $1 не е дозволено на страници со коментари.",
+	"commentstreams-error-comment-on-deleted-page": "Страницата со која е поврзан коментарот е избришана.",
 	"commentstreams-author-anonymous": "анонимен",
 	"apihelp-csQueryComment-description": "Дај го насловот, корисникот, времето и датумот и викитекстот на коментарот. Мора да се укаже назнака на страницата или наслов.",
 	"apihelp-csQueryComment-summary": "Дај го насловот, корисникот, времето и датумот и викитекстот на коментарот. Мора да се укаже назнака на страницата или наслов.",
