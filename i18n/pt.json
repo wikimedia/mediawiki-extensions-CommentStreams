@@ -6,6 +6,7 @@
 	},
 	"commentstreams-desc": "Permite deixar comentários nas páginas da wiki",
 	"commentstreams-error-prohibitedaction": "A ação $1 não é permitida nas páginas de comentários.",
+	"commentstreams-error-comment-on-deleted-page": "A página à qual este comentário está associado foi eliminada.",
 	"commentstreams-author-anonymous": "anónimo",
 	"apihelp-csQueryComment-description": "Devolver o título, o utilizador, a data e hora de criação, e o texto wiki de um comentário. Tem de ser fornecido o identificador da página ou o título.",
 	"apihelp-csQueryComment-summary": "Devolver o título, o utilizador, a data e hora de criação, e o texto wiki de um comentário. Tem de ser fornecido o identificador da página ou o título.",
