@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"Elisardojm"
+		]
+	},
+	"commentstreams-author-anonymous": "anónimo",
+	"apihelp-csPostComment-description": "Publicar un novo comentario.",
+	"apihelp-csPostComment-summary": "Publicar un novo comentario.",
+	"apihelp-csPostComment-param-commenttitle": "título opcional para o comentario.",
+	"apihelp-csPostComment-param-wikitext": "texto wiki para o comentario.",
+	"apihelp-csVote-param-vote": "votar (1, −1 ou 0).",
+	"commentstreams-api-error-notloggedin": "Debe estar conectado.",
+	"commentstreams-api-error-edit": "Erro ó editar o comentario.",
+	"commentstreams-api-error-delete-notloggedin": "Debe estar conectado para borrar.",
+	"commentstreams-buttontooltip-add": "engadir un comentario",
+	"commentstreams-buttontooltip-reply": "responder",
+	"commentstreams-buttontooltip-edit": "editar",
+	"commentstreams-buttontooltip-delete": "borrar",
+	"commentstreams-buttontooltip-permalink": "ligazón permanente",
+	"commentstreams-buttontooltip-collapse": "contraer",
+	"commentstreams-buttontooltip-expand": "expandir",
+	"commentstreams-buttontooltip-upvote": "votar a favor",
+	"commentstreams-buttontooltip-downvote": "votar en contra",
+	"commentstreams-buttontooltip-watch": "vixiar",
+	"commentstreams-buttontooltip-unwatch": "deixar de vixiar",
+	"commentstreams-buttontooltip-submit": "enviar",
+	"commentstreams-buttontooltip-cancel": "cancelar",
+	"commentstreams-dialog-buttontext-ok": "Aceptar",
+	"commentstreams-dialog-buttontext-cancel": "Cancelar",
+	"commentstreams-dialog-buttontext-yes": "Si",
+	"commentstreams-dialog-buttontext-no": "Non",
+	"commentstreams-allcomments-label-wikitext": "Comentario",
+	"commentstreams-allcomments-label-author": "Autor",
+	"commentstreams-allcomments-label-created": "Creado",
+	"commentstreams-allcomments-label-lasteditor": "Último editor",
+	"commentstreams-allcomments-label-lastedited": "Última edición",
+	"commentstreams-allcomments-button-next": "Seguinte",
+	"commentstreams-allcomments-button-previous": "Anterior"
+}
