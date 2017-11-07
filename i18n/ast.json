@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Xuacu"
+		]
+	},
+	"commentstreams-desc": "Permite facer comentarios nes páxines de la wiki",
+	"commentstreams-error-prohibitedaction": "L'aición $1 nun se permite nes páxines de comentarios.",
+	"commentstreams-error-comment-on-deleted-page": "La páxina cola que ta asociáu esti comentariu desanicióse.",
+	"commentstreams-author-anonymous": "anónimu",
+	"apihelp-csQueryComment-description": "Devuelve'l títulu. usuariu, hora de creación y testu wiki d'un comentariu. Tien de dase l'identificador de páxina o'l títulu.",
+	"apihelp-csQueryComment-summary": "Devuelve'l títulu. usuariu, hora de creación y testu wiki d'un comentariu. Tien de dase l'identificador de páxina o'l títulu.",
+	"apihelp-csQueryComment-param-pageid": "identificador de la páxina que tien el comentariu a consultar",
+	"apihelp-csQueryComment-param-title": "títulu de la páxina que tien el comentariu a consultar",
+	"apihelp-csQueryComment-pageid-example": "consultar el comentariu con identificador de páxina 3 en testu wiki",
+	"apihelp-csQueryComment-title-example": "consultar el comentariu con títulu de páxina CommentStreams:3 en testu wiki",
+	"apihelp-csDeleteComment-description": "Desaniciar un comentariu. Tien de dase l'identificador de páxina o'l títulu.",
+	"apihelp-csDeleteComment-summary": "Desaniciar un comentariu. Tien de dase l'identificador de páxina o'l títulu.",
+	"apihelp-csDeleteComment-param-pageid": "identificador de la páxina que tien el comentariu a desaniciar",
+	"apihelp-csDeleteComment-param-title": "títulu de la páxina que tien el comentariu a desaniciar",
+	"apihelp-csDeleteComment-pageid-example": "desaniciar el comentariu con identificador de páxina 3",
+	"apihelp-csDeleteComment-title-example": "desaniciar el comentariu con títulu de páxina CommentStreams:3",
+	"apihelp-csPostComment-description": "Publicar un comentariu nuevu.",
+	"apihelp-csPostComment-summary": "Publicar un comentariu nuevu.",
+	"apihelp-csPostComment-param-commenttitle": "títulu opcional pal comentariu.",
+	"apihelp-csPostComment-param-wikitext": "testu wiki pal comentariu.",
+	"apihelp-csPostComment-param-associatedid": "páxina cola que ta asociáu esti comentariu",
+	"apihelp-csPostComment-param-parentid": "identificador de la páxina del comentariu padre, si ye una respuesta.",
+	"apihelp-csEditComment-description": "Editar un comentariu esistiente. Tien de dase l'identificador de páxina o'l títulu.",
+	"apihelp-csEditComment-summary": "Editar un comentariu esistiente. Tien de dase l'identificador de páxina o'l títulu.",
+	"apihelp-csEditComment-param-pageid": "identificador de la páxina que tien el comentariu a editar",
+	"apihelp-csEditComment-param-title": "títulu de la páxina que tien el comentariu a editar",
+	"apihelp-csEditComment-param-commenttitle": "títulu opcional pal comentariu.",
+	"apihelp-csEditComment-param-wikitext": "testu wiki pal comentariu."
+}
