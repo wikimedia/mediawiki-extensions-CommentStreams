@@ -4,6 +4,7 @@
 			"Elisardojm"
 		]
 	},
+	"commentstreams-desc": "Permite deixar comentarios nas páxinas da wiki",
 	"commentstreams-author-anonymous": "anónimo",
 	"apihelp-csPostComment-description": "Publicar un novo comentario.",
 	"apihelp-csPostComment-summary": "Publicar un novo comentario.",
@@ -30,6 +31,13 @@
 	"commentstreams-dialog-buttontext-cancel": "Cancelar",
 	"commentstreams-dialog-buttontext-yes": "Si",
 	"commentstreams-dialog-buttontext-no": "Non",
+	"notification-body-commentstreams-comment-on-watched-page": "O comentario é:\n\n\n$5",
+	"notification-body-commentstreams-reply-on-watched-page": "A resposta é:\n\n\n$5",
+	"notification-body-commentstreams-reply-to-watched-comment": "A resposta é:\n\n\n$5",
+	"notification-link-label-commentstreams-comment-on-watched-page": "Visitar o comentário",
+	"notification-link-label-commentstreams-reply-on-watched-page": "Visitar a resposta",
+	"notification-link-label-commentstreams-reply-to-watched-comment": "Visitar a resposta",
+	"group-csmoderator": "Moderadores (CommentStreams)",
 	"commentstreams-allcomments-label-wikitext": "Comentario",
 	"commentstreams-allcomments-label-author": "Autor",
 	"commentstreams-allcomments-label-created": "Creado",
