@@ -7,6 +7,7 @@
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas del wiki",
 	"commentstreams-error-prohibitedaction": "No se permite efectuar la acción $1 en las páginas de comentarios.",
+	"commentstreams-error-comment-on-deleted-page": "Se eliminó la página que estaba asociada con este comentario.",
 	"commentstreams-author-anonymous": "anónimo",
 	"apihelp-csPostComment-description": "Publicar un comentario nuevo.",
 	"apihelp-csPostComment-summary": "Publicar un comentario nuevo.",
