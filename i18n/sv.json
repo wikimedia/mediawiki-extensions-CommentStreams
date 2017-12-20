@@ -7,6 +7,7 @@
 	},
 	"commentstreams-desc": "Tillåter kommentarer på wikisidor",
 	"commentstreams-error-prohibitedaction": "Åtärden $1 tillåts inte på kommentarssidor.",
+	"commentstreams-error-comment-on-deleted-page": "Sidan som denna kommentar associeras med har raderats.",
 	"commentstreams-author-anonymous": "anonym",
 	"apihelp-csQueryComment-description": "Returnera en kommentars titel, författare, tidsstämpel och wikitext. Sidans titel eller ID måste anges.",
 	"apihelp-csQueryComment-summary": "Returnera en kommentars titel, författare, tidsstämpel och wikitext. Sidans titel eller ID måste anges.",
