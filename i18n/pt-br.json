@@ -4,6 +4,8 @@
 			"Eduardo Addad de Oliveira"
 		]
 	},
+	"commentstreams-desc": "Permite deixar comentários nas páginas da wiki",
+	"commentstreams-error-prohibitedaction": "A ação $1 não é permitida nas páginas de comentários.",
 	"apihelp-csPostComment-description": "Publicar um comentário novo.",
 	"apihelp-csEditComment-param-wikitext": "texto wiki para o comentário.",
 	"commentstreams-api-error-vote-notloggedin": "Você deve estar logado para votar.",
