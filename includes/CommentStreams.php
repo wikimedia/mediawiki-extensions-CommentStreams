@@ -125,11 +125,9 @@ class CommentStreams {
 				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
 				return false;
 			}
-		}
-
-		// only display comments in subject namespaces in the list of allowed
-		// namespaces
-		elseif ( !in_array( $namespace, $csAllowedNamespaces ) ) {
+		} elseif ( !in_array( $namespace, $csAllowedNamespaces ) ) {
+			// only display comments in subject namespaces in the list of allowed
+			// namespaces
 			return false;
 		}
 
@@ -204,6 +202,8 @@ class CommentStreams {
 				$output->getUser()->getRights() ),
 			'moderatorFastDelete' =>
 				$GLOBALS['wgCommentStreamsModeratorFastDelete'] ? 1 : 0,
+			'showLabels' =>
+				$GLOBALS['wgCommentStreamsShowLabels'] ? 1 : 0,
 			'userDisplayName' =>
 				Comment::getDisplayNameFromUser( $output->getUser() ),
 			'userAvatar' =>
@@ -235,39 +235,37 @@ class CommentStreams {
 				return is_null( $comment->getParentId() );
 			}
 		);
-		usort( $array, function ( $comment1, $comment2 )
-			use ( $newestOnTop, $enableVoting ) {
-				$date1 = $comment1->getCreationTimestamp()->timestamp;
-				$date2 = $comment2->getCreationTimestamp()->timestamp;
-				if ( $enableVoting ) {
-					$upvotes1 = $comment1->getNumUpVotes();
-					$downvotes1 = $comment1->getNumDownVotes();
-					$votediff1 = $upvotes1 - $downvotes1;
-					$upvotes2 = $comment2->getNumUpVotes();
-					$downvotes2 = $comment2->getNumDownVotes();
-					$votediff2 = $upvotes2 - $downvotes2;
-					if ( $votediff1 === $votediff2 ) {
-						if ( $upvotes1 === $upvotes2 ) {
-							if ( $newestOnTop ) {
-								return $date1 > $date2 ? -1 : 1;
-							} else {
-								return $date1 < $date2 ? -1 : 1;
-							}
+		usort( $array, function ( $comment1, $comment2 ) use ( $newestOnTop, $enableVoting ) {
+			$date1 = $comment1->getCreationTimestamp()->timestamp;
+			$date2 = $comment2->getCreationTimestamp()->timestamp;
+			if ( $enableVoting ) {
+				$upvotes1 = $comment1->getNumUpVotes();
+				$downvotes1 = $comment1->getNumDownVotes();
+				$votediff1 = $upvotes1 - $downvotes1;
+				$upvotes2 = $comment2->getNumUpVotes();
+				$downvotes2 = $comment2->getNumDownVotes();
+				$votediff2 = $upvotes2 - $downvotes2;
+				if ( $votediff1 === $votediff2 ) {
+					if ( $upvotes1 === $upvotes2 ) {
+						if ( $newestOnTop ) {
+							return $date1 > $date2 ? -1 : 1;
 						} else {
-							return $upvotes1 > $upvotes2 ? -1 : 1;
+							return $date1 < $date2 ? -1 : 1;
 						}
 					} else {
-						return $votediff1 > $votediff2 ? -1 : 1;
+						return $upvotes1 > $upvotes2 ? -1 : 1;
 					}
 				} else {
-					if ( $newestOnTop ) {
-						return $date1 > $date2 ? -1 : 1;
-					} else {
-						return $date1 < $date2 ? -1 : 1;
-					}
+					return $votediff1 > $votediff2 ? -1 : 1;
+				}
+			} else {
+				if ( $newestOnTop ) {
+					return $date1 > $date2 ? -1 : 1;
+				} else {
+					return $date1 < $date2 ? -1 : 1;
 				}
 			}
-		);
+		} );
 		return $array;
 	}
 

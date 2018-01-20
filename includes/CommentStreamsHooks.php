@@ -150,7 +150,7 @@ class CommentStreamsHooks {
 	 * @param Title &$title the title object in question
 	 * @param User &$user the user performing the action
 	 * @param string $action the action being performed
-	 * @param boolean &$result true means the user is allowed, false means the
+	 * @param bool &$result true means the user is allowed, false means the
 	 * user is not allowed, untouched means this hook has no opinion
 	 * @return bool continue checking hooks
 	 */
@@ -315,7 +315,7 @@ class CommentStreamsHooks {
 			}
 		}
 		if ( !$found ) {
-			foreach ( $GLOBALS['wgGroupPermissions'] as $group => $groupperms) {
+			foreach ( $GLOBALS['wgGroupPermissions'] as $group => $groupperms ) {
 				if ( isset( $groupperms['edit'] ) ) {
 					$GLOBALS['wgGroupPermissions'][$group]['cs-comment'] =
 						$groupperms['edit'];
@@ -362,7 +362,7 @@ class CommentStreamsHooks {
 	 *
 	 * @param SMW\Store $store semantic data store
 	 * @param SMW\SemanticData $semanticData semantic data for page
-	 * @return boolean true to continue
+	 * @return bool true to continue
 	 */
 	public static function updateData( $store, $semanticData ) {
 		$subject = $semanticData->getSubject();
@@ -430,7 +430,6 @@ class CommentStreamsHooks {
 	 */
 	public static function onBeforeCreateEchoEvent( &$notifications,
 		&$notificationCategories, &$icons ) {
-
 		$notificationCategories['commentstreams-notification-category'] = [
 			'priority' => 3
 		];

@@ -103,6 +103,10 @@
 	padding-left: 5px;
 }
 
+.cs-comment-button-label {
+	padding-left: 5px;
+}
+
 button:hover {
 	background-color: #8eddf5;
 }

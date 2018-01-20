@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "4.1",
+	"version": "4.2",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -67,6 +67,8 @@
 				"commentstreams-api-error-unwatch",
 				"commentstreams-validation-error-nocommenttitle",
 				"commentstreams-validation-error-nocommenttext",
+				"commentstreams-buttontext-add",
+				"commentstreams-buttontext-reply",
 				"commentstreams-buttontooltip-add",
 				"commentstreams-buttontooltip-reply",
 				"commentstreams-buttontooltip-edit",
@@ -154,6 +156,7 @@
 		"CommentStreamsEnableTalk": false,
 		"CommentStreamsNewestStreamsOnTop": true,
 		"CommentStreamsModeratorFastDelete": false,
+		"CommentStreamsShowLabels": true,
 		"CommentStreamsEnableVoting": false,
 		"CommentStreamsInitiallyCollapsedNamespaces" : [],
 		"CommentStreamsUserRealNamePropertyName" : null,
