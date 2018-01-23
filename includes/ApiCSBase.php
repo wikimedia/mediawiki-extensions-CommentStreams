@@ -29,7 +29,7 @@ abstract class ApiCSBase extends ApiBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param boolean $edit whether this API module will be editing the database
+	 * @param bool $edit whether this API module will be editing the database
 	 */
 	public function __construct( $main, $action, $edit = false ) {
 		parent::__construct( $main, $action );
@@ -56,7 +56,7 @@ abstract class ApiCSBase extends ApiBase {
 	/**
 	 * the real body of the execute function
 	 */
-	protected abstract function executeBody();
+	abstract protected function executeBody();
 
 	/**
 	 * @return array allowed parameters
@@ -100,6 +100,8 @@ abstract class ApiCSBase extends ApiBase {
 	/**
 	 * log action
 	 * @param string $action the name of the action to be logged
+	 * @param string|null $title the title of the page for the comment that the
+	 *        action was performed upon, if differen from the current comment
 	 */
 	protected function logAction( $action, $title = null ) {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );

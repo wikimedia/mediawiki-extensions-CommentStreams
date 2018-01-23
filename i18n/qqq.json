@@ -82,6 +82,8 @@
 	"commentstreams-api-error-unwatch": "Error message.",
 	"commentstreams-validation-error-nocommenttitle": "Error message.",
 	"commentstreams-validation-error-nocommenttext": "Error message.",
+	"commentstreams-buttontext-add": "User interface button label. Upper case for stylistic reasons.",
+	"commentstreams-buttontext-reply": "User interface button label. Upper case for stylistic reasons.",
 	"commentstreams-buttontooltip-add": "User interface button tooltip.",
 	"commentstreams-buttontooltip-reply": "User interface button tooltip.\n{{Identical|Reply}}",
 	"commentstreams-buttontooltip-edit": "User interface button tooltip.\n{{Identical|Edit}}",

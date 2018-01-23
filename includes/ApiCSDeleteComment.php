@@ -105,9 +105,9 @@ class ApiCSDeleteComment extends ApiCSBase {
 		$result = $comment->delete();
 		$title = $comment->getWikiPage()->getTitle();
 		if ( is_null( $comment->getParentId() ) ) {
-			$this->logAction( 'comment-moderator-delete', $title  );
+			$this->logAction( 'comment-moderator-delete', $title );
 		} else {
-			$this->logAction( 'reply-moderator-delete', $title  );
+			$this->logAction( 'reply-moderator-delete', $title );
 		}
 		return $result;
 	}

@@ -119,7 +119,7 @@ class Comment {
 				}
 				$wikipage = new WikiPage( $title );
 				$status = $wikipage->doEditContent( $content, '',
-					EDIT_NEW | EDIT_SUPPRESS_RC , false, $user, null );
+					EDIT_NEW | EDIT_SUPPRESS_RC, false, $user, null );
 				if ( !$status->isOK() && !$status->isGood() ) {
 					if ( $status->getMessage()->getKey() == 'edit-already-exists' ) {
 						$index = wfRandomString();
@@ -179,7 +179,7 @@ class Comment {
 	 * load comment data from database
 	 */
 	private function loadFromDatabase() {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->selectRow(
 			'cs_comment_data',
 			[
@@ -193,10 +193,10 @@ class Comment {
 			__METHOD__
 		);
 		if ( $result ) {
-			$this->assoc_page_id = (integer)$result->cst_assoc_page_id;
+			$this->assoc_page_id = (int)$result->cst_assoc_page_id;
 			$this->parent_page_id = $result->cst_parent_page_id;
 			if ( !is_null( $this->parent_page_id ) ) {
-				$this->parent_page_id = (integer)$this->parent_page_id;
+				$this->parent_page_id = (int)$this->parent_page_id;
 			}
 			$this->comment_title = $result->cst_comment_title;
 			$this->loaded = true;
@@ -213,10 +213,10 @@ class Comment {
 	 */
 	private function loadFromValues( $assoc_page_id, $parent_page_id,
 		$comment_title ) {
-		$this->assoc_page_id = (integer)$assoc_page_id;
+		$this->assoc_page_id = (int)$assoc_page_id;
 		$this->parent_page_id = $parent_page_id;
 		if ( !is_null( $this->parent_page_id ) ) {
-			$this->parent_page_id = (integer)$this->parent_page_id;
+			$this->parent_page_id = (int)$this->parent_page_id;
 		}
 		$this->comment_title = $comment_title;
 		$this->loaded = true;
@@ -307,7 +307,7 @@ class Comment {
 	}
 
 	/**
-	 * @return boolean true if the last edit to this comment was not done by the
+	 * @return bool true if the last edit to this comment was not done by the
 	 * original author
 	 */
 	public function isLastEditModerated() {
@@ -343,7 +343,8 @@ class Comment {
 	 */
 	public function getAvatar() {
 		if ( is_null( $this->avatar ) ) {
-			if ( class_exists( 'wAvatar' ) ) { // from Extension:SocialProfile
+			if ( class_exists( 'wAvatar' ) ) {
+				// from Extension:SocialProfile
 				$avatar = new wAvatar( $this->getUser()->getId(), 'l' );
 				$this->avatar = $GLOBALS['wgUploadPath'] . '/avatars/' .
 					$avatar->getAvatarImage();
@@ -407,7 +408,7 @@ class Comment {
 	 */
 	public function getNumReplies() {
 		if ( is_null( $this->num_replies ) ) {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$this->num_replies = $dbr->selectRowCount(
 				'cs_comment_data',
 				'*',
@@ -454,7 +455,7 @@ class Comment {
 	 * @return +1 for up vote, -1 for down vote, 0 for no vote
 	 */
 	public function getVote( $user ) {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->selectRow(
 			'cs_votes',
 			[
@@ -467,7 +468,7 @@ class Comment {
 			__METHOD__
 		);
 		if ( $result ) {
-			$vote = (integer)$result->cst_v_vote;
+			$vote = (int)$result->cst_v_vote;
 			if ( $vote > 0 ) {
 				return 1;
 			}
@@ -483,7 +484,7 @@ class Comment {
 	 */
 	public function getNumUpVotes() {
 		if ( is_null( $this->num_up_votes ) ) {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$this->num_up_votes = $dbr->selectRowCount(
 				'cs_votes',
 				'*',
@@ -502,7 +503,7 @@ class Comment {
 	 */
 	public function getNumDownVotes() {
 		if ( is_null( $this->num_down_votes ) ) {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$this->num_down_votes = $dbr->selectRowCount(
 				'cs_votes',
 				'*',
@@ -519,7 +520,7 @@ class Comment {
 	/**
 	 * record a vote
 	 *
-	 * @param vote 1 for up vote, -1 for down vote, 0 for no vote
+	 * @param string $vote 1 for up vote, -1 for down vote, 0 for no vote
 	 * @param User $user the user voting on the comment
 	 * @return database status code
 	 */
@@ -527,8 +528,8 @@ class Comment {
 		if ( $vote !== "-1" && $vote !== "0" && $vote !== "1" ) {
 			return false;
 		}
-		$vote = (integer)$vote;
-		$dbr = wfGetDB( DB_SLAVE );
+		$vote = (int)$vote;
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->selectRow(
 			'cs_votes',
 			[
@@ -541,7 +542,7 @@ class Comment {
 			__METHOD__
 		);
 		if ( $result ) {
-			if ( $vote === (integer)$result->cst_v_vote ) {
+			if ( $vote === (int)$result->cst_v_vote ) {
 				return true;
 			}
 			if ( $vote === 1 || $vote === -1 ) {
@@ -630,7 +631,7 @@ class Comment {
 			return true;
 		}
 		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw->delete (
+		$result = $dbw->delete(
 			'cs_watchlist',
 			[
 				'cst_wl_page_id' => $this->getId(),
@@ -659,7 +660,7 @@ class Comment {
 	 * @return database true for OK, false for error
 	 */
 	private static function isWatchingComment( $pageid, $user ) {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->selectRow(
 			'cs_watchlist',
 			[
@@ -683,7 +684,7 @@ class Comment {
 	 * @return array of user IDs
 	 */
 	public function getWatchers() {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->select(
 			'cs_watchlist',
 			[
@@ -712,7 +713,7 @@ class Comment {
 	 * @param string $comment_title the new title for the comment
 	 * @param string $wikitext the wikitext to add
 	 * @param User $user the author of the edit
-	 * @return boolean true if successful
+	 * @return bool true if successful
 	 */
 	public function update( $comment_title, $wikitext, $user ) {
 		if ( is_null( $comment_title ) && is_null( $this->getParentId() ) ) {
@@ -726,7 +727,7 @@ class Comment {
 				$this->getAssociatedId() );
 		$content = new WikitextContent( $annotated_wikitext );
 		$status = $this->wikipage->doEditContent( $content, '',
-			EDIT_UPDATE | EDIT_SUPPRESS_RC , false, $user, null );
+			EDIT_UPDATE | EDIT_SUPPRESS_RC, false, $user, null );
 		if ( !$status->isOK() && !$status->isGood() ) {
 			return false;
 		}
@@ -756,7 +757,7 @@ class Comment {
 	/**
 	 * delete comment from database
 	 *
-	 * @return boolean true if successful
+	 * @return bool true if successful
 	 */
 	public function delete() {
 		$pageid = $this->getId();
@@ -824,7 +825,7 @@ EOT;
 	 * @return array array of comments for the given page
 	 */
 	public static function getAssociatedComments( $assoc_page_id ) {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->select(
 			'cs_comment_data',
 			[
@@ -854,7 +855,7 @@ EOT;
 	 * @return array array of comments for the given page
 	 */
 	public static function getReplies( $parent_page_id ) {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$result = $dbr->select(
 			'cs_comment_data',
 			[
@@ -881,7 +882,7 @@ EOT;
 	 * return the text to use to represent the user at the top of a comment
 	 *
 	 * @param User $user the user
-	 * @param boolean $linked whether to link the display name to the user page,
+	 * @param bool $linked whether to link the display name to the user page,
 	 * if it exists
 	 * @return string display name for user
 	 */
@@ -993,7 +994,7 @@ EOT;
 		$id = $event->getExtraParam( 'parent_id' );
 		$wikipage = WikiPage::newFromId( $id );
 		if ( !is_null( $wikipage ) ) {
-			$comment = Comment::newFromWikiPage( $wikipage );
+			$comment = self::newFromWikiPage( $wikipage );
 			if ( !is_null( $comment ) ) {
 				return $comment->getWatchers();
 			}

@@ -63,7 +63,7 @@ class ApiCSPostComment extends ApiBase {
 					'commentstreams-api-error-post-parentpagedoesnotexist' );
 			}
 			$parent_comment = Comment::newFromWikiPage( $parent_page );
-			if ( $parent_comment->getAssociatedId() !== (integer)$associatedid ) {
+			if ( $parent_comment->getAssociatedId() !== (int)$associatedid ) {
 				$this->dieCustomUsageMessage(
 					'commentstreams-api-error-post-associatedpageidmismatch' );
 			}
@@ -205,6 +205,8 @@ class ApiCSPostComment extends ApiBase {
 	/**
 	 * log action
 	 * @param string $action the name of the action to be logged
+	 * @param string|null $title the title of the page for the comment that the
+	 *        action was performed upon
 	 */
 	protected function logAction( $action, $title ) {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );

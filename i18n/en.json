@@ -80,6 +80,8 @@
 	"commentstreams-api-error-unwatch": "Error unwatching comment.",
 	"commentstreams-validation-error-nocommenttitle": "You must enter a comment title.",
 	"commentstreams-validation-error-nocommenttext": "You must enter comment text.",
+	"commentstreams-buttontext-add": "ADD A COMMENT",
+	"commentstreams-buttontext-reply": "REPLY",
 	"commentstreams-buttontooltip-add": "add a comment",
 	"commentstreams-buttontooltip-reply": "reply",
 	"commentstreams-buttontooltip-edit": "edit",

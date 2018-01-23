@@ -24,17 +24,14 @@
 class EchoCSPresentationModel extends EchoEventPresentationModel {
 
 	/**
-	 * @return string The symbolic icon name as defined in $wgEchoNotificationIcons
+	 * @inheritDoc
 	 */
 	public function getIconType() {
 		return 'chat';
 	}
 
 	/**
-	 * Array of primary link details, with possibly-relative URL & label.
-	 *
-	 * @return array|bool Array of link data, or false for no link:
-	 *                    ['url' => (string) url, 'label' => (string) link text (non-escaped)]
+	 * @inheritDoc
 	 */
 	public function getPrimaryLink() {
 		$id = $this->event->getExtraParam( 'comment_id' );
@@ -45,11 +42,7 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	}
 
 	/**
-	 * Get a message object and add the performer's name as
-	 * a parameter. It is expected that subclasses will override
-	 * this.
-	 *
-	 * @return Message
+	 * @inheritDoc
 	 */
 	public function getHeaderMessage() {
 		$msg = wfMessage( "notification-header-{$this->type}" );
@@ -66,6 +59,9 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 		return $msg;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getBodyMessage() {
 		$msg = wfMessage( "notification-body-{$this->type}" );
 		$msg->params( $this->event->getExtraParam(
@@ -82,10 +78,7 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	}
 
 	/**
-	 * If this function returns false, no other methods will be called
-	 * on the object.
-	 *
-	 * @return bool
+	 * @inheritDoc
 	 */
 	public function canRender() {
 		return !is_null( $this->event->getTitle() );

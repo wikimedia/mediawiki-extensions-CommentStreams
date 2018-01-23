@@ -32,6 +32,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		moderatorEdit: false,
 		moderatorDelete: false,
 		moderatorFastDelete: false,
+		showLabels: false,
 		userDisplayName: null,
 		newestStreamsOnTop: false,
 		initiallyCollapsed: false,
@@ -76,6 +77,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			this.moderatorDelete = config.moderatorDelete;
 			this.moderatorFastDelete = this.moderatorDelete ?
 				config.moderatorFastDelete : false;
+			this.showLabels = config.showLabels;
 			this.userDisplayName = config.userDisplayName;
 			this.newestStreamsOnTop = config.newestStreamsOnTop;
 			this.initiallyCollapsed = config.initiallyCollapsed;
@@ -112,12 +114,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 						id: 'cs-add-button'
 					} )
 					.addClass( 'cs-button' );
-				var addimage = $( '<img>' )
+				var addImage = $( '<img>' )
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-add' ),
 						src: this.imagepath + 'comment_add.png'
 					} );
-				addButton.append( addimage );
+				addButton.append( addImage );
+				if ( this.showLabels ) {
+					var addLabel = $( '<span>' )
+						.text( mw.message( 'commentstreams-buttontext-add' ) )
+						.addClass( 'cs-comment-button-label' )
+					addButton.append( addLabel );
+				}
 
 				if ( this.newestStreamsOnTop ) {
 					headerDiv.append( addButton );
@@ -223,12 +231,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 							type: 'button',
 							'data-stream-id': commentData.pageid
 						} );
-					var replyimage = $( '<img>' )
+					var replyImage = $( '<img>' )
 						.attr( {
 							title: mw.message( 'commentstreams-buttontooltip-reply' ),
 							src: this.imagepath + 'comment_reply.png'
 						} );
-					replyButton.append( replyimage );
+					replyButton.append( replyImage );
+					if ( this.showLabels ) {
+						var replyLabel = $( '<span>' )
+							.text( mw.message( 'commentstreams-buttontext-reply' ) )
+							.addClass( 'cs-comment-button-label' )
+						replyButton.append( replyLabel );
+					}
 					streamFooter.append( replyButton );
 					replyButton.click( function() {
 						var pageId = $( this ).attr( 'data-stream-id' );

@@ -24,11 +24,14 @@
 
 class CommentStreamsAllComments extends SpecialPage {
 
-	function __construct() {
+	public function __construct() {
 		parent::__construct( 'CommentStreamsAllComments' );
 	}
 
-	function execute( $par ) {
+	/**
+	 * @inheritDoc
+	 */
+	public function execute( $par ) {
 		$request = $this->getRequest();
 		$this->setHeaders();
 		$this->getOutput()->addModuleStyles( 'ext.CommentStreamsAllComments' );
@@ -73,7 +76,7 @@ class CommentStreamsAllComments extends SpecialPage {
 				$wikipage = WikiPage::newFromId( $page->page_id );
 				$comment = Comment::newFromWikiPage( $wikipage );
 				if ( !is_null( $comment ) ) {
-					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText() ;
+					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText();
 					$associatedpageid = $comment->getAssociatedId();
 					$associatedpage = WikiPage::newFromId( $associatedpageid );
 					if ( !is_null( $associatedpage ) ) {
@@ -101,13 +104,13 @@ class CommentStreamsAllComments extends SpecialPage {
 						}
 						$wikitext .= '|-' . PHP_EOL;
 						$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
-						$wikitext .= '|' . $associatedpagename . PHP_EOL;
-						$wikitext .= '|' . $comment->getCommentTitle() . PHP_EOL;
-						$wikitext .= '|' . $comment->getWikiText() . PHP_EOL;
-						$wikitext .= '|' . $author . PHP_EOL;
-						$wikitext .= '|' . $lasteditor . PHP_EOL;
-						$wikitext .= '|' . $comment->getCreationDate() . PHP_EOL;
-						$wikitext .= '|' . $modificationdate . PHP_EOL;
+						$wikitext .= '| ' . $associatedpagename . PHP_EOL;
+						$wikitext .= '| ' . $comment->getCommentTitle() . PHP_EOL;
+						$wikitext .= '| ' . $comment->getWikiText() . PHP_EOL;
+						$wikitext .= '| ' . $author . PHP_EOL;
+						$wikitext .= '| ' . $lasteditor . PHP_EOL;
+						$wikitext .= '| ' . $comment->getCreationDate() . PHP_EOL;
+						$wikitext .= '| ' . $modificationdate . PHP_EOL;
 						$index ++;
 					}
 				}
@@ -134,7 +137,6 @@ class CommentStreamsAllComments extends SpecialPage {
 	}
 
 	private function addTableNavigation( $offset, $more, $limit, $paramname ) {
-
 		$title = Title::newFromText( 'Special:' . __CLASS__ );
 		$url = $title->getFullURL();
 
@@ -176,7 +178,7 @@ class CommentStreamsAllComments extends SpecialPage {
 	}
 
 	private static function getCommentPages( $limit, $offset ) {
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$pages = $dbr->select(
 			[
 				'cs_comment_data',
