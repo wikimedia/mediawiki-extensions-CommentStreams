@@ -39,6 +39,8 @@
 	"commentstreams-api-error-unwatch": "Fehler beim Entbeobachten des Kommentars.",
 	"commentstreams-validation-error-nocommenttitle": "Du musst einen Kommentartitel eingeben.",
 	"commentstreams-validation-error-nocommenttext": "Du musst einen Kommentartext eingeben.",
+	"commentstreams-buttontext-add": "EINEN KOMMENTAR HINZUFÜGEN",
+	"commentstreams-buttontext-reply": "ANTWORTEN",
 	"commentstreams-buttontooltip-add": "Einen Kommentar hinzufügen",
 	"commentstreams-buttontooltip-reply": "Antworten",
 	"commentstreams-buttontooltip-edit": "Bearbeiten",
