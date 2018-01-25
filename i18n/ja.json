@@ -21,6 +21,8 @@
 	"commentstreams-api-error-watch-notloggedin": "コメントを閲覧するにはログインをしてください。",
 	"commentstreams-validation-error-nocommenttitle": "コメントのタイトルを入力してください。",
 	"commentstreams-validation-error-nocommenttext": "コメントを入力してください。",
+	"commentstreams-buttontext-add": "コメントを追加",
+	"commentstreams-buttontext-reply": "返信",
 	"commentstreams-buttontooltip-add": "コメントを追加",
 	"commentstreams-buttontooltip-reply": "返信",
 	"commentstreams-buttontooltip-edit": "編集",
