@@ -10,6 +10,8 @@
 	"apihelp-csVote-param-vote": "ভোট (1, -1, বা 0)।",
 	"commentstreams-api-error-delete": "মন্তব্য অপসারণের সময় ত্রুটি।",
 	"commentstreams-api-error-vote-notloggedin": "ভোট দিতে হলে আপনাকে অবশ্যই প্রবেশ করতে হবে।",
+	"commentstreams-buttontext-add": "একটি মন্তব্য যোগ করুন",
+	"commentstreams-buttontext-reply": "উত্তর দিন",
 	"commentstreams-buttontooltip-add": "একটি মন্তব্য যোগ করুন",
 	"commentstreams-buttontooltip-reply": "প্রত্যুত্তর",
 	"commentstreams-buttontooltip-edit": "সম্পাদনা",
