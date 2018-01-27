@@ -17,6 +17,7 @@
 	"commentstreams-api-error-edit-notloggedin": "Dir musst ageloggt si fir z'änneren.",
 	"commentstreams-api-error-delete": "Feeler beim Läsche vun der Bemierkung.",
 	"commentstreams-api-error-vote-notloggedin": "Dir musst ageloggt si fir kënnen ofzestëmmen.",
+	"commentstreams-buttontext-reply": "ÄNTWERTEN",
 	"commentstreams-buttontooltip-add": "eng Bemierkung dobäisetzen",
 	"commentstreams-buttontooltip-reply": "äntwerten",
 	"commentstreams-buttontooltip-edit": "änneren",
