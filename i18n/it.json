@@ -8,6 +8,8 @@
 	"apihelp-csVote-param-vote": "voto (1, -1, o 0).",
 	"commentstreams-api-error-delete-permissions": "L'utente non dispone dell'autorizzazione per cancellare il commento.",
 	"commentstreams-api-error-vote-notloggedin": "Devi aver effettuato l'accesso per votare.",
+	"commentstreams-buttontext-add": "AGGIUNGI UN COMMENTO",
+	"commentstreams-buttontext-reply": "RISPONDI",
 	"commentstreams-buttontooltip-add": "aggiungi un commento",
 	"commentstreams-buttontooltip-reply": "rispondi",
 	"commentstreams-buttontooltip-edit": "modifica",
