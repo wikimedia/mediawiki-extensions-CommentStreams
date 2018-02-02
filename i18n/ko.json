@@ -52,6 +52,7 @@
 	"commentstreams-api-error-unwatch": "댓글의 주시를 해제하는 중 오류가 발생했습니다.",
 	"commentstreams-validation-error-nocommenttitle": "댓글의 제목을 입력해야 합니다.",
 	"commentstreams-validation-error-nocommenttext": "댓글의 텍스트를 입력해야 합니다.",
+	"commentstreams-buttontext-add": "댓글 추가",
 	"commentstreams-buttontooltip-add": "댓글 추가",
 	"commentstreams-buttontooltip-reply": "답변",
 	"commentstreams-buttontooltip-edit": "편집",
