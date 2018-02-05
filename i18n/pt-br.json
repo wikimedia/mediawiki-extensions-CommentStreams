@@ -30,6 +30,8 @@
 	"apihelp-csEditComment-param-wikitext": "texto wiki para o comentário.",
 	"commentstreams-api-error-vote-notloggedin": "Você deve estar logado para votar.",
 	"commentstreams-api-error-watch-nowatchreply": "Não é permitido ver respostas.",
+	"commentstreams-buttontext-add": "ADICIONE UM COMENTÁRIO",
+	"commentstreams-buttontext-reply": "RESPONDER",
 	"commentstreams-buttontooltip-delete": "excluir",
 	"commentstreams-dialog-buttontext-yes": "Sim",
 	"commentstreams-title-field-placeholder": "Digite o título ...",
