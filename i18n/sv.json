@@ -80,6 +80,8 @@
 	"commentstreams-api-error-unwatch": "Fel uppstod vid upphörande av bevakning av en kommentar.",
 	"commentstreams-validation-error-nocommenttitle": "Du måste ange en kommentarstitel.",
 	"commentstreams-validation-error-nocommenttext": "Du måste ange kommentarstext.",
+	"commentstreams-buttontext-add": "LÄGG TILL EN KOMMENTAR",
+	"commentstreams-buttontext-reply": "SVARA",
 	"commentstreams-buttontooltip-add": "kommentera",
 	"commentstreams-buttontooltip-reply": "svara",
 	"commentstreams-buttontooltip-edit": "redigera",
