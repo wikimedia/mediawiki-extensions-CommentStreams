@@ -90,7 +90,9 @@ class ApiCSPostComment extends ApiBase {
 		}
 
 		$json = $comment->getJSON();
-		if ( class_exists( 'EchoEvent' ) && is_null( $comment->getParentId() ) ) {
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) &&
+			is_null( $comment->getParentId() )
+		) {
 			$json['watching'] = 1;
 		}
 		$this->getResult()->addValue( null, $this->getModuleName(), $json );
@@ -137,7 +139,7 @@ class ApiCSPostComment extends ApiBase {
 	 * @return not used
 	 */
 	private function sendNotifications( $comment, $associated_page ) {
-		if ( !class_exists( 'EchoEvent' ) ) {
+		if ( !ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ) {
 			return;
 		}
 
