@@ -33,7 +33,6 @@
 			"dependencies": [
 				"oojs-ui"
 			],
-			"position": "top",
 			"targets": [
 				"desktop",
 				"mobile"
