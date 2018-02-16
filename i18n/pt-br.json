@@ -123,6 +123,10 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "Visitar a resposta",
 	"group-csmoderator": "Moderadores (CommentStreams)",
 	"group-csmoderator-member": "{{GENDER:$1|moderador|moderadora}} (CommentStreams)",
+	"grouppage-csmoderator": "{{ns:project}}:Moderadores (CommentStreams)",
+	"right-cs-comment": "Publicar, editar e eliminar comentários do próprio utilizador",
+	"action-cs-comment": "publicar, editar ou eliminar comentários",
+	"right-cs-moderator-edit": "Editar comentários de qualquer usuário",
 	"commentstreams-allcomments-label-page": "Página de comentários",
 	"commentstreams-allcomments-label-lastedited": "Última edição"
 }
