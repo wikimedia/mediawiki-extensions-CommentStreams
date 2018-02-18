@@ -6,9 +6,12 @@
 	},
 	"commentstreams-author-anonymous": "匿名",
 	"commentstreams-buttontooltip-reply": "回覆",
+	"commentstreams-buttontooltip-edit": "編輯",
 	"commentstreams-buttontooltip-delete": "刪除",
+	"commentstreams-buttontooltip-submit": "送出",
 	"commentstreams-buttontooltip-cancel": "取消",
 	"commentstreams-dialog-buttontext-cancel": "取消",
+	"commentstreams-allcomments-label-wikitext": "評論",
 	"commentstreams-allcomments-button-next": "下一個",
 	"commentstreams-allcomments-button-previous": "上一個"
 }
