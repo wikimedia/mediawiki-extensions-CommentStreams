@@ -152,7 +152,7 @@ class CommentStreams {
 			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
 				$parentJSON['vote'] = $parentComment->getVote( $output->getUser() );
 			}
-			if ( class_exists( 'EchoEvent' ) ) {
+			if ( ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ) {
 				$parentJSON['watching'] = $parentComment->isWatching( $output->getUser() );
 			}
 			$childComments = $this->getReplies( $allComments,
@@ -214,7 +214,7 @@ class CommentStreams {
 			'enableVoting' =>
 				$GLOBALS['wgCommentStreamsEnableVoting'] ? 1 : 0,
 			'enableWatchlist' =>
-				class_exists( 'EchoEvent' ) ? 1 : 0,
+				ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ? 1 : 0,
 			'comments' => $comments
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
