@@ -204,18 +204,38 @@ class CommentStreamsHooks {
 	/**
 	 * Implements ParserFirstCallInit hook.
 	 * See https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
-	 * Adds no-comment-streams and comment-streams-initially-collapsed magic
-	 * words.
+	 * Adds comment-streams, no-comment-streams, and
+	 * comment-streams-initially-collapsed magic words.
 	 *
 	 * @param Parser $parser the parser
 	 * @return bool continue checking hooks
 	 */
 	public static function onParserSetup( Parser $parser ) {
+		$parser->setHook( 'comment-streams',
+			'CommentStreamsHooks::enableCommentStreams' );
 		$parser->setHook( 'no-comment-streams',
-			'CommentStreamsHooks::hideCommentStreams' );
+			'CommentStreamsHooks::disableCommentStreams' );
 		$parser->setHook( 'comment-streams-initially-collapsed',
 			'CommentStreamsHooks::initiallyCollapseCommentStreams' );
 		return true;
+	}
+
+	/**
+	 * Implements tag function, <comment-streams/>, which enables
+	 * CommentStreams on a page.
+	 *
+	 * @param string $input input between the tags (ignored)
+	 * @param array $args tag arguments
+	 * @param Parser $parser the parser
+	 * @param PPFrame $frame the parent frame
+	 * @return string to replace tag with
+	 */
+	public static function enableCommentStreams( $input, array $args,
+		Parser $parser, PPFrame $frame ) {
+		$parser->disableCache();
+		$cs = CommentStreams::singleton();
+		$cs->enableCommentsOnPage();
+		return "";
 	}
 
 	/**
@@ -228,7 +248,7 @@ class CommentStreamsHooks {
 	 * @param PPFrame $frame the parent frame
 	 * @return string to replace tag with
 	 */
-	public static function hideCommentStreams( $input, array $args,
+	public static function disableCommentStreams( $input, array $args,
 		Parser $parser, PPFrame $frame ) {
 		$parser->disableCache();
 		$cs = CommentStreams::singleton();

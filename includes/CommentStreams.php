@@ -26,6 +26,13 @@ class CommentStreams {
 	// CommentStreams singleton instance
 	private static $instance = null;
 
+	const COMMENTS_ENABLED = 1;
+	const COMMENTS_DISABLED = -1;
+	const COMMENTS_INHERITED = 0;
+
+	// no CommentStreams flag
+	private $areCommentsEnabled = self::COMMENTS_INHERITED;
+
 	/**
 	 * create a CommentStreams singleton instance
 	 *
@@ -38,14 +45,18 @@ class CommentStreams {
 		return self::$instance;
 	}
 
-	// no CommentStreams flag
-	private $noCommentStreams = false;
+	/**
+	 * enables the display of comments on the current page
+	 */
+	public function enableCommentsOnPage() {
+		$this->areCommentsEnabled = self::COMMENTS_ENABLED;
+	}
 
 	/**
 	 * disables the display of comments on the current page
 	 */
 	public function disableCommentsOnPage() {
-		$this->noCommentStreams = true;
+		$this->areCommentsEnabled = self::COMMENTS_DISABLED;
 	}
 
 	// initially collapse CommentStreams flag
@@ -79,7 +90,7 @@ class CommentStreams {
 	 */
 	private function checkDisplayComments( $output ) {
 		// don't display comments on this page if they are explicitly disabled
-		if ( $this->noCommentStreams ) {
+		if ( $this->areCommentsEnabled === self::COMMENTS_DISABLED ) {
 			return false;
 		}
 
@@ -115,10 +126,17 @@ class CommentStreams {
 			return false;
 		}
 
+		// display comments on this page if they are explicitly enabled
+		if ( $this->areCommentsEnabled === self::COMMENTS_ENABLED ) {
+			return true;
+		}
+
 		// don't display comments in a talk namespace unless:
 		// 1) $wgCommentStreamsEnableTalk is true, OR
 		// 2) the namespace is a talk namespace for a namespace in the array of
 		// allowed namespaces
+		// 3) comments have been explicitly enabled on that namespace with
+		// <comment-streams/>
 		if ( $title->isTalkPage() ) {
 			$subject_namespace = MWNamespace::getSubject( $namespace );
 			if ( !$GLOBALS['wgCommentStreamsEnableTalk'] &&
