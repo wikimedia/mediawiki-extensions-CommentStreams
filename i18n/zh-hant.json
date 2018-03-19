@@ -12,6 +12,7 @@
 	"commentstreams-buttontooltip-cancel": "取消",
 	"commentstreams-dialog-buttontext-cancel": "取消",
 	"commentstreams-allcomments-label-wikitext": "評論",
+	"commentstreams-allcomments-label-author": "作者",
 	"commentstreams-allcomments-button-next": "下一個",
 	"commentstreams-allcomments-button-previous": "上一個"
 }

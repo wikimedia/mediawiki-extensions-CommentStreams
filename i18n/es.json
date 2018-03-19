@@ -52,6 +52,7 @@
 	"notification-body-commentstreams-comment-on-watched-page": "El comentario es:\n\n\n$5",
 	"notification-body-commentstreams-reply-on-watched-page": "La respuesta es:\n\n\n$5",
 	"notification-link-label-commentstreams-comment-on-watched-page": "Visitar comentario",
+	"notification-link-label-commentstreams-reply-on-watched-page": "Visitar respuesta",
 	"notification-link-label-commentstreams-reply-to-watched-comment": "Visitar respuesta",
 	"action-cs-comment": "publicar, editar o borrar comentarios",
 	"action-cs-moderator-edit": "editar comentarios de otros usuarios",
