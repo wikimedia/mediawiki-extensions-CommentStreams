@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Metalhead64"
+			"Metalhead64",
+			"ToBeFree"
 		]
 	},
 	"commentstreams-desc": "Erlaubt die Kommentierung von Wikiseiten",
@@ -10,6 +11,7 @@
 	"commentstreams-author-anonymous": "Anonym",
 	"apihelp-csPostComment-description": "Speichert einen neuen Kommentar.",
 	"apihelp-csPostComment-summary": "Speichert einen neuen Kommentar.",
+	"apihelp-csPostComment-param-commenttitle": "optionaler Titel für den Kommentar.",
 	"apihelp-csEditComment-param-wikitext": "Wikitext für den Kommentar.",
 	"commentstreams-api-error-notloggedin": "Du musst angemeldet sein.",
 	"commentstreams-api-error-commentnotfound": "Der angeforderte Kommentar wurde nicht gefunden.",

@@ -11,6 +11,8 @@
 	"commentstreams-buttontooltip-submit": "送出",
 	"commentstreams-buttontooltip-cancel": "取消",
 	"commentstreams-dialog-buttontext-cancel": "取消",
+	"commentstreams-dialog-buttontext-yes": "是",
+	"commentstreams-dialog-buttontext-no": "否",
 	"commentstreams-allcomments-label-wikitext": "評論",
 	"commentstreams-allcomments-label-author": "作者",
 	"commentstreams-allcomments-button-next": "下一個",
