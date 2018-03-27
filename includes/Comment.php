@@ -434,7 +434,7 @@ class Comment {
 			'created_timestamp' => $this->getCreationTimestamp()->format( "U" ),
 			'modified' => $this->getModificationDate(),
 			'moderated' => $this->isLastEditModerated() ? "moderated" : null,
-			'wikitext' => $this->getWikiText(),
+			'wikitext' => htmlentities( $this->getWikiText() ),
 			'html' => $this->getHTML(),
 			'pageid' => $this->getId(),
 			'associatedid' => $this->getAssociatedId(),

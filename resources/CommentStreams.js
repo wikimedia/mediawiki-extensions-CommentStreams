@@ -1178,7 +1178,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 						commentBox.slideDown();
 
 						var editField = $( '#cs-body-edit-field' );
-						editField.val( result.wikitext );
+						editField.val( $( '<textarea/>' ).html( result.wikitext ).text() );
 						if ( is_stream ) {
 							var titleField = $( '#cs-title-edit-field' );
 							titleField.val( result.commenttitle );
