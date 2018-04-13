@@ -21,6 +21,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+use MediaWiki\MediaWikiServices;
+
 class CommentStreamsHooks {
 
 	/**
@@ -109,7 +111,9 @@ class CommentStreamsHooks {
 				} else {
 					$displaytitle = $associatedTitle->getPrefixedText();
 				}
-				$link = Linker::link( $associatedTitle, '< ' . $displaytitle );
+				$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
+				$link = $linkRenderer->makeLink( $associatedTitle,
+					'< ' . $displaytitle );
 				$output->setSubtitle( $link );
 			} else {
 				$message =

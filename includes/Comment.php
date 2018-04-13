@@ -21,6 +21,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+use MediaWiki\MediaWikiServices;
+
 class Comment {
 
 	// wiki page object for this comment wiki page
@@ -917,7 +919,8 @@ EOT;
 			$displayname = $user->getName();
 		}
 		if ( $linked && $userpage->exists() ) {
-			$displayname = Linker::link( $userpage, $displayname );
+			$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
+			$displayname = $linkRenderer->makeLink( $userpage, $displayname );
 		}
 		return $displayname;
 	}
