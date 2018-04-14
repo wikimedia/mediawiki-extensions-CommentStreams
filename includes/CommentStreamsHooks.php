@@ -111,10 +111,9 @@ class CommentStreamsHooks {
 				} else {
 					$displaytitle = $associatedTitle->getPrefixedText();
 				}
-				$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
-				$link = $linkRenderer->makeLink( $associatedTitle,
-					'< ' . $displaytitle );
-				$output->setSubtitle( $link );
+				$output->setSubtitle(
+					self::link( $associatedTitle, '< ' . $displaytitle )
+				);
 			} else {
 				$message =
 					wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
@@ -123,6 +122,20 @@ class CommentStreamsHooks {
 			$output->addWikitext( $comment->getHTML() );
 		}
 		return false;
+	}
+
+	/**
+	 * Shim for compatibility
+	 * @param Title $title to link to
+	 * @param string $display to show
+	 * @return string for link
+	 */
+	public static function link( Title $title, $display ) {
+		if ( method_exists( 'MediaWikiServices', 'getLinkRenderer' ) ) {
+			$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
+			return $linkRenderer->makeLink( $title, $display );
+		};
+		return Linker::link( $title, $display );
 	}
 
 	/**
