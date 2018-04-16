@@ -99,7 +99,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 		setupDivs: function() {
 			var self = this;
 
-			var mainDiv = $( '<div>' ).attr( 'id', 'cs-comments' );
+			var mainDiv = $( '#cs-comments' );
+			if ( !mainDiv.length ) {
+				mainDiv = $( '<div>' ).attr( 'id', 'cs-comments' );
+				mainDiv.insertAfter( '#catlinks' );
+			}
 
 			var headerDiv = $( '<div> ').attr( 'id', 'cs-header');
 			mainDiv.append( headerDiv );
@@ -137,8 +141,6 @@ var commentstreams_controller = ( function( mw, $ ) {
 					self.showNewCommentStreamBox();
 				} );
 			}
-
-			mainDiv.insertAfter( '#catlinks' );
 		},
 		addInitialComments: function() {
 			var self = this;

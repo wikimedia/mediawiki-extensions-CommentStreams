@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "4.3.1",
+	"version": "4.4",
 	"author": [
 		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -113,6 +113,7 @@
 	},
 	"AutoloadClasses": {
 		"CommentStreamsHooks": "includes/CommentStreamsHooks.php",
+		"CommentStreamsUtils": "includes/CommentStreamsUtils.php",
 		"CommentStreams": "includes/CommentStreams.php",
 		"Comment": "includes/Comment.php",
 		"ApiCSBase": "includes/ApiCSBase.php",

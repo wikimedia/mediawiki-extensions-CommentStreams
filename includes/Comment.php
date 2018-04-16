@@ -917,7 +917,7 @@ EOT;
 			$displayname = $user->getName();
 		}
 		if ( $linked && $userpage->exists() ) {
-			$displayname = CommentStreamsHooks::link( $userpage, $displayname );
+			$displayname = CommentStreamsUtils::link( $userpage, $displayname );
 		}
 		return $displayname;
 	}

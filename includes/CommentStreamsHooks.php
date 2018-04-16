@@ -21,8 +21,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-use MediaWiki\MediaWikiServices;
-
 class CommentStreamsHooks {
 
 	/**
@@ -112,7 +110,7 @@ class CommentStreamsHooks {
 					$displaytitle = $associatedTitle->getPrefixedText();
 				}
 				$output->setSubtitle(
-					self::link( $associatedTitle, '< ' . $displaytitle )
+					CommentStreamsUtils::link( $associatedTitle, '< ' . $displaytitle )
 				);
 			} else {
 				$message =
@@ -122,20 +120,6 @@ class CommentStreamsHooks {
 			$output->addWikitext( $comment->getHTML() );
 		}
 		return false;
-	}
-
-	/**
-	 * Shim for compatibility
-	 * @param Title $title to link to
-	 * @param string $display to show
-	 * @return string for link
-	 */
-	public static function link( Title $title, $display ) {
-		if ( method_exists( 'MediaWikiServices', 'getLinkRenderer' ) ) {
-			$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
-			return $linkRenderer->makeLink( $title, $display );
-		};
-		return Linker::link( $title, $display );
 	}
 
 	/**
@@ -252,7 +236,12 @@ class CommentStreamsHooks {
 		$parser->disableCache();
 		$cs = CommentStreams::singleton();
 		$cs->enableCommentsOnPage();
-		return "";
+		if ( isset( $args['location'] ) && $args['location'] === 'footer' ) {
+			$ret = '';
+		} else {
+			$ret = '<div id="cs-comments"></div>';
+		}
+		return $ret;
 	}
 
 	/**
