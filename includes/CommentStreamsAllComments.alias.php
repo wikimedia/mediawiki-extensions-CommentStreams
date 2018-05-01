@@ -33,3 +33,13 @@ $specialPageAliases['en'] = [
 $specialPageAliases['he'] = [
 	'CommentStreamsAllComments' => [ 'כל_התגובות' ]
 ];
+
+/** Serbian Cyrilic (српски (ћирлица)) */
+$specialPageAliases['sr-ec'] = [
+	'CommentStreamsAllComments' => [ 'Сви_коментари' ]
+];
+
+/** Serbian Latin (srpski (latinica)) */
+$specialPageAliases['sr-el'] = [
+	'CommentStreamsAllComments' => [ 'Svi_komentari' ]
+];
