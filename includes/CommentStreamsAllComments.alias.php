@@ -28,3 +28,8 @@ $specialPageAliases = [];
 $specialPageAliases['en'] = [
 	'CommentStreamsAllComments' => [ 'AllComments' ]
 ];
+
+/** Hebrew (עברית) */
+$specialPageAliases['he'] = [
+	'CommentStreamsAllComments' => [ 'כל_התגובות' ]
+];
