@@ -2,8 +2,8 @@
 	"name": "CommentStreams",
 	"version": "4.4",
 	"author": [
-		"[http://www.mediawiki.org/wiki/User:Jji Jason Ji]",
-		"[http://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
+		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
+		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:CommentStreams",
 	"descriptionmsg": "commentstreams-desc",
