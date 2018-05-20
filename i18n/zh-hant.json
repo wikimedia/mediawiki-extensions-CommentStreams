@@ -1,10 +1,25 @@
 {
 	"@metadata": {
 		"authors": [
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"Kly"
 		]
 	},
+	"commentstreams-desc": "允許在 wiki 頁面上評論",
 	"commentstreams-author-anonymous": "匿名",
+	"apihelp-csPostComment-description": "發佈新評論。",
+	"apihelp-csPostComment-summary": "發佈新評論。",
+	"apihelp-csPostComment-param-wikitext": "用於評論的 wiki 文字。",
+	"apihelp-csEditComment-param-commenttitle": "用於評論的選用標題。",
+	"apihelp-csEditComment-param-wikitext": "用於評論的 wiki 文字。",
+	"commentstreams-api-error-post": "添加評論時出錯。",
+	"commentstreams-api-error-edit": "編輯評論時出錯。",
+	"commentstreams-api-error-delete": "刪除評論時出錯。",
+	"commentstreams-api-error-vote-notloggedin": "您必須要先登入才能投票。",
+	"commentstreams-api-error-vote": "在評論上投票時出錯。",
+	"commentstreams-api-error-watch-notloggedin": "您必須要先登入才能監視評論。",
+	"commentstreams-api-error-watch": "監視評論時出錯。",
+	"commentstreams-api-error-unwatch": "取消監視評論時出錯。",
 	"commentstreams-buttontooltip-reply": "回覆",
 	"commentstreams-buttontooltip-edit": "編輯",
 	"commentstreams-buttontooltip-delete": "刪除",
@@ -13,8 +28,16 @@
 	"commentstreams-dialog-buttontext-cancel": "取消",
 	"commentstreams-dialog-buttontext-yes": "是",
 	"commentstreams-dialog-buttontext-no": "否",
+	"notification-link-label-commentstreams-reply-on-watched-page": "查看回覆",
+	"notification-link-label-commentstreams-reply-to-watched-comment": "查看回覆",
+	"commentstreamsallcomments": "所有評論",
+	"commentstreams-allcomments-nocommentsfound": "找不到評論",
+	"commentstreams-allcomments-label-page": "評論頁面",
+	"commentstreams-allcomments-label-associatedpage": "相關頁面",
+	"commentstreams-allcomments-label-commenttitle": "評論標題",
 	"commentstreams-allcomments-label-wikitext": "評論",
 	"commentstreams-allcomments-label-author": "作者",
+	"commentstreams-allcomments-label-created": "已建立",
 	"commentstreams-allcomments-button-next": "下一個",
 	"commentstreams-allcomments-button-previous": "上一個"
 }
