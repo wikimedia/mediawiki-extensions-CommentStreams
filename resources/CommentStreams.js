@@ -115,7 +115,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var addButton = $( '<button>' )
 					.attr( {
 						type: 'button',
-						id: 'cs-add-button'
+						id: 'cs-add-button',
+						title: mw.message( 'commentstreams-buttontext-add' ),
+						'data-toggle': 'tooltip'
 					} )
 					.addClass( 'cs-button' );
 				var addImage = $( '<img>' )
@@ -231,7 +233,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 						.addClass( 'cs-reply-button' )
 						.attr( {
 							type: 'button',
-							'data-stream-id': commentData.pageid
+							'data-stream-id': commentData.pageid,
+							title: mw.message( 'commentstreams-buttontext-reply' ),
+							'data-toggle': 'tooltip'
 						} );
 					var replyImage = $( '<img>' )
 						.attr( {
@@ -276,7 +280,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 			if ( commentData.parentid === null ) {
 				var title = $( '<div>' )
 					.addClass( 'cs-comment-title' )
-					.text( commentData.commenttitle );
+					.text( commentData.commenttitle )
+					.attr( {
+						title: commentData.commenttitle,
+						'data-toggle': 'tooltip'
+					} );
 				centerDiv.append( title );
 			}
 
@@ -423,7 +431,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var editButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-edit-button' )
-				.attr( 'type', 'button' );
+				.attr( {
+					type: 'button',
+					title: mw.message( 'commentstreams-buttontooltip-edit' ),
+					'data-toggle': 'tooltip'
+				} );
 			var editimage = $( '<img>' );
 			if ( mw.user.getName() !== username ) {
 				editimage
@@ -453,7 +465,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var deleteButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-delete-button' )
-				.attr( 'type', 'button' );
+				.attr( {
+					type:  'button',
+					title: mw.message( 'commentstreams-buttontooltip-delete' ),
+					'data-toggle': 'tooltip'
+				});
 			var deleteimage = $( '<img>' );
 			if ( mw.user.getName() !== username ) {
 				deleteimage
@@ -484,6 +500,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var permalinkButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-link-button' )
+				.attr( {
+					title: mw.message( 'commentstreams-buttontooltip-permalink' ),
+					'data-toggle': 'tooltip'
+				} )
 				.click( function() {
 					$( '.cs-target-comment' )
 						.removeClass( 'cs-target-comment' );
