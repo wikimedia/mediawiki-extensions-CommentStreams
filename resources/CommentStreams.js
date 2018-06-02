@@ -59,7 +59,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		initialize: function() {
 			var self = this;
-			this.baseUrl = window.location.href.split(/[?#]/)[0];
+			this.baseUrl = window.location.href.split( /[?#]/ )[0];
 			this.imagepath = mw.config.get( 'wgExtensionAssetsPath' ) +
 				'/CommentStreams/images/';
 			if ( window.location.hash ) {
@@ -93,7 +93,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		scrollToAnchor: function( id ){
 			var element = $( '#' + id );
 			if ( element.length ) {
-				$('html,body').animate( {scrollTop: element.offset().top},'slow');
+				$( 'html,body' ).animate( {scrollTop: element.offset().top},'slow');
 			}
 		},
 		setupDivs: function() {
@@ -193,24 +193,24 @@ var commentstreams_controller = ( function( mw, $ ) {
 				} );
 		},
 		disableAllButtons: function() {
-			$( '.cs-edit-button' ).attr( 'disabled', 'disabled' );
-			$( '.cs-reply-button' ).attr( 'disabled', 'disabled' );
-			$( '#cs-add-button' ).attr( 'disabled', 'disabled' );
-			$( '.cs-delete-button' ).attr( 'disabled', 'disabled' );
-			$( '.cs-toggle-button' ).attr( 'disabled', 'disabled' );
-			$( '.cs-link-button' ).attr( 'disabled', 'disabled' );
-			$( '.cs-vote-button' ).attr( 'disabled', 'disabled' );
-			$( '.cs-watch-button' ).attr( 'disabled', 'disabled' );
+			$( '.cs-edit-button' ).prop( 'disabled', true );
+			$( '.cs-reply-button' ).prop( 'disabled', true );
+			$( '#cs-add-button' ).prop( 'disabled', true );
+			$( '.cs-delete-button' ).prop( 'disabled', true );
+			$( '.cs-toggle-button' ).prop( 'disabled', true );
+			$( '.cs-link-button' ).prop( 'disabled', true );
+			$( '.cs-vote-button' ).prop( 'disabled', true );
+			$( '.cs-watch-button' ).prop( 'disabled', true );
 		},
 		enableAllButtons: function() {
-			$( '.cs-edit-button' ).attr( 'disabled', false );
-			$( '.cs-reply-button' ).attr( 'disabled', false );
-			$( '#cs-add-button' ).attr( 'disabled', false );
-			$( '.cs-delete-button' ).attr( 'disabled', false );
-			$( '.cs-toggle-button' ).attr( 'disabled', false );
-			$( '.cs-link-button' ).attr( 'disabled', false );
-			$( '.cs-vote-button' ).attr( 'disabled', false );
-			$( '.cs-watch-button' ).attr( 'disabled', false );
+			$( '.cs-edit-button' ).prop( 'disabled', false );
+			$( '.cs-reply-button' ).prop( 'disabled', false );
+			$( '#cs-add-button' ).prop( 'disabled', false );
+			$( '.cs-delete-button' ).prop( 'disabled', false );
+			$( '.cs-toggle-button' ).prop( 'disabled', false );
+			$( '.cs-link-button' ).prop( 'disabled', false );
+			$( '.cs-vote-button' ).prop( 'disabled', false );
+			$( '.cs-watch-button' ).prop( 'disabled', false );
 		},
 		formatComment: function( commentData ) {
 			var self = this;
@@ -469,7 +469,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					type:  'button',
 					title: mw.message( 'commentstreams-buttontooltip-delete' ),
 					'data-toggle': 'tooltip'
-				});
+				} );
 			var deleteimage = $( '<img>' );
 			if ( mw.user.getName() !== username ) {
 				deleteimage
@@ -619,10 +619,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var self = this;
 			var votespan = button.closest( '.cs-voting-span' );
 			var upcountspan = votespan.find( '.cs-vote-upcount' );
-			var upcount = parseInt(upcountspan.text());
+			var upcount = parseInt( upcountspan.text() );
 			var upimage = votespan.find( '.cs-vote-upimage' );
 			var downcountspan = votespan.find( '.cs-vote-downcount' );
-			var downcount = parseInt(downcountspan.text());
+			var downcount = parseInt( downcountspan.text() );
 			var downimage = votespan.find( '.cs-vote-downimage' );
 
 			var newvote;
@@ -748,10 +748,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var sibling = nextSiblings[index];
 				var nextupcountspan =
 					$( sibling ).find( '.cs-vote-upcount' );
-				var nextupcount = parseInt(nextupcountspan.text());
+				var nextupcount = parseInt( nextupcountspan.text() );
 				var nextdowncountspan =
 					$( sibling ).find( '.cs-vote-downcount' );
-				var nextdowncount = parseInt(nextdowncountspan.text());
+				var nextdowncount = parseInt( nextdowncountspan.text() );
 				var nextvotediff = nextupcount - nextdowncount;
 				if ( nextvotediff > votediff ) {
 					// keeping looking
@@ -807,10 +807,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var sibling = prevSiblings[index];
 				var prevupcountspan =
 					$( sibling ).find( '.cs-vote-upcount' );
-				var prevupcount = parseInt(prevupcountspan.text());
+				var prevupcount = parseInt( prevupcountspan.text() );
 				var prevdowncountspan =
 					$( sibling ).find( '.cs-vote-downcount' );
-				var prevdowncount = parseInt(prevdowncountspan.text());
+				var prevdowncount = parseInt( prevdowncountspan.text() );
 				var prevvotediff = prevupcount - prevdowncount;
 				if ( prevvotediff < votediff ) {
 					// keeping looking
@@ -875,7 +875,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				}
 				stream.slideDown( 1000, function() {
 					self.enableAllButtons();
-					var id = $ (this ).find( '.cs-head-comment:first' ).attr( 'id' );
+					var id = $( this ).find( '.cs-head-comment:first' ).attr( 'id' );
 					self.scrollToAnchor( id );
 				} );
 			} );
@@ -883,7 +883,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		createDivider: function() {
 			return $( '<span>' )
 				.addClass( 'cs-comment-details' )
-				.text('|');
+				.text( '|' );
 		},
 		formatEditBox: function( is_stream ) {
 			var commentBox = $( '<div>' )
@@ -900,6 +900,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 								commentBox.append( titleField );
 			} else {
 				commentBox.addClass( 'cs-reply-edit-box' );
+			}
+
+			if ( $.fn.applyVisualEditor ) {
+				// VEForAll is installed.
+				commentBox.addClass( 've-area-wrapper' );
 			}
 
 			var bodyField = $( '<textarea>' )
@@ -958,6 +963,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 					.hide()
 					.slideDown();
 			}
+			if ( $.fn.applyVisualEditor ) {
+				// VEForAll is installed.
+				var editField = $( '#cs-body-edit-field' );
+				editField.applyVisualEditor();
+			}
 			$( '#cs-submit-button' ).click( function() {
 				self.postComment( null );
 			} );
@@ -988,6 +998,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var editField = $( '#cs-body-edit-field' );
 			if ( editField !== null ) {
 				editField.focus();
+				if ( $.fn.applyVisualEditor ) {
+					// VEForAll is installed.
+					editField.applyVisualEditor();
+				}
 			}
 		},
 		hideEditBox: function( animated ) {
@@ -1004,7 +1018,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		postComment: function( parentPageId ) {
 			var self = this;
 			if ( this.isLoggedIn ) {
-				self.realPostComment( parentPageId );
+				self.postComment2( parentPageId );
 			} else {
 				var message_text =
 					mw.message( 'commentstreams-dialog-anonymous-message' ).text();
@@ -1026,14 +1040,42 @@ var commentstreams_controller = ( function( mw, $ ) {
 					opened.then( function ( closing, data ) {
 						if ( data && data.action ) {
 							if ( data.action === 'ok' ) {
-								self.realPostComment( parentPageId );
+								self.postComment2( parentPageId );
 							}
 						}
 					} );
 				} );
 			}
 		},
-		realPostComment: function( parentPageId ) {
+		postComment2: function( parentPageId ) {
+			var self = this;
+			if ( $( '#cs-body-edit-field' ).css( 'display' ) == 'none' ) {
+				self.postCommentFromVE( parentPageId );
+			} else {
+				var commentText = $( '#cs-body-edit-field' ).val();
+				self.realPostComment( parentPageId, commentText );
+			}
+		},
+		postCommentFromVE: function( parentPageId ) {
+			var self = this;
+			var editField = $( '#cs-body-edit-field' );
+			var veInstances = editField.getVEInstances();
+			var curVEEditor = veInstances[veInstances.length - 1];
+			new mw.Api().post( {
+				action: 'veforall-parsoid-utils',
+				from: 'html',
+				to: 'wikitext',
+				content: curVEEditor.target.getSurface().getHtml(),
+				title: mw.config.get( 'wgPageName' ).split( /(\\|\/)/g ).pop()
+			} ).then( function ( data ) {
+				var commentText = data[ 'veforall-parsoid-utils' ].content;
+				self.realPostComment( parentPageId, commentText );
+			} )
+			.fail( function ( data ) {
+				self.reportError( 'commentstreams-ve-conversion-error' );
+			} );
+		},
+		realPostComment: function( parentPageId, commentText ) {
 			var self = this;
 
 			var commentTitle;
@@ -1041,7 +1083,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var titleField = $( '#cs-title-edit-field' );
 				if ( titleField !== null ) {
 					commentTitle = titleField .val();
-					if ( commentTitle === null || commentTitle.trim() === "" ) {
+					if ( commentTitle === null || commentTitle.trim() === '' ) {
 						this.reportError( 'commentstreams-validation-error-nocommenttitle' );
 						return;
 					}
@@ -1050,14 +1092,13 @@ var commentstreams_controller = ( function( mw, $ ) {
 				commentTitle = null;
 			}
 
-			var commentText = $( '#cs-body-edit-field' ).val();
-			if ( commentText === null || commentText.trim() === "" ) {
+			if ( commentText === null || commentText.trim() === '' ) {
 				this.reportError( 'commentstreams-validation-error-nocommenttext' );
 				return;
 			}
 
-			$( '#cs-submit-button' ).attr( 'disabled', 'disabled' );
-			$( '#cs-cancel-button' ).attr( 'disabled', 'disabled' );
+			$( '#cs-submit-button' ).prop( 'disabled', true );
+			$( '#cs-cancel-button' ).prop( 'disabled', true );
 
 			$( '#cs-edit-box' ).fadeTo( 100, 0.2, function() {
 				new Spinner( self.spinnerOptions )
@@ -1102,8 +1143,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 					} else {
 						self.reportError( result.error );
 						$( '#cs-edit-box').fadeTo( 0.2, 100, function() {
-							$( '#cs-submit-button' ).attr( 'disabled', false );
-							$( '#cs-cancel-button' ).attr( 'disabled', false );
+							$( '#cs-submit-button' ).prop( 'disabled', false );
+							$( '#cs-cancel-button' ).prop( 'disabled', false );
 						} );
 					}
 				} );
@@ -1208,6 +1249,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 						} else {
 							editField.focus();
 						}
+						if ( $.fn.applyVisualEditor ) {
+							// VEForAll is installed.
+							editField.applyVisualEditor();
+						}
 
 						$( '#cs-cancel-button' ).click( function() {
 							commentBox.slideUp( 'normal', function() {
@@ -1219,75 +1264,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 						} );
 
 						$( '#cs-submit-button' ).click( function() {
-							if ( element.hasClass( 'cs-head-comment' ) ) {
-								var commentTitle = $( '#cs-title-edit-field' ).val();
-								if ( commentTitle === null || commentTitle.trim() === "" ) {
-									self.reportError(
-										'commentstreams-validation-error-nocommenttitle' );
-									return;
-								}
+							if ( $( '#cs-body-edit-field' ).css( 'display' ) == 'none' ) {
+								self.editCommentFromVE( element, commentBox, pageId );
+							} else {
+								var commentText = $( '#cs-body-edit-field' ).val();
+								self.realEditComment( element, commentBox, pageId, commentText );
 							}
-
-							var commentText = $( '#cs-body-edit-field' ).val();
-							if ( commentText === null || commentText.trim() === "" ) {
-								self.reportError(
-									'commentstreams-validation-error-nocommenttext' );
-								return;
-							}
-
-							$( '#cs-submit-button' ).attr( 'disabled', 'disabled' );
-							$( '#cs-cancel-button' ).attr( 'disabled', 'disabled' );
-
-							commentBox.fadeTo( 100, 0.2, function() {
-								new Spinner( self.spinnerOptions )
-									.spin( document.getElementById( 'cs-edit-box' ) );
-
-								CommentStreamsQuerier.editComment( commentTitle, commentText,
-									pageId, function( result ) {
-									$( '.spinner' ).remove();
-									if ( result.error === undefined ) {
-										var comment = self.formatCommentInner( result );
-										if ( element.closest( '.cs-stream' ).hasClass( 'cs-collapsed' ) ) {
-											comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
-										}
-										commentBox.slideUp( 'normal', function() {
-											comment.insertAfter( commentBox );
-											commentBox.remove();
-											element.remove();
-											self.enableAllButtons();
-										} );
-									} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
-										self.reportError( result.error );
-										var parentId = element
-											.closest( '.cs-stream' )
-											.find( '.cs-head-comment' )
-											.attr( 'data-id' );
-										CommentStreamsQuerier.queryComment( parentId, function( result ) {
-											if ( result.error === undefined &&
-												self.canDelete( result ) &&
-												!self.moderatorFastDelete ) {
-												self.createDeleteButton( result.username )
-													.insertAfter ( element
-														.closest( '.cs-stream' )
-														.find( '.cs-head-comment' )
-														.find( '.cs-comment-header' )
-														.find( '.cs-edit-button' ) );
-											}
-											commentBox.slideUp( 'normal', function() {
-												commentBox.remove();
-												element.remove();
-												self.enableAllButtons();
-											} );
-										} );
-									} else {
-										self.reportError( result.error );
-										commentBox.fadeTo( 0.2, 100, function() {
-											$( '#cs-submit-button' ).attr( 'disabled', false );
-											$( '#cs-cancel-button' ).attr( 'disabled', false );
-										} );
-									}
-								} );
-							} );
 						} );
 					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
 						self.reportError( result.error );
@@ -1313,6 +1295,96 @@ var commentstreams_controller = ( function( mw, $ ) {
 						self.reportError( result.error );
 						element.fadeTo( 0.2, 100, function() {
 							self.enableAllButtons();
+						} );
+					}
+				} );
+			} );
+		},
+		editCommentFromVE: function( element, commentBox, pageId ) {
+			var self = this;
+			var editField = $( '#cs-body-edit-field' );
+			var veInstances = editField.getVEInstances();
+			var curVEEditor = veInstances[veInstances.length - 1];
+			new mw.Api().post( {
+				action: 'veforall-parsoid-utils',
+				from: 'html',
+				to: 'wikitext',
+				content: curVEEditor.target.getSurface().getHtml(),
+				title: mw.config.get( 'wgPageName' ).split( /(\\|\/)/g ).pop()
+			} ).then( function ( data ) {
+				var commentText = data[ 'veforall-parsoid-utils' ].content;
+				self.realEditComment( element, commentBox, pageId, commentText );
+			} )
+			.fail( function ( data ) {
+				self.reportError( 'commentstreams-ve-conversion-error' );
+			} );
+		},
+		realEditComment: function( element, commentBox, pageId, commentText ) {
+			var self = this;
+			if ( element.hasClass( 'cs-head-comment' ) ) {
+				var commentTitle = $( '#cs-title-edit-field' ).val();
+				if ( commentTitle === null || commentTitle.trim() === '' ) {
+					self.reportError(
+						'commentstreams-validation-error-nocommenttitle' );
+					return;
+				}
+			}
+
+			if ( commentText === null || commentText.trim() === '' ) {
+				self.reportError(
+					'commentstreams-validation-error-nocommenttext' );
+				return;
+			}
+
+			$( '#cs-submit-button' ).prop( 'disabled', true );
+			$( '#cs-cancel-button' ).prop( 'disabled', true );
+
+			commentBox.fadeTo( 100, 0.2, function() {
+				new Spinner( self.spinnerOptions )
+					.spin( document.getElementById( 'cs-edit-box' ) );
+
+				CommentStreamsQuerier.editComment( commentTitle, commentText,
+					pageId, function( result ) {
+					$( '.spinner' ).remove();
+					if ( result.error === undefined ) {
+						var comment = self.formatCommentInner( result );
+						if ( element.closest( '.cs-stream' ).hasClass( 'cs-collapsed' ) ) {
+							comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
+						}
+						commentBox.slideUp( 'normal', function() {
+							comment.insertAfter( commentBox );
+							commentBox.remove();
+							element.remove();
+							self.enableAllButtons();
+						} );
+					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
+						self.reportError( result.error );
+						var parentId = element
+							.closest( '.cs-stream' )
+							.find( '.cs-head-comment' )
+							.attr( 'data-id' );
+						CommentStreamsQuerier.queryComment( parentId, function( result ) {
+							if ( result.error === undefined &&
+								self.canDelete( result ) &&
+								!self.moderatorFastDelete ) {
+								self.createDeleteButton( result.username )
+									.insertAfter ( element
+										.closest( '.cs-stream' )
+										.find( '.cs-head-comment' )
+										.find( '.cs-comment-header' )
+										.find( '.cs-edit-button' ) );
+							}
+							commentBox.slideUp( 'normal', function() {
+								commentBox.remove();
+								element.remove();
+								self.enableAllButtons();
+							} );
+						} );
+					} else {
+						self.reportError( result.error );
+						commentBox.fadeTo( 0.2, 100, function() {
+							$( '#cs-submit-button' ).prop( 'disabled', false );
+							$( '#cs-cancel-button' ).prop( 'disabled', false );
 						} );
 					}
 				} );

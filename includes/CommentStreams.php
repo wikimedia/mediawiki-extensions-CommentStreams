@@ -237,6 +237,9 @@ class CommentStreams {
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
 		$output->addModules( 'ext.CommentStreams' );
+		if ( ExtensionRegistry::getInstance()->isLoaded( 'VEForAll' ) ) {
+			$output->addModules( 'ext.veforall.main' );
+		}
 	}
 
 	/**
