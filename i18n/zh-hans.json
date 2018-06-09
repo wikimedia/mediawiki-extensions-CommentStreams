@@ -80,7 +80,7 @@
 	"commentstreams-api-error-unwatch": "取消监视评论时出错。",
 	"commentstreams-validation-error-nocommenttitle": "您必须输入评论标题。",
 	"commentstreams-validation-error-nocommenttext": "您必须输入评论文本。",
-	"commentstreams-buttontext-add": "添加一段评论",
+	"commentstreams-buttontext-add": "添加评论",
 	"commentstreams-buttontext-reply": "回复",
 	"commentstreams-buttontooltip-add": "添加一条评论",
 	"commentstreams-buttontooltip-reply": "回复",
