@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jon Harald Søby",
-			"Citadell"
+			"Citadell",
+			"Orf3us"
 		]
 	},
 	"commentstreams-desc": "Muliggjør kommentarer på wikisider",
@@ -43,7 +44,7 @@
 	"commentstreams-api-error-watch-nowatchreply": "Overvåking av svar er ikke tillatt.",
 	"commentstreams-api-error-unwatch-notloggedin": "Du må være logget inn for å fjerne overvåkning av en kommentar.",
 	"commentstreams-validation-error-nocommenttext": "Du må skrive inn kommentartekst.",
-	"commentstreams-buttontext-add": "Legg til",
+	"commentstreams-buttontext-add": "Legg til kommentar",
 	"commentstreams-buttontext-reply": "Svar",
 	"commentstreams-buttontooltip-add": "legg til en kommentar",
 	"commentstreams-buttontooltip-reply": "svar",

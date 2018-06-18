@@ -1,9 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ilimanaq29"
+			"Ilimanaq29",
+			"Dvorapa"
 		]
 	},
-	"commentstreams-buttontext-add": "PŘIDAT KOMENTÁŘ",
-	"commentstreams-buttontext-reply": "ODPOVĚDĚT"
+	"commentstreams-buttontext-add": "Přidat komentář",
+	"commentstreams-buttontext-reply": "Odpovědět"
 }
