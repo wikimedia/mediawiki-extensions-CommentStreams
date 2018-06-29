@@ -80,7 +80,7 @@
 	"commentstreams-api-error-unwatch": "取消監視評論時出錯。",
 	"commentstreams-validation-error-nocommenttitle": "您必須輸入評論標題。",
 	"commentstreams-validation-error-nocommenttext": "您必須輸入評論文字。",
-	"commentstreams-buttontext-add": "添加一個評論",
+	"commentstreams-buttontext-add": "添加評論",
 	"commentstreams-buttontext-reply": "回覆",
 	"commentstreams-buttontooltip-add": "新增評論",
 	"commentstreams-buttontooltip-reply": "回覆",
