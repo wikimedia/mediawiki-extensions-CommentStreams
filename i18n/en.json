@@ -154,5 +154,6 @@
 	"commentstreams-allcomments-label-lasteditor": "Last Editor",
 	"commentstreams-allcomments-label-lastedited": "Last Edited",
 	"commentstreams-allcomments-button-next": "Next",
-	"commentstreams-allcomments-button-previous": "Previous"
+	"commentstreams-allcomments-button-previous": "Previous",
+	"commentstreams-ve-conversion-error": "Error converting between wikitext and HTML for VisualEditor"
 }

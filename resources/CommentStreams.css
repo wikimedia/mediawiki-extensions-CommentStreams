@@ -10,7 +10,6 @@
 .cs-stream {
 	margin-top: 5px;
 	margin-bottom: 5px;
-	overflow: hidden;
 }
 
 .cs-comment {
@@ -199,3 +198,19 @@ button:hover {
 	font-family: sans-serif;
 	font-size: 14px;
 }
+
+// VisualEditor/VEForAll CSS
+.ve-area-wrapper, .ve-ce-documentNode {
+	width: auto !important;
+}
+
+.ve-area-wrapper {
+	z-index: 100;
+}
+
+div.ve-ce-branchNode {
+	border: 1px solid #00a7d8;
+	background: white;
+	margin-bottom: 5px;
+}
+

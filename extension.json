@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "4.4",
+	"version": "4.5",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -94,7 +94,8 @@
 				"commentstreams-datetext-lasteditedon",
 				"commentstreams-datetext-moderated",
 				"commentstreams-title-field-placeholder",
-				"commentstreams-body-field-placeholder"
+				"commentstreams-body-field-placeholder",
+				"commentstreams-ve-conversion-error"
 			]
 		},
 		"ext.CommentStreamsAllComments": {
