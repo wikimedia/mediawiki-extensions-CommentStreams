@@ -153,5 +153,6 @@
 	"commentstreams-allcomments-label-lasteditor": "העורך האחרון",
 	"commentstreams-allcomments-label-lastedited": "תאריך העריכה האחרונה",
 	"commentstreams-allcomments-button-next": "הבא",
-	"commentstreams-allcomments-button-previous": "הקודם"
+	"commentstreams-allcomments-button-previous": "הקודם",
+	"commentstreams-ve-conversion-error": "שגיאה בהמרת קוד ויקי ל־HTML בעורך החזותי"
 }

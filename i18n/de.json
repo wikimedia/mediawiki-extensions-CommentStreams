@@ -115,5 +115,6 @@
 	"commentstreams-allcomments-label-lasteditor": "Letzter Bearbeiter",
 	"commentstreams-allcomments-label-lastedited": "Zuletzt bearbeitet",
 	"commentstreams-allcomments-button-next": "Nächster",
-	"commentstreams-allcomments-button-previous": "Vorheriger"
+	"commentstreams-allcomments-button-previous": "Vorheriger",
+	"commentstreams-ve-conversion-error": "Fehler beim Konvertieren zwischen Wikitext und HTML für den visuellen Editor"
 }
