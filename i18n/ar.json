@@ -154,5 +154,6 @@
 	"commentstreams-allcomments-label-lasteditor": "آخر محرر",
 	"commentstreams-allcomments-label-lastedited": "آخر تعديل",
 	"commentstreams-allcomments-button-next": "التالي",
-	"commentstreams-allcomments-button-previous": "السابق"
+	"commentstreams-allcomments-button-previous": "السابق",
+	"commentstreams-ve-conversion-error": "خطأ في التحويل بين نص الويكي وHTML للمحرر المرئي"
 }

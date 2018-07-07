@@ -154,5 +154,6 @@
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
 	"commentstreams-allcomments-label-lastedited": "Última edição",
 	"commentstreams-allcomments-button-next": "Seguinte",
-	"commentstreams-allcomments-button-previous": "Anterior"
+	"commentstreams-allcomments-button-previous": "Anterior",
+	"commentstreams-ve-conversion-error": "Ocorreu uma falha de conversão entre texto wiki e HTML para o Editor Visual"
 }

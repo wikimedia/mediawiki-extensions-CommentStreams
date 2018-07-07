@@ -114,5 +114,6 @@
 	"commentstreams-allcomments-label-lasteditor": "마지막 편집자",
 	"commentstreams-allcomments-label-lastedited": "최근 편집",
 	"commentstreams-allcomments-button-next": "다음",
-	"commentstreams-allcomments-button-previous": "이전"
+	"commentstreams-allcomments-button-previous": "이전",
+	"commentstreams-ve-conversion-error": "시각편집기에서 위키텍스트와 HTML 간 변환에 오류가 있습니다"
 }
