@@ -154,5 +154,6 @@
 	"commentstreams-allcomments-label-lasteditor": "最后编辑者",
 	"commentstreams-allcomments-label-lastedited": "上次编辑于",
 	"commentstreams-allcomments-button-next": "下一个",
-	"commentstreams-allcomments-button-previous": "上一个"
+	"commentstreams-allcomments-button-previous": "上一个",
+	"commentstreams-ve-conversion-error": "在可视化编辑器中转换wiki文本和HTML时出错"
 }
