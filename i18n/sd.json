@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Indus Asia"
+			"Indus Asia",
+			"Tweety"
 		]
 	},
 	"apihelp-csPostComment-description": "نيئن راءِ درج ڪيو.",
@@ -24,5 +25,6 @@
 	"commentstreams-allcomments-label-created": "سرجيل (Created)",
 	"commentstreams-allcomments-label-lasteditor": "آخري ايڊيٽر",
 	"commentstreams-allcomments-label-lastedited": "آخري ڀيرو سنواريل",
+	"commentstreams-allcomments-button-next": "اڳيون",
 	"commentstreams-allcomments-button-previous": "اڳوڻو"
 }
