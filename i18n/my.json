@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dr Lotus Black"
+		]
+	},
+	"commentstreams-author-anonymous": "အမည်မသိ",
+	"commentstreams-buttontext-add": "မှတ်ချက် ပေါင်းထည့်ရန်",
+	"commentstreams-buttontext-reply": "အကြောင်းပြန်ရန်",
+	"commentstreams-buttontooltip-add": "မှတ်ချက် ပေါင်းထည့်ရန်",
+	"commentstreams-buttontooltip-reply": "အကြောင်းပြန်ရန်",
+	"commentstreams-buttontooltip-edit": "တည်းဖြတ်",
+	"commentstreams-buttontooltip-delete": "ဖျက်",
+	"commentstreams-buttontooltip-watch": "စောင့်ကြည့်ရန်",
+	"commentstreams-buttontooltip-unwatch": "စောင့်မကြည့်ပါနှင့်",
+	"commentstreams-buttontooltip-submit": "ထည့်သွင်းရန်",
+	"commentstreams-buttontooltip-cancel": "မလုပ်တော့",
+	"commentstreams-dialog-delete-message": "ဤမှတ်ချက်အား ဖျက်ရန် သေချာပါသလား",
+	"commentstreams-dialog-buttontext-ok": "အိုကေ",
+	"commentstreams-dialog-buttontext-cancel": "မလုပ်တော့ပါ",
+	"commentstreams-dialog-buttontext-yes": "လုပ်မည်",
+	"commentstreams-dialog-buttontext-no": "မလုပ်ပါ",
+	"commentstreamsallcomments": "မှတ်ချက်များ အားလုံး",
+	"commentstreams-allcomments-nocommentsfound": "မှတ်ချက်များ မတွေ့ပါ",
+	"commentstreams-allcomments-label-page": "မှတ်ချက် စာမျက်နှာ",
+	"commentstreams-allcomments-label-associatedpage": "ဆက်နွယ်သော စာမျက်နှာ",
+	"commentstreams-allcomments-label-commenttitle": "မှတ်ချက် ခေါင်းစဉ်",
+	"commentstreams-allcomments-label-wikitext": "မှတ်ချက်",
+	"commentstreams-allcomments-label-author": "စာရေးသူ",
+	"commentstreams-allcomments-label-created": "ဖန်တီးခဲ့သည်",
+	"commentstreams-allcomments-label-lasteditor": "နောက်ဆုံး တည်းဖြတ်သူ",
+	"commentstreams-allcomments-label-lastedited": "နောက်ဆုံး တည်းဖြတ်ခဲ့",
+	"commentstreams-allcomments-button-next": "ရှေ့",
+	"commentstreams-allcomments-button-previous": "ယခင်"
+}
