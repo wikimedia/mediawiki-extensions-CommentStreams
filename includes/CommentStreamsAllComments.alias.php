@@ -34,7 +34,7 @@ $specialPageAliases['he'] = [
 	'CommentStreamsAllComments' => [ 'כל_התגובות' ]
 ];
 
-/** Serbian Cyrilic (српски (ћирлица)) */
+/** Serbian Cyrillic (српски (ћирлица)) */
 $specialPageAliases['sr-ec'] = [
 	'CommentStreamsAllComments' => [ 'Сви_коментари' ]
 ];
