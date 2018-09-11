@@ -1,9 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kareyac"
+			"Kareyac",
+			"Vlad5250"
 		]
 	},
+	"commentstreams-desc": "Позволяет комментировать викистраницы",
+	"commentstreams-error-prohibitedaction": "Действие $1 не разрешено на страницах комментариев.",
+	"commentstreams-error-comment-on-deleted-page": "Страница, с которой связан этот комментарий, удалена.",
 	"commentstreams-author-anonymous": "аноним",
 	"commentstreams-buttontooltip-add": "добавить комментарий",
 	"commentstreams-buttontooltip-reply": "ответить",
