@@ -455,6 +455,69 @@ class CommentStreamsStore {
 
 	/**
 	 * @param int $pageId
+	 * @param int $assocPageId
+	 * @param string $commentTitle
+	 * @param string|null $blockName
+	 * @return bool
+	 */
+	public function upsertCommentMetadata(
+		int $pageId,
+		int $assocPageId,
+		string $commentTitle,
+		?string $blockName
+	): bool {
+		$dbw = $this->getDBConnection( DB_PRIMARY );
+		return $dbw->upsert(
+			'cs_comments',
+			[
+				'cst_c_comment_page_id' => $pageId,
+				'cst_c_assoc_page_id' => $assocPageId,
+				'cst_c_comment_title' => $commentTitle,
+				'cst_c_block_name' => $blockName
+			],
+			[
+				'cst_c_comment_page_id'
+			],
+			[
+				'cst_c_comment_page_id' => $pageId,
+				'cst_c_assoc_page_id' => $assocPageId,
+				'cst_c_comment_title' => $commentTitle,
+				'cst_c_block_name' => $blockName
+			],
+			__METHOD__
+		);
+	}
+
+	/**
+	 * @param int $pageId
+	 * @param int $commentPageId
+	 * @return bool
+	 * @throws MWException
+	 */
+	public function upsertReplyMetadata(
+		int $pageId,
+		int $commentPageId
+	) {
+		$dbw = $this->getDBConnection( DB_PRIMARY );
+		return $dbw->upsert(
+			'cs_replies',
+			[
+				'cst_r_reply_page_id' => $pageId,
+				'cst_r_comment_page_id' => $commentPageId
+			],
+			[
+				'cst_r_reply_page_id'
+			],
+			[
+				'cst_r_reply_page_id' => $pageId,
+				'cst_r_comment_page_id' => $commentPageId
+			],
+			__METHOD__
+		);
+	}
+
+	/**
+	 * @param int $pageId
 	 * @param int $userId
 	 * @return int -1, 0, or 1
 	 */
