@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "7.0-dev",
+	"version": "7.0",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -214,6 +214,7 @@
 			"services": [
 				"CommentStreamsHandler",
 				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"LinkRenderer",
 				"RevisionStore",
 				"PermissionManager"
@@ -231,6 +232,9 @@
 		"BeforePageDisplay": "main",
 		"ShowSearchHitTitle": "main",
 		"ParserFirstCallInit": "main",
+		"XmlDumpWriterOpenPage": "main",
+		"ImportHandlePageXMLTag": "main",
+		"AfterImportPage": "main",
 		"LoadExtensionSchemaUpdates": "schema",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\EchoInterface::onBeforeCreateEchoEvent",
 		"smwInitProperties": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::initProperties",
