@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"StanProg"
+		]
+	},
+	"commentstreams-buttontooltip-delete": "изтриване",
+	"commentstreams-buttontooltip-cancel": "Отказ",
+	"commentstreams-dialog-buttontext-cancel": "Отказ"
+}
