@@ -9,6 +9,7 @@
 	"descriptionmsg": "commentstreams-desc",
 	"manifest_version": 1,
 	"type": "parserhook",
+	"license-name": "MIT",
 	"SpecialPages": {
 		"CommentStreamsAllComments": "CommentStreamsAllComments"
 	},
