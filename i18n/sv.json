@@ -154,5 +154,6 @@
 	"commentstreams-allcomments-label-lasteditor": "Senaste redigerare",
 	"commentstreams-allcomments-label-lastedited": "Senast redigerad",
 	"commentstreams-allcomments-button-next": "Nästa",
-	"commentstreams-allcomments-button-previous": "Föregående"
+	"commentstreams-allcomments-button-previous": "Föregående",
+	"commentstreams-ve-conversion-error": "Fel uppstod under konvertering mellan wikitext och HTML för VisualEditor"
 }
