@@ -45,6 +45,7 @@ class ApiCSPostComment extends ApiBase {
 		$parentid = $this->getMain()->getVal( 'parentid' );
 		$comment_title = $this->getMain()->getVal( 'commenttitle' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
+		$cst_id = $this->getMain()->getVal( 'cst_id' );
 
 		if ( $parentid === null && $comment_title === null ) {
 			$this->dieCustomUsageMessage(
@@ -76,7 +77,7 @@ class ApiCSPostComment extends ApiBase {
 				'commentstreams-api-error-post-associatedpagedoesnotexist' );
 		}
 
-		$comment = Comment::newFromValues( $associatedid, $parentid,
+		$comment = Comment::newFromValues( $associatedid, $parentid, $cst_id,
 			$comment_title, $wikitext, $this->getUser() );
 		if ( !$comment ) {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-post' );
@@ -119,6 +120,10 @@ class ApiCSPostComment extends ApiBase {
 			],
 			'parentid' => [
 				ApiBase::PARAM_TYPE => 'integer',
+				ApiBase::PARAM_REQUIRED => false
+			],
+			'cst_id' => [
+				ApiBase::PARAM_TYPE => 'string',
 				ApiBase::PARAM_REQUIRED => false
 			]
 		];

@@ -43,6 +43,8 @@ class CommentStreamsHooks {
 			$dir . 'dropForeignKey1.sql' );
 		$updater->dropExtensionIndex( 'cs_comment_data', 'cst_assoc_page_id',
 			$dir . 'dropForeignKey2.sql' );
+		$updater->addExtensionField( 'cs_comment_data', 'cst_id',
+			$dir . 'addCommentId.sql' );
 		return true;
 	}
 
@@ -235,15 +237,21 @@ class CommentStreamsHooks {
 	 * @param PPFrame $frame the parent frame
 	 * @return string to replace tag with
 	 */
-	public static function enableCommentStreams( $input, array $args,
-		Parser $parser, PPFrame $frame ) {
+	public static function enableCommentStreams(
+		$input,
+		array $args,
+		Parser $parser,
+		PPFrame $frame
+	) {
 		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = CommentStreams::singleton();
 		$cs->enableCommentsOnPage();
-		if ( isset( $args['location'] ) && $args['location'] === 'footer' ) {
+		if ( isset( $args['id'] ) ) {
+			$ret = '<div class="cs-comments" id="csc_' . md5( $args['id'] ) . '"></div>';
+		} elseif ( isset( $args['location'] ) && $args['location'] === 'footer' ) {
 			$ret = '';
 		} else {
-			$ret = '<div id="cs-comments"></div>';
+			$ret = '<div class="cs-comments" id="cs-comments"></div>';
 		}
 		return $ret;
 	}
@@ -289,12 +297,14 @@ class CommentStreamsHooks {
 	 * See https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
 	 * Gets comments for page and initializes variables to be passed to JavaScript.
 	 *
-	 * @param OutputPage &$output OutputPage object
-	 * @param Skin &$skin Skin object that will be used to generate the page
+	 * @param OutputPage $output OutputPage object
+	 * @param Skin $skin Skin object that will be used to generate the page
 	 * @return bool continue checking hooks
 	 */
-	public static function addCommentsAndInitializeJS( OutputPage &$output,
-		Skin &$skin ) {
+	public static function addCommentsAndInitializeJS(
+		OutputPage $output,
+		Skin $skin
+	) {
 		$cs = CommentStreams::singleton();
 		$cs->init( $output );
 		return true;
