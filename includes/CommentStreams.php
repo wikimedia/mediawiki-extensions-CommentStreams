@@ -38,14 +38,17 @@ class CommentStreams {
 	// no CommentStreams flag
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
+	// true if enabled due to wgCommentStreamsAllowedNamespaces
+	private $areNamespaceEnabled = false;
+
 	/**
 	 * create a CommentStreams singleton instance
 	 *
 	 * @return CommentStreams a singleton CommentStreams instance
 	 */
-	public static function singleton() {
+	public static function singleton() : self {
 		if ( self::$instance === null ) {
-			self::$instance = new CommentStreams();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -105,10 +108,14 @@ class CommentStreams {
 		}
 
 		// if $wgCommentStreamsAllowedNamespaces is not set, display comments
-		// in all content namespaces
-		$csAllowedNamespaces = $GLOBALS['wgCommentStreamsAllowedNamespaces'];
+		// in all content namespaces and if set to -1, don't display comments
+		$config = $output->getConfig();
+		$csAllowedNamespaces = $config->get( 'CommentStreamsAllowedNamespaces' );
 		if ( $csAllowedNamespaces === null ) {
-			$csAllowedNamespaces = $GLOBALS['wgContentNamespaces'];
+			$csAllowedNamespaces = $config->get( 'ContentNamespaces' );
+			$this->areNamespaceEnabled = true;
+		} elseif ( $csAllowedNamespaces === self::COMMENTS_DISABLED ) {
+			return false;
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
 			$csAllowedNamespaces = [ $csAllowedNamespaces ];
 		}
@@ -144,7 +151,7 @@ class CommentStreams {
 		// <comment-streams/>
 		if ( $title->isTalkPage() ) {
 			$subject_namespace = MWNamespace::getSubject( $namespace );
-			if ( !$GLOBALS['wgCommentStreamsEnableTalk'] &&
+			if ( !$config->get( 'CommentStreamsEnableTalk' ) &&
 				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
 				return false;
 			}
@@ -234,6 +241,7 @@ class CommentStreams {
 			'newestStreamsOnTop' =>
 				$GLOBALS['wgCommentStreamsNewestStreamsOnTop'] ? 1 : 0,
 			'initiallyCollapsed' => $initiallyCollapsed,
+			'areNamespaceEnabled' => $this->areNamespaceEnabled,
 			'enableVoting' =>
 				$GLOBALS['wgCommentStreamsEnableVoting'] ? 1 : 0,
 			'enableWatchlist' =>

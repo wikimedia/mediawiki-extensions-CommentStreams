@@ -44,6 +44,9 @@ class Comment {
 	// data for this comment has been loaded from the database
 	private $loaded = false;
 
+	// string comments ID - unique id to identify comment block in a page
+	private $cst_id;
+
 	// int page ID for the wikipage this comment is on
 	private $assoc_page_id;
 
@@ -107,13 +110,14 @@ class Comment {
 	 * @param int $assoc_page_id page ID for the wikipage this comment is on
 	 * @param int $parent_page_id page ID for the wikipage this comment is in
 	 * reply to or null
+	 * @param string $cst_id unique id to identify comment block in a page
 	 * @param string $comment_title string title of comment
 	 * @param string $wikitext the wikitext to add
 	 * @param User $user the user
 	 * @return Comment|null new comment object or null if there was a problem
 	 * creating it
 	 */
-	public static function newFromValues( $assoc_page_id, $parent_page_id,
+	public static function newFromValues( $assoc_page_id, $parent_page_id, $cst_id,
 		$comment_title, $wikitext, $user ) {
 		if ( $comment_title === null && $parent_page_id === null ) {
 			return null;
@@ -167,6 +171,7 @@ class Comment {
 			'cs_comment_data',
 			[
 				'cst_page_id' => $wikipage->getId(),
+				'cst_id' => $cst_id,
 				'cst_assoc_page_id' => $assoc_page_id,
 				'cst_parent_page_id' => $parent_page_id,
 				'cst_comment_title' => $comment_title
@@ -176,7 +181,7 @@ class Comment {
 		if ( !$result ) {
 			return null;
 		}
-		$comment->loadFromValues( $assoc_page_id, $parent_page_id, $comment_title );
+		$comment->loadFromValues( $assoc_page_id, $parent_page_id, $cst_id, $comment_title );
 
 		if ( $parent_page_id === null ) {
 			$comment->watch( $user );
@@ -209,6 +214,7 @@ class Comment {
 		$result = $dbr->selectRow(
 			'cs_comment_data',
 			[
+				'cst_id',
 				'cst_assoc_page_id',
 				'cst_parent_page_id',
 				'cst_comment_title'
@@ -219,6 +225,7 @@ class Comment {
 			__METHOD__
 		);
 		if ( $result ) {
+			$this->cst_id = $result->cst_id;
 			$this->assoc_page_id = (int)$result->cst_assoc_page_id;
 			$this->parent_page_id = $result->cst_parent_page_id;
 			if ( $this->parent_page_id !== null ) {
@@ -235,12 +242,18 @@ class Comment {
 	 * @param int $assoc_page_id page ID for the wikipage this comment is on
 	 * @param int $parent_page_id page ID for the wikipage this comment is in
 	 * reply to or null
+	 * @param string $cst_id unique id to identify comment block in a page
 	 * @param string $comment_title string title of comment
 	 */
-	private function loadFromValues( $assoc_page_id, $parent_page_id,
-		$comment_title ) {
+	private function loadFromValues(
+		$assoc_page_id,
+		$parent_page_id,
+		$cst_id,
+		$comment_title
+	) {
 		$this->assoc_page_id = (int)$assoc_page_id;
 		$this->parent_page_id = $parent_page_id;
+		$this->cst_id = $cst_id;
 		if ( $this->parent_page_id !== null ) {
 			$this->parent_page_id = (int)$this->parent_page_id;
 		}
@@ -260,6 +273,16 @@ class Comment {
 	 */
 	public function getWikiPage() {
 		return $this->wikipage;
+	}
+
+	/**
+	 * @return string comments ID - unique id to identify comment block in a page
+	 */
+	public function getCommentsId() {
+		if ( $this->loaded === false ) {
+			$this->loadFromDatabase();
+		}
+		return $this->cst_id;
 	}
 
 	/**
@@ -476,6 +499,7 @@ class Comment {
 			'wikitext' => htmlentities( $this->getWikiText() ),
 			'html' => $this->getHTML(),
 			'pageid' => $this->getId(),
+			'cst_id' => $this->getCommentsId(),
 			'associatedid' => $this->getAssociatedId(),
 			'parentid' => $this->getParentId(),
 			'numreplies' => $this->getNumReplies(),

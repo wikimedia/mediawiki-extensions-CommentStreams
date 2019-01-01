@@ -36,6 +36,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		userDisplayName: null,
 		newestStreamsOnTop: false,
 		initiallyCollapsed: false,
+		areNamespaceEnabled: false,
 		enableVoting: false,
 		enableWatchlist: false,
 		comments: [],
@@ -81,6 +82,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			this.userDisplayName = config.userDisplayName;
 			this.newestStreamsOnTop = config.newestStreamsOnTop;
 			this.initiallyCollapsed = config.initiallyCollapsed;
+			this.areNamespaceEnabled = config.areNamespaceEnabled;
 			this.enableVoting = config.enableVoting;
 			this.enableWatchlist = config.enableWatchlist;
 			this.comments = config.comments;
@@ -99,50 +101,64 @@ var commentstreams_controller = ( function( mw, $ ) {
 		setupDivs: function() {
 			var self = this;
 
-			var mainDiv = $( '#cs-comments' );
-			if ( !mainDiv.length ) {
-				mainDiv = $( '<div>' ).attr( 'id', 'cs-comments' );
+			if ( self.areNamespaceEnabled && $( '#cs-comments.cs-comments' ).length == 0 ) {
+				var mainDiv = $( '<div>' ).attr( 'class', 'cs-comments' ).attr( 'id', 'cs-comments' );
 				mainDiv.insertAfter( '#catlinks' );
 			}
+			$( '.cs-comments' ).each( function() {
+				var mainDiv = $( this );
 
-			var headerDiv = $( '<div> ').attr( 'id', 'cs-header');
-			mainDiv.append( headerDiv );
+				var headerDiv = $( '<div>' ).attr( 'class', 'cs-header');
+				// For backwards compatibility. Please remove in ver 6.0
+				if ( mainDiv.attr( "id" ) == "cs-comments" ) {
+					headerDiv.attr( "id", "cs-header" );
+				}
+				mainDiv.append( headerDiv );
 
-			var footerDiv = $( '<div> ').attr( 'id', 'cs-footer');
-			mainDiv.append( footerDiv );
+				var footerDiv = $( '<div>' ).attr( 'class', 'cs-footer');
+				// For backwards compatibility. Please remove in ver 6.0
+				if ( mainDiv.attr( "id" ) == "cs-comments" ) {
+					footerDiv.attr( "id", "cs-footer" );
+				}
+				mainDiv.append( footerDiv );
 
-			if ( this.canComment ) {
-				var addButton = $( '<button>' )
-					.attr( {
-						type: 'button',
-						id: 'cs-add-button',
-						title: mw.message( 'commentstreams-buttontext-add' ),
-						'data-toggle': 'tooltip'
-					} )
-					.addClass( 'cs-button' );
-				var addImage = $( '<img>' )
-					.attr( {
-						title: mw.message( 'commentstreams-buttontooltip-add' ),
-						src: this.imagepath + 'comment_add.png'
+				if ( self.canComment ) {
+					var addButton = $( '<button>' )
+						.attr( {
+							type: 'button',
+							class: 'cs-add-button',
+							title: mw.message( 'commentstreams-buttontext-add' ),
+							'data-toggle': 'tooltip'
+						} )
+						.addClass( 'cs-button' );
+					// For backwards compatibility. Please remove in ver 6.0
+					if ( mainDiv.attr( "id" ) == "cs-comments" ) {
+						addButton.attr( "id", "cs-add-button" );
+					}
+					var addImage = $( '<img>' )
+						.attr( {
+							title: mw.message( 'commentstreams-buttontooltip-add' ),
+							src: self.imagepath + 'comment_add.png'
+						} );
+					addButton.append( addImage );
+					if ( self.showLabels ) {
+						var addLabel = $( '<span>' )
+							.text( mw.message( 'commentstreams-buttontext-add' ) )
+							.addClass( 'cs-comment-button-label' )
+						addButton.append( addLabel );
+					}
+
+					if ( self.newestStreamsOnTop ) {
+						headerDiv.append( addButton );
+					} else {
+						footerDiv.append( addButton );
+					}
+
+					addButton.click( function() {
+						self.showNewCommentStreamBox( this );
 					} );
-				addButton.append( addImage );
-				if ( this.showLabels ) {
-					var addLabel = $( '<span>' )
-						.text( mw.message( 'commentstreams-buttontext-add' ) )
-						.addClass( 'cs-comment-button-label' )
-					addButton.append( addLabel );
 				}
-
-				if ( this.newestStreamsOnTop ) {
-					headerDiv.append( addButton );
-				} else {
-					footerDiv.append( addButton );
-				}
-
-				addButton.click( function() {
-					self.showNewCommentStreamBox();
-				} );
-			}
+			});
 		},
 		addInitialComments: function() {
 			var self = this;
@@ -151,7 +167,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var parentComment = this.comments[ parentIndex ];
 				var commenthtml = this.formatComment( parentComment );
 				var location = $( commenthtml )
-					.insertBefore( '#cs-footer' );
+					.insertBefore( '#'+ parentComment['cst_id'] +' .cs-footer' );
 				var childIndex;
 				for ( childIndex in parentComment.children ) {
 					var childComment = parentComment.children[ childIndex ];
@@ -195,7 +211,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		disableAllButtons: function() {
 			$( '.cs-edit-button' ).prop( 'disabled', true );
 			$( '.cs-reply-button' ).prop( 'disabled', true );
-			$( '#cs-add-button' ).prop( 'disabled', true );
+			$( '.cs-add-button' ).prop( 'disabled', true );
 			$( '.cs-delete-button' ).prop( 'disabled', true );
 			$( '.cs-toggle-button' ).prop( 'disabled', true );
 			$( '.cs-link-button' ).prop( 'disabled', true );
@@ -205,7 +221,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		enableAllButtons: function() {
 			$( '.cs-edit-button' ).prop( 'disabled', false );
 			$( '.cs-reply-button' ).prop( 'disabled', false );
-			$( '#cs-add-button' ).prop( 'disabled', false );
+			$( '.cs-add-button' ).prop( 'disabled', false );
 			$( '.cs-delete-button' ).prop( 'disabled', false );
 			$( '.cs-toggle-button' ).prop( 'disabled', false );
 			$( '.cs-link-button' ).prop( 'disabled', false );
@@ -949,16 +965,16 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			return commentBox;
 		},
-		showNewCommentStreamBox: function() {
+		showNewCommentStreamBox: function( addButton ) {
 			var self = this;
 			var editBox = this.formatEditBox( true );
 			if ( this.newestStreamsOnTop ) {
-				$( '#cs-header' ).append( editBox );
+				$( addButton ).parent( '.cs-header' ).append( editBox );
 				$( '#cs-edit-box' )
 					.hide()
 					.slideDown();
 			} else {
-				$( '#cs-footer' ).prepend( editBox );
+				$( addButton ).parent( '.cs-footer' ).prepend( editBox );
 				$( '#cs-edit-box' )
 					.hide()
 					.slideDown();
@@ -969,7 +985,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				editField.applyVisualEditor();
 			}
 			$( '#cs-submit-button' ).click( function() {
-				self.postComment( null );
+				self.postComment( null, $( addButton ).parents( '.cs-comments' ).attr( 'id' ) );
 			} );
 			$( '#cs-cancel-button' ).click( function() {
 				self.hideEditBox( true );
@@ -1015,10 +1031,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 			}
 			this.enableAllButtons();
 		},
-		postComment: function( parentPageId ) {
+		postComment: function( parentPageId, cst_id = "0" ) {
 			var self = this;
 			if ( this.isLoggedIn ) {
-				self.postComment2( parentPageId );
+				self.postComment2( parentPageId, cst_id );
 			} else {
 				var message_text =
 					mw.message( 'commentstreams-dialog-anonymous-message' ).text();
@@ -1028,7 +1044,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					mw.message( 'commentstreams-dialog-buttontext-cancel' ).text();
 				var dialog = new OO.ui.MessageDialog();
 				var window_manager = new OO.ui.WindowManager();
-				$( '#cs-comments' ).append( window_manager.$element );
+				$( '.cs-comments' ).append( window_manager.$element );
 				window_manager.addWindows( [ dialog ] );
 				window_manager.openWindow( dialog, {
 					message: message_text,
@@ -1040,23 +1056,23 @@ var commentstreams_controller = ( function( mw, $ ) {
 					opened.then( function ( closing, data ) {
 						if ( data && data.action ) {
 							if ( data.action === 'ok' ) {
-								self.postComment2( parentPageId );
+								self.postComment2( parentPageId, cst_id );
 							}
 						}
 					} );
 				} );
 			}
 		},
-		postComment2: function( parentPageId ) {
+		postComment2: function( parentPageId, cst_id ) {
 			var self = this;
 			if ( $( '#cs-body-edit-field' ).css( 'display' ) == 'none' ) {
-				self.postCommentFromVE( parentPageId );
+				self.postCommentFromVE( parentPageId, cst_id );
 			} else {
 				var commentText = $( '#cs-body-edit-field' ).val();
-				self.realPostComment( parentPageId, commentText );
+				self.realPostComment( parentPageId, cst_id, commentText );
 			}
 		},
-		postCommentFromVE: function( parentPageId ) {
+		postCommentFromVE: function( parentPageId, cst_id ) {
 			var self = this;
 			var editField = $( '#cs-body-edit-field' );
 			var veInstances = editField.getVEInstances();
@@ -1069,13 +1085,13 @@ var commentstreams_controller = ( function( mw, $ ) {
 				title: mw.config.get( 'wgPageName' ).split( /(\\|\/)/g ).pop()
 			} ).then( function ( data ) {
 				var commentText = data[ 'veforall-parsoid-utils' ].content;
-				self.realPostComment( parentPageId, commentText );
+				self.realPostComment( parentPageId, cst_id, commentText );
 			} )
 			.fail( function ( data ) {
 				self.reportError( 'commentstreams-ve-conversion-error' );
 			} );
 		},
-		realPostComment: function( parentPageId, commentText ) {
+		realPostComment: function( parentPageId, cst_id, commentText ) {
 			var self = this;
 
 			var commentTitle;
@@ -1106,7 +1122,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 				var associatedPageId = mw.config.get( 'wgArticleId' );
 				CommentStreamsQuerier.postComment( commentTitle, commentText,
-					associatedPageId, parentPageId, function( result ) {
+					associatedPageId, parentPageId, cst_id, function( result ) {
 					$( '.spinner' ).remove();
 					if ( result.error === undefined ) {
 						var comment = self.formatComment( result );
@@ -1129,11 +1145,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 						} else {
 							self.hideEditBox( false );
 							if ( self.newestStreamsOnTop ) {
-								comment.insertAfter( '#cs-header' )
+								comment.insertAfter( '#'+ cst_id +' .cs-header' )
 									.hide()
 									.slideDown();
 							} else {
-								comment.insertBefore( '#cs-footer' )
+								comment.insertBefore( '#'+ cst_id +' .cs-footer' )
 									.hide()
 									.slideDown();
 							}
@@ -1160,7 +1176,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				mw.message( 'commentstreams-dialog-buttontext-no' ).text();
 			var dialog = new OO.ui.MessageDialog();
 			var window_manager = new OO.ui.WindowManager();
-			$( '#cs-comments' ).append( window_manager.$element );
+			$( '.cs-comments' ).append( window_manager.$element );
 			window_manager.addWindows( [ dialog ] );
 			window_manager.openWindow( dialog, {
 				message: message_text,
@@ -1412,7 +1428,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var ok_text = mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
 			var dialog = new OO.ui.MessageDialog();
 			var window_manager = new OO.ui.WindowManager();
-			$( '#cs-comments' ).append( window_manager.$element );
+			$( '.cs-comments' ).append( window_manager.$element );
 			window_manager.addWindows( [ dialog ] );
 			window_manager.openWindow( dialog, {
 				message: message_text,
