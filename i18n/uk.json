@@ -80,6 +80,8 @@
 	"commentstreams-api-error-unwatch": "Помилка при спробі припинити спостереження за коментарем.",
 	"commentstreams-validation-error-nocommenttitle": "Вам треба вказати назву коментаря.",
 	"commentstreams-validation-error-nocommenttext": "Вам треба вказати текст коментаря.",
+	"commentstreams-buttontext-add": "Додати коментар",
+	"commentstreams-buttontext-reply": "Відповісти",
 	"commentstreams-buttontooltip-add": "додати коментар",
 	"commentstreams-buttontooltip-reply": "відповісти",
 	"commentstreams-buttontooltip-edit": "редагувати",
@@ -152,5 +154,6 @@
 	"commentstreams-allcomments-label-lasteditor": "Останній редактор",
 	"commentstreams-allcomments-label-lastedited": "Востаннє відредаговано",
 	"commentstreams-allcomments-button-next": "Наступне",
-	"commentstreams-allcomments-button-previous": "Попереднє"
+	"commentstreams-allcomments-button-previous": "Попереднє",
+	"commentstreams-ve-conversion-error": "Виникла помилка під час конвертування між вікірозміткою та HTML для Візуального редактора"
 }
