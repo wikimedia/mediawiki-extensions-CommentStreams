@@ -12,6 +12,8 @@
 	"apihelp-csPostComment-description": "Speichert einen neuen Kommentar.",
 	"apihelp-csPostComment-summary": "Speichert einen neuen Kommentar.",
 	"apihelp-csPostComment-param-commenttitle": "optionaler Titel für den Kommentar.",
+	"apihelp-csPostComment-param-wikitext": "Wikitext für den Kommentar.",
+	"apihelp-csEditComment-param-commenttitle": "Optionaler Titel für den Kommentar.",
 	"apihelp-csEditComment-param-wikitext": "Wikitext für den Kommentar.",
 	"apihelp-csVote-pageid-example": "Stimmt über den Kommentar mit der Seitenkennung 3 ab",
 	"apihelp-csWatch-pageid-example": "Beobachtet den Kommentar mit der Seitenkennung 3",
