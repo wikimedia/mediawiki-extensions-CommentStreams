@@ -4,6 +4,10 @@
 			"Mirzali"
 		]
 	},
+	"commentstreams-buttontooltip-collapse": "teng ke",
+	"commentstreams-buttontooltip-expand": "hera ke",
 	"commentstreams-buttontooltip-cancel": "bıtexelne",
-	"commentstreams-dialog-buttontext-cancel": "Bıtexelne"
+	"commentstreams-dialog-buttontext-cancel": "Bıtexelne",
+	"commentstreams-dialog-buttontext-yes": "Eya",
+	"commentstreams-dialog-buttontext-no": "Nê"
 }
