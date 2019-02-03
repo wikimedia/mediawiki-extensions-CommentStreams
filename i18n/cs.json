@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Ilimanaq29",
-			"Dvorapa"
+			"Dvorapa",
+			"Patriccck"
 		]
 	},
 	"commentstreams-buttontext-add": "Přidat komentář",
-	"commentstreams-buttontext-reply": "Odpovědět"
+	"commentstreams-buttontext-reply": "Odpovědět",
+	"commentstreams-ve-conversion-error": "Chyba při převodu mezi Wikitextem a HTML pro Vizuální editor"
 }

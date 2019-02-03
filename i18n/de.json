@@ -17,6 +17,7 @@
 	"apihelp-csEditComment-param-commenttitle": "Optionaler Titel für den Kommentar.",
 	"apihelp-csEditComment-param-wikitext": "Wikitext für den Kommentar.",
 	"apihelp-csVote-pageid-example": "Stimmt über den Kommentar mit der Seitenkennung 3 ab",
+	"apihelp-csVote-title-example": "Stimmt über den Kommentar mit dem Seitentitel CommentStreams:3 ab",
 	"apihelp-csWatch-pageid-example": "Beobachtet den Kommentar mit der Seitenkennung 3",
 	"apihelp-csUnwatch-pageid-example": "Beobachtet den Kommentar mit der Seitenkennung 3 nicht mehr",
 	"commentstreams-api-error-notloggedin": "Du musst angemeldet sein.",
