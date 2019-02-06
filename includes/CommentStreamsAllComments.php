@@ -111,7 +111,7 @@ class CommentStreamsAllComments extends SpecialPage {
 						$wikitext .= '| ' . $lasteditor . PHP_EOL;
 						$wikitext .= '| ' . $comment->getCreationDate() . PHP_EOL;
 						$wikitext .= '| ' . $modificationdate . PHP_EOL;
-						$index ++;
+						$index++;
 					}
 				}
 			} else {
