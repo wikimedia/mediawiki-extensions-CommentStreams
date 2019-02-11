@@ -36,6 +36,7 @@
 	"apihelp-csWatch-param-title": "Titel der Seite, die den zu beobachtenden Kommentar enthält.",
 	"apihelp-csWatch-pageid-example": "Beobachtet den Kommentar mit der Seitenkennung 3",
 	"apihelp-csWatch-title-example": "Beobachtet den Kommentar mit dem Seitentitel CommentStreams:3",
+	"apihelp-csUnwatch-summary": "Beobachtet einen Kommentar nicht mehr, um nicht länger benachrichtigt zu werden, wenn er Antworten erhält.",
 	"apihelp-csUnwatch-param-title": "Titel der Seite, die den nicht mehr zu beobachtenden Kommentar enthält.",
 	"apihelp-csUnwatch-pageid-example": "Beobachtet den Kommentar mit der Seitenkennung 3 nicht mehr",
 	"apihelp-csUnwatch-title-example": "Beobachtet den Kommentar mit dem Seitentitel CommentStreams:3 nicht mehr",
