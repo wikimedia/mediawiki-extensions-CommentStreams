@@ -5,5 +5,7 @@
 		]
 	},
 	"commentstreams-buttontooltip-cancel": "bıtexelne",
-	"commentstreams-dialog-buttontext-cancel": "Bıtexelne"
+	"commentstreams-dialog-buttontext-cancel": "Bıtexelne",
+	"commentstreams-dialog-buttontext-yes": "Heya",
+	"commentstreams-dialog-buttontext-no": "Nê"
 }
