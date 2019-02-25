@@ -14,6 +14,8 @@
 	"apihelp-csQueryComment-pageid-example": "Ruft den Kommentar mit der Seitenkennung 3 in Wikitext ab",
 	"apihelp-csQueryComment-title-example": "Ruft den Kommentar mit dem Seitentitel CommentStreams:3 in Wikitext ab",
 	"apihelp-csDeleteComment-description": "Löscht einen Kommentar. Entweder muss pageid oder title angegeben werden.",
+	"apihelp-csDeleteComment-summary": "Löscht einen Kommentar. Es muss entweder pageid oder title angegeben werden.",
+	"apihelp-csDeleteComment-param-pageid": "Kennung der Seite, die den zu löschenden Kommentar enthält.",
 	"apihelp-csDeleteComment-param-title": "Titel der Seite, die den zu löschenden Kommentar enthält.",
 	"apihelp-csDeleteComment-pageid-example": "Löscht den Kommentar mit der Seitenkennung 3",
 	"apihelp-csDeleteComment-title-example": "Löscht den Kommentar mit dem Seitentitel CommentStreams:3",
