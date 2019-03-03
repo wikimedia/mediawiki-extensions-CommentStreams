@@ -1,9 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
-			"StanProg"
+			"StanProg",
+			"Vlad5250"
 		]
 	},
+	"commentstreams-desc": "Позволява коментиране в уики страници",
+	"commentstreams-error-prohibitedaction": "Действието $1 не е разрешено на страници с коментари.",
+	"commentstreams-error-comment-on-deleted-page": "Страницата, към която е бил свързан коментарът, е изтрита.",
+	"commentstreams-author-anonymous": "анонимен",
+	"apihelp-csQueryComment-description": "Дай заглавието, потребителя, времето и датата и уики текста на коментара. Трябва да посочете идентификация на страницата или заглавие.",
+	"apihelp-csQueryComment-summary": "Дай заглавието, потребителя, времето и датата и уики текста на коментара. Трябва да посочете идентификация на страницата или заглавие.",
 	"commentstreams-buttontooltip-delete": "изтриване",
 	"commentstreams-buttontooltip-cancel": "Отказ",
 	"commentstreams-dialog-buttontext-cancel": "Отказ"
