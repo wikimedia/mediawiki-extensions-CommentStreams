@@ -1,13 +1,17 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mainframe98"
+			"Mainframe98",
+			"Hzjethro"
 		]
 	},
 	"commentstreams-author-anonymous": "anoniem",
 	"commentstreams-api-error-notloggedin": "U moet ingelogd zijn.",
 	"commentstreams-api-error-edit-notloggedin": "U moet aangemeld zijn om te kunnen bewerken.",
 	"commentstreams-api-error-delete-notloggedin": "U moet aangemeld zijn om te kunnen verwijderen.",
+	"commentstreams-buttontext-add": "Voeg commentaar toe",
+	"commentstreams-buttontext-reply": "Beantwoorden",
+	"commentstreams-buttontooltip-add": "voeg commentaar toe",
 	"commentstreams-buttontooltip-reply": "antwoorden",
 	"commentstreams-buttontooltip-edit": "bewerken",
 	"commentstreams-buttontooltip-delete": "verwijderen",
