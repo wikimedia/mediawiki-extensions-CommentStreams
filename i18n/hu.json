@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Csega"
+			"Csega",
+			"R-Joe"
 		]
 	},
-	"commentstreams-buttontext-reply": "VÁLASZ"
+	"commentstreams-buttontext-reply": "Válasz"
 }
