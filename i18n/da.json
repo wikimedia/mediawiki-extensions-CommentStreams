@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saederup92"
+		]
+	},
+	"commentstreams-author-anonymous": "anonym",
+	"commentstreams-buttontext-add": "Tilføj kommentar",
+	"commentstreams-buttontext-reply": "Svar",
+	"commentstreams-buttontooltip-add": "tilføj kommentar",
+	"commentstreams-buttontooltip-reply": "svar",
+	"commentstreams-buttontooltip-edit": "rediger",
+	"commentstreams-buttontooltip-delete": "slet",
+	"commentstreams-dialog-buttontext-yes": "Ja",
+	"commentstreams-dialog-buttontext-no": "Nej",
+	"commentstreams-allcomments-label-commenttitle": "Kommentartitel",
+	"commentstreams-allcomments-label-wikitext": "Kommentar",
+	"commentstreams-allcomments-label-author": "Forfatter",
+	"commentstreams-allcomments-label-created": "Oprettet",
+	"commentstreams-allcomments-label-lastedited": "Sidst redigeret",
+	"commentstreams-allcomments-button-next": "Næste",
+	"commentstreams-allcomments-button-previous": "Forrige"
+}
