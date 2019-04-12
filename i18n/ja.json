@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Otokoume",
-			"Hinaloe"
+			"Hinaloe",
+			"Shirayuki"
 		]
 	},
 	"commentstreams-desc": "ウィキページへのコメントを可能にする",
@@ -47,7 +48,8 @@
 	"notification-body-commentstreams-comment-on-watched-page": "コメントはこちらから確認できます:\n\n\n$5",
 	"notification-body-commentstreams-reply-on-watched-page": "返信はこちらから確認できます:\n\n\n$5",
 	"notification-body-commentstreams-reply-to-watched-comment": "返信はこちらから確認できます:\n\n\n$5",
-	"right-cs-comment": "自身のコメントの投稿、編集、削除",
+	"right-cs-comment": "自身のコメントを投稿、編集、削除",
+	"action-cs-comment": "コメントの投稿、編集、削除",
 	"right-cs-moderator-edit": "利用者によるコメントの編集",
 	"action-cs-moderator-edit": "利用者によるコメントの編集",
 	"right-cs-moderator-delete": "利用者によるコメントの削除",
