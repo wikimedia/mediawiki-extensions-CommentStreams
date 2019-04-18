@@ -159,7 +159,7 @@ class Comment {
 		}
 
 		if ( defined( 'SMW_VERSION' ) ) {
-			$job = new SMWUpdateJob( $title );
+			$job = new SMWUpdateJob( $title, [] );
 			JobQueueGroup::singleton()->push( $job );
 		}
 
