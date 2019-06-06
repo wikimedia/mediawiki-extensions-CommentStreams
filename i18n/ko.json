@@ -66,6 +66,7 @@
 	"commentstreams-buttontooltip-submit": "제출",
 	"commentstreams-buttontooltip-cancel": "취소",
 	"commentstreams-dialog-delete-message": "이 댓글을 삭제하겠습니까?",
+	"commentstreams-dialog-anonymous-message": "로그인되어 있지 않습니다. 이 댓글의 저장을 계속하면 IP 주소가 기록되며 이 댓글을 편집하거나 삭제할 수 없게 됩니다.",
 	"commentstreams-dialog-buttontext-ok": "확인",
 	"commentstreams-dialog-buttontext-cancel": "취소",
 	"commentstreams-dialog-buttontext-yes": "예",
