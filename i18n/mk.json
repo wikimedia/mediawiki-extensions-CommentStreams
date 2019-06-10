@@ -13,6 +13,7 @@
 	"apihelp-csQueryComment-param-pageid": "назнака на страницата каде се наоѓа коментарот што се бара",
 	"apihelp-csQueryComment-param-title": "наслов на страницата каде се наоѓа коментарот што се бара",
 	"apihelp-csQueryComment-pageid-example": "побарај коментар со назнака на страницата 3 во викитекстот",
+	"apihelp-csQueryComment-title-example": "побарај коментар со наслов на страница CommentStreams:3 во викитекстот",
 	"apihelp-csPostComment-description": "Ставете нов коментар.",
 	"apihelp-csPostComment-summary": "Ставете нов коментар.",
 	"apihelp-csPostComment-param-commenttitle": "незадолжителен наслов на коментарот.",
