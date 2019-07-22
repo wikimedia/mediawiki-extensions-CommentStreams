@@ -6,7 +6,7 @@
 		]
 	},
 	"commentstreams-desc": "Позволява коментиране в уики страници",
-	"commentstreams-error-prohibitedaction": "Действието $1 не е разрешено на страници с коментари.",
+	"commentstreams-error-prohibitedaction": "Действието $1 не е разрешено на страници на коментари.",
 	"commentstreams-error-comment-on-deleted-page": "Страницата, към която е бил свързан коментарът, е изтрита.",
 	"commentstreams-author-anonymous": "анонимен",
 	"apihelp-csQueryComment-description": "Дай заглавието, потребителя, времето и датата и уики текста на коментара. Трябва да посочете идентификация на страницата или заглавие.",
