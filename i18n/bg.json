@@ -2,11 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"StanProg",
-			"Vlad5250"
+			"Vlad5250",
+			"Ted Masters"
 		]
 	},
 	"commentstreams-desc": "Позволява коментиране в уики страници",
-	"commentstreams-error-prohibitedaction": "Действието $1 не е разрешено на страници на коментари.",
+	"commentstreams-error-prohibitedaction": "Действието $1 не е разрешено на страници за коментари.",
 	"commentstreams-error-comment-on-deleted-page": "Страницата, към която е бил свързан коментарът, е изтрита.",
 	"commentstreams-author-anonymous": "анонимен",
 	"apihelp-csQueryComment-description": "Дай заглавието, потребителя, времето и датата и уики текста на коментара. Трябва да посочете идентификация на страницата или заглавие.",
