@@ -120,7 +120,7 @@ class CommentStreamsAllComments extends SpecialPage {
 		}
 
 		$wikitext .= '|}' . PHP_EOL;
-		$this->getOutput()->addWikiText( $wikitext );
+		$this->getOutput()->addWikiTextAsInterface( $wikitext );
 
 		if ( $offset > 0 || $more ) {
 			$this->addTableNavigation( $offset, $more, $limit, 'offset' );
