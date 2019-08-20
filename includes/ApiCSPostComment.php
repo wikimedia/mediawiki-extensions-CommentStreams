@@ -101,7 +101,7 @@ class ApiCSPostComment extends ApiBase {
 	}
 
 	/**
-	 * @return array allowed paramters
+	 * @return array allowed parameters
 	 */
 	public function getAllowedParams() {
 		return [

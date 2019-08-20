@@ -58,7 +58,7 @@ class ApiCSVote extends ApiCSBase {
 	}
 
 	/**
-	 * @return array allowed paramters
+	 * @return array allowed parameters
 	 */
 	public function getAllowedParams() {
 		return array_merge( parent::getAllowedParams(),
