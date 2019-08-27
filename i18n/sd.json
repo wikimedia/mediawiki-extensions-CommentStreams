@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Indus Asia",
-			"Tweety"
+			"Tweety",
+			"Mehtab ahmed"
 		]
 	},
 	"apihelp-csPostComment-description": "نيئن راءِ درج ڪيو.",
@@ -23,7 +24,7 @@
 	"commentstreams-allcomments-label-associatedpage": "لاڳاپيل صفحو",
 	"commentstreams-allcomments-label-author": "ليکڪ",
 	"commentstreams-allcomments-label-created": "سرجيل (Created)",
-	"commentstreams-allcomments-label-lasteditor": "آخري ايڊيٽر",
+	"commentstreams-allcomments-label-lasteditor": "آخري سنواريندڙ",
 	"commentstreams-allcomments-label-lastedited": "آخري ڀيرو سنواريل",
 	"commentstreams-allcomments-button-next": "اڳيون",
 	"commentstreams-allcomments-button-previous": "اڳوڻو"
