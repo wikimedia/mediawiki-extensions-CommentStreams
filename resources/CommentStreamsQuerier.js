@@ -42,7 +42,7 @@ var commentstreams_querier = ( function( mw ) {
 			api.post( {
 					action: 'csDeleteComment',
 					pageid: pageid,
-					token: mw.user.tokens.get( 'editToken' )
+					token: mw.user.tokens.get( 'csrfToken' )
 				} )
 				.done( function( data ) {
 					reply( data );
@@ -59,7 +59,7 @@ var commentstreams_querier = ( function( mw ) {
 				action: 'csPostComment',
 				wikitext: wikitext,
 				associatedid: associatedid,
-				token: mw.user.tokens.get( 'editToken' )
+				token: mw.user.tokens.get( 'csrfToken' )
 			};
 			if ( commenttitle !== null ) {
 				data.commenttitle = commenttitle;
@@ -85,7 +85,7 @@ var commentstreams_querier = ( function( mw ) {
 					pageid: pageid,
 					commenttitle: commenttitle,
 					wikitext: wikitext,
-					token: mw.user.tokens.get( 'editToken' )
+					token: mw.user.tokens.get( 'csrfToken' )
 				} )
 				.done( function( data ) {
 					reply( data.csEditComment );
@@ -101,7 +101,7 @@ var commentstreams_querier = ( function( mw ) {
 					action: 'csVote',
 					pageid: pageid,
 					vote: vote,
-					token: mw.user.tokens.get( 'editToken' )
+					token: mw.user.tokens.get( 'csrfToken' )
 				} )
 				.done( function( data ) {
 					reply( data.csVote );
@@ -116,7 +116,7 @@ var commentstreams_querier = ( function( mw ) {
 			api.post( {
 					action: action ? 'csWatch' : 'csUnwatch',
 					pageid: pageid,
-					token: mw.user.tokens.get( 'editToken' )
+					token: mw.user.tokens.get( 'csrfToken' )
 				} )
 				.done( function( data ) {
 					if ( action ) {
