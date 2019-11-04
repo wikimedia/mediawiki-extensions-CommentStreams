@@ -233,7 +233,7 @@ class CommentStreamsHooks {
 	 */
 	public static function enableCommentStreams( $input, array $args,
 		Parser $parser, PPFrame $frame ) {
-		$parser->disableCache();
+		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = CommentStreams::singleton();
 		$cs->enableCommentsOnPage();
 		if ( isset( $args['location'] ) && $args['location'] === 'footer' ) {
@@ -256,7 +256,7 @@ class CommentStreamsHooks {
 	 */
 	public static function disableCommentStreams( $input, array $args,
 		Parser $parser, PPFrame $frame ) {
-		$parser->disableCache();
+		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = CommentStreams::singleton();
 		$cs->disableCommentsOnPage();
 		return "";
@@ -274,7 +274,7 @@ class CommentStreamsHooks {
 	 */
 	public static function initiallyCollapseCommentStreams( $input, array $args,
 		Parser $parser, PPFrame $frame ) {
-		$parser->disableCache();
+		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = CommentStreams::singleton();
 		$cs->initiallyCollapseCommentsOnPage();
 		return "";
