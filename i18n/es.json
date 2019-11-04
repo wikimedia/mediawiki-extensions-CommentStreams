@@ -19,6 +19,7 @@
 	"commentstreams-api-error-post": "Error al añadir el comentario.",
 	"commentstreams-api-error-edit-notloggedin": "Debes acceder a tu cuenta para editar.",
 	"commentstreams-api-error-edit": "Error al editar el comentario.",
+	"commentstreams-api-error-delete": "Error al eliminar el comentario.",
 	"commentstreams-api-error-vote-notloggedin": "Debes acceder a tu cuenta para votar.",
 	"commentstreams-api-error-vote-novoteonreply": "No se permite emitir votos para las respuestas.",
 	"commentstreams-api-error-vote": "Error al emitir el voto para el comentario.",
