@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Gomoko",
-			"Wladek92"
+			"Wladek92",
+			"Thibaut120094"
 		]
 	},
 	"commentstreams-desc": "Permet de commenter les pages wiki",
@@ -97,7 +98,7 @@
 	"commentstreams-buttontooltip-unwatch": "ne plus surveiller",
 	"commentstreams-buttontooltip-submit": "soumettre",
 	"commentstreams-buttontooltip-cancel": "annuler",
-	"commentstreams-dialog-delete-message": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
+	"commentstreams-dialog-delete-message": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
 	"commentstreams-dialog-anonymous-message": "Vous n’êtes pas connecté. Si vous poursuivez l’enregistrement de ce commentaire, votre adresse IP sera enregistrée, et vous ne pourrez plus modifier ou supprimer ce commentaire.",
 	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-cancel": "Annuler",
