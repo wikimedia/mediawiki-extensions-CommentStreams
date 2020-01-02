@@ -1,8 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Sayginer"
+			"Sayginer",
+			"BaRaN6161 TURK"
 		]
 	},
-	"commentstreams-error-comment-on-deleted-page": "Bu yorumla bağlantılı olan sayfa silinmiş."
+	"commentstreams-error-comment-on-deleted-page": "Bu yorumla bağlantılı olan sayfa silinmiş.",
+	"commentstreams-buttontooltip-edit": "düzenle",
+	"commentstreams-buttontooltip-delete": "sil",
+	"commentstreams-buttontooltip-cancel": "iptal",
+	"commentstreams-dialog-buttontext-cancel": "İptal"
 }
