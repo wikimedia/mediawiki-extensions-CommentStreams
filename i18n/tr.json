@@ -6,8 +6,15 @@
 		]
 	},
 	"commentstreams-error-comment-on-deleted-page": "Bu yorumla bağlantılı olan sayfa silinmiş.",
+	"commentstreams-author-anonymous": "anonim",
+	"commentstreams-buttontext-reply": "Yanıtla",
+	"commentstreams-buttontooltip-reply": "yanıtla",
 	"commentstreams-buttontooltip-edit": "düzenle",
 	"commentstreams-buttontooltip-delete": "sil",
+	"commentstreams-buttontooltip-permalink": "kalıcı bağlantı",
 	"commentstreams-buttontooltip-cancel": "iptal",
-	"commentstreams-dialog-buttontext-cancel": "İptal"
+	"commentstreams-dialog-buttontext-cancel": "İptal",
+	"commentstreams-dialog-buttontext-yes": "Evet",
+	"commentstreams-dialog-buttontext-no": "Hayır",
+	"commentstreams-allcomments-label-wikitext": "Yorum"
 }
