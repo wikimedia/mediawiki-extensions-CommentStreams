@@ -67,13 +67,13 @@ class ApiCSDeleteComment extends ApiCSBase {
 		} else {
 			$result = $this->comment->delete();
 			if ( $action === 'cs-comment' ) {
-				if ( is_null( $this->comment->getParentId() ) ) {
+				if ( $this->comment->getParentId() === null ) {
 					$this->logAction( 'comment-delete' );
 				} else {
 					$this->logAction( 'reply-delete' );
 				}
 			} else {
-				if ( is_null( $this->comment->getParentId() ) ) {
+				if ( $this->comment->getParentId() === null ) {
 					$this->logAction( 'comment-moderator-delete' );
 				} else {
 					$this->logAction( 'reply-moderator-delete' );
@@ -93,6 +93,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 	 * recursively delete comment and replies
 	 *
 	 * @param Comment $comment the comment to recursively delete
+	 * @return bool
 	 */
 	private function recursiveDelete( $comment ) {
 		$replies = Comment::getReplies( $comment->getId() );
@@ -104,7 +105,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 		}
 		$result = $comment->delete();
 		$title = $comment->getWikiPage()->getTitle();
-		if ( is_null( $comment->getParentId() ) ) {
+		if ( $comment->getParentId() === null ) {
 			$this->logAction( 'comment-moderator-delete', $title );
 		} else {
 			$this->logAction( 'reply-moderator-delete', $title );

@@ -57,7 +57,7 @@ class ApiCSEditComment extends ApiCSBase {
 		$comment_title = $this->getMain()->getVal( 'commenttitle' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
-		if ( is_null( $this->comment->getParentId() ) && is_null( $comment_title ) ) {
+		if ( $this->comment->getParentId() === null && $comment_title === null ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-missingcommenttitle' );
 		}
@@ -68,13 +68,13 @@ class ApiCSEditComment extends ApiCSBase {
 		}
 
 		if ( $action === 'cs-comment' ) {
-			if ( is_null( $this->comment->getParentId() ) ) {
+			if ( $this->comment->getParentId() === null ) {
 				$this->logAction( 'comment-edit' );
 			} else {
 				$this->logAction( 'reply-edit' );
 			}
 		} else {
-			if ( is_null( $this->comment->getParentId() ) ) {
+			if ( $this->comment->getParentId() === null ) {
 				$this->logAction( 'comment-moderator-edit' );
 			} else {
 				$this->logAction( 'reply-moderator-edit' );
@@ -83,7 +83,7 @@ class ApiCSEditComment extends ApiCSBase {
 
 		$json = $this->comment->getJSON();
 
-		if ( is_null( $this->comment->getParentId() ) ) {
+		if ( $this->comment->getParentId() === null ) {
 			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
 				$json['vote'] = $this->comment->getVote( $this->getUser() );
 			}

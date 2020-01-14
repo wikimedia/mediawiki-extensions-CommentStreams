@@ -92,13 +92,13 @@ class CommentStreamsHooks {
 		}
 		$wikipage = new WikiPage( $title );
 		$comment = Comment::newFromWikiPage( $wikipage );
-		if ( !is_null( $comment ) ) {
+		if ( $comment !== null ) {
 			$commentTitle = $comment->getCommentTitle();
-			if ( !is_null( $commentTitle ) ) {
+			if ( $commentTitle !== null ) {
 				$output->setPageTitle( $commentTitle );
 			}
 			$associatedTitle = Title::newFromId( $comment->getAssociatedId() );
-			if ( !is_null( $associatedTitle ) ) {
+			if ( $associatedTitle !== null ) {
 				$values = [];
 				if ( class_exists( 'PageProps' ) ) {
 					$values = PageProps::getInstance()->getProperties( $associatedTitle,
@@ -312,9 +312,9 @@ class CommentStreamsHooks {
 	public static function showSearchHitTitle( Title &$title, &$text,
 		SearchResult $result, array $terms, SpecialSearch $page ) {
 		$comment = Comment::newFromWikiPage( WikiPage::factory( $title ) );
-		if ( !is_null( $comment ) ) {
+		if ( $comment !== null ) {
 			$t = Title::newFromId( $comment->getAssociatedId() );
-			if ( !is_null( $t ) ) {
+			if ( $t !== null ) {
 				$title = $t;
 			}
 		}
@@ -392,20 +392,20 @@ class CommentStreamsHooks {
 	 */
 	public static function updateData( $store, $semanticData ) {
 		$subject = $semanticData->getSubject();
-		if ( !is_null( $subject ) && !is_null( $subject->getTitle() ) &&
+		if ( $subject !== null && $subject->getTitle() !== null &&
 			$subject->getTitle()->getNamespace() === NS_COMMENTSTREAMS ) {
 			$page_id = $subject->getTitle()->getArticleID( Title::GAID_FOR_UPDATE );
 			$wikipage = WikiPage::newFromId( $page_id );
 			$comment = Comment::newFromWikiPage( $wikipage );
 
-			if ( is_null( $comment ) ) {
+			if ( $comment === null ) {
 				return true;
 			}
 
 			$assoc_page_id = $comment->getAssociatedId();
-			if ( !is_null( $assoc_page_id ) ) {
+			if ( $assoc_page_id !== null ) {
 				$assoc_wikipage = WikiPage::newFromId( $assoc_page_id );
-				if ( !is_null( $assoc_wikipage ) ) {
+				if ( $assoc_wikipage !== null ) {
 					$propertyDI = new SMW\DIProperty( '___CS_ASSOCPG' );
 					$dataItem =
 						SMW\DIWikiPage::newFromTitle( $assoc_wikipage->getTitle() );
@@ -414,9 +414,9 @@ class CommentStreamsHooks {
 			}
 
 			$parent_page_id = $comment->getParentId();
-			if ( !is_null( $parent_page_id ) ) {
+			if ( $parent_page_id !== null ) {
 				$parent_wikipage = WikiPage::newFromId( $parent_page_id );
-				if ( !is_null( $parent_wikipage ) ) {
+				if ( $parent_wikipage !== null ) {
 					$propertyDI = new SMW\DIProperty( '___CS_REPLYTO' );
 					$dataItem =
 						SMW\DIWikiPage::newFromTitle( $parent_wikipage->getTitle() );
@@ -425,7 +425,7 @@ class CommentStreamsHooks {
 			}
 
 			$commentTitle = $comment->getCommentTitle();
-			if ( !is_null( $commentTitle ) ) {
+			if ( $commentTitle !== null ) {
 				$propertyDI = new SMW\DIProperty( '___CS_TITLE' );
 				$dataItem = new SMWDIBlob( $comment->getCommentTitle() );
 				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );

@@ -73,7 +73,7 @@ class Comment {
 	 * error
 	 */
 	public static function newFromWikiPage( $wikipage ) {
-		if ( !is_null( $wikipage ) &&
+		if ( $wikipage !== null &&
 			$wikipage->getTitle()->getNamespace() === NS_COMMENTSTREAMS ) {
 			$comment = new Comment( $wikipage );
 			if ( $wikipage->exists() ) {
@@ -100,10 +100,10 @@ class Comment {
 	 */
 	public static function newFromValues( $assoc_page_id, $parent_page_id,
 		$comment_title, $wikitext, $user ) {
-		if ( is_null( $comment_title ) && is_null( $parent_page_id ) ) {
+		if ( $comment_title === null && $parent_page_id === null ) {
 			return null;
 		}
-		if ( !is_null( $comment_title ) && !is_null( $parent_page_id ) ) {
+		if ( $comment_title !== null && $parent_page_id !== null ) {
 			return null;
 		}
 		$annotated_wikitext = self::addAnnotations( $wikitext, $comment_title,
@@ -152,7 +152,7 @@ class Comment {
 		}
 		$comment->loadFromValues( $assoc_page_id, $parent_page_id, $comment_title );
 
-		if ( is_null( $parent_page_id ) ) {
+		if ( $parent_page_id === null ) {
 			$comment->watch( $user );
 		} else {
 			self::watchComment( $parent_page_id, $user );
@@ -195,7 +195,7 @@ class Comment {
 		if ( $result ) {
 			$this->assoc_page_id = (int)$result->cst_assoc_page_id;
 			$this->parent_page_id = $result->cst_parent_page_id;
-			if ( !is_null( $this->parent_page_id ) ) {
+			if ( $this->parent_page_id !== null ) {
 				$this->parent_page_id = (int)$this->parent_page_id;
 			}
 			$this->comment_title = $result->cst_comment_title;
@@ -215,7 +215,7 @@ class Comment {
 		$comment_title ) {
 		$this->assoc_page_id = (int)$assoc_page_id;
 		$this->parent_page_id = $parent_page_id;
-		if ( !is_null( $this->parent_page_id ) ) {
+		if ( $this->parent_page_id !== null ) {
 			$this->parent_page_id = (int)$this->parent_page_id;
 		}
 		$this->comment_title = $comment_title;
@@ -271,7 +271,7 @@ class Comment {
 	 * @return string wikitext of the comment
 	 */
 	public function getWikiText() {
-		if ( is_null( $this->wikitext ) ) {
+		if ( $this->wikitext === null ) {
 			$wikitext = ContentHandler::getContentText( $this->wikipage->getContent(
 				Revision::RAW ) );
 			$wikitext = $this->removeAnnotations( $wikitext );
@@ -284,9 +284,9 @@ class Comment {
 	 * @return string parsed HTML of the comment
 	 */
 	public function getHTML() {
-		if ( is_null( $this->html ) ) {
+		if ( $this->html === null ) {
 			$this->getWikiText();
-			if ( !is_null( $this->wikitext ) ) {
+			if ( $this->wikitext !== null ) {
 				$parser = new Parser;
 				$this->html = $parser->parse( $this->wikitext,
 					$this->wikipage->getTitle(), new ParserOptions )->getText();
@@ -299,7 +299,7 @@ class Comment {
 	 * @return User the author of this comment
 	 */
 	public function getUser() {
-		if ( is_null( $this->user ) ) {
+		if ( $this->user === null ) {
 			$user_id = $this->wikipage->getOldestRevision()->getUser();
 			$this->user = User::newFromId( $user_id );
 		}
@@ -342,7 +342,7 @@ class Comment {
 	 * @return string the URL of the avatar of the author of this comment
 	 */
 	public function getAvatar() {
-		if ( is_null( $this->avatar ) ) {
+		if ( $this->avatar === null ) {
 			if ( class_exists( 'wAvatar' ) ) {
 				// from Extension:SocialProfile
 				$avatar = new wAvatar( $this->getUser()->getId(), 'l' );
@@ -359,7 +359,7 @@ class Comment {
 	 * @return MWTimestamp the earliest revision date for this
 	 */
 	public function getCreationTimestamp() {
-		if ( is_null( $this->creation_timestamp ) ) {
+		if ( $this->creation_timestamp === null ) {
 			$this->creation_timestamp = MWTimestamp::getLocalInstance(
 				$this->wikipage->getTitle()->getEarliestRevTime() );
 		}
@@ -370,7 +370,7 @@ class Comment {
 	 * @return MWTimestamp the earliest revision date for this
 	 */
 	public function getCreationDate() {
-		if ( !is_null( $this->getCreationTimestamp() ) ) {
+		if ( $this->getCreationTimestamp() !== null ) {
 			return $this->creation_timestamp->format( "M j \a\\t g:i a" );
 		}
 		return "";
@@ -380,7 +380,7 @@ class Comment {
 	 * @return MWTimestamp the latest revision date for this
 	 */
 	public function getModificationTimestamp() {
-		if ( is_null( $this->modification_timestamp ) ) {
+		if ( $this->modification_timestamp === null ) {
 			$title = $this->wikipage->getTitle();
 			if ( $title->getFirstRevision()->getId() === $title->getLatestRevID() ) {
 				return null;
@@ -397,7 +397,7 @@ class Comment {
 	 * @return MWTimestamp the earliest revision date for this
 	 */
 	public function getModificationDate() {
-		if ( !is_null( $this->getModificationTimestamp() ) ) {
+		if ( $this->getModificationTimestamp() !== null ) {
 			return $this->modification_timestamp->format( "M j \a\\t g:i a" );
 		}
 		return null;
@@ -407,7 +407,7 @@ class Comment {
 	 * @return int number of replies
 	 */
 	public function getNumReplies() {
-		if ( is_null( $this->num_replies ) ) {
+		if ( $this->num_replies === null ) {
 			$dbr = wfGetDB( DB_REPLICA );
 			$this->num_replies = $dbr->selectRowCount(
 				'cs_comment_data',
@@ -483,7 +483,7 @@ class Comment {
 	 * @return int number of up votes
 	 */
 	public function getNumUpVotes() {
-		if ( is_null( $this->num_up_votes ) ) {
+		if ( $this->num_up_votes === null ) {
 			$dbr = wfGetDB( DB_REPLICA );
 			$this->num_up_votes = $dbr->selectRowCount(
 				'cs_votes',
@@ -502,7 +502,7 @@ class Comment {
 	 * @return int number of down votes
 	 */
 	public function getNumDownVotes() {
-		if ( is_null( $this->num_down_votes ) ) {
+		if ( $this->num_down_votes === null ) {
 			$dbr = wfGetDB( DB_REPLICA );
 			$this->num_down_votes = $dbr->selectRowCount(
 				'cs_votes',
@@ -522,7 +522,7 @@ class Comment {
 	 *
 	 * @param string $vote 1 for up vote, -1 for down vote, 0 for no vote
 	 * @param User $user the user voting on the comment
-	 * @return database status code
+	 * @return bool database status code
 	 */
 	public function vote( $vote, $user ) {
 		if ( $vote !== "-1" && $vote !== "0" && $vote !== "1" ) {
@@ -591,7 +591,7 @@ class Comment {
 	 * watch a comment (get page ID from this comment)
 	 *
 	 * @param User $user the user watching the comment
-	 * @return database true for OK, false for error
+	 * @return bool database true for OK, false for error
 	 */
 	public function watch( $user ) {
 		return self::watchComment( $this->getID(), $user );
@@ -600,9 +600,9 @@ class Comment {
 	/**
 	 * watch a comment (get page ID from parameter)
 	 *
-	 * @param $pageid the page ID of the comment to watch
+	 * @param int $pageid the page ID of the comment to watch
 	 * @param User $user the user watching the comment
-	 * @return database true for OK, false for error
+	 * @return bool database true for OK, false for error
 	 */
 	private static function watchComment( $pageid, $user ) {
 		if ( self::isWatchingComment( $pageid, $user ) ) {
@@ -624,7 +624,7 @@ class Comment {
 	 * unwatch a comment
 	 *
 	 * @param User $user the user unwatching the comment
-	 * @return database true for OK, false for error
+	 * @return bool database true for OK, false for error
 	 */
 	public function unwatch( $user ) {
 		if ( !$this->isWatching( $user ) ) {
@@ -646,7 +646,7 @@ class Comment {
 	 * Check if a particular user is watching this comment
 	 *
 	 * @param User $user the user watching the comment
-	 * @return database true for OK, false for error
+	 * @return bool database true for OK, false for error
 	 */
 	public function isWatching( $user ) {
 		return self::isWatchingComment( $this->getId(), $user );
@@ -655,9 +655,9 @@ class Comment {
 	/**
 	 * Check if a particular user is watching a comment
 	 *
-	 * @param $pageid the page ID of the comment to check
+	 * @param int $pageid the page ID of the comment to check
 	 * @param User $user the user watching the comment
-	 * @return database true for OK, false for error
+	 * @return bool database true for OK, false for error
 	 */
 	private static function isWatchingComment( $pageid, $user ) {
 		$dbr = wfGetDB( DB_REPLICA );
@@ -716,10 +716,10 @@ class Comment {
 	 * @return bool true if successful
 	 */
 	public function update( $comment_title, $wikitext, $user ) {
-		if ( is_null( $comment_title ) && is_null( $this->getParentId() ) ) {
+		if ( $comment_title === null && $this->getParentId() === null ) {
 			return false;
 		}
-		if ( !is_null( $comment_title ) && !is_null( $this->getParentId() ) ) {
+		if ( $comment_title !== null && $this->getParentId() !== null ) {
 			return false;
 		}
 		$annotated_wikitext =
@@ -789,7 +789,7 @@ class Comment {
 	 */
 	public static function addAnnotations( $wikitext, $comment_title,
 		$assoc_page_id ) {
-		if ( !is_null( $comment_title ) ) {
+		if ( $comment_title !== null ) {
 			$wikitext .= <<<EOT
 {{DISPLAYTITLE:
 $comment_title
@@ -807,7 +807,7 @@ EOT;
 	 */
 	public function removeAnnotations( $wikitext ) {
 		$comment_title = $this->getCommentTitle();
-		if ( !is_null( $comment_title ) ) {
+		if ( $comment_title !== null ) {
 			$strip = <<<EOT
 {{DISPLAYTITLE:
 $comment_title
@@ -841,7 +841,7 @@ EOT;
 			$page_id = $row->cst_page_id;
 			$wikipage = WikiPage::newFromId( $page_id );
 			$comment = self::newFromWikiPage( $wikipage );
-			if ( !is_null( $comment ) ) {
+			if ( $comment !== null ) {
 				$comments[] = $comment;
 			}
 		}
@@ -871,7 +871,7 @@ EOT;
 			$page_id = $row->cst_page_id;
 			$wikipage = WikiPage::newFromId( $page_id );
 			$comment = self::newFromWikiPage( $wikipage );
-			if ( !is_null( $comment ) ) {
+			if ( $comment !== null ) {
 				$comments[] = $comment;
 			}
 		}
@@ -897,11 +897,11 @@ EOT;
 		}
 		$userpage = $user->getUserPage();
 		$displayname = null;
-		if ( !is_null( $GLOBALS['wgCommentStreamsUserRealNamePropertyName'] ) ) {
+		if ( $GLOBALS['wgCommentStreamsUserRealNamePropertyName'] !== null ) {
 			$displayname = self::getUserProperty( $user,
 				$GLOBALS['wgCommentStreamsUserRealNamePropertyName'] );
 		}
-		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
+		if ( $displayname === null || strlen( $displayname ) == 0 ) {
 			if ( class_exists( 'PageProps' ) ) {
 				$values = PageProps::getInstance()->getProperties( $userpage,
 					'displaytitle' );
@@ -910,10 +910,10 @@ EOT;
 				}
 			}
 		}
-		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
+		if ( $displayname === null || strlen( $displayname ) == 0 ) {
 			$displayname = $user->getRealName();
 		}
-		if ( is_null( $displayname ) || strlen( $displayname ) == 0 ) {
+		if ( $displayname === null || strlen( $displayname ) == 0 ) {
 			$displayname = $user->getName();
 		}
 		if ( $linked && $userpage->exists() ) {
@@ -930,13 +930,13 @@ EOT;
 	 */
 	public static function getAvatarFromUser( $user ) {
 		$avatar = null;
-		if ( !is_null( $GLOBALS['wgCommentStreamsUserAvatarPropertyName'] ) ) {
+		if ( $GLOBALS['wgCommentStreamsUserAvatarPropertyName'] !== null ) {
 			$avatar = self::getUserProperty( $user,
 				$GLOBALS['wgCommentStreamsUserAvatarPropertyName'] );
-			if ( !is_null( $avatar ) ) {
+			if ( $avatar !== null ) {
 				if ( gettype( $avatar ) === 'string' ) {
 					$avatar = Title::newFromText( $avatar );
-					if ( is_null( $avatar ) ) {
+					if ( $avatar === null ) {
 						return null;
 					}
 				}
@@ -994,9 +994,9 @@ EOT;
 	public static function locateUsersWatchingComment( $event ) {
 		$id = $event->getExtraParam( 'parent_id' );
 		$wikipage = WikiPage::newFromId( $id );
-		if ( !is_null( $wikipage ) ) {
+		if ( $wikipage !== null ) {
 			$comment = self::newFromWikiPage( $wikipage );
-			if ( !is_null( $comment ) ) {
+			if ( $comment !== null ) {
 				return $comment->getWatchers();
 			}
 		}

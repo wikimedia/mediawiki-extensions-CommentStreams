@@ -44,11 +44,11 @@ abstract class ApiCSBase extends ApiBase {
 		$wikipage = $this->getTitleOrPageId( $params,
 			$this->edit ? 'frommasterdb' : 'fromdb' );
 		$this->comment = Comment::newFromWikiPage( $wikipage );
-		if ( is_null( $this->comment ) ) {
+		if ( $this->comment === null ) {
 			$this->dieCustomUsageMessage( 'commentstreams-api-error-notacomment' );
 		}
 		$result = $this->executeBody();
-		if ( !is_null( $result ) ) {
+		if ( $result !== null ) {
 			$this->getResult()->addValue( null, $this->getModuleName(), $result );
 		}
 	}

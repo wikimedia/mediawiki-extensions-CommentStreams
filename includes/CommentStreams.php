@@ -39,7 +39,7 @@ class CommentStreams {
 	 * @return CommentStreams a singleton CommentStreams instance
 	 */
 	public static function singleton() {
-		if ( is_null( self::$instance ) ) {
+		if ( self::$instance === null ) {
 			self::$instance = new CommentStreams();
 		}
 		return self::$instance;
@@ -86,7 +86,7 @@ class CommentStreams {
 	 * checks to see if comments should be displayed on this page
 	 *
 	 * @param OutputPage $output the OutputPage object
-	 * @return boolean true if comments should be displayed on this page
+	 * @return bool true if comments should be displayed on this page
 	 */
 	private function checkDisplayComments( $output ) {
 		// don't display comments on this page if they are explicitly disabled
@@ -102,7 +102,7 @@ class CommentStreams {
 		// if $wgCommentStreamsAllowedNamespaces is not set, display comments
 		// in all content namespaces
 		$csAllowedNamespaces = $GLOBALS['wgCommentStreamsAllowedNamespaces'];
-		if ( is_null( $csAllowedNamespaces ) ) {
+		if ( $csAllowedNamespaces === null ) {
 			$csAllowedNamespaces = $GLOBALS['wgContentNamespaces'];
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
 			$csAllowedNamespaces = [ $csAllowedNamespaces ];
@@ -246,14 +246,15 @@ class CommentStreams {
 	 * return all discussions (top level comments) in an array of comments
 	 *
 	 * @param array $allComments an array of all comments on a page
-	 * @param boolean $newestOnTop true if array should be sorted from newest to
+	 * @param bool $newestOnTop true if array should be sorted from newest to
+	 * @param bool $enableVoting
 	 * @return array an array of all discussions
 	 * oldest
 	 */
 	private function getDiscussions( $allComments, $newestOnTop, $enableVoting ) {
 		$array = array_filter(
 			$allComments, function ( $comment ) {
-				return is_null( $comment->getParentId() );
+				return $comment->getParentId() === null;
 			}
 		);
 		usort( $array, function ( $comment1, $comment2 ) use ( $newestOnTop, $enableVoting ) {

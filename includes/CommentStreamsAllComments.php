@@ -75,11 +75,11 @@ class CommentStreamsAllComments extends SpecialPage {
 			if ( $index < $limit ) {
 				$wikipage = WikiPage::newFromId( $page->page_id );
 				$comment = Comment::newFromWikiPage( $wikipage );
-				if ( !is_null( $comment ) ) {
+				if ( $comment !== null ) {
 					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText();
 					$associatedpageid = $comment->getAssociatedId();
 					$associatedpage = WikiPage::newFromId( $associatedpageid );
-					if ( !is_null( $associatedpage ) ) {
+					if ( $associatedpage !== null ) {
 						$associatedpagename =
 							'[[' . $associatedpage->getTitle()->getPrefixedText() . ']]';
 						$author = $comment->getUser();
@@ -90,7 +90,7 @@ class CommentStreamsAllComments extends SpecialPage {
 							$author = $author->getName();
 						}
 						$modificationdate = $comment->getModificationDate();
-						if ( is_null( $modificationdate ) ) {
+						if ( $modificationdate === null ) {
 							$lasteditor = '';
 						} else {
 							$lasteditor =

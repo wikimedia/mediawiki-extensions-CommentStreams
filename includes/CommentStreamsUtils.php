@@ -33,7 +33,7 @@ class CommentStreamsUtils {
 		if ( method_exists( 'MediaWikiServices', 'getLinkRenderer' ) ) {
 			$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
 			return $linkRenderer->makeLink( $title, $display );
-		};
+		}
 		return Linker::link( $title, $display );
 	}
 }

@@ -81,6 +81,6 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	 * @inheritDoc
 	 */
 	public function canRender() {
-		return !is_null( $this->event->getTitle() );
+		return $this->event->getTitle() !== null;
 	}
 }

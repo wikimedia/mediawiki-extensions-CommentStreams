@@ -42,7 +42,7 @@ class ApiCSUnwatch extends ApiCSBase {
 				'commentstreams-api-error-unwatch-notloggedin' );
 		}
 
-		if ( !is_null( $this->comment->getParentId() ) ) {
+		if ( $this->comment->getParentId() !== null ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-unwatch-nounwatchonreply' );
 		}
