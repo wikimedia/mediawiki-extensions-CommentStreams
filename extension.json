@@ -11,7 +11,7 @@
 	"type": "parserhook",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.32.0"
+		"MediaWiki": ">= 1.31.0"
 	},
 	"SpecialPages": {
 		"CommentStreamsAllComments": "CommentStreamsAllComments"

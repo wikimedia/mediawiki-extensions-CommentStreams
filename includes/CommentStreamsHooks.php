@@ -117,7 +117,11 @@ class CommentStreamsHooks {
 					wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
 				$output->addHTML( '<p class="error">' . $message . '</p>' );
 			}
-			$output->addWikiTextAsInterface( $comment->getHTML() );
+			if ( method_exists( 'OutputPage', 'addWikiTextAsInterface' ) ) {
+				$output->addWikiTextAsInterface( $comment->getHTML() );
+			} else {
+				$output->addWikiText( $comment->getHTML() );
+			}
 		}
 		return false;
 	}
