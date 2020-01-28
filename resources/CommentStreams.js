@@ -333,7 +333,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.addClass( 'cs-comment-header-right' );
 
 			if ( commentData.parentid === null && this.enableWatchlist &&
-				!mw.user.isAnon() ) {
+				!this.isLoggedIn ) {
 				rightDiv.append( this.createWatchButton( commentData ) );
 			}
 
@@ -437,7 +437,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					'data-toggle': 'tooltip'
 				} );
 			var editimage = $( '<img>' );
-			if ( mw.user.getName() !== username ) {
+			if ( mw.config.get( 'wgUserName' ) !== username ) {
 				editimage
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-moderator-edit' ),
@@ -471,7 +471,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					'data-toggle': 'tooltip'
 				} );
 			var deleteimage = $( '<img>' );
-			if ( mw.user.getName() !== username ) {
+			if ( mw.config.get( 'wgUserName' ) !== username ) {
 				deleteimage
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-moderator-delete' ),
@@ -553,7 +553,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var self = this;
 
 			var upButton;
-			if ( mw.user.isAnon() ) {
+			if ( this.isLoggedIn ) {
 				upButton = $( '<span>' )
 					.addClass( 'cs-button' );
 			} else {
@@ -581,7 +581,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			upButton.append( upcountspan );
 
 			var downButton;
-			if ( mw.user.isAnon() ) {
+			if ( this.isLoggedIn ) {
 				downButton = $( '<span>' )
 					.addClass( 'cs-button' );
 			} else {
@@ -1392,7 +1392,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		canEdit: function( comment ) {
 			var username = comment.username;
-			if ( !mw.user.isAnon() && ( mw.user.getName() === username ||
+			if ( this.isLoggedIn && ( mw.config.get( 'wgUserName' ) === username ||
 				this.moderatorEdit ) ) {
 				return true;
 			}
@@ -1400,8 +1400,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 		},
 		canDelete: function( comment ) {
 			var username = comment.username;
-			if ( !mw.user.isAnon() &&
-				( mw.user.getName() === username || this.moderatorDelete ) &&
+			if ( this.isLoggedIn && ( mw.config.get( 'wgUserName' ) === username ||
+				this.moderatorDelete ) &&
 				( comment.numreplies === 0 || this.moderatorFastDelete ) ) {
 				return true;
 			}
