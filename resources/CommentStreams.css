@@ -107,7 +107,7 @@
 	padding-left: 5px;
 }
 
-button:hover {
+.cs-button:hover {
 	background-color: #8eddf5;
 }
 
