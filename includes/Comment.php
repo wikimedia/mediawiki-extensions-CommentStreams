@@ -21,6 +21,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+use MediaWiki\MediaWikiServices;
+
 class Comment {
 
 	// wiki page object for this comment wiki page
@@ -287,7 +289,13 @@ class Comment {
 		if ( $this->html === null ) {
 			$this->getWikiText();
 			if ( $this->wikitext !== null ) {
-				$parser = new Parser;
+				if ( class_exists( \ParserFactory::class ) ) {
+					// @requires MediaWiki >= 1.32.0
+					$parser = MediaWikiServices::getInstance()->getParserFactory()->create();
+				} else {
+					$parser = new Parser();
+				}
+
 				$this->html = $parser->parse( $this->wikitext,
 					$this->wikipage->getTitle(), new ParserOptions )->getText();
 			}
