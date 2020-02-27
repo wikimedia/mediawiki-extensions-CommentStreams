@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"हिमाल सुबेदी"
+		]
+	},
+	"commentstreams-author-anonymous": "अज्ञात",
+	"commentstreams-api-error-edit-notloggedin": "तपाई सम्पादन गर्न प्रवेश हुनुपर्दछ।",
+	"commentstreams-api-error-edit-permissions": "प्रयोगकर्तालाई टिप्पणी सम्पादन गर्न अनुमति छैन।",
+	"commentstreams-api-error-delete-notloggedin": "तपाई मेटाउन गर्न प्रवेश हुनुपर्दछ।",
+	"commentstreams-buttontext-add": "टिप्पणी थप्नुहाेस्",
+	"commentstreams-buttontext-reply": "जवाफ दिनुहोस्",
+	"commentstreams-buttontooltip-add": "टिप्पणी थप्नुहाेस्",
+	"commentstreams-buttontooltip-reply": "जवाफ दिनुहोस्",
+	"commentstreams-buttontooltip-edit": "सम्पादन",
+	"commentstreams-buttontooltip-delete": "मेटाउनु",
+	"commentstreams-buttontooltip-permalink": "स्थायी सूत्र",
+	"commentstreams-buttontooltip-collapse": "खुम्च्याउनुहाेस्",
+	"commentstreams-buttontooltip-expand": "फैलाउनुहोस्",
+	"commentstreams-buttontooltip-watch": "अवलोकन",
+	"commentstreams-buttontooltip-submit": "पेश गर्नुहोस्",
+	"commentstreams-buttontooltip-cancel": "रद्द गर्नुहोस्",
+	"commentstreams-dialog-buttontext-ok": "ठीक",
+	"commentstreams-dialog-buttontext-cancel": "रद्द गर्नुहोस्",
+	"commentstreams-dialog-buttontext-yes": "हो",
+	"commentstreams-dialog-buttontext-no": "होइन",
+	"commentstreams-datetext-postedon": "प्रेषित मिति",
+	"commentstreams-datetext-lasteditedon": "अन्तिम पटक सम्पादन",
+	"commentstreams-datetext-moderated": "सामान्य",
+	"commentstreams-allcomments-label-author": "लेखक",
+	"commentstreams-allcomments-label-created": "सृजना गरिएको",
+	"commentstreams-allcomments-label-lasteditor": "अन्तिम सम्पादक",
+	"commentstreams-allcomments-label-lastedited": "अन्तिम पटक सम्पादन",
+	"commentstreams-allcomments-button-next": "अर्को",
+	"commentstreams-allcomments-button-previous": "अघिल्लो"
+}
