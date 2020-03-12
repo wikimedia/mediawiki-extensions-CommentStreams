@@ -326,9 +326,21 @@ class CommentStreamsHooks {
 	}
 
 	/**
+	 * Implements SMW::Settings::BeforeInitializationComplete callback.
+	 * See https://github.com/SemanticMediaWiki/SemanticMediaWiki/blob/master/docs/technical/hooks/hook.settings.beforeinitializationcomplete.md
+	 * Defines CommentStreams namespace constants.
+	 *
+	 * @param array &$configuration An array of the configuration options
+	 */
+	public static function onSMWInitialization( array &$configuration ) {
+		$namespace = $GLOBALS['wgCommentStreamsNamespaceIndex'];
+		$configuration['smwgNamespacesWithSemanticLinks'][$namespace] = true;
+	}
+
+	/**
 	 * Implements extension registration callback.
 	 * See https://www.mediawiki.org/wiki/Manual:Extension_registration#Customizing_registration
-	 * Defines CommentStreams namespace constants.
+	 * Sets configuration constants.
 	 *
 	 */
 	public static function onRegistration() {
@@ -336,7 +348,6 @@ class CommentStreamsHooks {
 		define( 'NS_COMMENTSTREAMS_TALK',
 			$GLOBALS['wgCommentStreamsNamespaceIndex'] + 1 );
 		$GLOBALS['wgNamespacesToBeSearchedDefault'][NS_COMMENTSTREAMS] = true;
-		$GLOBALS['smwgNamespacesWithSemanticLinks'][NS_COMMENTSTREAMS] = true;
 		$found = false;
 		foreach ( $GLOBALS['wgGroupPermissions'] as $groupperms ) {
 			if ( isset( $groupperms['cs-comment'] ) ) {

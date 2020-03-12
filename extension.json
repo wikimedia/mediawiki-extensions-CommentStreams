@@ -152,7 +152,8 @@
 		"ShowSearchHitTitle": "CommentStreamsHooks::showSearchHitTitle",
 		"smwInitProperties": "CommentStreamsHooks::initProperties",
 		"SMWStore::updateDataBefore": "CommentStreamsHooks::updateData",
-		"BeforeCreateEchoEvent": "CommentStreamsHooks::onBeforeCreateEchoEvent"
+		"BeforeCreateEchoEvent": "CommentStreamsHooks::onBeforeCreateEchoEvent",
+		"SMW::Settings::BeforeInitializationComplete": "CommentStreamsHooks::onSMWInitialization"
 	},
 	"callback" : "CommentStreamsHooks::onRegistration",
 	"config": {
