@@ -50,10 +50,21 @@ class ApiCSDeleteComment extends ApiCSBase {
 			$action = 'cs-moderator-delete';
 		}
 
-		if ( !$this->comment->getWikiPage()->getTitle()->userCan( $action,
-			$this->getUser() ) ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-delete-permissions' );
+		$title = $this->comment->getWikiPage()->getTitle();
+		if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
+			// MW 1.33+
+			if ( !\MediaWiki\MediaWikiServices::getInstance()
+				->getPermissionManager()
+				->userCan( $action, $this->getUser(), $title )
+			) {
+				$this->dieCustomUsageMessage(
+					'commentstreams-api-error-delete-permissions' );
+			}
+		} else {
+			if ( !$title->userCan( $action, $this->getUser() ) ) {
+				$this->dieCustomUsageMessage(
+					'commentstreams-api-error-delete-permissions' );
+			}
 		}
 
 		$childCount = $this->comment->getNumReplies();

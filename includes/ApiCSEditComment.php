@@ -48,10 +48,22 @@ class ApiCSEditComment extends ApiCSBase {
 		} else {
 			$action = 'cs-moderator-edit';
 		}
-		if ( !$this->comment->getWikiPage()->getTitle()->userCan( $action,
-			$this->getUser() ) ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-edit-permissions' );
+
+		$title = $this->comment->getWikiPage()->getTitle();
+		if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
+			// MW 1.33+
+			if ( !\MediaWiki\MediaWikiServices::getInstance()
+				->getPermissionManager()
+				->userCan( $action, $this->getUser(), $title )
+			) {
+				$this->dieCustomUsageMessage(
+					'commentstreams-api-error-edit-permissions' );
+			}
+		} else {
+			if ( !$title->userCan( $action, $this->getUser() ) ) {
+				$this->dieCustomUsageMessage(
+					'commentstreams-api-error-edit-permissions' );
+			}
 		}
 
 		$comment_title = $this->getMain()->getVal( 'commenttitle' );

@@ -116,9 +116,20 @@ class Comment {
 			$index = wfRandomString();
 			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
 			if ( !$title->isDeletedQuick() && !$title->exists() ) {
-				if ( !$title->userCan( 'cs-comment' ) ) {
-					return null;
+				if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
+					// MW 1.33+
+					if ( !MediaWikiServices::getInstance()
+						->getPermissionManager()
+						->userCan( 'cs-comment', $user, $title )
+					) {
+						return null;
+					}
+				} else {
+					if ( !$title->userCan( 'cs-comment' ) ) {
+						return null;
+					}
 				}
+
 				$wikipage = new WikiPage( $title );
 				$status = $wikipage->doEditContent( $content, '',
 					EDIT_NEW | EDIT_SUPPRESS_RC, false, $user, null );
