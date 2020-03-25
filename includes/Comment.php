@@ -404,8 +404,9 @@ class Comment {
 			if ( $title->getFirstRevision()->getId() === $title->getLatestRevID() ) {
 				return null;
 			}
-			$timestamp = Revision::getTimestampFromId( $title,
-				$title->getLatestRevID() );
+			$timestamp = MediaWikiServices::getInstance()
+				->getRevisionStore()
+				->getTimestampFromId( $title->getLatestRevID() );
 			$this->modification_timestamp = MWTimestamp::getLocalInstance(
 				$timestamp );
 		}
