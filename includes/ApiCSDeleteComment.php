@@ -37,7 +37,8 @@ class ApiCSDeleteComment extends ApiCSBase {
 	 * @return result of API request
 	 */
 	protected function executeBody() {
-		if ( $this->getUser()->isAnon() ) {
+		$user = $this->getUser();
+		if ( $user->isAnon() ) {
 			$this->dieCustomUsageMessage(
 				'commentstreams-api-error-delete-notloggedin' );
 		}
@@ -55,13 +56,13 @@ class ApiCSDeleteComment extends ApiCSBase {
 			// MW 1.33+
 			if ( !\MediaWiki\MediaWikiServices::getInstance()
 				->getPermissionManager()
-				->userCan( $action, $this->getUser(), $title )
+				->userCan( $action, $user, $title )
 			) {
 				$this->dieCustomUsageMessage(
 					'commentstreams-api-error-delete-permissions' );
 			}
 		} else {
-			if ( !$title->userCan( $action, $this->getUser() ) ) {
+			if ( !$title->userCan( $action, $user ) ) {
 				$this->dieCustomUsageMessage(
 					'commentstreams-api-error-delete-permissions' );
 			}
@@ -76,7 +77,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 					'commentstreams-api-error-delete-haschildren' );
 			}
 		} else {
-			$result = $this->comment->delete();
+			$result = $this->comment->delete( $user );
 			if ( $action === 'cs-comment' ) {
 				if ( $this->comment->getParentId() === null ) {
 					$this->logAction( 'comment-delete' );
@@ -114,7 +115,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 				return $result;
 			}
 		}
-		$result = $comment->delete();
+		$result = $comment->delete( $this->getUser() );
 		$title = $comment->getWikiPage()->getTitle();
 		if ( $comment->getParentId() === null ) {
 			$this->logAction( 'comment-moderator-delete', $title );

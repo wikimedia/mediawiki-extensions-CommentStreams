@@ -777,17 +777,28 @@ class Comment {
 	/**
 	 * delete comment from database
 	 *
+	 * @param User $deleter
 	 * @return bool true if successful
 	 */
-	public function delete() {
-		$pageid = $this->getId();
+	public function delete( User $deleter ) {
+		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
+			$status = $this->getWikiPage()->doDeleteArticleReal(
+				'comment deleted',
+				true
+			);
+		} else {
+			$status = $this->getWikiPage()->doDeleteArticleReal(
+				'comment deleted',
+				$deleter,
+				true
+			);
+		}
 
-		$status = $this->getWikiPage()->doDeleteArticleReal( 'comment deleted',
-			true, 0 );
 		if ( !$status->isOK() && !$status->isGood() ) {
 			return false;
 		}
 
+		$pageid = $this->getId();
 		$dbw = wfGetDB( DB_MASTER );
 		$result = $dbw->delete(
 			'cs_comment_data',
