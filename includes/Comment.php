@@ -975,7 +975,13 @@ EOT;
 					return null;
 				}
 				if ( $avatar->isKnown() && $avatar->getNamespace() === NS_FILE ) {
-					$file = wfFindFile( $avatar );
+					if ( method_exists( MediaWikiServices::class, 'getRepoGroup' ) ) {
+						// MediaWiki 1.34+
+						$file = MediaWikiServices::getInstance()->getRepoGroup()
+							->findFile( $avatar );
+					} else {
+						$file = wfFindFile( $avatar );
+					}
 					if ( $file ) {
 						return $file->getFullUrl();
 					}
