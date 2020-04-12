@@ -554,9 +554,6 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			var upButton;
 			if ( this.isLoggedIn ) {
-				upButton = $( '<span>' )
-					.addClass( 'cs-button' );
-			} else {
 				upButton = $( '<button>' )
 					.addClass( 'cs-button' )
 					.addClass( 'cs-vote-button' )
@@ -564,6 +561,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 						self.vote( $( this ), commentData.pageid, true,
 							commentData.created_timestamp );
 					} );
+			} else {
+				upButton = $( '<span>' )
+					.addClass( 'cs-button' );
 			}
 			var upimage = $( '<img>' )
 				.attr( 'title', mw.message( 'commentstreams-buttontooltip-upvote' ) )
@@ -582,9 +582,6 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			var downButton;
 			if ( this.isLoggedIn ) {
-				downButton = $( '<span>' )
-					.addClass( 'cs-button' );
-			} else {
 				downButton = $( '<button>' )
 					.addClass( 'cs-button' )
 					.addClass( 'cs-vote-button' )
@@ -592,6 +589,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 						self.vote( $( this ), commentData.pageid, false,
 							commentData.created_timestamp );
 					} );
+			} else {
+				downButton = $( '<span>' )
+					.addClass( 'cs-button' );
 			}
 			var downimage = $( '<img>' )
 				.attr( 'title', mw.message( 'commentstreams-buttontooltip-downvote' ) )
