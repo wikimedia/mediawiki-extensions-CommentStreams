@@ -4,5 +4,7 @@
 			"Joao Xavier"
 		]
 	},
-	"commentstreams-buttontooltip-cancel": "anular"
+	"commentstreams-buttontooltip-delete": "efacar",
+	"commentstreams-buttontooltip-cancel": "anular",
+	"commentstreams-dialog-buttontext-cancel": "Nuligar"
 }

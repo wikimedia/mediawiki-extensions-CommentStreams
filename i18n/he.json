@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Guycn2"
 		]
 	},
 	"commentstreams-desc": "מתן אפשרות להגיב על דפי ויקי",
 	"commentstreams-error-prohibitedaction": "הפעולה $1 אינה מותרת בדפי תגובות.",
-	"commentstreams-error-comment-on-deleted-page": "הדף שאליו התגובה הזו משויכת נמחק.",
+	"commentstreams-error-comment-on-deleted-page": "הדף שהתגובה הזאת משויכת אליו נמחק.",
 	"commentstreams-author-anonymous": "אנונימי",
 	"apihelp-csQueryComment-description": "החזרת הכותרת, המשתמש, מועד היצירה וטקסט הוויקי של תגובה. יש לציין את מזהה הדף או את כותרתו.",
 	"apihelp-csQueryComment-summary": "החזרת הכותרת, המשתמש, מועד היצירה וטקסט הוויקי של תגובה. יש לציין את מזהה הדף או את כותרתו.",
@@ -97,12 +98,12 @@
 	"commentstreams-buttontooltip-submit": "שליחה",
 	"commentstreams-buttontooltip-cancel": "ביטול",
 	"commentstreams-dialog-delete-message": "האם ברצונך למחוק תגובה זו?",
-	"commentstreams-dialog-anonymous-message": "לא נכנסת לחשבון. שמירת התגובה תגרום לתיעוד כתובת ה־IP שלך, ולא יהיה באפשרותך לערוך או למחוק את התגובה הזו.",
+	"commentstreams-dialog-anonymous-message": "לא נכנסת לחשבון. שמירת התגובה תגרום לתיעוד כתובת ה־IP שלך, ולא יהיה באפשרותך לערוך או למחוק את התגובה הזאת.",
 	"commentstreams-dialog-buttontext-ok": "אישור",
 	"commentstreams-dialog-buttontext-cancel": "ביטול",
 	"commentstreams-dialog-buttontext-yes": "כן",
 	"commentstreams-dialog-buttontext-no": "לא",
-	"commentstreams-urldialog-instructions": "יש להעתיק ולהדביק את כתובת ה־URL שלהלן כדי לשתף קישור קבוע לתגובה זו. ניתן להקיש על Esc כדי לסגור את תיבת הדו־שיח הזו.",
+	"commentstreams-urldialog-instructions": "יש להעתיק ולהדביק את כתובת ה־URL שלהלן כדי לשתף קישור קבוע לתגובה הזאת. ניתן להקיש על Esc כדי לסגור את תיבת הדו־שיח הזאת.",
 	"commentstreams-datetext-postedon": "פורסמה בתאריך",
 	"commentstreams-datetext-lasteditedon": "נערכה לאחרונה בתאריך",
 	"commentstreams-datetext-moderated": "נוהלה",
