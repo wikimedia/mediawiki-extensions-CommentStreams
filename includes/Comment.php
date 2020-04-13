@@ -404,9 +404,15 @@ class Comment {
 			if ( $title->getFirstRevision()->getId() === $title->getLatestRevID() ) {
 				return null;
 			}
-			$timestamp = MediaWikiServices::getInstance()
-				->getRevisionStore()
-				->getTimestampFromId( $title->getLatestRevID() );
+
+			$revStore = MediaWikiServices::getInstance()->getRevisionStore();
+			$latestRev = $title->getLatestRevId();
+			if ( version_compare( MW_VERSION, '1.34', '<' ) ) {
+				$timestamp = $revStore->getTimestampFromId( $title, $latestRev );
+			} else {
+				$timestamp = $revStore->getTimestampFromId( $latestRev );
+			}
+
 			$this->modification_timestamp = MWTimestamp::getLocalInstance(
 				$timestamp );
 		}
