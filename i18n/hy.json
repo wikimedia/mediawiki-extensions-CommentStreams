@@ -4,9 +4,11 @@
 			"Kareyac"
 		]
 	},
+	"commentstreams-author-anonymous": "անանուն",
 	"commentstreams-buttontooltip-edit": "խմբագրել",
 	"commentstreams-buttontooltip-delete": "ջնջել",
 	"commentstreams-buttontooltip-permalink": "մշտական հղում",
+	"commentstreams-buttontooltip-collapse": "ծալել",
 	"commentstreams-buttontooltip-expand": "բացել",
 	"commentstreams-buttontooltip-watch": "հսկել",
 	"commentstreams-buttontooltip-cancel": "չեղարկել",
