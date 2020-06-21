@@ -21,6 +21,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
 class ApiCSQueryComment extends ApiCSBase {
 
 	/**

@@ -22,6 +22,13 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use Html;
+use SpecialPage;
+use Title;
+use WikiPage;
+
 class CommentStreamsAllComments extends SpecialPage {
 
 	public function __construct() {
@@ -94,7 +101,7 @@ class CommentStreamsAllComments extends SpecialPage {
 							$lasteditor = '';
 						} else {
 							$lasteditor =
-								User::newFromId( $wikipage->getRevision()->getUser() );
+								\User::newFromId( $wikipage->getRevision()->getUser() );
 							if ( $lasteditor->isAnon() ) {
 								$lasteditor = '<i>' .
 									wfMessage( 'commentstreams-author-anonymous' ) . '</i>';

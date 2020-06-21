@@ -21,6 +21,12 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use ApiBase;
+use ApiMessage;
+use ManualLogEntry;
+
 abstract class ApiCSBase extends ApiBase {
 
 	private $edit;

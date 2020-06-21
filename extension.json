@@ -14,7 +14,7 @@
 		"MediaWiki": ">= 1.31.0"
 	},
 	"SpecialPages": {
-		"CommentStreamsAllComments": "CommentStreamsAllComments"
+		"CommentStreamsAllComments": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsAllComments"
 	},
 	"MessagesDirs": {
 		"CommentStreams": [
@@ -116,46 +116,33 @@
 		"localBasePath": "resources",
 		"remoteExtPath": "CommentStreams/resources"
 	},
-	"AutoloadClasses": {
-		"CommentStreamsHooks": "includes/CommentStreamsHooks.php",
-		"CommentStreamsUtils": "includes/CommentStreamsUtils.php",
-		"CommentStreams": "includes/CommentStreams.php",
-		"Comment": "includes/Comment.php",
-		"ApiCSBase": "includes/ApiCSBase.php",
-		"ApiCSPostComment": "includes/ApiCSPostComment.php",
-		"ApiCSQueryComment": "includes/ApiCSQueryComment.php",
-		"ApiCSEditComment": "includes/ApiCSEditComment.php",
-		"ApiCSDeleteComment": "includes/ApiCSDeleteComment.php",
-		"ApiCSVote": "includes/ApiCSVote.php",
-		"ApiCSWatch": "includes/ApiCSWatch.php",
-		"ApiCSUnwatch": "includes/ApiCSUnwatch.php",
-		"EchoCSPresentationModel": "includes/EchoCSPresentationModel.php",
-		"CommentStreamsAllComments": "includes/CommentStreamsAllComments.php"
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\CommentStreams\\": "includes/"
 	},
 	"APIModules": {
-		"csPostComment": "ApiCSPostComment",
-		"csQueryComment": "ApiCSQueryComment",
-		"csEditComment": "ApiCSEditComment",
-		"csDeleteComment": "ApiCSDeleteComment",
-		"csVote": "ApiCSVote",
-		"csWatch": "ApiCSWatch",
-		"csUnwatch": "ApiCSUnwatch"
+		"csPostComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
+		"csQueryComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
+		"csEditComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
+		"csDeleteComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
+		"csVote": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
+		"csWatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
+		"csUnwatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch"
 	},
 	"Hooks": {
-		"LoadExtensionSchemaUpdates": "CommentStreamsHooks::addCommentTableToDatabase",
-		"CanonicalNamespaces": "CommentStreamsHooks::addCommentStreamsNamespaces",
-		"MediaWikiPerformAction": "CommentStreamsHooks::onMediaWikiPerformAction",
-		"MovePageIsValidMove": "CommentStreamsHooks::onMovePageIsValidMove",
-		"userCan": "CommentStreamsHooks::userCan",
-		"ParserFirstCallInit": "CommentStreamsHooks::onParserSetup",
-		"BeforePageDisplay": "CommentStreamsHooks::addCommentsAndInitializeJS",
-		"ShowSearchHitTitle": "CommentStreamsHooks::showSearchHitTitle",
-		"smwInitProperties": "CommentStreamsHooks::initProperties",
-		"SMWStore::updateDataBefore": "CommentStreamsHooks::updateData",
-		"BeforeCreateEchoEvent": "CommentStreamsHooks::onBeforeCreateEchoEvent",
-		"SMW::Settings::BeforeInitializationComplete": "CommentStreamsHooks::onSMWInitialization"
+		"LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentTableToDatabase",
+		"CanonicalNamespaces": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentStreamsNamespaces",
+		"MediaWikiPerformAction": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onMediaWikiPerformAction",
+		"MovePageIsValidMove": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onMovePageIsValidMove",
+		"userCan": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::userCan",
+		"ParserFirstCallInit": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onParserSetup",
+		"BeforePageDisplay": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentsAndInitializeJS",
+		"ShowSearchHitTitle": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::showSearchHitTitle",
+		"smwInitProperties": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::initProperties",
+		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::updateData",
+		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onBeforeCreateEchoEvent",
+		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onSMWInitialization"
 	},
-	"callback" : "CommentStreamsHooks::onRegistration",
+	"callback" : "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onRegistration",
 	"config": {
 		"CommentStreamsNamespaceIndex": 844,
 		"CommentStreamsAllowedNamespaces" : null,

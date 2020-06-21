@@ -21,6 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use ApiBase;
+
 class ApiCSVote extends ApiCSBase {
 
 	/**

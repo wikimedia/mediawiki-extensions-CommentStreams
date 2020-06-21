@@ -21,7 +21,19 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use Html;
 use MediaWiki\MediaWikiServices;
+use Parser;
+use ParserOptions;
+use SMWDataItem;
+use SMWUpdateJob;
+use Title;
+use User;
+use wAvatar;
+use WikiPage;
+use WikitextContent;
 
 class Comment {
 
@@ -173,7 +185,7 @@ class Comment {
 
 		if ( defined( 'SMW_VERSION' ) ) {
 			$job = new SMWUpdateJob( $title, [] );
-			JobQueueGroup::singleton()->push( $job );
+			\JobQueueGroup::singleton()->push( $job );
 		}
 
 		return $comment;
@@ -285,8 +297,8 @@ class Comment {
 	 */
 	public function getWikiText() {
 		if ( $this->wikitext === null ) {
-			$wikitext = ContentHandler::getContentText( $this->wikipage->getContent(
-				Revision::RAW ) );
+			$wikitext = \ContentHandler::getContentText( $this->wikipage->getContent(
+				\Revision::RAW ) );
 			$wikitext = $this->removeAnnotations( $wikitext );
 			$this->wikitext = $wikitext;
 		}
@@ -413,7 +425,7 @@ class Comment {
 				$timestamp = $revStore->getTimestampFromId( $latestRev );
 			}
 
-			$this->modification_timestamp = MWTimestamp::getLocalInstance(
+			$this->modification_timestamp = \MWTimestamp::getLocalInstance(
 				$timestamp );
 		}
 		return $this->modification_timestamp;
@@ -940,7 +952,7 @@ EOT;
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
 			if ( class_exists( 'PageProps' ) ) {
-				$values = PageProps::getInstance()->getProperties( $userpage,
+				$values = \PageProps::getInstance()->getProperties( $userpage,
 					'displaytitle' );
 				if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
 					$displayname = $values[$userpage->getArticleID()];
@@ -1009,9 +1021,9 @@ EOT;
 			$userpage = $user->getUserPage();
 			if ( $userpage->exists() ) {
 				$store = \SMW\StoreFactory::getStore();
-				$subject = SMWDIWikiPage::newFromTitle( $userpage );
+				$subject = \SMWDIWikiPage::newFromTitle( $userpage );
 				$data = $store->getSemanticData( $subject );
-				$property = SMWDIProperty::newFromUserLabel( $propertyName );
+				$property = \SMWDIProperty::newFromUserLabel( $propertyName );
 				$values = $data->getPropertyValues( $property );
 				if ( count( $values ) > 0 ) {
 					// this property should only have one value so pick the first one

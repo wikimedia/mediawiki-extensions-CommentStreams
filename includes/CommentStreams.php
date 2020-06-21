@@ -21,6 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use ExtensionRegistry;
+use MWNamespace;
+
 class CommentStreams {
 
 	// CommentStreams singleton instance
@@ -95,7 +100,7 @@ class CommentStreams {
 		}
 
 		// don't display comments on any page action other than view action
-		if ( Action::getActionName( $output->getContext() ) !== "view" ) {
+		if ( \Action::getActionName( $output->getContext() ) !== "view" ) {
 			return false;
 		}
 

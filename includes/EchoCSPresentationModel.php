@@ -21,6 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use EchoEventPresentationModel;
+
 class EchoCSPresentationModel extends EchoEventPresentationModel {
 
 	/**

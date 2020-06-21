@@ -19,7 +19,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use Linker;
 use MediaWiki\MediaWikiServices;
+use Title;
 
 class CommentStreamsUtils {
 

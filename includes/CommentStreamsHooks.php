@@ -21,6 +21,21 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use Article;
+use DatabaseUpdater;
+use MediaWiki;
+use OutputPage;
+use Parser;
+use PPFrame;
+use Skin;
+use SMW\DIWikiPage;
+use Title;
+use User;
+use WebRequest;
+use WikiPage;
+
 class CommentStreamsHooks {
 
 	/**
@@ -101,7 +116,7 @@ class CommentStreamsHooks {
 			if ( $associatedTitle !== null ) {
 				$values = [];
 				if ( class_exists( 'PageProps' ) ) {
-					$values = PageProps::getInstance()->getProperties( $associatedTitle,
+					$values = \PageProps::getInstance()->getProperties( $associatedTitle,
 						'displaytitle' );
 				}
 				if ( array_key_exists( $comment->getAssociatedId(), $values ) ) {
@@ -217,11 +232,11 @@ class CommentStreamsHooks {
 	 */
 	public static function onParserSetup( Parser $parser ) {
 		$parser->setHook( 'comment-streams',
-			'CommentStreamsHooks::enableCommentStreams' );
+			'MediaWiki\Extension\CommentStreams\CommentStreamsHooks::enableCommentStreams' );
 		$parser->setHook( 'no-comment-streams',
-			'CommentStreamsHooks::disableCommentStreams' );
+			'MediaWiki\Extension\CommentStreams\CommentStreamsHooks::disableCommentStreams' );
 		$parser->setHook( 'comment-streams-initially-collapsed',
-			'CommentStreamsHooks::initiallyCollapseCommentStreams' );
+			'MediaWiki\Extension\CommentStreams\CommentStreamsHooks::initiallyCollapseCommentStreams' );
 		return true;
 	}
 
@@ -423,7 +438,7 @@ class CommentStreamsHooks {
 				if ( $assoc_wikipage !== null ) {
 					$propertyDI = new SMW\DIProperty( '___CS_ASSOCPG' );
 					$dataItem =
-						SMW\DIWikiPage::newFromTitle( $assoc_wikipage->getTitle() );
+						DIWikiPage::newFromTitle( $assoc_wikipage->getTitle() );
 					$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 				}
 			}
@@ -434,7 +449,7 @@ class CommentStreamsHooks {
 				if ( $parent_wikipage !== null ) {
 					$propertyDI = new SMW\DIProperty( '___CS_REPLYTO' );
 					$dataItem =
-						SMW\DIWikiPage::newFromTitle( $parent_wikipage->getTitle() );
+						DIWikiPage::newFromTitle( $parent_wikipage->getTitle() );
 					$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 				}
 			}

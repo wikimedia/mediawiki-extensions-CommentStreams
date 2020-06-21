@@ -21,6 +21,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace MediaWiki\Extension\CommentStreams;
+
+use ApiBase;
+use ApiMessage;
+use EchoEvent;
+use ExtensionRegistry;
+use ManualLogEntry;
+use WikiPage;
+
 class ApiCSPostComment extends ApiBase {
 
 	/**
@@ -163,7 +172,7 @@ class ApiCSPostComment extends ApiBase {
 			$associated_page->getTitle()->getPrefixedText();
 		if ( class_exists( 'PageProps' ) ) {
 			$associated_title = $associated_page->getTitle();
-			$values = PageProps::getInstance()->getProperties( $associated_title,
+			$values = \PageProps::getInstance()->getProperties( $associated_title,
 				'displaytitle' );
 			if ( array_key_exists( $associated_title->getArticleID(), $values ) ) {
 				$associated_page_display_title =
