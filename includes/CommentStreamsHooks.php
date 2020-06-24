@@ -33,6 +33,7 @@ use SearchResult;
 use Skin;
 use SMW\DIWikiPage;
 use SpecialSearch;
+use Status;
 use Title;
 use User;
 use WebRequest;
