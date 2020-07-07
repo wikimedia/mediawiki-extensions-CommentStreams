@@ -25,6 +25,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use Html;
 use MediaWiki\MediaWikiServices;
+use MWTimestamp;
 use Parser;
 use ParserOptions;
 use SMWDataItem;
@@ -425,7 +426,7 @@ class Comment {
 				$timestamp = $revStore->getTimestampFromId( $latestRev );
 			}
 
-			$this->modification_timestamp = \MWTimestamp::getLocalInstance(
+			$this->modification_timestamp = MWTimestamp::getLocalInstance(
 				$timestamp );
 		}
 		return $this->modification_timestamp;
