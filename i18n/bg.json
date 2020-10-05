@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Kareyac",
 			"StanProg",
 			"Ted Masters",
 			"Vlad5250"
@@ -14,5 +15,6 @@
 	"apihelp-csQueryComment-summary": "Връщане на заглавието, потребителя, времето и датата, и уики текста на коментара. Трябва да се посочи идентификационен номер на страницата или заглавие.",
 	"commentstreams-buttontooltip-delete": "изтриване",
 	"commentstreams-buttontooltip-cancel": "Отказ",
-	"commentstreams-dialog-buttontext-cancel": "Отказ"
+	"commentstreams-dialog-buttontext-cancel": "Отказ",
+	"commentstreams-allcomments-label-author": "Автор"
 }
