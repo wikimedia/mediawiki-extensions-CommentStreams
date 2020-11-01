@@ -51,7 +51,7 @@ var commentstreams_querier = ( function( mw ) {
 					self.reportError( data, reply );
 				} );
 		},
-		postComment: function( commenttitle, wikitext, associatedid, parentid,
+		postComment: function( commenttitle, wikitext, associatedid, parentid, cst_id,
 			reply ) {
 			var self = this;
 			var api = new mw.Api();
@@ -59,6 +59,7 @@ var commentstreams_querier = ( function( mw ) {
 				action: 'csPostComment',
 				wikitext: wikitext,
 				associatedid: associatedid,
+				cst_id: cst_id,
 				token: mw.user.tokens.get( 'csrfToken' )
 			};
 			if ( commenttitle !== null ) {
