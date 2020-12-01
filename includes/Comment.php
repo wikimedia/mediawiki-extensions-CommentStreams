@@ -437,7 +437,11 @@ class Comment {
 	public function getModificationTimestamp() {
 		if ( $this->modification_timestamp === null ) {
 			$title = $this->wikipage->getTitle();
-			if ( $title->getFirstRevision()->getId() === $title->getLatestRevID() ) {
+			$firstRevision = $title->getFirstRevision();
+			if ( $firstRevision === null ) {
+				return null;
+			}
+			if ( $firstRevision->getId() === $title->getLatestRevID() ) {
 				return null;
 			}
 
@@ -796,7 +800,7 @@ class Comment {
 		}
 		$this->wikitext = $wikitext;
 		$this->modification_timestamp = null;
-		$this->wikipage = WikiPage::newFromID( $this->wikipage->getId() );
+		$this->wikipage = WikiPage::newFromID( $this->wikipage->getId(), 'fromdbmaster' );
 
 		$dbw = wfGetDB( DB_MASTER );
 		$result = $dbw->update(
@@ -824,6 +828,8 @@ class Comment {
 	 * @return bool true if successful
 	 */
 	public function delete( User $deleter ) {
+		$pageid = $this->getId();
+
 		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
 			$status = $this->getWikiPage()->doDeleteArticleReal(
 				'comment deleted',
@@ -841,7 +847,6 @@ class Comment {
 			return false;
 		}
 
-		$pageid = $this->getId();
 		$dbw = wfGetDB( DB_MASTER );
 		$result = $dbw->delete(
 			'cs_comment_data',
