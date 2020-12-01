@@ -20,43 +20,43 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-var commentstreams_querier = ( function( mw ) {
+var commentstreams_querier = ( function () {
 	return {
-		queryComment: function( pageid, reply ) {
+		queryComment: function ( pageid, reply ) {
 			var self = this;
 			var api = new mw.Api();
 			api.get( {
-					action: 'csQueryComment',
-					pageid: pageid
+				action: 'csquerycomment',
+				pageid: pageid
+			} )
+				.done( function ( data ) {
+					reply( data.csquerycomment );
 				} )
-				.done( function( data ) {
-					reply( data.csQueryComment );
-				} )
-				.fail( function( data ) {
+				.fail( function ( data ) {
 					self.reportError( data, reply );
 				} );
 		},
-		deleteComment: function( pageid, reply ) {
+		deleteComment: function ( pageid, reply ) {
 			var self = this;
 			var api = new mw.Api();
 			api.post( {
-					action: 'csDeleteComment',
-					pageid: pageid,
-					token: mw.user.tokens.get( 'csrfToken' )
-				} )
-				.done( function( data ) {
+				action: 'csdeletecomment',
+				pageid: pageid,
+				token: mw.user.tokens.get( 'csrfToken' )
+			} )
+				.done( function ( data ) {
 					reply( data );
 				} )
-				.fail( function( data ) {
+				.fail( function ( data ) {
 					self.reportError( data, reply );
 				} );
 		},
-		postComment: function( commenttitle, wikitext, associatedid, parentid, cst_id,
+		postComment: function ( commenttitle, wikitext, associatedid, parentid, cst_id,
 			reply ) {
 			var self = this;
 			var api = new mw.Api();
 			var data = {
-				action: 'csPostComment',
+				action: 'cspostcomment',
 				wikitext: wikitext,
 				associatedid: associatedid,
 				cst_id: cst_id,
@@ -69,83 +69,83 @@ var commentstreams_querier = ( function( mw ) {
 				data.parentid = parentid;
 			}
 			api.post(
-					data
-				)
-				.done( function( data ) {
-					reply( data.csPostComment );
+				data
+			)
+				.done( function ( postData ) {
+					reply( postData.cspostcomment );
 				} )
-				.fail( function( data ) {
-					self.reportError( data, reply );
+				.fail( function ( postData ) {
+					self.reportError( postData, reply );
 				} );
 		},
-		editComment: function( commenttitle, wikitext, pageid, reply ) {
+		editComment: function ( commenttitle, wikitext, pageid, reply ) {
 			var self = this;
 			var api = new mw.Api();
 			api.post( {
-					action: 'csEditComment',
-					pageid: pageid,
-					commenttitle: commenttitle,
-					wikitext: wikitext,
-					token: mw.user.tokens.get( 'csrfToken' )
+				action: 'cseditcomment',
+				pageid: pageid,
+				commenttitle: commenttitle,
+				wikitext: wikitext,
+				token: mw.user.tokens.get( 'csrfToken' )
+			} )
+				.done( function ( data ) {
+					reply( data.cseditcomment );
 				} )
-				.done( function( data ) {
-					reply( data.csEditComment );
-				} )
-				.fail( function( data ) {
+				.fail( function ( data ) {
 					self.reportError( data, reply );
 				} );
 		},
-		vote: function( pageid, vote, reply ) {
+		vote: function ( pageid, vote, reply ) {
 			var self = this;
 			var api = new mw.Api();
 			api.post( {
-					action: 'csVote',
-					pageid: pageid,
-					vote: vote,
-					token: mw.user.tokens.get( 'csrfToken' )
+				action: 'csvote',
+				pageid: pageid,
+				vote: vote,
+				token: mw.user.tokens.get( 'csrfToken' )
+			} )
+				.done( function ( data ) {
+					reply( data.csvote );
 				} )
-				.done( function( data ) {
-					reply( data.csVote );
-				} )
-				.fail( function( data ) {
+				.fail( function ( data ) {
 					self.reportError( data, reply );
 				} );
 		},
-		watch: function( pageid, action, reply ) {
+		watch: function ( pageid, action, reply ) {
 			var self = this;
 			var api = new mw.Api();
 			api.post( {
-					action: action ? 'csWatch' : 'csUnwatch',
-					pageid: pageid,
-					token: mw.user.tokens.get( 'csrfToken' )
-				} )
-				.done( function( data ) {
+				action: action ? 'cswatch' : 'csunwatch',
+				pageid: pageid,
+				token: mw.user.tokens.get( 'csrfToken' )
+			} )
+				.done( function ( data ) {
 					if ( action ) {
-						reply( data.csWatch );
+						reply( data.cswatch );
 					} else {
-						reply( data.csUnwatch );
+						reply( data.csunwatch );
 					}
 				} )
-				.fail( function( data ) {
+				.fail( function ( data ) {
 					self.reportError( data, reply );
 				} );
 		},
-		reportError: function( data, reply ) {
+		reportError: function ( data, reply ) {
 			if ( data === 'nosuchpageid' ) {
 				reply( {
-					'error': 'commentstreams-api-error-commentnotfound'
+					error: 'commentstreams-api-error-commentnotfound'
 				} );
 			} else if ( data === 'badtoken' ) {
 				reply( {
-					'error': 'commentstreams-api-error-notloggedin'
+					error: 'commentstreams-api-error-notloggedin'
 				} );
 			} else {
 				reply( {
-					'error': data
+					error: data
 				} );
 			}
 		}
 	};
-}( mediaWiki ) );
+}() );
 
 window.CommentStreamsQuerier = commentstreams_querier;

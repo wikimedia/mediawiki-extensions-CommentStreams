@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2016 The MITRE Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -20,7 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-var commentstreams_controller = ( function( mw, $ ) {
+var commentstreams_controller = ( function () {
 	'use strict';
 
 	return {
@@ -58,9 +58,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 			top: '50%', // Top position relative to parent
 			left: '50%' // Left position relative to parent
 		},
-		initialize: function() {
-			var self = this;
-			this.baseUrl = window.location.href.split( /[?#]/ )[0];
+		initialize: function () {
+			this.baseUrl = window.location.href.split( /[?#]/ )[ 0 ];
 			this.imagepath = mw.config.get( 'wgExtensionAssetsPath' ) +
 				'/CommentStreams/images/';
 			if ( window.location.hash ) {
@@ -92,35 +91,35 @@ var commentstreams_controller = ( function( mw, $ ) {
 				this.scrollToAnchor( this.targetComment );
 			}
 		},
-		scrollToAnchor: function( id ){
+		scrollToAnchor: function ( id ) {
 			var element = $( '#' + id );
 			if ( element.length ) {
-				$( 'html,body' ).animate( {scrollTop: element.offset().top},'slow');
+				$( 'html,body' ).animate( { scrollTop: element.offset().top }, 'slow' );
 			}
 		},
-		setupDivs: function() {
+		setupDivs: function () {
 			var self = this;
 
-			if ( self.areNamespaceEnabled && $( '#cs-comments.cs-comments' ).length == 0 ) {
+			if ( self.areNamespaceEnabled && $( '#cs-comments.cs-comments' ).length === 0 ) {
 				var mainDiv = $( '<div>' ).attr( 'class', 'cs-comments' ).attr( 'id', 'cs-comments' );
 				mainDiv.insertAfter( '#catlinks' );
 			}
-			$( '.cs-comments' ).each( function() {
-				var mainDiv = $( this );
+			$( '.cs-comments' ).each( function () {
+				var commentDiv = $( this );
 
-				var headerDiv = $( '<div>' ).attr( 'class', 'cs-header');
+				var headerDiv = $( '<div>' ).attr( 'class', 'cs-header' );
 				// For backwards compatibility. Please remove in ver 6.0
-				if ( mainDiv.attr( "id" ) == "cs-comments" ) {
-					headerDiv.attr( "id", "cs-header" );
+				if ( commentDiv.attr( 'id' ) === 'cs-comments' ) {
+					headerDiv.attr( 'id', 'cs-header' );
 				}
-				mainDiv.append( headerDiv );
+				commentDiv.append( headerDiv );
 
-				var footerDiv = $( '<div>' ).attr( 'class', 'cs-footer');
+				var footerDiv = $( '<div>' ).attr( 'class', 'cs-footer' );
 				// For backwards compatibility. Please remove in ver 6.0
-				if ( mainDiv.attr( "id" ) == "cs-comments" ) {
-					footerDiv.attr( "id", "cs-footer" );
+				if ( commentDiv.attr( 'id' ) === 'cs-comments' ) {
+					footerDiv.attr( 'id', 'cs-footer' );
 				}
-				mainDiv.append( footerDiv );
+				commentDiv.append( footerDiv );
 
 				if ( self.canComment ) {
 					var addButton = $( '<button>' )
@@ -132,8 +131,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 						} )
 						.addClass( 'cs-button' );
 					// For backwards compatibility. Please remove in ver 6.0
-					if ( mainDiv.attr( "id" ) == "cs-comments" ) {
-						addButton.attr( "id", "cs-add-button" );
+					if ( commentDiv.attr( 'id' ) === 'cs-comments' ) {
+						addButton.attr( 'id', 'cs-add-button' );
 					}
 					var addImage = $( '<img>' )
 						.attr( {
@@ -144,7 +143,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					if ( self.showLabels ) {
 						var addLabel = $( '<span>' )
 							.text( mw.message( 'commentstreams-buttontext-add' ) )
-							.addClass( 'cs-comment-button-label' )
+							.addClass( 'cs-comment-button-label' );
 						addButton.append( addLabel );
 					}
 
@@ -154,20 +153,20 @@ var commentstreams_controller = ( function( mw, $ ) {
 						footerDiv.append( addButton );
 					}
 
-					addButton.click( function() {
+					addButton.click( function () {
 						self.showNewCommentStreamBox( this );
 					} );
 				}
-			});
+			} );
 		},
-		addInitialComments: function() {
+		addInitialComments: function () {
 			var self = this;
 			var parentIndex;
 			for ( parentIndex in this.comments ) {
 				var parentComment = this.comments[ parentIndex ];
 				var commenthtml = this.formatComment( parentComment );
 				var location = $( commenthtml )
-					.insertBefore( '#'+ parentComment['cst_id'] +' .cs-footer' );
+					.insertBefore( '#' + parentComment.cst_id + ' .cs-footer' );
 				var childIndex;
 				for ( childIndex in parentComment.children ) {
 					var childComment = parentComment.children[ childIndex ];
@@ -178,13 +177,13 @@ var commentstreams_controller = ( function( mw, $ ) {
 			}
 
 			if ( this.initiallyCollapsed ) {
-				$( '.cs-stream' ).each( function() {
+				$( '.cs-stream' ).each( function () {
 					self.collapseStream( $( this ), $( this )
 						.find( '.cs-toggle-button' ) );
 				} );
 			}
 		},
-		collapseStream: function( stream, button ) {
+		collapseStream: function ( stream, button ) {
 			stream.find( '.cs-reply-comment' ).addClass( 'cs-hidden' );
 			stream.find( '.cs-head-comment .cs-comment-body' ).addClass( 'cs-hidden' );
 			stream.find( '.cs-stream-footer .cs-reply-button' ).addClass( 'cs-hidden' );
@@ -196,7 +195,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					src: this.imagepath + 'expand.png'
 				} );
 		},
-		expandStream: function( stream, button ) {
+		expandStream: function ( stream, button ) {
 			stream.find( '.cs-reply-comment' ).removeClass( 'cs-hidden' );
 			stream.find( '.cs-head-comment .cs-comment-body' ).removeClass( 'cs-hidden' );
 			stream.find( '.cs-stream-footer .cs-reply-button' ).removeClass( 'cs-hidden' );
@@ -208,7 +207,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					src: this.imagepath + 'collapse.png'
 				} );
 		},
-		disableAllButtons: function() {
+		disableAllButtons: function () {
 			$( '.cs-edit-button' ).prop( 'disabled', true );
 			$( '.cs-reply-button' ).prop( 'disabled', true );
 			$( '.cs-add-button' ).prop( 'disabled', true );
@@ -218,7 +217,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			$( '.cs-vote-button' ).prop( 'disabled', true );
 			$( '.cs-watch-button' ).prop( 'disabled', true );
 		},
-		enableAllButtons: function() {
+		enableAllButtons: function () {
 			$( '.cs-edit-button' ).prop( 'disabled', false );
 			$( '.cs-reply-button' ).prop( 'disabled', false );
 			$( '.cs-add-button' ).prop( 'disabled', false );
@@ -228,7 +227,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			$( '.cs-vote-button' ).prop( 'disabled', false );
 			$( '.cs-watch-button' ).prop( 'disabled', false );
 		},
-		formatComment: function( commentData ) {
+		formatComment: function ( commentData ) {
 			var self = this;
 			var comment = this.formatCommentInner( commentData );
 
@@ -262,11 +261,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 					if ( this.showLabels ) {
 						var replyLabel = $( '<span>' )
 							.text( mw.message( 'commentstreams-buttontext-reply' ) )
-							.addClass( 'cs-comment-button-label' )
+							.addClass( 'cs-comment-button-label' );
 						replyButton.append( replyLabel );
 					}
 					streamFooter.append( replyButton );
-					replyButton.click( function() {
+					replyButton.click( function () {
 						var pageId = $( this ).attr( 'data-stream-id' );
 						self.showNewReplyBox( $( this ), pageId );
 					} );
@@ -275,7 +274,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			return comment;
 		},
-		formatCommentInner: function( commentData ) {
+		formatCommentInner: function ( commentData ) {
 			var self = this;
 			var commentHeader = $( '<div>' )
 				.addClass( 'cs-comment-header' );
@@ -334,11 +333,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 			centerDiv.append( divider );
 
 			if ( this.canEdit( commentData ) ) {
-				centerDiv.append( this.createEditButton( commentData.username) );
+				centerDiv.append( this.createEditButton( commentData.username ) );
 			}
 
 			if ( this.canDelete( commentData ) ) {
-				centerDiv.append( this.createDeleteButton( commentData.username) );
+				centerDiv.append( this.createDeleteButton( commentData.username ) );
 			}
 
 			centerDiv.append( this.createPermalinkButton( commentData.pageid ) );
@@ -369,7 +368,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 					} );
 				collapseButton.append( collapseimage );
 				rightDiv.append( collapseButton );
-				collapseButton.click( function() {
+				collapseButton.click( function () {
 					var stream = $( this ).closest( '.cs-stream' );
 					if ( stream.hasClass( 'cs-expanded' ) ) {
 						self.collapseStream( stream, this );
@@ -394,11 +393,14 @@ var commentstreams_controller = ( function( mw, $ ) {
 				commentClass = 'cs-head-comment';
 			}
 			var id = 'cs-comment-' + commentData.pageid;
+			// The following classes are used here:
+			// * cs-reply-comment
+			// * cs-head-comment
 			var comment = $( '<div>' )
 				.addClass( 'cs-comment' )
 				.addClass( commentClass )
 				.attr( {
-					'id': id,
+					id: id,
 					'data-id': commentData.pageid
 				} );
 			if ( this.targetComment === id ) {
@@ -442,7 +444,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			windowManager.openWindow( urlDialog );
 			textInput.select();
 		},
-		createEditButton: function( username ) {
+		createEditButton: function ( username ) {
 			var self = this;
 			var editButton = $( '<button>' )
 				.addClass( 'cs-button' )
@@ -460,7 +462,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 						src: this.imagepath + 'comment_moderator_edit.png'
 					} );
 				editButton
-					.addClass( 'cs-moderator-button' )
+					.addClass( 'cs-moderator-button' );
 			} else {
 				editimage
 					.attr( {
@@ -469,20 +471,20 @@ var commentstreams_controller = ( function( mw, $ ) {
 					} );
 			}
 			editButton.append( editimage );
-			editButton.click( function() {
+			editButton.click( function () {
 				var comment = $( this ).closest( '.cs-comment' );
 				var pageId = $( comment ).attr( 'data-id' );
 				self.editComment( $( comment ), pageId );
 			} );
 			return editButton;
 		},
-		createDeleteButton: function( username ) {
+		createDeleteButton: function ( username ) {
 			var self = this;
 			var deleteButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-delete-button' )
 				.attr( {
-					type:  'button',
+					type: 'button',
 					title: mw.message( 'commentstreams-buttontooltip-delete' ),
 					'data-toggle': 'tooltip'
 				} );
@@ -494,7 +496,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 						src: this.imagepath + 'comment_moderator_delete.png'
 					} );
 				deleteButton
-					.addClass( 'cs-moderator-button' )
+					.addClass( 'cs-moderator-button' );
 			} else {
 				deleteimage
 					.attr( {
@@ -503,14 +505,14 @@ var commentstreams_controller = ( function( mw, $ ) {
 					} );
 			}
 			deleteButton.append( deleteimage );
-			deleteButton.click( function() {
+			deleteButton.click( function () {
 				var comment = $( this ).closest( '.cs-comment' );
 				var pageId = $( comment ).attr( 'data-id' );
 				self.deleteComment( $( comment ), pageId );
 			} );
 			return deleteButton;
 		},
-		createPermalinkButton: function( pageid ) {
+		createPermalinkButton: function ( pageid ) {
 			var self = this;
 			var id = 'cs-comment-' + pageid;
 			var permalinkButton = $( '<button>' )
@@ -520,10 +522,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 					title: mw.message( 'commentstreams-buttontooltip-permalink' ),
 					'data-toggle': 'tooltip'
 				} )
-				.click( function() {
+				.on( 'click', function () {
 					$( '.cs-target-comment' )
 						.removeClass( 'cs-target-comment' );
-					self.scrollToAnchor( id )
+					self.scrollToAnchor( id );
 					var comment = $( this ).closest( '.cs-comment' );
 					comment
 						.addClass( 'cs-target-comment' );
@@ -538,12 +540,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 			permalinkButton.append( permalinkimage );
 			return permalinkButton;
 		},
-		createWatchButton: function( commentData ) {
+		createWatchButton: function ( commentData ) {
 			var self = this;
 			var watchButton = $( '<button>' )
 				.addClass( 'cs-button' )
 				.addClass( 'cs-watch-button' )
-				.click( function() {
+				.on( 'click', function () {
 					self.watch( $( this ), commentData.pageid );
 				} );
 			var watchimage = $( '<img>' )
@@ -560,12 +562,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 					.attr( {
 						title: mw.message( 'commentstreams-buttontooltip-watch' ),
 						src: this.imagepath + 'notwatching.png'
-					} )
+					} );
 			}
 			watchButton.append( watchimage );
 			return watchButton;
 		},
-		createVotingButtons: function( commentData ) {
+		createVotingButtons: function ( commentData ) {
 			var self = this;
 
 			var upButton;
@@ -573,7 +575,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				upButton = $( '<button>' )
 					.addClass( 'cs-button' )
 					.addClass( 'cs-vote-button' )
-					.click( function() {
+					.on( 'click', function () {
 						self.vote( $( this ), commentData.pageid, true,
 							commentData.created_timestamp );
 					} );
@@ -601,7 +603,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				downButton = $( '<button>' )
 					.addClass( 'cs-button' )
 					.addClass( 'cs-vote-button' )
-					.click( function() {
+					.on( 'click', function () {
 						self.vote( $( this ), commentData.pageid, false,
 							commentData.created_timestamp );
 					} );
@@ -630,7 +632,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			votingSpan.append( downButton );
 			return votingSpan;
 		},
-		vote: function( button, pageid, up, created_timestamp ) {
+		vote: function ( button, pageid, up, created_timestamp ) {
 
 			var self = this;
 			var votespan = button.closest( '.cs-voting-span' );
@@ -642,30 +644,17 @@ var commentstreams_controller = ( function( mw, $ ) {
 			var downimage = votespan.find( '.cs-vote-downimage' );
 
 			var newvote;
-			var oldvote;
 			if ( up ) {
 				if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
 					newvote = 0;
-					oldvote = 1;
 				} else {
 					newvote = 1;
-					if ( downimage.hasClass( 'cs-vote-enabled' ) ) {
-						oldvote = -1;
-					} else {
-						oldvote = 0;
-					}
 				}
 			} else {
 				if ( downimage.hasClass( 'cs-vote-enabled' ) ) {
 					newvote = 0;
-					oldvote = -1;
 				} else {
 					newvote = -1;
-					if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
-						oldvote = 1;
-					} else {
-						oldvote = 0;
-					}
 				}
 			}
 
@@ -673,7 +662,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			this.disableAllButtons();
 			new Spinner( self.spinnerOptions )
 				.spin( document.getElementById( comment.attr( 'id' ) ) );
-			CommentStreamsQuerier.vote( pageid, newvote, function( result ) {
+			CommentStreamsQuerier.vote( pageid, newvote, function ( result ) {
 				$( '.spinner' ).remove();
 				if ( result.error === undefined ) {
 					if ( up ) {
@@ -723,15 +712,15 @@ var commentstreams_controller = ( function( mw, $ ) {
 				}
 			} );
 		},
-		watch: function( button, pageid ) {
+		watch: function ( button, pageid ) {
 			var self = this;
-			var image = button.find( '.cs-watch-image');
+			var image = button.find( '.cs-watch-image' );
 			var watchaction = !image.hasClass( 'cs-watch-watching' );
 			var comment = button.closest( '.cs-comment' );
 			this.disableAllButtons();
 			new Spinner( self.spinnerOptions )
 				.spin( document.getElementById( comment.attr( 'id' ) ) );
-			CommentStreamsQuerier.watch( pageid, watchaction, function( result ) {
+			CommentStreamsQuerier.watch( pageid, watchaction, function ( result ) {
 				$( '.spinner' ).remove();
 				if ( result.error === undefined ) {
 					if ( watchaction ) {
@@ -755,18 +744,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 				self.enableAllButtons();
 			} );
 		},
-		adjustCommentOrder: function( stream, votediff, upcount,
+		adjustCommentOrder: function ( stream, votediff, upcount,
 			created_timestamp ) {
 			var nextSiblings = stream.nextAll( '.cs-stream' );
 			var first = true;
 			var index;
 			for ( index = 0; index < nextSiblings.length; index++ ) {
-				var sibling = nextSiblings[index];
+				var nextSibling = nextSiblings[ index ];
 				var nextupcountspan =
-					$( sibling ).find( '.cs-vote-upcount' );
+					$( nextSibling ).find( '.cs-vote-upcount' );
 				var nextupcount = parseInt( nextupcountspan.text() );
 				var nextdowncountspan =
-					$( sibling ).find( '.cs-vote-downcount' );
+					$( nextSibling ).find( '.cs-vote-downcount' );
 				var nextdowncount = parseInt( nextdowncountspan.text() );
 				var nextvotediff = nextupcount - nextdowncount;
 				if ( nextvotediff > votediff ) {
@@ -776,7 +765,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 						// keeping looking
 					} else if ( nextupcount === upcount ) {
 						var nextcreated_timestamp =
-							$( sibling ).attr( 'data-created-timestamp' );
+							$( nextSibling ).attr( 'data-created-timestamp' );
 						if ( this.newestStreamsOnTop ) {
 							if ( nextcreated_timestamp > created_timestamp ) {
 								// keeping looking
@@ -784,7 +773,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 								// check previous siblings
 								break;
 							} else {
-								this.moveComment( stream, true, $( sibling ) );
+								this.moveComment( stream, true, $( nextSibling ) );
 								return;
 							}
 						} else if ( nextcreated_timestamp < created_timestamp ) {
@@ -793,39 +782,39 @@ var commentstreams_controller = ( function( mw, $ ) {
 							// check previous siblings
 							break;
 						} else {
-							this.moveComment( stream, true, $( sibling ) );
+							this.moveComment( stream, true, $( nextSibling ) );
 							return;
 						}
 					} else if ( first ) {
 						// check previous siblings
 						break;
 					} else {
-						this.moveComment( stream, true, $( sibling ) );
+						this.moveComment( stream, true, $( nextSibling ) );
 						return;
 					}
 				} else if ( first ) {
 					// check previous siblings
 					break;
 				} else {
-					this.moveComment( stream, true, $( sibling ) );
+					this.moveComment( stream, true, $( nextSibling ) );
 					return;
 				}
 				first = false;
 			}
 			if ( !first ) {
 				this.moveComment( stream, false,
-					$( nextSiblings[nextSiblings.length - 1] ) );
+					$( nextSiblings[ nextSiblings.length - 1 ] ) );
 				return;
 			}
 			var prevSiblings = stream.prevAll( '.cs-stream' );
 			first = true;
 			for ( index = 0; index < prevSiblings.length; index++ ) {
-				var sibling = prevSiblings[index];
+				var prevSibling = prevSiblings[ index ];
 				var prevupcountspan =
-					$( sibling ).find( '.cs-vote-upcount' );
+					$( prevSibling ).find( '.cs-vote-upcount' );
 				var prevupcount = parseInt( prevupcountspan.text() );
 				var prevdowncountspan =
-					$( sibling ).find( '.cs-vote-downcount' );
+					$( prevSibling ).find( '.cs-vote-downcount' );
 				var prevdowncount = parseInt( prevdowncountspan.text() );
 				var prevvotediff = prevupcount - prevdowncount;
 				if ( prevvotediff < votediff ) {
@@ -835,7 +824,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 						// keeping looking
 					} else if ( prevupcount === upcount ) {
 						var prevcreated_timestamp =
-							$( sibling ).attr( 'data-created-timestamp' );
+							$( prevSibling ).attr( 'data-created-timestamp' );
 						if ( this.newestStreamsOnTop ) {
 							if ( prevcreated_timestamp < created_timestamp ) {
 								// keeping looking
@@ -843,7 +832,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 								// done
 								break;
 							} else {
-								this.moveComment( stream, false, $( sibling ) );
+								this.moveComment( stream, false, $( prevSibling ) );
 								return;
 							}
 						} else if ( prevcreated_timestamp > created_timestamp ) {
@@ -852,36 +841,36 @@ var commentstreams_controller = ( function( mw, $ ) {
 							// done
 							break;
 						} else {
-							this.moveComment( stream, false, $( sibling ) );
+							this.moveComment( stream, false, $( prevSibling ) );
 							return;
 						}
 					} else if ( first ) {
 						// done
 						break;
 					} else {
-						this.moveComment( stream, false, $( sibling ) );
+						this.moveComment( stream, false, $( prevSibling ) );
 						return;
 					}
 				} else if ( first ) {
 					// done
 					break;
 				} else {
-					this.moveComment( stream, false, $( sibling ) );
+					this.moveComment( stream, false, $( prevSibling ) );
 					return;
 				}
 				first = false;
 			}
 			if ( !first ) {
 				this.moveComment( stream, true,
-					$( prevSiblings[prevSiblings.length - 1] ) );
+					$( prevSiblings[ prevSiblings.length - 1 ] ) );
 				return;
 			}
 			// otherwise, the comment was in the correct place already
 			this.enableAllButtons();
 		},
-		moveComment: function( stream, before, location ) {
+		moveComment: function ( stream, before, location ) {
 			var self = this;
-			stream.slideUp( 1000, function() {
+			stream.slideUp( 1000, function () {
 				stream.detach();
 				stream.hide();
 				if ( before ) {
@@ -889,19 +878,19 @@ var commentstreams_controller = ( function( mw, $ ) {
 				} else {
 					stream.insertAfter( location );
 				}
-				stream.slideDown( 1000, function() {
+				stream.slideDown( 1000, function () {
 					self.enableAllButtons();
 					var id = $( this ).find( '.cs-head-comment:first' ).attr( 'id' );
 					self.scrollToAnchor( id );
 				} );
 			} );
 		},
-		createDivider: function() {
+		createDivider: function () {
 			return $( '<span>' )
 				.addClass( 'cs-comment-details' )
 				.text( '|' );
 		},
-		formatEditBox: function( is_stream ) {
+		formatEditBox: function ( is_stream ) {
 			var commentBox = $( '<div>' )
 				.addClass( 'cs-edit-box' )
 				.attr( 'id', 'cs-edit-box' );
@@ -909,11 +898,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 			if ( is_stream ) {
 				var titleField = $( '<input>' )
 					.attr( {
-						'id': 'cs-title-edit-field',
-						'type': 'text',
-						'placeholder': mw.message( 'commentstreams-title-field-placeholder' )
+						id: 'cs-title-edit-field',
+						type: 'text',
+						placeholder: mw.message( 'commentstreams-title-field-placeholder' )
 					} );
-								commentBox.append( titleField );
+				commentBox.append( titleField );
 			} else {
 				commentBox.addClass( 'cs-reply-edit-box' );
 			}
@@ -925,9 +914,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			var bodyField = $( '<textarea>' )
 				.attr( {
-					'id': 'cs-body-edit-field',
-					'rows': 10,
-					'placeholder': mw.message( 'commentstreams-body-field-placeholder' )
+					id: 'cs-body-edit-field',
+					rows: 10,
+					placeholder: mw.message( 'commentstreams-body-field-placeholder' )
 				} );
 			commentBox.append( bodyField );
 
@@ -935,8 +924,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.addClass( 'cs-button' )
 				.addClass( 'cs-submit-button' )
 				.attr( {
-					'id': 'cs-submit-button',
-					'type': 'button'
+					id: 'cs-submit-button',
+					type: 'button'
 				} );
 			var submitimage = $( '<img>' )
 				.attr( {
@@ -951,8 +940,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.addClass( 'cs-button' )
 				.addClass( 'cs-cancel-button' )
 				.attr( {
-					'id': 'cs-cancel-button',
-					'type': 'button'
+					id: 'cs-cancel-button',
+					type: 'button'
 				} );
 			var cancelimage = $( '<img>' )
 				.attr( {
@@ -965,7 +954,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 
 			return commentBox;
 		},
-		showNewCommentStreamBox: function( addButton ) {
+		showNewCommentStreamBox: function ( addButton ) {
 			var self = this;
 			var editBox = this.formatEditBox( true );
 			if ( this.newestStreamsOnTop ) {
@@ -984,10 +973,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var editField = $( '#cs-body-edit-field' );
 				editField.applyVisualEditor();
 			}
-			$( '#cs-submit-button' ).click( function() {
+			$( '#cs-submit-button' ).on( 'click', function () {
 				self.postComment( null, $( addButton ).parents( '.cs-comments' ).attr( 'id' ) );
 			} );
-			$( '#cs-cancel-button' ).click( function() {
+			$( '#cs-cancel-button' ).on( 'click', function () {
 				self.hideEditBox( true );
 			} );
 			this.disableAllButtons();
@@ -996,7 +985,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 				titleField.focus();
 			}
 		},
-		showNewReplyBox: function( element, topCommentId ) {
+		showNewReplyBox: function ( element, topCommentId ) {
 			var self = this;
 			var editBox = this.formatEditBox( false );
 			$( editBox )
@@ -1004,10 +993,10 @@ var commentstreams_controller = ( function( mw, $ ) {
 				.hide()
 				.slideDown();
 
-			$( '#cs-submit-button' ).click( function() {
-					self.postComment( topCommentId );
+			$( '#cs-submit-button' ).on( 'click', function () {
+				self.postComment( topCommentId, '0' );
 			} );
-			$( '#cs-cancel-button' ).click( function() {
+			$( '#cs-cancel-button' ).on( 'click', function () {
 				self.hideEditBox( true );
 			} );
 			this.disableAllButtons();
@@ -1020,10 +1009,9 @@ var commentstreams_controller = ( function( mw, $ ) {
 				}
 			}
 		},
-		hideEditBox: function( animated ) {
-			var self = this;
+		hideEditBox: function ( animated ) {
 			if ( animated ) {
-				$( '#cs-edit-box' ).slideUp( 'normal', function() {
+				$( '#cs-edit-box' ).slideUp( 'normal', function () {
 					$( '#cs-edit-box' ).remove();
 				} );
 			} else {
@@ -1031,7 +1019,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			}
 			this.enableAllButtons();
 		},
-		postComment: function( parentPageId, cst_id = "0" ) {
+		postComment: function ( parentPageId, cst_id ) {
 			var self = this;
 			if ( this.isLoggedIn ) {
 				self.postComment2( parentPageId, cst_id );
@@ -1052,31 +1040,27 @@ var commentstreams_controller = ( function( mw, $ ) {
 						{ label: ok_text, action: 'ok' },
 						{ label: cancel_text, flags: 'primary' }
 					]
-				} ).then( function ( opened ) {
-					opened.then( function ( closing, data ) {
-						if ( data && data.action ) {
-							if ( data.action === 'ok' ) {
-								self.postComment2( parentPageId, cst_id );
-							}
-						}
-					} );
+				} ).closed.then( function ( data ) {
+					if ( data && data.action && data.action === 'ok' ) {
+						self.postComment2( parentPageId, cst_id );
+					}
 				} );
 			}
 		},
-		postComment2: function( parentPageId, cst_id ) {
+		postComment2: function ( parentPageId, cst_id ) {
 			var self = this;
-			if ( $( '#cs-body-edit-field' ).css( 'display' ) == 'none' ) {
+			if ( $( '#cs-body-edit-field' ).css( 'display' ) === 'none' ) {
 				self.postCommentFromVE( parentPageId, cst_id );
 			} else {
 				var commentText = $( '#cs-body-edit-field' ).val();
 				self.realPostComment( parentPageId, cst_id, commentText );
 			}
 		},
-		postCommentFromVE: function( parentPageId, cst_id ) {
+		postCommentFromVE: function ( parentPageId, cst_id ) {
 			var self = this;
 			var editField = $( '#cs-body-edit-field' );
 			var veInstances = editField.getVEInstances();
-			var curVEEditor = veInstances[veInstances.length - 1];
+			var curVEEditor = veInstances[ veInstances.length - 1 ];
 			new mw.Api().post( {
 				action: 'veforall-parsoid-utils',
 				from: 'html',
@@ -1087,18 +1071,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var commentText = data[ 'veforall-parsoid-utils' ].content;
 				self.realPostComment( parentPageId, cst_id, commentText );
 			} )
-			.fail( function ( data ) {
-				self.reportError( 'commentstreams-ve-conversion-error' );
-			} );
+				.fail( function () {
+					self.reportError( 'commentstreams-ve-conversion-error' );
+				} );
 		},
-		realPostComment: function( parentPageId, cst_id, commentText ) {
+		realPostComment: function ( parentPageId, cst_id, commentText ) {
 			var self = this;
 
 			var commentTitle;
 			if ( parentPageId === null ) {
 				var titleField = $( '#cs-title-edit-field' );
 				if ( titleField !== null ) {
-					commentTitle = titleField .val();
+					commentTitle = titleField.val();
 					if ( commentTitle === null || commentTitle.trim() === '' ) {
 						this.reportError( 'commentstreams-validation-error-nocommenttitle' );
 						return;
@@ -1116,57 +1100,57 @@ var commentstreams_controller = ( function( mw, $ ) {
 			$( '#cs-submit-button' ).prop( 'disabled', true );
 			$( '#cs-cancel-button' ).prop( 'disabled', true );
 
-			$( '#cs-edit-box' ).fadeTo( 100, 0.2, function() {
+			$( '#cs-edit-box' ).fadeTo( 100, 0.2, function () {
 				new Spinner( self.spinnerOptions )
 					.spin( document.getElementById( 'cs-edit-box' ) );
 
 				var associatedPageId = mw.config.get( 'wgArticleId' );
 				CommentStreamsQuerier.postComment( commentTitle, commentText,
-					associatedPageId, parentPageId, cst_id, function( result ) {
-					$( '.spinner' ).remove();
-					if ( result.error === undefined ) {
-						var comment = self.formatComment( result );
-						if ( parentPageId ) {
-							if ( !self.moderatorFastDelete ) {
-								var deleteSpan = $( '#cs-edit-box' )
+					associatedPageId, parentPageId, cst_id, function ( result ) {
+						$( '.spinner' ).remove();
+						if ( result.error === undefined ) {
+							var comment = self.formatComment( result );
+							if ( parentPageId ) {
+								if ( !self.moderatorFastDelete ) {
+									var deleteSpan = $( '#cs-edit-box' )
+										.closest( '.cs-stream' )
+										.find( '.cs-head-comment' )
+										.find( '.cs-comment-header' )
+										.find( '.cs-delete-button' );
+									deleteSpan.remove();
+								}
+								var location = $( '#cs-edit-box' )
 									.closest( '.cs-stream' )
-									.find( '.cs-head-comment' )
-									.find( '.cs-comment-header' )
-									.find( '.cs-delete-button' );
-								deleteSpan.remove();
-							}
-							var location = $( '#cs-edit-box' )
-								.closest( '.cs-stream' )
-								.find( '.cs-stream-footer' );
-							self.hideEditBox( false );
-							comment.insertBefore( $( location ) )
-								.hide()
-								.slideDown();
-						} else {
-							self.hideEditBox( false );
-							if ( self.newestStreamsOnTop ) {
-								comment.insertAfter( '#'+ cst_id +' .cs-header' )
+									.find( '.cs-stream-footer' );
+								self.hideEditBox( false );
+								comment.insertBefore( $( location ) )
 									.hide()
 									.slideDown();
 							} else {
-								comment.insertBefore( '#'+ cst_id +' .cs-footer' )
-									.hide()
-									.slideDown();
+								self.hideEditBox( false );
+								if ( self.newestStreamsOnTop ) {
+									comment.insertAfter( '#' + cst_id + ' .cs-header' )
+										.hide()
+										.slideDown();
+								} else {
+									comment.insertBefore( '#' + cst_id + ' .cs-footer' )
+										.hide()
+										.slideDown();
+								}
+								self.adjustCommentOrder( comment, 0, 0,
+									result.created_timestamp );
 							}
-							self.adjustCommentOrder( comment, 0, 0,
-								result.created_timestamp );
+						} else {
+							self.reportError( result.error );
+							$( '#cs-edit-box' ).fadeTo( 0.2, 100, function () {
+								$( '#cs-submit-button' ).prop( 'disabled', false );
+								$( '#cs-cancel-button' ).prop( 'disabled', false );
+							} );
 						}
-					} else {
-						self.reportError( result.error );
-						$( '#cs-edit-box').fadeTo( 0.2, 100, function() {
-							$( '#cs-submit-button' ).prop( 'disabled', false );
-							$( '#cs-cancel-button' ).prop( 'disabled', false );
-						} );
-					}
-				} );
+					} );
 			} );
 		},
-		deleteComment: function( element, pageId ) {
+		deleteComment: function ( element, pageId ) {
 			var self = this;
 			var message_text =
 				mw.message( 'commentstreams-dialog-delete-message' ).text();
@@ -1184,29 +1168,25 @@ var commentstreams_controller = ( function( mw, $ ) {
 					{ label: yes_text, action: 'yes' },
 					{ label: no_text, flags: 'primary' }
 				]
-			} ).then( function ( opened ) {
-				opened.then( function ( closing, data ) {
-					if ( data && data.action ) {
-						if ( data.action === 'yes' ) {
-							self.realDeleteComment( element, pageId );
-						}
-					}
-				} );
+			} ).closed.then( function ( data ) {
+				if ( data && data.action && data.action === 'yes' ) {
+					self.realDeleteComment( element, pageId );
+				}
 			} );
 		},
-		realDeleteComment: function( element, pageId ) {
+		realDeleteComment: function ( element, pageId ) {
 			var self = this;
 			this.disableAllButtons();
-			element.fadeTo( 100, 0.2, function() {
+			element.fadeTo( 100, 0.2, function () {
 				new Spinner( self.spinnerOptions )
 					.spin( document.getElementById( element.attr( 'id' ) ) );
-				CommentStreamsQuerier.deleteComment( pageId, function( result ) {
+				CommentStreamsQuerier.deleteComment( pageId, function ( result ) {
 					$( '.spinner' ).remove();
 					if ( result.error === undefined ||
 						result.error === 'commentstreams-api-error-commentnotfound' ) {
 						if ( element.hasClass( 'cs-head-comment' ) ) {
 							element.closest( '.cs-stream' )
-								.slideUp( 'normal', function() {
+								.slideUp( 'normal', function () {
 									element.closest( '.cs-stream' ).remove();
 									self.enableAllButtons();
 								} );
@@ -1215,17 +1195,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 								.closest( '.cs-stream' )
 								.find( '.cs-head-comment' )
 								.attr( 'data-id' );
-							CommentStreamsQuerier.queryComment( parentId, function( result ) {
-								if ( result.error === undefined && self.canDelete( result ) &&
+							CommentStreamsQuerier.queryComment( parentId, function ( queryResult ) {
+								if ( queryResult.error === undefined &&
+									self.canDelete( queryResult ) &&
 									!self.moderatorFastDelete ) {
-									self.createDeleteButton( result.username )
-										.insertAfter ( element
+									self.createDeleteButton( queryResult.username )
+										.insertAfter( element
 											.closest( '.cs-stream' )
 											.find( '.cs-head-comment' )
 											.find( '.cs-comment-header' )
 											.find( '.cs-edit-button' ) );
 								}
-								element.slideUp( 'normal', function() {
+								element.slideUp( 'normal', function () {
 									element.remove();
 									self.enableAllButtons();
 								} );
@@ -1233,20 +1214,20 @@ var commentstreams_controller = ( function( mw, $ ) {
 						}
 					} else {
 						self.reportError( result.error );
-						element.fadeTo( 0.2, 100, function() {
+						element.fadeTo( 0.2, 100, function () {
 							self.enableAllButtons();
 						} );
 					}
 				} );
 			} );
 		},
-		editComment: function( element, pageId ) {
+		editComment: function ( element, pageId ) {
 			var self = this;
 			this.disableAllButtons();
-			element.fadeTo( 100, 0.2, function() {
+			element.fadeTo( 100, 0.2, function () {
 				new Spinner( self.spinnerOptions )
 					.spin( document.getElementById( element.attr( 'id' ) ) );
-				CommentStreamsQuerier.queryComment( pageId, function( result ) {
+				CommentStreamsQuerier.queryComment( pageId, function ( result ) {
 					$( '.spinner' ).remove();
 
 					if ( result.error === undefined ) {
@@ -1270,17 +1251,17 @@ var commentstreams_controller = ( function( mw, $ ) {
 							editField.applyVisualEditor();
 						}
 
-						$( '#cs-cancel-button' ).click( function() {
-							commentBox.slideUp( 'normal', function() {
-								element.fadeTo( 0.2, 100, function() {
+						$( '#cs-cancel-button' ).on( 'click', function () {
+							commentBox.slideUp( 'normal', function () {
+								element.fadeTo( 0.2, 100, function () {
 									commentBox.remove();
 									self.enableAllButtons();
 								} );
 							} );
 						} );
 
-						$( '#cs-submit-button' ).click( function() {
-							if ( $( '#cs-body-edit-field' ).css( 'display' ) == 'none' ) {
+						$( '#cs-submit-button' ).on( 'click', function () {
+							if ( $( '#cs-body-edit-field' ).css( 'display' ) === 'none' ) {
 								self.editCommentFromVE( element, commentBox, pageId );
 							} else {
 								var commentText = $( '#cs-body-edit-field' ).val();
@@ -1293,12 +1274,12 @@ var commentstreams_controller = ( function( mw, $ ) {
 							.closest( '.cs-stream' )
 							.find( '.cs-head-comment' )
 							.attr( 'data-id' );
-						CommentStreamsQuerier.queryComment( parentId, function( result ) {
-							if ( result.error === undefined &&
-								self.canDelete( result ) &&
+						CommentStreamsQuerier.queryComment( parentId, function ( queryResult ) {
+							if ( queryResult.error === undefined &&
+								self.canDelete( queryResult ) &&
 								!self.moderatorFastDelete ) {
-								self.createDeleteButton( result.username )
-									.insertAfter ( element
+								self.createDeleteButton( queryResult.username )
+									.insertAfter( element
 										.closest( '.cs-stream' )
 										.find( '.cs-head-comment' )
 										.find( '.cs-comment-header' )
@@ -1309,18 +1290,18 @@ var commentstreams_controller = ( function( mw, $ ) {
 						} );
 					} else {
 						self.reportError( result.error );
-						element.fadeTo( 0.2, 100, function() {
+						element.fadeTo( 0.2, 100, function () {
 							self.enableAllButtons();
 						} );
 					}
 				} );
 			} );
 		},
-		editCommentFromVE: function( element, commentBox, pageId ) {
+		editCommentFromVE: function ( element, commentBox, pageId ) {
 			var self = this;
 			var editField = $( '#cs-body-edit-field' );
 			var veInstances = editField.getVEInstances();
-			var curVEEditor = veInstances[veInstances.length - 1];
+			var curVEEditor = veInstances[ veInstances.length - 1 ];
 			new mw.Api().post( {
 				action: 'veforall-parsoid-utils',
 				from: 'html',
@@ -1331,11 +1312,11 @@ var commentstreams_controller = ( function( mw, $ ) {
 				var commentText = data[ 'veforall-parsoid-utils' ].content;
 				self.realEditComment( element, commentBox, pageId, commentText );
 			} )
-			.fail( function ( data ) {
-				self.reportError( 'commentstreams-ve-conversion-error' );
-			} );
+				.fail( function () {
+					self.reportError( 'commentstreams-ve-conversion-error' );
+				} );
 		},
-		realEditComment: function( element, commentBox, pageId, commentText ) {
+		realEditComment: function ( element, commentBox, pageId, commentText ) {
 			var self = this;
 			if ( element.hasClass( 'cs-head-comment' ) ) {
 				var commentTitle = $( '#cs-title-edit-field' ).val();
@@ -1355,58 +1336,58 @@ var commentstreams_controller = ( function( mw, $ ) {
 			$( '#cs-submit-button' ).prop( 'disabled', true );
 			$( '#cs-cancel-button' ).prop( 'disabled', true );
 
-			commentBox.fadeTo( 100, 0.2, function() {
+			commentBox.fadeTo( 100, 0.2, function () {
 				new Spinner( self.spinnerOptions )
 					.spin( document.getElementById( 'cs-edit-box' ) );
 
 				CommentStreamsQuerier.editComment( commentTitle, commentText,
-					pageId, function( result ) {
-					$( '.spinner' ).remove();
-					if ( result.error === undefined ) {
-						var comment = self.formatCommentInner( result );
-						if ( element.closest( '.cs-stream' ).hasClass( 'cs-collapsed' ) ) {
-							comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
-						}
-						commentBox.slideUp( 'normal', function() {
-							comment.insertAfter( commentBox );
-							commentBox.remove();
-							element.remove();
-							self.enableAllButtons();
-						} );
-					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
-						self.reportError( result.error );
-						var parentId = element
-							.closest( '.cs-stream' )
-							.find( '.cs-head-comment' )
-							.attr( 'data-id' );
-						CommentStreamsQuerier.queryComment( parentId, function( result ) {
-							if ( result.error === undefined &&
-								self.canDelete( result ) &&
-								!self.moderatorFastDelete ) {
-								self.createDeleteButton( result.username )
-									.insertAfter ( element
-										.closest( '.cs-stream' )
-										.find( '.cs-head-comment' )
-										.find( '.cs-comment-header' )
-										.find( '.cs-edit-button' ) );
+					pageId, function ( result ) {
+						$( '.spinner' ).remove();
+						if ( result.error === undefined ) {
+							var comment = self.formatCommentInner( result );
+							if ( element.closest( '.cs-stream' ).hasClass( 'cs-collapsed' ) ) {
+								comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
 							}
-							commentBox.slideUp( 'normal', function() {
+							commentBox.slideUp( 'normal', function () {
+								comment.insertAfter( commentBox );
 								commentBox.remove();
 								element.remove();
 								self.enableAllButtons();
 							} );
-						} );
-					} else {
-						self.reportError( result.error );
-						commentBox.fadeTo( 0.2, 100, function() {
-							$( '#cs-submit-button' ).prop( 'disabled', false );
-							$( '#cs-cancel-button' ).prop( 'disabled', false );
-						} );
-					}
-				} );
+						} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
+							self.reportError( result.error );
+							var parentId = element
+								.closest( '.cs-stream' )
+								.find( '.cs-head-comment' )
+								.attr( 'data-id' );
+							CommentStreamsQuerier.queryComment( parentId, function ( queryResult ) {
+								if ( queryResult.error === undefined &&
+								self.canDelete( queryResult ) &&
+								!self.moderatorFastDelete ) {
+									self.createDeleteButton( queryResult.username )
+										.insertAfter( element
+											.closest( '.cs-stream' )
+											.find( '.cs-head-comment' )
+											.find( '.cs-comment-header' )
+											.find( '.cs-edit-button' ) );
+								}
+								commentBox.slideUp( 'normal', function () {
+									commentBox.remove();
+									element.remove();
+									self.enableAllButtons();
+								} );
+							} );
+						} else {
+							self.reportError( result.error );
+							commentBox.fadeTo( 0.2, 100, function () {
+								$( '#cs-submit-button' ).prop( 'disabled', false );
+								$( '#cs-cancel-button' ).prop( 'disabled', false );
+							} );
+						}
+					} );
 			} );
 		},
-		canEdit: function( comment ) {
+		canEdit: function ( comment ) {
 			var username = comment.username;
 			if ( this.isLoggedIn && ( mw.config.get( 'wgUserName' ) === username ||
 				this.moderatorEdit ) ) {
@@ -1414,7 +1395,7 @@ var commentstreams_controller = ( function( mw, $ ) {
 			}
 			return false;
 		},
-		canDelete: function( comment ) {
+		canDelete: function ( comment ) {
 			var username = comment.username;
 			if ( this.isLoggedIn && ( mw.config.get( 'wgUserName' ) === username ||
 				this.moderatorDelete ) &&
@@ -1423,7 +1404,8 @@ var commentstreams_controller = ( function( mw, $ ) {
 			}
 			return false;
 		},
-		reportError: function( message ) {
+		reportError: function ( message ) {
+			/* eslint-disable mediawiki/msg-doc */
 			var message_text = mw.message( message ).text();
 			var ok_text = mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
 			var dialog = new OO.ui.MessageDialog();
@@ -1440,15 +1422,15 @@ var commentstreams_controller = ( function( mw, $ ) {
 			} );
 		}
 	};
-}( mediaWiki, jQuery ) );
+}() );
 
 window.CommentStreamsController = commentstreams_controller;
 
-( function( mw, $ ) {
+( function () {
 	$( document )
-		.ready( function() {
+		.ready( function () {
 			if ( mw.config.exists( 'CommentStreams' ) ) {
 				window.CommentStreamsController.initialize();
 			}
 		} );
-}( mediaWiki, jQuery ) );
+}() );

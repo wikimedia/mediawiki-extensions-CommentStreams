@@ -120,13 +120,13 @@
 		"MediaWiki\\Extension\\CommentStreams\\": "includes/"
 	},
 	"APIModules": {
-		"csPostComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
-		"csQueryComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
-		"csEditComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
-		"csDeleteComment": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
-		"csVote": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
-		"csWatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
-		"csUnwatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch"
+		"cspostcomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
+		"csquerycomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
+		"cseditcomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
+		"csdeletecomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
+		"csvote": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
+		"cswatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
+		"csunwatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch"
 	},
 	"Hooks": {
 		"LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentTableToDatabase",
