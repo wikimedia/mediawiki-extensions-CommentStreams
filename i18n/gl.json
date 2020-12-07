@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"ArenaL5",
 			"Athena in Wonderland",
 			"Elisardojm"
 		]
@@ -22,8 +23,8 @@
 	"commentstreams-api-error-edit": "Erro ó editar o comentario.",
 	"commentstreams-api-error-delete-notloggedin": "Debe estar conectado para borrar.",
 	"commentstreams-api-error-delete": "Erro ó borrar o comentario.",
-	"commentstreams-buttontext-add": "ENGADIR UN COMENTARIO",
-	"commentstreams-buttontext-reply": "RESPONDER",
+	"commentstreams-buttontext-add": "Engadir comentario",
+	"commentstreams-buttontext-reply": "Responder",
 	"commentstreams-buttontooltip-add": "engadir un comentario",
 	"commentstreams-buttontooltip-reply": "responder",
 	"commentstreams-buttontooltip-edit": "editar",
