@@ -178,7 +178,7 @@ class CommentStreams {
 			$GLOBALS['wgCommentStreamsNewestStreamsOnTop'],
 			$GLOBALS['wgCommentStreamsEnableVoting'] );
 		foreach ( $parentComments as $parentComment ) {
-			$parentJSON = $parentComment->getJSON();
+			$parentJSON = $parentComment->getJSON( $output );
 			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
 				$parentJSON['vote'] = $parentComment->getVote( $output->getUser() );
 			}
@@ -188,7 +188,7 @@ class CommentStreams {
 			$childComments = $this->getReplies( $allComments,
 				$parentComment->getId() );
 			foreach ( $childComments as $childComment ) {
-				$childJSON = $childComment->getJSON();
+				$childJSON = $childComment->getJSON( $output );
 				$parentJSON['children'][] = $childJSON;
 			}
 			$commentData[] = $parentJSON;

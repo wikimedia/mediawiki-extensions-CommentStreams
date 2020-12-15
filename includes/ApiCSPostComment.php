@@ -99,7 +99,7 @@ class ApiCSPostComment extends ApiBase {
 			$this->logAction( 'reply-create', $title );
 		}
 
-		$json = $comment->getJSON();
+		$json = $comment->getJSON( $this );
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) &&
 			$comment->getParentId() === null
 		) {

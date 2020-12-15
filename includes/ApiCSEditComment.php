@@ -97,7 +97,7 @@ class ApiCSEditComment extends ApiCSBase {
 			}
 		}
 
-		$json = $this->comment->getJSON();
+		$json = $this->comment->getJSON( $this );
 
 		if ( $this->comment->getParentId() === null ) {
 			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
