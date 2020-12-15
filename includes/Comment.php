@@ -23,34 +23,57 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
+use ContentHandler;
 use Html;
+use IContextSource;
+use IDBAccessObject;
+use JobQueueGroup;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Revision\RevisionStore;
 use MWTimestamp;
+use PageProps;
 use Parser;
+use ParserFactory;
 use ParserOptions;
+use Revision;
 use SMWDataItem;
 use SMWUpdateJob;
 use Title;
 use User;
-use wAvatar;
 use WikiPage;
 use WikitextContent;
 
 class Comment {
 
-	// wiki page object for this comment wiki page
+	/**
+	 * wiki page object for this comment wiki page
+	 * @var WikiPage|null
+	 */
 	private $wikipage = null;
 
-	// data for this comment has been loaded from the database
+	/**
+	 * data for this comment has been loaded from the database
+	 * @var bool
+	 */
 	private $loaded = false;
 
-	// string comments ID - unique id to identify comment block in a page
+	/**
+	 * string comments ID - unique id to identify comment block in a page
+	 * @var string
+	 */
 	private $cst_id;
 
-	// int page ID for the wikipage this comment is on
+	/**
+	 * int page ID for the wikipage this comment is on
+	 * @var int
+	 */
 	private $assoc_page_id;
 
-	// int page ID for the wikipage this comment is in reply to or null
+	/**
+	 * int page ID for the wikipage this comment is in reply to or null
+	 * @var int
+	 */
 	private $parent_page_id;
 
 	// string title of comment
@@ -129,10 +152,16 @@ class Comment {
 			$assoc_page_id );
 		$content = new WikitextContent( $annotated_wikitext );
 		$success = false;
+		$index = wfRandomString();
 		while ( !$success ) {
-			$index = wfRandomString();
 			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
-			if ( !$title->isDeletedQuick() && !$title->exists() ) {
+			if ( method_exists( $title, 'hasDeletedEdits' ) ) {
+				// MW 1.36+
+				$deleted = $title->hasDeletedEdits();
+			} else {
+				$deleted = $title->isDeletedQuick();
+			}
+			if ( !$deleted && !$title->exists() ) {
 				if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
 					// MW 1.33+
 					if ( !MediaWikiServices::getInstance()
@@ -191,7 +220,7 @@ class Comment {
 
 		if ( defined( 'SMW_VERSION' ) ) {
 			$job = new SMWUpdateJob( $title, [] );
-			\JobQueueGroup::singleton()->push( $job );
+			JobQueueGroup::singleton()->push( $job );
 		}
 
 		return $comment;
@@ -321,8 +350,8 @@ class Comment {
 	 */
 	public function getWikiText() {
 		if ( $this->wikitext === null ) {
-			$wikitext = \ContentHandler::getContentText( $this->wikipage->getContent(
-				\Revision::RAW ) );
+			$wikitext = ContentHandler::getContentText( $this->wikipage->getContent(
+				Revision::RAW ) );
 			$wikitext = $this->removeAnnotations( $wikitext );
 			$this->wikitext = $wikitext;
 		}
@@ -330,21 +359,26 @@ class Comment {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @return string parsed HTML of the comment
 	 */
-	public function getHTML() {
+	public function getHTML( IContextSource $context ) {
 		if ( $this->html === null ) {
 			$this->getWikiText();
 			if ( $this->wikitext !== null ) {
-				if ( class_exists( \ParserFactory::class ) ) {
+				if ( class_exists( ParserFactory::class ) ) {
 					// @requires MediaWiki >= 1.32.0
 					$parser = MediaWikiServices::getInstance()->getParserFactory()->create();
 				} else {
 					$parser = new Parser();
 				}
-
+				if ( version_compare( MW_VERSION, '1.36', '<' ) ) {
+					$parserOptions = new ParserOptions;
+				} else {
+					$parserOptions = $this->wikipage->makeParserOptions( $context );
+				}
 				$this->html = $parser->parse( $this->wikitext,
-					$this->wikipage->getTitle(), new ParserOptions )->getText();
+					$this->wikipage->getTitle(), $parserOptions )->getText();
 			}
 		}
 		return $this->html;
@@ -355,10 +389,27 @@ class Comment {
 	 */
 	public function getUser() {
 		if ( $this->user === null ) {
-			$user_id = $this->wikipage->getOldestRevision()->getUser();
+			// TODO: check
+			if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
+				// MW 1.35+
+				$user_id = $this->getFirstRevision()->getUser( RevisionRecord::RAW )->getId();
+			} else {
+				$user_id = $this->wikipage->getOldestRevision()->getUser();
+			}
 			$this->user = User::newFromId( $user_id );
 		}
 		return $this->user;
+	}
+
+	private function getFirstRevision() : RevisionRecord {
+		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
+		return $revisionStore->getFirstRevision( $this->wikipage->getTitle() );
+	}
+
+	private function getLatestRevision() : ?RevisionRecord {
+		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
+		return $revisionStore->getRevisionByTitle( $this->wikipage->getTitle(),
+			0, IDBAccessObject::READ_LATEST );
 	}
 
 	/**
@@ -366,8 +417,21 @@ class Comment {
 	 * original author
 	 */
 	public function isLastEditModerated() {
-		$author = $this->wikipage->getOldestRevision()->getUser();
-		$lastEditor = $this->wikipage->getRevision()->getUser();
+		if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
+			// MW 1.35+
+			$author = $this->getFirstRevision()->getUser( RevisionRecord::RAW )->getId();
+			$latestRevision = $this->getLatestRevision();
+			if ( $latestRevision ) {
+				$lastEditor = $latestRevision->getUser( RevisionRecord::RAW )->getId();
+			} else {
+				// TODO: why?
+				// new Revision not saved yet
+				return false;
+			}
+		} else {
+			$author = $this->wikipage->getOldestRevision()->getUser();
+			$lastEditor = $this->wikipage->getRevision()->getUser();
+		}
 		return $author !== $lastEditor;
 	}
 
@@ -400,7 +464,7 @@ class Comment {
 		if ( $this->avatar === null ) {
 			if ( class_exists( 'wAvatar' ) ) {
 				// from Extension:SocialProfile
-				$avatar = new wAvatar( $this->getUser()->getId(), 'l' );
+				$avatar = new \wAvatar( $this->getUser()->getId(), 'l' );
 				$this->avatar = $GLOBALS['wgUploadPath'] . '/avatars/' .
 					$avatar->getAvatarImage();
 			} else {
@@ -415,16 +479,21 @@ class Comment {
 	 */
 	public function getCreationTimestamp() {
 		if ( $this->creation_timestamp === null ) {
-			$this->creation_timestamp = MWTimestamp::getLocalInstance(
-				$this->wikipage->getTitle()->getEarliestRevTime() );
+			if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
+				// MW 1.35+
+				$timestamp = $this->getFirstRevision()->getTimestamp();
+			} else {
+				$timestamp = $this->wikipage->getTitle()->getEarliestRevTime();
+			}
+			$this->creation_timestamp = MWTimestamp::getLocalInstance( $timestamp );
 		}
 		return $this->creation_timestamp;
 	}
 
 	/**
-	 * @return MWTimestamp the earliest revision date for this
+	 * @return string the earliest revision date for this
 	 */
-	public function getCreationDate() {
+	public function getCreationDate() : string {
 		if ( $this->getCreationTimestamp() !== null ) {
 			return $this->creation_timestamp->format( "M j \a\\t g:i a" );
 		}
@@ -437,20 +506,30 @@ class Comment {
 	public function getModificationTimestamp() {
 		if ( $this->modification_timestamp === null ) {
 			$title = $this->wikipage->getTitle();
-			$firstRevision = $title->getFirstRevision();
+
+			// TODO:  check
+			if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
+				// MW 1.35+
+				$firstRevision = $this->getFirstRevision();
+			} else {
+				$firstRevision = $title->getFirstRevision();
+			}
+
 			if ( $firstRevision === null ) {
 				return null;
 			}
-			if ( $firstRevision->getId() === $title->getLatestRevID() ) {
+
+			$latestRevisionId = $title->getLatestRevId();
+			if ( $firstRevision->getId() === $latestRevisionId ) {
 				return null;
 			}
 
+			// TODO: check
 			$revStore = MediaWikiServices::getInstance()->getRevisionStore();
-			$latestRev = $title->getLatestRevId();
 			if ( version_compare( MW_VERSION, '1.34', '<' ) ) {
-				$timestamp = $revStore->getTimestampFromId( $title, $latestRev );
+				$timestamp = $revStore->getTimestampFromId( $title, $latestRevisionId );
 			} else {
-				$timestamp = $revStore->getTimestampFromId( $latestRev );
+				$timestamp = $revStore->getTimestampFromId( $latestRevisionId );
 			}
 
 			$this->modification_timestamp = MWTimestamp::getLocalInstance(
@@ -488,9 +567,10 @@ class Comment {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @return array get comment data in array suitable for JSON
 	 */
-	public function getJSON() {
+	public function getJSON( IContextSource $context ) {
 		$json = [
 			'commenttitle' => $this->getCommentTitle(),
 			'username' => $this->getUsername(),
@@ -501,7 +581,7 @@ class Comment {
 			'modified' => $this->getModificationDate(),
 			'moderated' => $this->isLastEditModerated() ? "moderated" : null,
 			'wikitext' => htmlentities( $this->getWikiText() ),
-			'html' => $this->getHTML(),
+			'html' => $this->getHTML( $context ),
 			'pageid' => $this->getId(),
 			'cst_id' => $this->getCommentsId(),
 			'associatedid' => $this->getAssociatedId(),
@@ -981,12 +1061,10 @@ EOT;
 				$GLOBALS['wgCommentStreamsUserRealNamePropertyName'] );
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
-			if ( class_exists( 'PageProps' ) ) {
-				$values = \PageProps::getInstance()->getProperties( $userpage,
-					'displaytitle' );
-				if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
-					$displayname = $values[$userpage->getArticleID()];
-				}
+			$values = PageProps::getInstance()->getProperties( $userpage,
+				'displaytitle' );
+			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
+				$displayname = $values[$userpage->getArticleID()];
 			}
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
