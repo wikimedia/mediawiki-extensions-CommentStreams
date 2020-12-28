@@ -22,12 +22,17 @@
 	margin-left: 30px;
 }
 
+.cs-comment-header {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
 .cs-head-comment > .cs-comment-header {
 	border-top: 1px solid #00a7d8;
 }
 
 .cs-target-comment .cs-comment-header {
-	border: 2px solid green;
+	border: 2px solid #0f0;
 }
 
 .cs-expanded .cs-comment-header {
@@ -35,17 +40,12 @@
 }
 
 .cs-collapsed .cs-comment-header {
-	background-color: #eeeeee;
+	background-color: #eee;
 	margin-bottom: 10px;
 }
 
 .cs-reply-comment > .cs-comment-header {
 	background-color: #f5faff;
-}
-
-.cs-comment-header {
-	padding-top: 2px;
-	padding-bottom: 2px;
 }
 
 .cs-comment-header-left {
@@ -82,7 +82,7 @@
 .cs-comment-author-anonymous {
 	font-style: italic;
 	opacity: 0.8;
-	color: #555555;
+	color: #555;
 }
 
 .cs-comment-author a {
@@ -96,7 +96,7 @@
 }
 
 .cs-comment-details {
-	color: #555555;
+	color: #555;
 	opacity: 0.8;
 	font-size: 12px;
 	padding-right: 5px;
@@ -107,19 +107,24 @@
 	padding-left: 5px;
 }
 
-.cs-button:hover {
-	background-color: #8eddf5;
-}
-
 .cs-button {
 	background-color: transparent;
-	border: none;
+	border: 0;
 	font-family: sans-serif;
 	font-weight: bold;
 	text-decoration: none;
 	padding-left: 5px;
 	padding-right: 5px;
 	box-shadow: none;
+}
+
+.cs-button:hover {
+	background-color: #8eddf5;
+}
+
+.cs-button:disabled {
+	color: #95a5a6;
+	opacity: 0.2;
 }
 
 .cs-button:enabled:active {
@@ -130,35 +135,30 @@
 	color: #3ccefa;
 }
 
-.cs-button:disabled {
-	color: #95a5a6;
-	opacity: 0.2;
-}
-
 .cs-moderator-button {
-	color: #ff0000;
+	color: #f00;
 }
 
 .cs-moderator-button:enabled:hover {
-	color: #ff5555;
+	color: #f55;
 }
 
 .cs-toggle-button {
-	border: none;
-	border-style: none;
+	border: 0;
 }
 
-.cs-vote-upcount, .cs-vote-downcount {
-	color: #555555;
+.cs-vote-upcount,
+.cs-vote-downcount {
+	color: #555;
 	padding-left: 3px;
 }
 
 .cs-link-button {
-	border: none;
-	border-style: none;
+	border: 0;
 }
 
-#cs-add-button, .cs-reply-button {
+#cs-add-button,
+.cs-reply-button {
 	font-size: 14px;
 	padding-left: 0;
 }
@@ -178,7 +178,7 @@
 	border-radius: 2px;
 	border-width: 1px;
 	border-color: #00a7d8;
-	box-style: content-box;
+	box-sizing: content-box;
 	-webkit-box-sizing: content-box;
 	width: 80%;
 	min-width: 400px;
@@ -200,8 +200,9 @@
 	font-size: 14px;
 }
 
-// VisualEditor/VEForAll CSS
-.ve-area-wrapper, .ve-ce-documentNode {
+/* VisualEditor/VEForAll CSS */
+.ve-area-wrapper,
+.ve-ce-documentNode {
 	width: auto !important;
 }
 
@@ -211,7 +212,6 @@
 
 div.ve-ce-branchNode {
 	border: 1px solid #00a7d8;
-	background: white;
+	background: #fff;
 	margin-bottom: 5px;
 }
-
