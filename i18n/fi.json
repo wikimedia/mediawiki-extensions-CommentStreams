@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Nike",
-			"Silvonen"
+			"Silvonen",
+			"Yupik"
 		]
 	},
 	"commentstreams-buttontooltip-add": "lisää kommentti",
+	"commentstreams-buttontooltip-permalink": "ikilinkki",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
 	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu",
 	"commentstreams-allcomments-button-next": "Seuraava",
