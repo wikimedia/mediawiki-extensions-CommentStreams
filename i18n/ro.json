@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"NGC 54"
+		]
+	},
+	"commentstreams-author-anonymous": "anonim",
+	"commentstreams-dialog-buttontext-yes": "Da",
+	"commentstreams-dialog-buttontext-no": "Nu",
+	"commentstreamsallcomments": "Toate comentariile",
+	"commentstreams-allcomments-label-author": "Autor",
+	"commentstreams-allcomments-label-created": "Creat"
+}
