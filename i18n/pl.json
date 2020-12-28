@@ -4,7 +4,7 @@
 			"Chrumps"
 		]
 	},
-	"apihelp-csVote-param-vote": "głos (1, -1 albo 0).",
+	"apihelp-csvote-param-vote": "głos (1, -1 albo 0).",
 	"commentstreams-api-error-notloggedin": "Musisz się zalogować.",
 	"commentstreams-api-error-post": "Błąd dodawania komentarza.",
 	"commentstreams-api-error-edit-notloggedin": "Aby edytować, musisz się zalogować.",

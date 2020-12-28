@@ -8,7 +8,7 @@
 	"commentstreams-desc": "উইকি পাতাগুলিতে মন্তব্য করতে দেয়",
 	"commentstreams-error-prohibitedaction": "মন্তব্যের পাতায় $1 কর্ম অনুমোদিত নয়।",
 	"commentstreams-author-anonymous": "নামহীন",
-	"apihelp-csVote-param-vote": "ভোট (1, -1, বা 0)।",
+	"apihelp-csvote-param-vote": "ভোট (1, -1, বা 0)।",
 	"commentstreams-api-error-delete": "মন্তব্য অপসারণের সময় ত্রুটি।",
 	"commentstreams-api-error-vote-notloggedin": "ভোট দিতে হলে আপনাকে অবশ্যই প্রবেশ করতে হবে।",
 	"commentstreams-buttontext-add": "একটি মন্তব্য যোগ করুন",
