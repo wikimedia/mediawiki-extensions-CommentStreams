@@ -21,6 +21,8 @@
  */
 
 var commentstreams_querier = ( function () {
+	'use strict';
+
 	return {
 		queryComment: function ( pageid, reply ) {
 			var self = this;
@@ -47,14 +49,14 @@ var commentstreams_querier = ( function () {
 				pageid: pageid,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-				.done( function ( data ) {
-					reply( data );
+				.done( function () {
+					reply();
 				} )
 				.fail( function ( code, error ) {
 					self.reportError( error, reply );
 				} );
 		},
-		postComment: function ( commenttitle, wikitext, associatedid, parentid, cst_id,
+		postComment: function ( commenttitle, wikitext, associatedid, parentid, commentblockid,
 			reply ) {
 			var self = this;
 			var api = new mw.Api();
@@ -62,7 +64,7 @@ var commentstreams_querier = ( function () {
 				action: 'cspostcomment',
 				wikitext: wikitext,
 				associatedid: associatedid,
-				cst_id: cst_id,
+				commentblockid: commentblockid,
 				token: mw.user.tokens.get( 'csrfToken' )
 			};
 			if ( commenttitle !== null ) {
@@ -78,7 +80,7 @@ var commentstreams_querier = ( function () {
 					if ( postData.cspostcomment === undefined ) {
 						self.reportError( 'invalid', reply );
 					}
-					reply( postData.cspostcomment );
+					self.queryComment( postData.cspostcomment, reply );
 				} )
 				.fail( function ( code, error ) {
 					self.reportError( error, reply );
@@ -94,11 +96,8 @@ var commentstreams_querier = ( function () {
 				wikitext: wikitext,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-				.done( function ( data ) {
-					if ( data.cseditcomment === undefined ) {
-						self.reportError( 'invalid', reply );
-					}
-					reply( data.cseditcomment );
+				.done( function () {
+					self.queryComment( pageid, reply );
 				} )
 				.fail( function ( code, error ) {
 					self.reportError( error, reply );
@@ -113,11 +112,8 @@ var commentstreams_querier = ( function () {
 				vote: vote,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-				.done( function ( data ) {
-					if ( data.csvote === undefined ) {
-						self.reportError( 'invalid', reply );
-					}
-					reply( data.csvote );
+				.done( function () {
+					reply();
 				} )
 				.fail( function ( code, error ) {
 					self.reportError( error, reply );
@@ -131,18 +127,8 @@ var commentstreams_querier = ( function () {
 				pageid: pageid,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-				.done( function ( data ) {
-					if ( action ) {
-						if ( data.cswatch === undefined ) {
-							self.reportError( 'invalid', reply );
-						}
-						reply( data.cswatch );
-					} else {
-						if ( data.csunwatch === undefined ) {
-							self.reportError( 'invalid', reply );
-						}
-						reply( data.csunwatch );
-					}
+				.done( function () {
+					reply();
 				} )
 				.fail( function ( code, error ) {
 					self.reportError( error, reply );

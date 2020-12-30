@@ -24,63 +24,52 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ApiBase;
+use ApiMain;
+use ApiUsageException;
+use MWException;
 
 class ApiCSEditComment extends ApiCSBase {
-
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 */
-	public function __construct( $main, $action ) {
+	public function __construct( ApiMain $main, string $action ) {
 		parent::__construct( $main, $action, true );
 	}
 
 	/**
 	 * the real body of the execute function
-	 *
-	 * @return result of API request
+	 * @return ?array result of API request
+	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
-	protected function executeBody() {
-		if ( $this->getUser()->isAnon() ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-edit-notloggedin' );
+	protected function executeBody() : ?array {
+		$user = $this->getUser();
+		if ( $user->isAnon() ) {
+			$this->dieWithError( 'commentstreams-api-error-edit-notloggedin' );
 		}
 
-		if ( $this->getUser()->getId() ===
-			$this->comment->getWikiPage()->getOldestRevision()->getUser() ) {
+		if ( $user->getId() === $this->comment->getAuthor()->getId() ) {
 			$action = 'cs-comment';
 		} else {
 			$action = 'cs-moderator-edit';
 		}
 
-		$title = $this->comment->getWikiPage()->getTitle();
-		if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
-			// MW 1.33+
-			if ( !\MediaWiki\MediaWikiServices::getInstance()
-				->getPermissionManager()
-				->userCan( $action, $this->getUser(), $title )
-			) {
-				$this->dieCustomUsageMessage(
-					'commentstreams-api-error-edit-permissions' );
-			}
-		} else {
-			if ( !$title->userCan( $action, $this->getUser() ) ) {
-				$this->dieCustomUsageMessage(
-					'commentstreams-api-error-edit-permissions' );
-			}
+		$title = $this->comment->getTitle();
+		if ( !CommentStreamsUtils::userCan( $action, $user, $title ) ) {
+			$this->dieWithError( 'commentstreams-api-error-edit-permissions' );
 		}
 
 		$comment_title = $this->getMain()->getVal( 'commenttitle' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
 		if ( $this->comment->getParentId() === null && $comment_title === null ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-missingcommenttitle' );
+			$this->dieWithError( 'commentstreams-api-error-missingcommenttitle' );
 		}
 
 		$result = $this->comment->update( $comment_title, $wikitext, $this->getUser() );
 		if ( !$result ) {
-			$this->dieCustomUsageMessage( 'commentstreams-api-error-edit' );
+			$this->dieWithError( 'commentstreams-api-error-edit' );
 		}
 
 		if ( $action === 'cs-comment' ) {
@@ -97,22 +86,13 @@ class ApiCSEditComment extends ApiCSBase {
 			}
 		}
 
-		$json = $this->comment->getJSON( $this );
-
-		if ( $this->comment->getParentId() === null ) {
-			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
-				$json['vote'] = $this->comment->getVote( $this->getUser() );
-			}
-			$json['watching'] = $this->comment->isWatching( $this->getUser() ) ? 1 : 0;
-		}
-
-		$this->getResult()->addValue( null, $this->getModuleName(), $json );
+		return null;
 	}
 
 	/**
 	 * @return array allowed parameters
 	 */
-	public function getAllowedParams() {
+	public function getAllowedParams() : array {
 		return array_merge( parent::getAllowedParams(),
 			[
 				'commenttitle' =>
@@ -132,14 +112,14 @@ class ApiCSEditComment extends ApiCSBase {
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() {
+	public function getExamplesMessages() : array {
 		return [];
 	}
 
 	/**
 	 * @return string indicates that this API module requires a CSRF toekn
 	 */
-	public function needsToken() {
+	public function needsToken() : string {
 		return 'csrf';
 	}
 }

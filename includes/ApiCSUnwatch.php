@@ -23,56 +23,56 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-class ApiCSUnwatch extends ApiCSBase {
+use ApiMain;
+use ApiUsageException;
 
+class ApiCSUnwatch extends ApiCSBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 */
-	public function __construct( $main, $action ) {
+	public function __construct( ApiMain $main, string $action ) {
 		parent::__construct( $main, $action, true );
 	}
 
 	/**
 	 * the real body of the execute function
-	 *
-	 * @return result of API request
+	 * @return ?array result of API request
+	 * @throws ApiUsageException
 	 */
-	protected function executeBody() {
+	protected function executeBody() : ?array {
 		if ( $this->getUser()->isAnon() ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-unwatch-notloggedin' );
+			$this->dieWithError( 'commentstreams-api-error-unwatch-notloggedin' );
 		}
 
 		if ( $this->comment->getParentId() !== null ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-unwatch-nounwatchonreply' );
+			$this->dieWithError( 'commentstreams-api-error-unwatch-nounwatchonreply' );
 		}
 
-		$result = $this->comment->unwatch( $this->getUser() );
+		$result = $this->comment->unwatch( $this->getUser()->getId() );
 		if ( !$result ) {
-			$this->dieCustomUsageMessage( 'commentstreams-api-error-unwatch' );
+			$this->dieWithError( 'commentstreams-api-error-unwatch' );
 		}
 
-		$this->getResult()->addValue( null, $this->getModuleName(), '' );
+		return null;
 	}
 
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() {
+	public function getExamplesMessages() : array {
 		return [
 			'action=' . $this->getModuleName() . '&pageid=3' =>
-			'apihelp-' . $this->getModuleName() . '-pageid-example',
+				'apihelp-' . $this->getModuleName() . '-pageid-example',
 			'action=' . $this->getModuleName() . '&title=CommentStreams:3' =>
-			'apihelp-' . $this->getModuleName() . '-title-example'
+				'apihelp-' . $this->getModuleName() . '-title-example'
 		];
 	}
 
 	/**
 	 * @return string indicates that this API module requires a CSRF toekn
 	 */
-	public function needsToken() {
+	public function needsToken() : string {
 		return 'csrf';
 	}
 }
