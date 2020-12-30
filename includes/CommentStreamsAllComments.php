@@ -25,31 +25,35 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Html;
+use MediaWiki\MediaWikiServices;
+use MWException;
 use SpecialPage;
 use Title;
-use WikiPage;
 
 class CommentStreamsAllComments extends SpecialPage {
-
 	public function __construct() {
 		parent::__construct( 'CommentStreamsAllComments' );
 	}
 
 	/**
 	 * @inheritDoc
+	 * @throws MWException
 	 */
-	public function execute( $par ) {
+	public function execute( $subPage ) {
 		$request = $this->getRequest();
 		$this->setHeaders();
 		$this->getOutput()->addModuleStyles( 'ext.CommentStreamsAllComments' );
 
-		$offset = $request->getText( 'offset', 0 );
+		$commentStreamsStore =
+			MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' );
+
+		$offset = $request->getText( 'offset', '0' );
 		$limit = 20;
-		$pages = self::getCommentPages( $limit + 1, $offset );
+		$pages = $commentStreamsStore->getCommentPages( $limit + 1, $offset );
 
 		if ( !$pages->valid() ) {
 			$offset = 0;
-			$pages = self::getCommentPages( $limit + 1, $offset );
+			$pages = $commentStreamsStore->getCommentPages( $limit + 1, $offset );
 			if ( !$pages->valid() ) {
 				$this->displayMessage(
 					wfMessage( 'commentstreams-allcomments-nocommentsfound' )
@@ -76,20 +80,23 @@ class CommentStreamsAllComments extends SpecialPage {
 		$wikitext .=
 			'!' . wfMessage( 'commentstreams-allcomments-label-lastedited' ) . PHP_EOL;
 
+		$commentStreamsFactory =
+			MediaWikiServices::getInstance()->getService( 'CommentStreamsFactory' );
+
 		$index = 0;
 		$more = false;
 		foreach ( $pages as $page ) {
 			if ( $index < $limit ) {
-				$wikipage = WikiPage::newFromId( $page->page_id );
-				$comment = Comment::newFromWikiPage( $wikipage );
+				$wikipage = CommentStreamsUtils::newWikiPageFromId( $page->page_id );
+				$comment = $commentStreamsFactory->newFromWikiPage( $wikipage );
 				if ( $comment !== null ) {
-					$pagename = $comment->getWikiPage()->getTitle()->getPrefixedText();
+					$pagename = $comment->getTitle()->getPrefixedText();
 					$associatedpageid = $comment->getAssociatedId();
-					$associatedpage = WikiPage::newFromId( $associatedpageid );
+					$associatedpage = CommentStreamsUtils::newWikiPageFromId( $associatedpageid );
 					if ( $associatedpage !== null ) {
 						$associatedpagename =
 							'[[' . $associatedpage->getTitle()->getPrefixedText() . ']]';
-						$author = $comment->getUser();
+						$author = $comment->getAuthor();
 						if ( $author->isAnon() ) {
 							$author = '<i>' . wfMessage( 'commentstreams-author-anonymous' )
 								. '</i>';
@@ -99,9 +106,9 @@ class CommentStreamsAllComments extends SpecialPage {
 						$modificationdate = $comment->getModificationDate();
 						if ( $modificationdate === null ) {
 							$lasteditor = '';
+							$modificationdate = '';
 						} else {
-							$lasteditor =
-								\User::newFromId( $wikipage->getRevision()->getUser() );
+							$lasteditor = $comment->getLastEditor();
 							if ( $lasteditor->isAnon() ) {
 								$lasteditor = '<i>' .
 									wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
@@ -113,7 +120,7 @@ class CommentStreamsAllComments extends SpecialPage {
 						$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
 						$wikitext .= '| ' . $associatedpagename . PHP_EOL;
 						$wikitext .= '| ' . $comment->getCommentTitle() . PHP_EOL;
-						$wikitext .= '| ' . $comment->getWikiText() . PHP_EOL;
+						$wikitext .= '| ' . htmlentities( $comment->getWikiText() ) . PHP_EOL;
 						$wikitext .= '| ' . $author . PHP_EOL;
 						$wikitext .= '| ' . $lasteditor . PHP_EOL;
 						$wikitext .= '| ' . $comment->getCreationDate() . PHP_EOL;
@@ -127,11 +134,7 @@ class CommentStreamsAllComments extends SpecialPage {
 		}
 
 		$wikitext .= '|}' . PHP_EOL;
-		if ( method_exists( 'OutputPage', 'addWikiTextAsInterface' ) ) {
-			$this->getOutput()->addWikiTextAsInterface( $wikitext );
-		} else {
-			$this->getOutput()->addWikiText( $wikitext );
-		}
+		CommentStreamsUtils::addWikiTextToOutputPage( $wikitext, $this->getOutput() );
 
 		if ( $offset > 0 || $more ) {
 			$this->addTableNavigation( $offset, $more, $limit, 'offset' );
@@ -186,30 +189,5 @@ class CommentStreamsAllComments extends SpecialPage {
 			. Html::closeElement( 'tr' )
 			. Html::closeElement( 'table' );
 		$this->getOutput()->addHtml( $html );
-	}
-
-	private static function getCommentPages( $limit, $offset ) {
-		$dbr = wfGetDB( DB_REPLICA );
-		$pages = $dbr->select(
-			[
-				'cs_comment_data',
-				'page',
-				'revision'
-			],
-			[
-				'page_id'
-			],
-			[
-				'cst_page_id = page_id',
-				'page_latest = rev_id'
-			],
-			__METHOD__,
-			[
-				'ORDER BY' => 'rev_timestamp DESC' ,
-				'LIMIT' => $limit,
-				'OFFSET' => $offset
-			]
-		);
-		return $pages;
 	}
 }

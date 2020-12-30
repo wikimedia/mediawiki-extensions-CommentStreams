@@ -1,7 +1,6 @@
 <?php
+
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -23,22 +22,48 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiMain;
+use ConfigException;
+use User;
+use wAvatar;
 
-class ApiCSQueryComment extends ApiCSBase {
+class CommentStreamsSocialProfileInterface {
+	public const CONSTRUCTOR_OPTIONS = [
+		'UploadPath'
+	];
+
 	/**
-	 * @param ApiMain $main main module
-	 * @param string $action name of this module
+	 * @var bool
 	 */
-	public function __construct( ApiMain $main, string $action ) {
-		parent::__construct( $main, $action );
+	private $isLoaded;
+
+	/**
+	 * @var string
+	 */
+	private $uploadPath;
+
+	/**
+	 * @param \MediaWiki\Config\ServiceOptions|\Config $options
+	 * @throws ConfigException
+	 */
+	public function __construct(
+		$options
+	) {
+		if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
+			$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+		}
+		$this->isLoaded = class_exists( 'wAvatar' );
+		$this->uploadPath = $options->get( 'UploadPath' );
 	}
 
 	/**
-	 * the real body of the execute function
-	 * @return ?array result of API request
+	 * @param User $user
+	 * @return ?string
 	 */
-	protected function executeBody() : ?array {
-		return $this->comment->getJSON( $this );
+	public function getAvatar( User $user ) : ?string {
+		if ( !$this->isLoaded ) {
+			return null;
+		}
+		$avatar = new wAvatar( $user->getId(), 'l' );
+		return $this->uploadPath . '/avatars/' . $avatar->getAvatarImage();
 	}
 }

@@ -24,50 +24,73 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ApiBase;
-use ApiMessage;
+use ApiMain;
+use ApiUsageException;
 use ManualLogEntry;
+use MediaWiki\Linker\LinkTarget;
+use MediaWiki\MediaWikiServices;
+use MWException;
+use Title;
 
 abstract class ApiCSBase extends ApiBase {
-
+	/**
+	 * whether this API module will be editing the database
+	 * @var bool
+	 */
 	private $edit;
+
+	/**
+	 * @var Comment
+	 */
 	protected $comment;
+
+	/**
+	 * @var CommentStreamsFactory
+	 */
+	protected $commentStreamsFactory;
 
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param bool $edit whether this API module will be editing the database
 	 */
-	public function __construct( $main, $action, $edit = false ) {
+	public function __construct( ApiMain $main, string $action, bool $edit = false ) {
 		parent::__construct( $main, $action );
 		$this->edit = $edit;
+		$services = MediaWikiServices::getInstance();
+		$this->commentStreamsFactory = $services->getService( 'CommentStreamsFactory' );
 	}
 
 	/**
 	 * execute the API request
+	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
 	public function execute() {
 		$params = $this->extractRequestParams();
-		$wikipage = $this->getTitleOrPageId( $params,
-			$this->edit ? 'frommasterdb' : 'fromdb' );
-		$this->comment = Comment::newFromWikiPage( $wikipage );
-		if ( $this->comment === null ) {
-			$this->dieCustomUsageMessage( 'commentstreams-api-error-notacomment' );
-		}
-		$result = $this->executeBody();
-		if ( $result !== null ) {
-			$this->getResult()->addValue( null, $this->getModuleName(), $result );
+		$wikipage = $this->getTitleOrPageId( $params, $this->edit ? 'frommasterdb' : 'fromdb' );
+		$comment = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
+		if ( $comment === null ) {
+			$this->dieWithError( 'commentstreams-api-error-notacomment' );
+		} else {
+			$this->comment = $comment;
+			$result = $this->executeBody();
+			if ( $result !== null ) {
+				$this->getResult()->addValue( null, $this->getModuleName(), $result );
+			}
 		}
 	}
 
 	/**
 	 * the real body of the execute function
+	 * @return ?array result of API request
 	 */
-	abstract protected function executeBody();
+	abstract protected function executeBody() : ?array;
 
 	/**
 	 * @return array allowed parameters
 	 */
-	public function getAllowedParams() {
+	public function getAllowedParams(): array {
 		return [
 			'pageid' => [
 				ApiBase::PARAM_TYPE => 'integer',
@@ -83,17 +106,17 @@ abstract class ApiCSBase extends ApiBase {
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() {
+	public function getExamplesMessages(): array {
 		return [
 			'action=' . $this->getModuleName() . '&pageid=3' =>
-			'apihelp-' . $this->getModuleName() . '-pageid-example',
+				'apihelp-' . $this->getModuleName() . '-pageid-example',
 			'action=' . $this->getModuleName() . '&title=CommentStreams:3' =>
-			'apihelp-' . $this->getModuleName() . '-title-example'
+				'apihelp-' . $this->getModuleName() . '-title-example'
 		];
 	}
 
 	/**
-	 * @return string indicates that this API module requires a CSRF token
+	 * @return string|false indicates that this API module requires a CSRF token
 	 */
 	public function needsToken() {
 		if ( $this->edit ) {
@@ -106,30 +129,18 @@ abstract class ApiCSBase extends ApiBase {
 	/**
 	 * log action
 	 * @param string $action the name of the action to be logged
-	 * @param string|null $title the title of the page for the comment that the
-	 *        action was performed upon, if differen from the current comment
+	 * @param LinkTarget|Title|null $title the title of the page for the comment that the
+	 *        action was performed upon, if different from the current comment
+	 * @throws MWException
 	 */
-	protected function logAction( $action, $title = null ) {
+	protected function logAction( string $action, $title = null ) {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );
 		$logEntry->setPerformer( $this->getUser() );
 		if ( $title ) {
 			$logEntry->setTarget( $title );
 		} else {
-			$logEntry->setTarget( $this->comment->getWikiPage()->getTitle() );
+			$logEntry->setTarget( $this->comment->getTitle() );
 		}
-		$logid = $logEntry->insert();
-	}
-
-	/**
-	 * die with a custom usage message
-	 * @param string $message_name the name of the custom message
-	 */
-	protected function dieCustomUsageMessage( $message_name ) {
-		$error_message = wfMessage( $message_name );
-		$this->dieUsageMsg(
-			[
-				ApiMessage::create( $error_message )
-			]
-		);
+		$logEntry->insert();
 	}
 }
