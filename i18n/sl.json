@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"commentstreams-buttontooltip-cancel": "prekliči",
+	"commentstreams-dialog-buttontext-cancel": "Prekliči",
+	"commentstreams-dialog-buttontext-yes": "Da",
+	"commentstreams-dialog-buttontext-no": "Ne"
+}
