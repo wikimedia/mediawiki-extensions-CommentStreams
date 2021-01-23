@@ -1406,7 +1406,11 @@ var commentstreams_controller = ( function () {
 		},
 		reportError: function ( message ) {
 			/* eslint-disable mediawiki/msg-doc */
-			var message_text = mw.message( message ).text();
+			var message_text = message;
+			var mwmessage = mw.message( message );
+			if ( mwmessage.exists() ) {
+				message_text = mwmessage.text();
+			}
 			var ok_text = mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
 			var dialog = new OO.ui.MessageDialog();
 			var window_manager = new OO.ui.WindowManager();
