@@ -54,6 +54,7 @@
 	"apihelp-csunwatch-param-title": "{{doc-apihelp-param|csunwatch|title}}",
 	"apihelp-csunwatch-pageid-example": "{{doc-apihelp-example|csunwatch}}",
 	"apihelp-csunwatch-title-example": "{{doc-apihelp-example|csunwatch}}",
+	"commentstreams-api-error-invalid": "Error message.",
 	"commentstreams-api-error-notloggedin": "Error message.",
 	"commentstreams-api-error-commentnotfound": "Error message.",
 	"commentstreams-api-error-notacomment": "Error message.",

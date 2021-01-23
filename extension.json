@@ -42,6 +42,7 @@
 				"mobile"
 			],
 			"messages": [
+				"commentstreams-api-error-invalid",
 				"commentstreams-api-error-notloggedin",
 				"commentstreams-api-error-commentnotfound",
 				"commentstreams-api-error-notacomment",

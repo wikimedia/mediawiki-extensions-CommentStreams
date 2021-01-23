@@ -30,10 +30,13 @@ var commentstreams_querier = ( function () {
 				pageid: pageid
 			} )
 				.done( function ( data ) {
+					if ( data.csquerycomment === undefined ) {
+						self.reportError( 'invalid', reply );
+					}
 					reply( data.csquerycomment );
 				} )
-				.fail( function ( data ) {
-					self.reportError( data, reply );
+				.fail( function ( code, error ) {
+					self.reportError( error, reply );
 				} );
 		},
 		deleteComment: function ( pageid, reply ) {
@@ -47,8 +50,8 @@ var commentstreams_querier = ( function () {
 				.done( function ( data ) {
 					reply( data );
 				} )
-				.fail( function ( data ) {
-					self.reportError( data, reply );
+				.fail( function ( code, error ) {
+					self.reportError( error, reply );
 				} );
 		},
 		postComment: function ( commenttitle, wikitext, associatedid, parentid, cst_id,
@@ -72,10 +75,13 @@ var commentstreams_querier = ( function () {
 				data
 			)
 				.done( function ( postData ) {
+					if ( postData.cspostcomment === undefined ) {
+						self.reportError( 'invalid', reply );
+					}
 					reply( postData.cspostcomment );
 				} )
-				.fail( function ( postData ) {
-					self.reportError( postData, reply );
+				.fail( function ( code, error ) {
+					self.reportError( error, reply );
 				} );
 		},
 		editComment: function ( commenttitle, wikitext, pageid, reply ) {
@@ -89,10 +95,13 @@ var commentstreams_querier = ( function () {
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
 				.done( function ( data ) {
+					if ( data.cseditcomment === undefined ) {
+						self.reportError( 'invalid', reply );
+					}
 					reply( data.cseditcomment );
 				} )
-				.fail( function ( data ) {
-					self.reportError( data, reply );
+				.fail( function ( code, error ) {
+					self.reportError( error, reply );
 				} );
 		},
 		vote: function ( pageid, vote, reply ) {
@@ -105,10 +114,13 @@ var commentstreams_querier = ( function () {
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
 				.done( function ( data ) {
+					if ( data.csvote === undefined ) {
+						self.reportError( 'invalid', reply );
+					}
 					reply( data.csvote );
 				} )
-				.fail( function ( data ) {
-					self.reportError( data, reply );
+				.fail( function ( code, error ) {
+					self.reportError( error, reply );
 				} );
 		},
 		watch: function ( pageid, action, reply ) {
@@ -121,27 +133,45 @@ var commentstreams_querier = ( function () {
 			} )
 				.done( function ( data ) {
 					if ( action ) {
+						if ( data.cswatch === undefined ) {
+							self.reportError( 'invalid', reply );
+						}
 						reply( data.cswatch );
 					} else {
+						if ( data.csunwatch === undefined ) {
+							self.reportError( 'invalid', reply );
+						}
 						reply( data.csunwatch );
 					}
 				} )
-				.fail( function ( data ) {
-					self.reportError( data, reply );
+				.fail( function ( code, error ) {
+					self.reportError( error, reply );
 				} );
 		},
-		reportError: function ( data, reply ) {
-			if ( data === 'nosuchpageid' ) {
+		reportError: function ( error, reply ) {
+			if (
+				error === 'invalid' ||
+				error.error === undefined ||
+				error.error.code === undefined ||
+				error.error[ '*' ] === undefined
+			) {
+				reply( {
+					error: 'commentstreams-api-error-invalid'
+				} );
+			} else if ( error.error.code === 'nosuchpageid' ) {
 				reply( {
 					error: 'commentstreams-api-error-commentnotfound'
 				} );
-			} else if ( data === 'badtoken' ) {
+			} else if ( error.error.code === 'badtoken' ) {
 				reply( {
 					error: 'commentstreams-api-error-notloggedin'
 				} );
 			} else {
+				// These types of errors should never happen, but in the case of install errors,
+				// syntax errors during development, or conflicting extensions, they could happen.
+				// Since there is no other good way of debugging them, they will be displayed.
 				reply( {
-					error: data
+					error: error.error[ '*' ]
 				} );
 			}
 		}
