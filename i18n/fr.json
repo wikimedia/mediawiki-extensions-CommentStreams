@@ -54,6 +54,7 @@
 	"apihelp-csunwatch-param-title": "titre de la page qui contient le commentaire à ne plus surveiller",
 	"apihelp-csunwatch-pageid-example": "ne plus surveiller le commentaire de la page d’ID 3",
 	"apihelp-csunwatch-title-example": "ne plus surveiller le commentaire de la page de titre ''CommentStreams:3''",
+	"commentstreams-api-error-invalid": "Réponse d’API non valide.",
 	"commentstreams-api-error-notloggedin": "Vous devez être connecté.",
 	"commentstreams-api-error-commentnotfound": "Le commentaire demandé n’a pas été trouvé.",
 	"commentstreams-api-error-notacomment": "L’ID de page fourni ne fait pas référence à un commentaire valide.",
