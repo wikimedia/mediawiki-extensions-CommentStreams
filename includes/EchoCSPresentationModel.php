@@ -24,20 +24,20 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use EchoEventPresentationModel;
+use Message;
 
 class EchoCSPresentationModel extends EchoEventPresentationModel {
-
 	/**
 	 * @inheritDoc
 	 */
-	public function getIconType() {
+	public function getIconType() : string {
 		return 'chat';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getPrimaryLink() {
+	public function getPrimaryLink() : array {
 		$id = $this->event->getExtraParam( 'comment_id' );
 		return [
 			'url' => $this->event->getTitle()->getFullURL() . '#cs-comment-' . $id,
@@ -48,18 +48,9 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	/**
 	 * @inheritDoc
 	 */
-	public function getHeaderMessage() {
+	public function getHeaderMessage() : Message {
 		$msg = wfMessage( "notification-header-{$this->type}" );
-		$msg->params( $this->event->getExtraParam(
-			'comment_author_display_name' ) );
-		$msg->params( $this->event->getExtraParam( 'comment_title' ) );
-		$msg->params( $this->event->getExtraParam(
-			'associated_page_display_title' ) );
-		$msg->params( $this->event->getExtraParam(
-			'comment_author_username' ) );
-		$msg->params( $this->event->getExtraParam(
-			'comment_wikitext' ) );
-		$msg->params( $this->getViewingUserForGender() );
+		$this->addMessageParams( $msg );
 		return $msg;
 	}
 
@@ -68,6 +59,11 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	 */
 	public function getBodyMessage() {
 		$msg = wfMessage( "notification-body-{$this->type}" );
+		$this->addMessageParams( $msg );
+		return $msg;
+	}
+
+	private function addMessageParams( Message $msg ) {
 		$msg->params( $this->event->getExtraParam(
 			'comment_author_display_name' ) );
 		$msg->params( $this->event->getExtraParam( 'comment_title' ) );
@@ -78,13 +74,12 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 		$msg->params( $this->event->getExtraParam(
 			'comment_wikitext' ) );
 		$msg->params( $this->getViewingUserForGender() );
-		return $msg;
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function canRender() {
+	public function canRender() : bool {
 		return $this->event->getTitle() !== null;
 	}
 }

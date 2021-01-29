@@ -23,14 +23,13 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
+use Action;
+use ConfigException;
 use ExtensionRegistry;
-use MWNamespace;
+use MWException;
+use OutputPage;
 
-class CommentStreams {
-
-	// CommentStreams singleton instance
-	private static $instance = null;
-
+class CommentStreamsHandler {
 	const COMMENTS_ENABLED = 1;
 	const COMMENTS_DISABLED = -1;
 	const COMMENTS_INHERITED = 0;
@@ -42,15 +41,49 @@ class CommentStreams {
 	private $areNamespaceEnabled = false;
 
 	/**
-	 * create a CommentStreams singleton instance
-	 *
-	 * @return CommentStreams a singleton CommentStreams instance
+	 * @var CommentStreamsFactory
 	 */
-	public static function singleton() : self {
-		if ( self::$instance === null ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
+	private $commentStreamsFactory;
+
+	/**
+	 * @var CommentStreamsStore
+	 */
+	private $commentStreamsStore;
+
+	/**
+	 * @var CommentStreamsEchoInterface
+	 */
+	private $echoInterface;
+
+	/**
+	 * @var CommentStreamsSMWInterface
+	 */
+	private $smwInterface;
+
+	/**
+	 * @var CommentStreamsSocialProfileInterface
+	 */
+	private $socialProfileInterface;
+
+	/**
+	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param CommentStreamsStore $commentStreamsStore
+	 * @param CommentStreamsEchoInterface $echoInterface
+	 * @param CommentStreamsSMWInterface $smwInterface
+	 * @param CommentStreamsSocialProfileInterface $socialProfileInterface
+	 */
+	public function __construct(
+		CommentStreamsFactory $commentStreamsFactory,
+		CommentStreamsStore $commentStreamsStore,
+		CommentStreamsEchoInterface $echoInterface,
+		CommentStreamsSMWInterface $smwInterface,
+		CommentStreamsSocialProfileInterface $socialProfileInterface
+	) {
+		$this->commentStreamsFactory = $commentStreamsFactory;
+		$this->commentStreamsStore = $commentStreamsStore;
+		$this->echoInterface = $echoInterface;
+		$this->smwInterface = $smwInterface;
+		$this->socialProfileInterface = $socialProfileInterface;
 	}
 
 	/**
@@ -82,8 +115,10 @@ class CommentStreams {
 	 * initializes the display of comments
 	 *
 	 * @param OutputPage $output OutputPage object
+	 * @throws ConfigException
+	 * @throws MWException
 	 */
-	public function init( $output ) {
+	public function init( OutputPage $output ) {
 		if ( $this->checkDisplayComments( $output ) ) {
 			$comments = $this->getComments( $output );
 			$this->initJS( $output, $comments );
@@ -95,15 +130,16 @@ class CommentStreams {
 	 *
 	 * @param OutputPage $output the OutputPage object
 	 * @return bool true if comments should be displayed on this page
+	 * @throws ConfigException
 	 */
-	private function checkDisplayComments( $output ) {
+	private function checkDisplayComments( OutputPage $output ) : bool {
 		// don't display comments on this page if they are explicitly disabled
 		if ( $this->areCommentsEnabled === self::COMMENTS_DISABLED ) {
 			return false;
 		}
 
 		// don't display comments on any page action other than view action
-		if ( \Action::getActionName( $output->getContext() ) !== "view" ) {
+		if ( Action::getActionName( $output->getContext() ) !== "view" ) {
 			return false;
 		}
 
@@ -150,7 +186,7 @@ class CommentStreams {
 		// 3) comments have been explicitly enabled on that namespace with
 		// <comment-streams/>
 		if ( $title->isTalkPage() ) {
-			$subject_namespace = MWNamespace::getSubject( $namespace );
+			$subject_namespace = CommentStreamsUtils::getSubjectNamespace( $namespace );
 			if ( !$config->get( 'CommentStreamsEnableTalk' ) &&
 				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
 				return false;
@@ -169,24 +205,41 @@ class CommentStreams {
 	 *
 	 * @param OutputPage $output the OutputPage object for the current page
 	 * @return Comment[] array of comments
+	 * @throws MWException
+	 * @throws ConfigException
 	 */
-	private function getComments( $output ) {
+	private function getComments( OutputPage $output ) : array {
 		$commentData = [];
 		$pageId = $output->getTitle()->getArticleID();
-		$allComments = Comment::getAssociatedComments( $pageId );
-		$parentComments = $this->getDiscussions( $allComments,
-			$GLOBALS['wgCommentStreamsNewestStreamsOnTop'],
-			$GLOBALS['wgCommentStreamsEnableVoting'] );
+		$comment_page_ids = $this->commentStreamsStore->getAssociatedComments( $pageId );
+		$allComments = [];
+		foreach ( $comment_page_ids as $id ) {
+			$wikipage = CommentStreamsUtils::newWikiPageFromId( $id );
+			if ( $wikipage !== null ) {
+				$comment = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
+				if ( $comment !== null ) {
+					$allComments[] = $comment;
+				}
+			}
+		}
+
+		$config = $output->getConfig();
+		$newestStreamsOnTop = $config->get( 'CommentStreamsNewestStreamsOnTop' );
+		$votingEnabled = $config->get( 'CommentStreamsEnableVoting' );
+		$parentComments = $this->getDiscussions(
+			$allComments,
+			$newestStreamsOnTop,
+			$votingEnabled
+		);
 		foreach ( $parentComments as $parentComment ) {
 			$parentJSON = $parentComment->getJSON( $output );
-			if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
+			if ( $votingEnabled ) {
 				$parentJSON['vote'] = $parentComment->getVote( $output->getUser() );
 			}
-			if ( ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ) {
+			if ( $this->echoInterface->isLoaded() ) {
 				$parentJSON['watching'] = $parentComment->isWatching( $output->getUser() );
 			}
-			$childComments = $this->getReplies( $allComments,
-				$parentComment->getId() );
+			$childComments = $this->getReplies( $allComments, $parentComment->getId() );
 			foreach ( $childComments as $childComment ) {
 				$childJSON = $childComment->getJSON( $output );
 				$parentJSON['children'][] = $childJSON;
@@ -201,51 +254,45 @@ class CommentStreams {
 	 *
 	 * @param OutputPage $output the OutputPage object
 	 * @param Comment[] $comments array of comments on the current page
+	 * @throws ConfigException
 	 */
-	private function initJS( $output, $comments ) {
+	private function initJS( OutputPage $output, array $comments ) {
 		// determine if comments should be initially collapsed or expanded
 		// if the namespace is a talk namespace, use state of its subject namespace
 		$title = $output->getTitle();
 		$namespace = $title->getNamespace();
 		if ( $title->isTalkPage() ) {
-			$namespace = MWNamespace::getSubject( $namespace );
+			$namespace = CommentStreamsUtils::getSubjectNamespace( $namespace );
 		}
+
+		$config = $output->getConfig();
 
 		if ( $this->initiallyCollapseCommentStreams ) {
 			$initiallyCollapsed = true;
 		} else {
-			$initiallyCollapsed = in_array( $namespace,
-				$GLOBALS['wgCommentStreamsInitiallyCollapsedNamespaces'] );
+			$initiallyCollapsedNamespaces =
+				$config->get( 'CommentStreamsInitiallyCollapsedNamespaces' );
+			$initiallyCollapsed = in_array( $namespace, $initiallyCollapsedNamespaces );
 		}
 
 		$canComment = true;
-		if ( !in_array( 'cs-comment', $output->getUser()->getRights() ) ||
-			$output->getUser()->isBlocked() ) {
+		if ( !CommentStreamsUtils::userHasRight( $output->getUser(), 'cs-comment' ) ) {
 			$canComment = false;
 		}
 
 		$commentStreamsParams = [
 			'canComment' => $canComment,
-			'moderatorEdit' => in_array( 'cs-moderator-edit',
-				$output->getUser()->getRights() ),
-			'moderatorDelete' => in_array( 'cs-moderator-delete',
-				$output->getUser()->getRights() ),
-			'moderatorFastDelete' =>
-				$GLOBALS['wgCommentStreamsModeratorFastDelete'] ? 1 : 0,
-			'showLabels' =>
-				$GLOBALS['wgCommentStreamsShowLabels'] ? 1 : 0,
-			'userDisplayName' =>
-				Comment::getDisplayNameFromUser( $output->getUser() ),
-			'userAvatar' =>
-				Comment::getAvatarFromUser( $output->getUser() ),
-			'newestStreamsOnTop' =>
-				$GLOBALS['wgCommentStreamsNewestStreamsOnTop'] ? 1 : 0,
+			'moderatorEdit' => CommentStreamsUtils::userHasRight( $output->getUser(),
+				'cs-moderator-edit' ),
+			'moderatorDelete' => CommentStreamsUtils::userHasRight( $output->getUser(),
+				'cs-moderator-delete' ),
+			'moderatorFastDelete' => $config->get( 'CommentStreamsModeratorFastDelete' ) ? 1 : 0,
+			'showLabels' => $config->get( 'CommentStreamsShowLabels' ) ? 1 : 0,
+			'newestStreamsOnTop' => $config->get( 'CommentStreamsNewestStreamsOnTop' ) ? 1 : 0,
 			'initiallyCollapsed' => $initiallyCollapsed,
 			'areNamespaceEnabled' => $this->areNamespaceEnabled,
-			'enableVoting' =>
-				$GLOBALS['wgCommentStreamsEnableVoting'] ? 1 : 0,
-			'enableWatchlist' =>
-				ExtensionRegistry::getInstance()->isLoaded( 'Echo' ) ? 1 : 0,
+			'enableVoting' => $config->get( 'CommentStreamsEnableVoting' ) ? 1 : 0,
+			'enableWatchlist' => $this->echoInterface->isLoaded() ? 1 : 0,
 			'comments' => $comments
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
@@ -264,7 +311,11 @@ class CommentStreams {
 	 * @return array an array of all discussions
 	 * oldest
 	 */
-	private function getDiscussions( $allComments, $newestOnTop, $enableVoting ) {
+	private function getDiscussions(
+		array $allComments,
+		bool $newestOnTop,
+		bool $enableVoting
+	) : array {
 		$array = array_filter(
 			$allComments, function ( $comment ) {
 				return $comment->getParentId() === null;
@@ -274,11 +325,11 @@ class CommentStreams {
 			$date1 = $comment1->getCreationTimestamp()->timestamp;
 			$date2 = $comment2->getCreationTimestamp()->timestamp;
 			if ( $enableVoting ) {
-				$upvotes1 = $comment1->getNumUpVotes();
-				$downvotes1 = $comment1->getNumDownVotes();
+				$upvotes1 = $this->commentStreamsStore->getNumUpVotes( $comment1->getId() );
+				$downvotes1 = $this->commentStreamsStore->getNumDownVotes( $comment1->getId() );
 				$votediff1 = $upvotes1 - $downvotes1;
-				$upvotes2 = $comment2->getNumUpVotes();
-				$downvotes2 = $comment2->getNumDownVotes();
+				$upvotes2 = $this->commentStreamsStore->getNumUpVotes( $comment2->getId() );
+				$downvotes2 = $this->commentStreamsStore->getNumDownVotes( $comment2->getId() );
 				$votediff2 = $upvotes2 - $downvotes2;
 				if ( $votediff1 === $votediff2 ) {
 					if ( $upvotes1 === $upvotes2 ) {
@@ -311,7 +362,7 @@ class CommentStreams {
 	 * @param int $parentId the page ID of the discussion to get replies for
 	 * @return array an array of replies for the given discussion
 	 */
-	private function getReplies( $allComments, $parentId ) {
+	private function getReplies( array $allComments, int $parentId ) : array {
 		$array = array_filter(
 			$allComments, function ( $comment ) use ( $parentId ) {
 				if ( $comment->getParentId() === $parentId ) {

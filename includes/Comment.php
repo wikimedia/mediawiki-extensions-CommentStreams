@@ -23,338 +23,245 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ContentHandler;
+use ConfigException;
+use FatalError;
 use Html;
 use IContextSource;
-use IDBAccessObject;
-use JobQueueGroup;
-use MediaWiki\MediaWikiServices;
-use MediaWiki\Revision\RevisionRecord;
-use MediaWiki\Revision\RevisionStore;
+use MediaWiki\Linker\LinkRenderer;
+use MWException;
 use MWTimestamp;
 use PageProps;
-use Parser;
-use ParserFactory;
-use ParserOptions;
-use Revision;
-use SMWDataItem;
-use SMWUpdateJob;
 use Title;
 use User;
+use Wikimedia\Assert\Assert;
 use WikiPage;
-use WikitextContent;
 
 class Comment {
+	public const CONSTRUCTOR_OPTIONS = [
+		'CommentStreamsUserAvatarPropertyName',
+		'CommentStreamsUserRealNamePropertyName',
+		'CommentStreamsEnableVoting'
+	];
+
+	/**
+	 * @var CommentStreamsStore
+	 */
+	private $commentStreamsStore;
+
+	/**
+	 * @var CommentStreamsEchoInterface
+	 */
+	private $echoInterface;
+
+	/**
+	 * @var CommentStreamsSMWInterface
+	 */
+	private $smwInterface;
+
+	/**
+	 * @var CommentStreamsSocialProfileInterface
+	 */
+	private $socialProfileInterface;
+
+	/**
+	 * @var LinkRenderer
+	 */
+	private $linkRenderer;
+
+	/**
+	 * @var string
+	 */
+	private $userAvatarPropertyName;
+
+	/**
+	 * @var string
+	 */
+	private $userRealNamePropertyName;
+
+	/**
+	 * @var mixed
+	 */
+	private $enableVoting;
 
 	/**
 	 * wiki page object for this comment wiki page
-	 * @var WikiPage|null
+	 * @var WikiPage
 	 */
-	private $wikipage = null;
+	private $wikipage;
 
 	/**
-	 * data for this comment has been loaded from the database
-	 * @var bool
+	 * unique id to identify comment block in a page
+	 * @var ?string
 	 */
-	private $loaded = false;
+	private $comment_block_id;
 
 	/**
-	 * string comments ID - unique id to identify comment block in a page
-	 * @var string
-	 */
-	private $cst_id;
-
-	/**
-	 * int page ID for the wikipage this comment is on
+	 * page ID for the wiki page this comment is on
 	 * @var int
 	 */
 	private $assoc_page_id;
 
 	/**
-	 * int page ID for the wikipage this comment is in reply to or null
-	 * @var int
+	 * page ID for the wiki page this comment is in reply to or null
+	 * @var ?int
 	 */
 	private $parent_page_id;
 
-	// string title of comment
+	/**
+	 * title of comment
+	 * @var ?string
+	 */
 	private $comment_title;
 
-	// string wikitext of comment
-	private $wikitext = null;
-
-	// string HTML of comment
-	private $html = null;
-
-	// User user object for the author of this comment
-	private $user = null;
-
-	// Avatar for author of this comment
-	private $avatar = null;
-
-	// MWTimestamp the earliest revision date for this comment
-	private $creation_timestamp = null;
-
-	// MWTimestamp the latest revision date for this comment
-	private $modification_timestamp = null;
-
-	// number of replies to this comment
-	private $num_replies = null;
-
-	// number of up votes for this comment
-	private $num_up_votes = null;
-
-	// number of dow votes for this comment
-	private $num_down_votes = null;
+	/**
+	 * wikitext of comment
+	 * @var ?string
+	 */
+	private $wikitext;
 
 	/**
-	 * create a new Comment object from existing wiki page
-	 *
+	 * number of replies to this comment
+	 * @var ?int
+	 */
+	private $num_replies;
+
+	/**
+	 * user object for the author of this comment
+	 * @var User
+	 */
+	private $author;
+
+	/**
+	 * user object for the last editor of this comment
+	 * @var ?User
+	 */
+	private $lastEditor;
+
+	/**
+	 * Avatar for author of this comment
+	 * @var ?string
+	 */
+	private $avatar;
+
+	/**
+	 * @var array
+	 */
+	private static $avatarCache = [];
+
+	/**
+	 * the earliest revision date for this comment
+	 * @var ?MWTimestamp
+	 */
+	private $creation_timestamp;
+
+	/**
+	 * the latest revision date for this comment
+	 * @var ?MWTimestamp
+	 */
+	private $modification_timestamp;
+
+	/**
+	 * Do not instantiate directly. Use CommentStreamsFactory instead.
+	 * @param \MediaWiki\Config\ServiceOptions|\Config $options
+	 * @param CommentStreamsStore $commentStreamsStore
+	 * @param CommentStreamsEchoInterface $echoInterface
+	 * @param CommentStreamsSMWInterface $smwInterface
+	 * @param CommentStreamsSocialProfileInterface $socialProfileInterface
+	 * @param LinkRenderer $linkRenderer
 	 * @param WikiPage $wikipage WikiPage object corresponding to comment page
-	 * @return Comment|null the newly created comment or null if there was an
-	 * error
+	 * @param ?string $comment_block_id
+	 * @param int $assoc_page_id
+	 * @param ?int $parent_page_id
+	 * @param ?string $comment_title
+	 * @param string $wikitext
+	 * @throws ConfigException
 	 */
-	public static function newFromWikiPage( $wikipage ) {
-		if ( $wikipage !== null &&
-			$wikipage->getTitle()->getNamespace() === NS_COMMENTSTREAMS ) {
-			$comment = new Comment( $wikipage );
-			if ( $wikipage->exists() ) {
-				$comment->loadFromDatabase();
-			}
-			return $comment;
-		}
-		return null;
-	}
-
-	/**
-	 * create a new Comment object from values and save to database
-	 * NOTE: since only head comments can contain a comment title, either
-	 * $comment_title or $parent_page_id must be non null, but not both
-	 *
-	 * @param int $assoc_page_id page ID for the wikipage this comment is on
-	 * @param int $parent_page_id page ID for the wikipage this comment is in
-	 * reply to or null
-	 * @param string $cst_id unique id to identify comment block in a page
-	 * @param string $comment_title string title of comment
-	 * @param string $wikitext the wikitext to add
-	 * @param User $user the user
-	 * @return Comment|null new comment object or null if there was a problem
-	 * creating it
-	 */
-	public static function newFromValues( $assoc_page_id, $parent_page_id, $cst_id,
-		$comment_title, $wikitext, $user ) {
-		if ( $comment_title === null && $parent_page_id === null ) {
-			return null;
-		}
-		if ( $comment_title !== null && $parent_page_id !== null ) {
-			return null;
-		}
-		$annotated_wikitext = self::addAnnotations( $wikitext, $comment_title,
-			$assoc_page_id );
-		$content = new WikitextContent( $annotated_wikitext );
-		$success = false;
-		$index = wfRandomString();
-		while ( !$success ) {
-			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
-			if ( method_exists( $title, 'hasDeletedEdits' ) ) {
-				// MW 1.36+
-				$deleted = $title->hasDeletedEdits();
-			} else {
-				$deleted = $title->isDeletedQuick();
-			}
-			if ( !$deleted && !$title->exists() ) {
-				if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
-					// MW 1.33+
-					if ( !MediaWikiServices::getInstance()
-						->getPermissionManager()
-						->userCan( 'cs-comment', $user, $title )
-					) {
-						return null;
-					}
-				} else {
-					if ( !$title->userCan( 'cs-comment' ) ) {
-						return null;
-					}
-				}
-
-				$wikipage = new WikiPage( $title );
-				$status = $wikipage->doEditContent( $content, '',
-					EDIT_NEW | EDIT_SUPPRESS_RC, false, $user, null );
-				if ( !$status->isOK() && !$status->isGood() ) {
-					if ( $status->getMessage()->getKey() == 'edit-already-exists' ) {
-						$index = wfRandomString();
-					} else {
-						return null;
-					}
-				} else {
-					$success = true;
-				}
-			} else {
-				$index = wfRandomString();
-			}
-		}
-		$comment = new Comment( $wikipage );
-		$comment->wikitext = $wikitext;
-
-		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw->insert(
-			'cs_comment_data',
-			[
-				'cst_page_id' => $wikipage->getId(),
-				'cst_id' => $cst_id,
-				'cst_assoc_page_id' => $assoc_page_id,
-				'cst_parent_page_id' => $parent_page_id,
-				'cst_comment_title' => $comment_title
-			],
-			__METHOD__
-		);
-		if ( !$result ) {
-			return null;
-		}
-		$comment->loadFromValues( $assoc_page_id, $parent_page_id, $cst_id, $comment_title );
-
-		if ( $parent_page_id === null ) {
-			$comment->watch( $user );
-		} else {
-			self::watchComment( $parent_page_id, $user );
-		}
-
-		if ( defined( 'SMW_VERSION' ) ) {
-			$job = new SMWUpdateJob( $title, [] );
-			JobQueueGroup::singleton()->push( $job );
-		}
-
-		return $comment;
-	}
-
-	/**
-	 * constructor
-	 *
-	 * @param WikiPage $wikipage WikiPage object corresponding to comment page
-	 */
-	private function __construct( $wikipage ) {
-		$this->wikipage = $wikipage;
-	}
-
-	/**
-	 * load comment data from database
-	 */
-	private function loadFromDatabase() {
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->selectRow(
-			'cs_comment_data',
-			[
-				'cst_id',
-				'cst_assoc_page_id',
-				'cst_parent_page_id',
-				'cst_comment_title'
-			],
-			[
-				'cst_page_id' => $this->getId()
-			],
-			__METHOD__
-		);
-		if ( $result ) {
-			$this->cst_id = $result->cst_id;
-			$this->assoc_page_id = (int)$result->cst_assoc_page_id;
-			$this->parent_page_id = $result->cst_parent_page_id;
-			if ( $this->parent_page_id !== null ) {
-				$this->parent_page_id = (int)$this->parent_page_id;
-			}
-			$this->comment_title = $result->cst_comment_title;
-			$this->loaded = true;
-		}
-	}
-
-	/**
-	 * load comment data from values
-	 *
-	 * @param int $assoc_page_id page ID for the wikipage this comment is on
-	 * @param int $parent_page_id page ID for the wikipage this comment is in
-	 * reply to or null
-	 * @param string $cst_id unique id to identify comment block in a page
-	 * @param string $comment_title string title of comment
-	 */
-	private function loadFromValues(
-		$assoc_page_id,
-		$parent_page_id,
-		$cst_id,
-		$comment_title
+	public function __construct(
+		$options,
+		CommentStreamsStore $commentStreamsStore,
+		CommentStreamsEchoInterface $echoInterface,
+		CommentStreamsSMWInterface $smwInterface,
+		CommentStreamsSocialProfileInterface $socialProfileInterface,
+		LinkRenderer $linkRenderer,
+		WikiPage $wikipage,
+		?string $comment_block_id,
+		int $assoc_page_id,
+		?int $parent_page_id,
+		?string $comment_title,
+		string $wikitext
 	) {
-		$this->assoc_page_id = (int)$assoc_page_id;
-		$this->parent_page_id = $parent_page_id;
-		$this->cst_id = $cst_id;
-		if ( $this->parent_page_id !== null ) {
-			$this->parent_page_id = (int)$this->parent_page_id;
+		if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
+			$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		}
+		$this->userAvatarPropertyName = $options->get( 'CommentStreamsUserAvatarPropertyName' );
+		$this->userRealNamePropertyName = $options->get( 'CommentStreamsUserRealNamePropertyName' );
+		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
+		$this->commentStreamsStore = $commentStreamsStore;
+		$this->echoInterface = $echoInterface;
+		$this->smwInterface = $smwInterface;
+		$this->socialProfileInterface = $socialProfileInterface;
+		$this->linkRenderer = $linkRenderer;
+		$this->wikipage = $wikipage;
+		$this->comment_block_id = $comment_block_id;
+		$this->assoc_page_id = $assoc_page_id;
+		$this->parent_page_id = $parent_page_id;
 		$this->comment_title = $comment_title;
-		$this->loaded = true;
+		$this->wikitext = $wikitext;
+		$this->num_replies = $commentStreamsStore->getNumReplies( $wikipage->getId() );
+		$title = $wikipage->getTitle();
+		$user = CommentStreamsUtils::getAuthor( $title );
+		if ( $user !== null ) {
+			$this->author = $user;
+		}
+		$this->setAvatar();
+		$this->lastEditor = CommentStreamsUtils::getLastEditor( $wikipage ) ?: $this->author;
+		$timestamp = CommentStreamsUtils::getCreationTimestamp( $title );
+		if ( $timestamp !== null ) {
+			$this->creation_timestamp = MWTimestamp::getLocalInstance( $timestamp );
+		}
+		$this->setModificationTimestamp();
 	}
 
 	/**
-	 * @return int page ID of the comment's wikipage
+	 * @return int page ID of the comment's wiki page
 	 */
-	public function getId() {
+	public function getId() : int {
 		return $this->wikipage->getId();
 	}
 
 	/**
-	 * @return WikiPage wiki page object associate with this comment page
+	 * @return Title Title object associated with this comment page
 	 */
-	public function getWikiPage() {
-		return $this->wikipage;
+	public function getTitle() : Title {
+		return $this->wikipage->getTitle();
 	}
 
 	/**
-	 * @return string comments ID - unique id to identify comment block in a page
+	 * @return int page ID for the wiki page this comment is on
 	 */
-	public function getCommentsId() {
-		if ( $this->loaded === false ) {
-			$this->loadFromDatabase();
-		}
-		return $this->cst_id;
-	}
-
-	/**
-	 * @return int page ID for the wikipage this comment is on
-	 */
-	public function getAssociatedId() {
-		if ( $this->loaded === false ) {
-			$this->loadFromDatabase();
-		}
+	public function getAssociatedId() : int {
 		return $this->assoc_page_id;
 	}
 
 	/**
-	 * @return int|null page ID for the wikipage this comment is in reply to or
+	 * @return int|null page ID for the wiki page this comment is in reply to or
 	 * null if this comment is a discussion, not a reply
 	 */
-	public function getParentId() {
-		if ( $this->loaded === false ) {
-			$this->loadFromDatabase();
-		}
+	public function getParentId() : ?int {
 		return $this->parent_page_id;
 	}
 
 	/**
-	 * @return string the title of the comment
+	 * @return ?string the title of the comment
 	 */
-	public function getCommentTitle() {
-		if ( $this->loaded === false ) {
-			$this->loadFromDatabase();
-		}
+	public function getCommentTitle() : ?string {
 		return $this->comment_title;
 	}
 
 	/**
 	 * @return string wikitext of the comment
 	 */
-	public function getWikiText() {
-		if ( $this->wikitext === null ) {
-			$wikitext = ContentHandler::getContentText( $this->wikipage->getContent(
-				Revision::RAW ) );
-			$wikitext = $this->removeAnnotations( $wikitext );
-			$this->wikitext = $wikitext;
-		}
+	public function getWikiText() : string {
 		return $this->wikitext;
 	}
 
@@ -362,306 +269,120 @@ class Comment {
 	 * @param IContextSource $context
 	 * @return string parsed HTML of the comment
 	 */
-	public function getHTML( IContextSource $context ) {
-		if ( $this->html === null ) {
-			$this->getWikiText();
-			if ( $this->wikitext !== null ) {
-				if ( class_exists( ParserFactory::class ) ) {
-					// @requires MediaWiki >= 1.32.0
-					$parser = MediaWikiServices::getInstance()->getParserFactory()->create();
-				} else {
-					$parser = new Parser();
-				}
-				if ( version_compare( MW_VERSION, '1.36', '<' ) ) {
-					$parserOptions = new ParserOptions;
-				} else {
-					$parserOptions = $this->wikipage->makeParserOptions( $context );
-				}
-				$this->html = $parser->parse( $this->wikitext,
-					$this->wikipage->getTitle(), $parserOptions )->getText();
-			}
-		}
-		return $this->html;
+	public function getHTML( IContextSource $context ) : string {
+		return CommentStreamsUtils::parse( $this->wikitext, $this->wikipage, $context );
 	}
 
 	/**
-	 * @return User the author of this comment
+	 * @return int number of replies
 	 */
-	public function getUser() {
-		if ( $this->user === null ) {
-			// TODO: check
-			if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
-				// MW 1.35+
-				$user_id = $this->getFirstRevision()->getUser( RevisionRecord::RAW )->getId();
-			} else {
-				$user_id = $this->wikipage->getOldestRevision()->getUser();
-			}
-			$this->user = User::newFromId( $user_id );
-		}
-		return $this->user;
-	}
-
-	private function getFirstRevision() : RevisionRecord {
-		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
-		return $revisionStore->getFirstRevision( $this->wikipage->getTitle() );
-	}
-
-	private function getLatestRevision() : ?RevisionRecord {
-		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
-		return $revisionStore->getRevisionByTitle( $this->wikipage->getTitle(),
-			0, IDBAccessObject::READ_LATEST );
+	public function getNumReplies() : int {
+		return $this->num_replies;
 	}
 
 	/**
-	 * @return bool true if the last edit to this comment was not done by the
-	 * original author
+	 * @return ?User the author of this comment
 	 */
-	public function isLastEditModerated() {
-		if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
-			// MW 1.35+
-			$author = $this->getFirstRevision()->getUser( RevisionRecord::RAW )->getId();
-			$latestRevision = $this->getLatestRevision();
-			if ( $latestRevision ) {
-				$lastEditor = $latestRevision->getUser( RevisionRecord::RAW )->getId();
-			} else {
-				// TODO: why?
-				// new Revision not saved yet
-				return false;
-			}
-		} else {
-			$author = $this->wikipage->getOldestRevision()->getUser();
-			$lastEditor = $this->wikipage->getRevision()->getUser();
-		}
-		return $author !== $lastEditor;
+	public function getAuthor() : ?User {
+		return $this->author;
 	}
 
 	/**
 	 * @return string username of the author of this comment
 	 */
-	public function getUsername() {
-		return $this->getUser()->getName();
+	public function getUsername() : string {
+		return $this->author->getName();
 	}
 
 	/**
 	 * @return string display name of the author of this comment linked to
 	 * the user's user page if it exists
 	 */
-	public function getUserDisplayName() {
-		return self::getDisplayNameFromUser( $this->getUser() );
+	public function getUserDisplayName() : string {
+		return $this->getDisplayNameFromUser( $this->author, true );
 	}
 
 	/**
 	 * @return string display name of the author of this comment
 	 */
-	public function getUserDisplayNameUnlinked() {
-		return self::getDisplayNameFromUser( $this->getUser(), false );
+	public function getUserDisplayNameUnlinked() : string {
+		return $this->getDisplayNameFromUser( $this->author, false );
 	}
 
 	/**
-	 * @return string the URL of the avatar of the author of this comment
+	 * @return User the last editor of this comment
 	 */
-	public function getAvatar() {
-		if ( $this->avatar === null ) {
-			if ( class_exists( 'wAvatar' ) ) {
-				// from Extension:SocialProfile
-				$avatar = new \wAvatar( $this->getUser()->getId(), 'l' );
-				$this->avatar = $GLOBALS['wgUploadPath'] . '/avatars/' .
-					$avatar->getAvatarImage();
-			} else {
-				$this->avatar = self::getAvatarFromUser( $this->getUser() );
-			}
-		}
-		return $this->avatar;
+	public function getLastEditor() : User {
+		return $this->lastEditor;
 	}
 
 	/**
-	 * @return MWTimestamp the earliest revision date for this
+	 * @return bool true if the last edit to this comment was not done by the
+	 * original author
 	 */
-	public function getCreationTimestamp() {
-		if ( $this->creation_timestamp === null ) {
-			if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
-				// MW 1.35+
-				$timestamp = $this->getFirstRevision()->getTimestamp();
-			} else {
-				$timestamp = $this->wikipage->getTitle()->getEarliestRevTime();
-			}
-			$this->creation_timestamp = MWTimestamp::getLocalInstance( $timestamp );
-		}
+	public function isLastEditModerated() : bool {
+		return $this->author->getId() !== $this->lastEditor->getId();
+	}
+
+	/**
+	 * @return MWTimestamp
+	 */
+	public function getCreationTimestamp() : MWTimestamp {
 		return $this->creation_timestamp;
 	}
 
 	/**
-	 * @return string the earliest revision date for this
+	 * @return string
 	 */
 	public function getCreationDate() : string {
-		if ( $this->getCreationTimestamp() !== null ) {
-			return $this->creation_timestamp->format( "M j \a\\t g:i a" );
-		}
-		return "";
+		return $this->creation_timestamp->format( "M j \a\\t g:i a" );
 	}
 
 	/**
-	 * @return MWTimestamp the latest revision date for this
+	 * @return ?string
 	 */
-	public function getModificationTimestamp() {
-		if ( $this->modification_timestamp === null ) {
-			$title = $this->wikipage->getTitle();
-
-			// TODO:  check
-			if ( method_exists( RevisionStore::class, 'getFirstRevision' ) ) {
-				// MW 1.35+
-				$firstRevision = $this->getFirstRevision();
-			} else {
-				$firstRevision = $title->getFirstRevision();
-			}
-
-			if ( $firstRevision === null ) {
-				return null;
-			}
-
-			$latestRevisionId = $title->getLatestRevId();
-			if ( $firstRevision->getId() === $latestRevisionId ) {
-				return null;
-			}
-
-			// TODO: check
-			$revStore = MediaWikiServices::getInstance()->getRevisionStore();
-			if ( version_compare( MW_VERSION, '1.34', '<' ) ) {
-				$timestamp = $revStore->getTimestampFromId( $title, $latestRevisionId );
-			} else {
-				$timestamp = $revStore->getTimestampFromId( $latestRevisionId );
-			}
-
-			$this->modification_timestamp = MWTimestamp::getLocalInstance(
-				$timestamp );
-		}
-		return $this->modification_timestamp;
-	}
-
-	/**
-	 * @return MWTimestamp the earliest revision date for this
-	 */
-	public function getModificationDate() {
-		if ( $this->getModificationTimestamp() !== null ) {
-			return $this->modification_timestamp->format( "M j \a\\t g:i a" );
-		}
-		return null;
-	}
-
-	/**
-	 * @return int number of replies
-	 */
-	public function getNumReplies() {
-		if ( $this->num_replies === null ) {
-			$dbr = wfGetDB( DB_REPLICA );
-			$this->num_replies = $dbr->selectRowCount(
-				'cs_comment_data',
-				'*',
-				[
-					'cst_parent_page_id' => $this->getId()
-				],
-				__METHOD__
-			);
-		}
-		return $this->num_replies;
+	public function getModificationDate() : ?string {
+		return $this->modification_timestamp ?
+			$this->modification_timestamp->format( "M j \a\\t g:i a" ) : null;
 	}
 
 	/**
 	 * @param IContextSource $context
 	 * @return array get comment data in array suitable for JSON
 	 */
-	public function getJSON( IContextSource $context ) {
+	public function getJSON( IContextSource $context ) : array {
 		$json = [
-			'commenttitle' => $this->getCommentTitle(),
-			'username' => $this->getUsername(),
-			'userdisplayname' => $this->getUserDisplayName(),
-			'avatar' => $this->getAvatar(),
-			'created' => $this->getCreationDate(),
-			'created_timestamp' => $this->getCreationTimestamp()->format( "U" ),
-			'modified' => $this->getModificationDate(),
-			'moderated' => $this->isLastEditModerated() ? "moderated" : null,
-			'wikitext' => htmlentities( $this->getWikiText() ),
+			'pageid' => $this->wikipage->getId(),
+			'commentblockid' => $this->comment_block_id,
+			'associatedid' => $this->assoc_page_id,
+			'parentid' => $this->parent_page_id,
+			'commenttitle' => $this->comment_title,
+			'wikitext' => htmlentities( $this->wikitext ),
 			'html' => $this->getHTML( $context ),
-			'pageid' => $this->getId(),
-			'cst_id' => $this->getCommentsId(),
-			'associatedid' => $this->getAssociatedId(),
-			'parentid' => $this->getParentId(),
-			'numreplies' => $this->getNumReplies(),
+			'username' => $this->getUsername(),
+			'numreplies' => $this->num_replies,
+			'userdisplayname' => $this->getUserDisplayName(),
+			'avatar' => $this->avatar,
+			'moderated' => $this->isLastEditModerated() ? "moderated" : null,
+			'created' => $this->getCreationDate(),
+			'created_timestamp' => $this->creation_timestamp->format( "U" ),
+			'modified' => $this->getModificationDate()
 		];
-		if ( $GLOBALS['wgCommentStreamsEnableVoting'] ) {
-			$json['numupvotes'] = $this->getNumUpVotes();
-			$json['numdownvotes'] = $this->getNumDownVotes();
+
+		$user = $context->getUser();
+		if ( $this->parent_page_id === null ) {
+			if ( $this->enableVoting ) {
+				$json['numupvotes'] = $this->commentStreamsStore->getNumUpVotes( $this->getId() );
+				$json['numdownvotes'] =
+					$this->commentStreamsStore->getNumDownVotes( $this->getId() );
+				$json['vote'] = $this->getVote( $user );
+			}
+			if ( $this->echoInterface->isLoaded() ) {
+				$json['watching'] = $this->isWatching( $user ) ? 1 : 0;
+			}
 		}
+
 		return $json;
-	}
-
-	/**
-	 * get vote for user
-	 *
-	 * @param User $user the author of the edit
-	 * @return +1 for up vote, -1 for down vote, 0 for no vote
-	 */
-	public function getVote( $user ) {
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->selectRow(
-			'cs_votes',
-			[
-				'cst_v_vote'
-			],
-			[
-				'cst_v_page_id' => $this->getId(),
-				'cst_v_user_id' => $user->getId()
-			],
-			__METHOD__
-		);
-		if ( $result ) {
-			$vote = (int)$result->cst_v_vote;
-			if ( $vote > 0 ) {
-				return 1;
-			}
-			if ( $vote < 0 ) {
-				return -1;
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * @return int number of up votes
-	 */
-	public function getNumUpVotes() {
-		if ( $this->num_up_votes === null ) {
-			$dbr = wfGetDB( DB_REPLICA );
-			$this->num_up_votes = $dbr->selectRowCount(
-				'cs_votes',
-				'*',
-				[
-					'cst_v_page_id' => $this->getId(),
-					'cst_v_vote' => 1
-				],
-				__METHOD__
-			);
-		}
-		return $this->num_up_votes;
-	}
-
-	/**
-	 * @return int number of down votes
-	 */
-	public function getNumDownVotes() {
-		if ( $this->num_down_votes === null ) {
-			$dbr = wfGetDB( DB_REPLICA );
-			$this->num_down_votes = $dbr->selectRowCount(
-				'cs_votes',
-				'*',
-				[
-					'cst_v_page_id' => $this->getId(),
-					'cst_v_vote' => -1
-				],
-				__METHOD__
-			);
-		}
-		return $this->num_down_votes;
 	}
 
 	/**
@@ -671,184 +392,44 @@ class Comment {
 	 * @param User $user the user voting on the comment
 	 * @return bool database status code
 	 */
-	public function vote( $vote, $user ) {
-		if ( $vote !== "-1" && $vote !== "0" && $vote !== "1" ) {
-			return false;
-		}
-		$vote = (int)$vote;
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->selectRow(
-			'cs_votes',
-			[
-				'cst_v_vote'
-			],
-			[
-				'cst_v_page_id' => $this->getId(),
-				'cst_v_user_id' => $user->getId()
-			],
-			__METHOD__
-		);
-		if ( $result ) {
-			if ( $vote === (int)$result->cst_v_vote ) {
-				return true;
-			}
-			if ( $vote === 1 || $vote === -1 ) {
-				$dbw = wfGetDB( DB_MASTER );
-				$result = $dbw->update(
-					'cs_votes',
-					[
-						'cst_v_vote' => $vote
-					],
-					[
-						'cst_v_page_id' => $this->getId(),
-						'cst_v_user_id' => $user->getId()
-					],
-					__METHOD__
-				);
-			} else {
-				$dbw = wfGetDB( DB_MASTER );
-				$result = $dbw->delete(
-					'cs_votes',
-					[
-						'cst_v_page_id' => $this->getId(),
-						'cst_v_user_id' => $user->getId()
-					],
-					__METHOD__
-				);
-			}
-		} else {
-			if ( $vote === 0 ) {
-				return true;
-			}
-			$dbw = wfGetDB( DB_MASTER );
-			$result = $dbw->insert(
-				'cs_votes',
-				[
-					'cst_v_page_id' => $this->getId(),
-					'cst_v_user_id' => $user->getId(),
-					'cst_v_vote' => $vote
-				],
-				__METHOD__
-			);
-		}
+	public function vote( string $vote, User $user ) : bool {
+		Assert::parameter( $vote === "-1" || $vote === "0" || $vote === "1", '$vote',
+			'must be "-1", "0", or "1"' );
+		$result = $this->commentStreamsStore->vote( (int)$vote, $this->getId(), $user->getId() );
+		$this->smwInterface->update( $this->getTitle() );
 		return $result;
 	}
 
 	/**
-	 * watch a comment (get page ID from this comment)
-	 *
-	 * @param User $user the user watching the comment
-	 * @return bool database true for OK, false for error
+	 * @param User $user
+	 * @return int
 	 */
-	public function watch( $user ) {
-		return self::watchComment( $this->getID(), $user );
+	public function getVote( User $user ) : int {
+		return $this->commentStreamsStore->getVote( $this->getId(), $user->getId() );
 	}
 
 	/**
-	 * watch a comment (get page ID from parameter)
-	 *
-	 * @param int $pageid the page ID of the comment to watch
-	 * @param User $user the user watching the comment
-	 * @return bool database true for OK, false for error
+	 * @param int $user_id
+	 * @return bool
 	 */
-	private static function watchComment( $pageid, $user ) {
-		if ( self::isWatchingComment( $pageid, $user ) ) {
-			return true;
-		}
-		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw->insert(
-			'cs_watchlist',
-			[
-				'cst_wl_page_id' => $pageid,
-				'cst_wl_user_id' => $user->getId()
-			],
-			__METHOD__
-		);
-		return $result;
+	public function watch( int $user_id ) : bool {
+		return $this->commentStreamsStore->watch( $this->getId(), $user_id );
 	}
 
 	/**
-	 * unwatch a comment
-	 *
-	 * @param User $user the user unwatching the comment
-	 * @return bool database true for OK, false for error
+	 * @param int $user_id
+	 * @return bool
 	 */
-	public function unwatch( $user ) {
-		if ( !$this->isWatching( $user ) ) {
-			return true;
-		}
-		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw->delete(
-			'cs_watchlist',
-			[
-				'cst_wl_page_id' => $this->getId(),
-				'cst_wl_user_id' => $user->getId()
-			],
-			__METHOD__
-		);
-		return $result;
+	public function unwatch( int $user_id ) : bool {
+		return $this->commentStreamsStore->unwatch( $this->getId(), $user_id );
 	}
 
 	/**
-	 * Check if a particular user is watching this comment
-	 *
-	 * @param User $user the user watching the comment
-	 * @return bool database true for OK, false for error
+	 * @param User $user
+	 * @return bool
 	 */
-	public function isWatching( $user ) {
-		return self::isWatchingComment( $this->getId(), $user );
-	}
-
-	/**
-	 * Check if a particular user is watching a comment
-	 *
-	 * @param int $pageid the page ID of the comment to check
-	 * @param User $user the user watching the comment
-	 * @return bool database true for OK, false for error
-	 */
-	private static function isWatchingComment( $pageid, $user ) {
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->selectRow(
-			'cs_watchlist',
-			[
-				'cst_wl_page_id'
-			],
-			[
-				'cst_wl_page_id' => $pageid,
-				'cst_wl_user_id' => $user->getId()
-			],
-			__METHOD__
-		);
-		if ( $result ) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Get an array of watchers for this comment
-	 *
-	 * @return array of user IDs
-	 */
-	public function getWatchers() {
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->select(
-			'cs_watchlist',
-			[
-				'cst_wl_user_id'
-			],
-			[
-				'cst_wl_page_id' => $this->getId()
-			],
-			__METHOD__
-		);
-		$users = [];
-		foreach ( $result as $row ) {
-			$user_id = $row->cst_wl_user_id;
-			$user = User::newFromId( $user_id );
-			$users[$user_id] = $user;
-		}
-		return $users;
+	public function isWatching( User $user ) : bool {
+		return $this->commentStreamsStore->isWatching( $this->getId(), $user->getId() );
 	}
 
 	/**
@@ -857,47 +438,43 @@ class Comment {
 	 * $comment_title may only be non null if this comment has a null parent id
 	 * and vice versa
 	 *
-	 * @param string $comment_title the new title for the comment
+	 * @param ?string $comment_title the new title for the comment
 	 * @param string $wikitext the wikitext to add
 	 * @param User $user the author of the edit
 	 * @return bool true if successful
+	 * @throws MWException
 	 */
-	public function update( $comment_title, $wikitext, $user ) {
-		if ( $comment_title === null && $this->getParentId() === null ) {
-			return false;
-		}
-		if ( $comment_title !== null && $this->getParentId() !== null ) {
-			return false;
-		}
-		$annotated_wikitext =
-			self::addAnnotations( $wikitext, $comment_title,
-				$this->getAssociatedId() );
-		$content = new WikitextContent( $annotated_wikitext );
-		$status = $this->wikipage->doEditContent( $content, '',
-			EDIT_UPDATE | EDIT_SUPPRESS_RC, false, $user, null );
-		if ( !$status->isOK() && !$status->isGood() ) {
-			return false;
-		}
-		$this->wikitext = $wikitext;
-		$this->modification_timestamp = null;
-		$this->wikipage = WikiPage::newFromID( $this->wikipage->getId(), 'fromdbmaster' );
-
-		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw->update(
-			'cs_comment_data',
-			[
-				'cst_comment_title' => $comment_title
-			],
-			[
-				'cst_page_id' => $this->getId()
-			],
-			__METHOD__
+	public function update(
+		?string $comment_title,
+		string $wikitext,
+		User $user
+	) : bool {
+		Assert::parameter(
+			( $comment_title === null && $this->parent_page_id !== null ) ||
+			( $comment_title !== null && $this->parent_page_id === null ),
+			'$comment_title',
+			'must be null if parent page ID is non-null or non-null if parent page ID is null'
+		);
+		$result = $this->commentStreamsStore->updateComment(
+			$this->wikipage,
+			$comment_title,
+			$wikitext,
+			$user
 		);
 		if ( !$result ) {
 			return false;
 		}
 		$this->comment_title = $comment_title;
-
+		$this->wikitext = $wikitext;
+		$this->modification_timestamp = null;
+		$wikipage = CommentStreamsUtils::newWikiPageFromId( $this->wikipage->getId(),
+			'fromdbmaster' );
+		if ( $wikipage !== null ) {
+			$this->wikipage = $wikipage;
+		}
+		if ( $this->parent_page_id === null ) {
+			$this->smwInterface->update( $this->getTitle() );
+		}
 		return true;
 	}
 
@@ -906,135 +483,56 @@ class Comment {
 	 *
 	 * @param User $deleter
 	 * @return bool true if successful
+	 * @throws FatalError
+	 * @throws MWException
 	 */
-	public function delete( User $deleter ) {
-		$pageid = $this->getId();
-
-		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
-			$status = $this->getWikiPage()->doDeleteArticleReal(
-				'comment deleted',
-				true
-			);
-		} else {
-			$status = $this->getWikiPage()->doDeleteArticleReal(
-				'comment deleted',
-				$deleter,
-				true
-			);
-		}
-
-		if ( !$status->isOK() && !$status->isGood() ) {
-			return false;
-		}
-
-		$dbw = wfGetDB( DB_MASTER );
-		$result = $dbw->delete(
-			'cs_comment_data',
-			[
-				'cst_page_id' => $pageid
-			],
-			__METHOD__
-		);
-		return $result;
+	public function delete( User $deleter ) : bool {
+		return $this->commentStreamsStore->deleteComment( $this->wikipage, $deleter );
 	}
 
-	/**
-	 * add extra information to wikitext before storage
-	 *
-	 * @param string $wikitext the wikitext to which to add
-	 * @param string $comment_title string title of comment
-	 * @param int $assoc_page_id page ID for the wikipage this comment is on
-	 * @return string annotated wikitext
-	 */
-	public static function addAnnotations( $wikitext, $comment_title,
-		$assoc_page_id ) {
-		if ( $comment_title !== null ) {
-			$wikitext .= <<<EOT
-{{DISPLAYTITLE:
-$comment_title
-}}
-EOT;
+	private function setAvatar() {
+		if ( array_key_exists( $this->author->getId(), self::$avatarCache ) ) {
+			$this->avatar = self::$avatarCache[ $this->author->getId() ];
+			return;
 		}
-		return $wikitext;
-	}
 
-	/**
-	 * add extra information to wikitext before storage
-	 *
-	 * @param string $wikitext the wikitext to which to add
-	 * @return string wikitext without annotations
-	 */
-	public function removeAnnotations( $wikitext ) {
-		$comment_title = $this->getCommentTitle();
-		if ( $comment_title !== null ) {
-			$strip = <<<EOT
-{{DISPLAYTITLE:
-$comment_title
-}}
-EOT;
-			$wikitext = str_replace( $strip, '', $wikitext );
-		}
-		return $wikitext;
-	}
+		$this->avatar = $this->socialProfileInterface->getAvatar( $this->author );
 
-	/**
-	 * get comments for the given page
-	 *
-	 * @param int $assoc_page_id ID of page to get comments for
-	 * @return array array of comments for the given page
-	 */
-	public static function getAssociatedComments( $assoc_page_id ) {
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->select(
-			'cs_comment_data',
-			[
-				'cst_page_id'
-			],
-			[
-				'cst_assoc_page_id' => $assoc_page_id
-			],
-			__METHOD__
-		);
-		$comments = [];
-		foreach ( $result as $row ) {
-			$page_id = $row->cst_page_id;
-			$wikipage = WikiPage::newFromId( $page_id );
-			$comment = self::newFromWikiPage( $wikipage );
-			if ( $comment !== null ) {
-				$comments[] = $comment;
+		if ( $this->avatar === null && $this->userAvatarPropertyName !== null ) {
+			$title = $this->smwInterface->getUserProperty( $this->author,
+				$this->userAvatarPropertyName );
+			if ( $title !== null ) {
+				if ( is_string( $title ) ) {
+					$title = Title::newFromText( $title );
+				}
+				if ( $title->isKnown() && $title->getNamespace() === NS_FILE ) {
+					$file = CommentStreamsUtils::findFile( $title->getText() );
+					if ( $file ) {
+						$this->avatar = $file->getFullUrl();
+					}
+				}
 			}
 		}
-		return $comments;
+
+		self::$avatarCache[ $this->author->getId() ] = $this->avatar;
 	}
 
-	/**
-	 * get replies for the given comment
-	 *
-	 * @param int $parent_page_id ID of page to get comments for
-	 * @return array array of comments for the given page
-	 */
-	public static function getReplies( $parent_page_id ) {
-		$dbr = wfGetDB( DB_REPLICA );
-		$result = $dbr->select(
-			'cs_comment_data',
-			[
-				'cst_page_id'
-			],
-			[
-				'cst_parent_page_id' => $parent_page_id
-			],
-			__METHOD__
-		);
-		$comments = [];
-		foreach ( $result as $row ) {
-			$page_id = $row->cst_page_id;
-			$wikipage = WikiPage::newFromId( $page_id );
-			$comment = self::newFromWikiPage( $wikipage );
-			if ( $comment !== null ) {
-				$comments[] = $comment;
-			}
+	private function setModificationTimestamp() {
+		$title = $this->wikipage->getTitle();
+		$firstRevisionId = CommentStreamsUtils::getFirstRevisionId( $title );
+		if ( $firstRevisionId === null ) {
+			return;
 		}
-		return $comments;
+
+		$latestRevisionId = $title->getLatestRevId();
+		if ( $firstRevisionId === $latestRevisionId ) {
+			return;
+		}
+
+		$timestamp = CommentStreamsUtils::getTimestampFromId( $latestRevisionId, $title );
+		if ( $timestamp !== false ) {
+			$this->modification_timestamp = MWTimestamp::getLocalInstance( $timestamp );
+		}
 	}
 
 	/**
@@ -1042,23 +540,27 @@ EOT;
 	 *
 	 * @param User $user the user
 	 * @param bool $linked whether to link the display name to the user page,
-	 * if it exists
+	 *        if it exists
 	 * @return string display name for user
 	 */
-	public static function getDisplayNameFromUser( $user, $linked = true ) {
+	private function getDisplayNameFromUser(
+		User $user,
+		bool $linked
+	) : string {
 		if ( $user->isAnon() ) {
-			$html = Html::openElement( 'span', [
+			return Html::openElement( 'span', [
 					'class' => 'cs-comment-author-anonymous'
 				] )
 				. wfMessage( 'commentstreams-author-anonymous' )
 				. Html::closeElement( 'span' );
-			return $html;
 		}
 		$userpage = $user->getUserPage();
 		$displayname = null;
-		if ( $GLOBALS['wgCommentStreamsUserRealNamePropertyName'] !== null ) {
-			$displayname = self::getUserProperty( $user,
-				$GLOBALS['wgCommentStreamsUserRealNamePropertyName'] );
+		if ( $this->userRealNamePropertyName !== null ) {
+			$displayname = $this->smwInterface->getUserProperty(
+				$user,
+				$this->userRealNamePropertyName
+			);
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
 			$values = PageProps::getInstance()->getProperties( $userpage,
@@ -1074,95 +576,8 @@ EOT;
 			$displayname = $user->getName();
 		}
 		if ( $linked && $userpage->exists() ) {
-			$displayname = CommentStreamsUtils::link( $userpage, $displayname );
+			$displayname = $this->linkRenderer->makeLink( $userpage, $displayname );
 		}
 		return $displayname;
-	}
-
-	/**
-	 * return the name of the file page containing the user's avatar
-	 *
-	 * @param User $user the user
-	 * @return string URL of avatar
-	 */
-	public static function getAvatarFromUser( $user ) {
-		$avatar = null;
-		if ( $GLOBALS['wgCommentStreamsUserAvatarPropertyName'] !== null ) {
-			$avatar = self::getUserProperty( $user,
-				$GLOBALS['wgCommentStreamsUserAvatarPropertyName'] );
-			if ( $avatar !== null ) {
-				if ( gettype( $avatar ) === 'string' ) {
-					$avatar = Title::newFromText( $avatar );
-					if ( $avatar === null ) {
-						return null;
-					}
-				}
-				if ( !get_class( $avatar ) === 'Title' ) {
-					return null;
-				}
-				if ( $avatar->isKnown() && $avatar->getNamespace() === NS_FILE ) {
-					if ( method_exists( MediaWikiServices::class, 'getRepoGroup' ) ) {
-						// MediaWiki 1.34+
-						$file = MediaWikiServices::getInstance()->getRepoGroup()
-							->findFile( $avatar );
-					} else {
-						$file = wfFindFile( $avatar );
-					}
-					if ( $file ) {
-						return $file->getFullUrl();
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * return the value of a property on a user page
-	 *
-	 * @param User $user the user
-	 * @param string $propertyName the name of the property
-	 * @return string|null the value of the property
-	 */
-	private static function getUserProperty( $user, $propertyName ) {
-		if ( defined( 'SMW_VERSION' ) ) {
-			$userpage = $user->getUserPage();
-			if ( $userpage->exists() ) {
-				$store = \SMW\StoreFactory::getStore();
-				$subject = \SMWDIWikiPage::newFromTitle( $userpage );
-				$data = $store->getSemanticData( $subject );
-				$property = \SMWDIProperty::newFromUserLabel( $propertyName );
-				$values = $data->getPropertyValues( $property );
-				if ( count( $values ) > 0 ) {
-					// this property should only have one value so pick the first one
-					$value = $values[0];
-					if ( ( defined( 'SMWDataItem::TYPE_STRING' ) &&
-						$value->getDIType() == SMWDataItem::TYPE_STRING ) ||
-						$value->getDIType() == SMWDataItem::TYPE_BLOB ) {
-						return $value->getString();
-					} elseif ( $value->getDIType() == SMWDataItem::TYPE_WIKIPAGE ) {
-						return $value->getTitle();
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Used by Echo to locate the users watching a comment being replied to.
-	 * @param EchoEvent $event the Echo event
-	 * @return array array mapping user id to User object
-	 */
-	public static function locateUsersWatchingComment( $event ) {
-		$id = $event->getExtraParam( 'parent_id' );
-		$wikipage = WikiPage::newFromId( $id );
-		if ( $wikipage !== null ) {
-			$comment = self::newFromWikiPage( $wikipage );
-			if ( $comment !== null ) {
-				return $comment->getWatchers();
-			}
-		}
-		return [];
 	}
 }
