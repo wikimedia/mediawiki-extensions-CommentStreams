@@ -33,7 +33,6 @@ var commentstreams_controller = ( function () {
 		moderatorDelete: false,
 		moderatorFastDelete: false,
 		showLabels: false,
-		userDisplayName: null,
 		newestStreamsOnTop: false,
 		initiallyCollapsed: false,
 		areNamespaceEnabled: false,
@@ -75,10 +74,8 @@ var commentstreams_controller = ( function () {
 			this.canComment = config.canComment;
 			this.moderatorEdit = config.moderatorEdit;
 			this.moderatorDelete = config.moderatorDelete;
-			this.moderatorFastDelete = this.moderatorDelete ?
-				config.moderatorFastDelete : false;
+			this.moderatorFastDelete = this.moderatorDelete ? config.moderatorFastDelete : false;
 			this.showLabels = config.showLabels;
-			this.userDisplayName = config.userDisplayName;
 			this.newestStreamsOnTop = config.newestStreamsOnTop;
 			this.initiallyCollapsed = config.initiallyCollapsed;
 			this.areNamespaceEnabled = config.areNamespaceEnabled;
@@ -166,7 +163,7 @@ var commentstreams_controller = ( function () {
 				var parentComment = this.comments[ parentIndex ];
 				var commenthtml = this.formatComment( parentComment );
 				var location = $( commenthtml )
-					.insertBefore( '#' + parentComment.cst_id + ' .cs-footer' );
+					.insertBefore( '#' + parentComment.commentblockid + ' .cs-footer' );
 				var childIndex;
 				for ( childIndex in parentComment.children ) {
 					var childComment = parentComment.children[ childIndex ];
@@ -347,8 +344,7 @@ var commentstreams_controller = ( function () {
 			var rightDiv = $( '<div>' )
 				.addClass( 'cs-comment-header-right' );
 
-			if ( commentData.parentid === null && this.enableWatchlist &&
-				!this.isLoggedIn ) {
+			if ( commentData.parentid === null && this.enableWatchlist && this.isLoggedIn ) {
 				rightDiv.append( this.createWatchButton( commentData ) );
 			}
 
@@ -664,7 +660,7 @@ var commentstreams_controller = ( function () {
 				.spin( document.getElementById( comment.attr( 'id' ) ) );
 			CommentStreamsQuerier.vote( pageid, newvote, function ( result ) {
 				$( '.spinner' ).remove();
-				if ( result.error === undefined ) {
+				if ( result === undefined ) {
 					if ( up ) {
 						if ( upimage.hasClass( 'cs-vote-enabled' ) ) {
 							upimage.attr( 'src', self.imagepath + 'upvote-disabled.png' );
@@ -722,7 +718,7 @@ var commentstreams_controller = ( function () {
 				.spin( document.getElementById( comment.attr( 'id' ) ) );
 			CommentStreamsQuerier.watch( pageid, watchaction, function ( result ) {
 				$( '.spinner' ).remove();
-				if ( result.error === undefined ) {
+				if ( result === undefined ) {
 					if ( watchaction ) {
 						image
 							.attr( {
@@ -1019,10 +1015,10 @@ var commentstreams_controller = ( function () {
 			}
 			this.enableAllButtons();
 		},
-		postComment: function ( parentPageId, cst_id ) {
+		postComment: function ( parentPageId, commentblockid ) {
 			var self = this;
 			if ( this.isLoggedIn ) {
-				self.postComment2( parentPageId, cst_id );
+				self.postComment2( parentPageId, commentblockid );
 			} else {
 				var message_text =
 					mw.message( 'commentstreams-dialog-anonymous-message' ).text();
@@ -1042,21 +1038,21 @@ var commentstreams_controller = ( function () {
 					]
 				} ).closed.then( function ( data ) {
 					if ( data && data.action && data.action === 'ok' ) {
-						self.postComment2( parentPageId, cst_id );
+						self.postComment2( parentPageId, commentblockid );
 					}
 				} );
 			}
 		},
-		postComment2: function ( parentPageId, cst_id ) {
+		postComment2: function ( parentPageId, commentblockid ) {
 			var self = this;
 			if ( $( '#cs-body-edit-field' ).css( 'display' ) === 'none' ) {
-				self.postCommentFromVE( parentPageId, cst_id );
+				self.postCommentFromVE( parentPageId, commentblockid );
 			} else {
 				var commentText = $( '#cs-body-edit-field' ).val();
-				self.realPostComment( parentPageId, cst_id, commentText );
+				self.realPostComment( parentPageId, commentblockid, commentText );
 			}
 		},
-		postCommentFromVE: function ( parentPageId, cst_id ) {
+		postCommentFromVE: function ( parentPageId, commentblockid ) {
 			var self = this;
 			var editField = $( '#cs-body-edit-field' );
 			var veInstances = editField.getVEInstances();
@@ -1069,13 +1065,13 @@ var commentstreams_controller = ( function () {
 				title: mw.config.get( 'wgPageName' ).split( /(\\|\/)/g ).pop()
 			} ).then( function ( data ) {
 				var commentText = data[ 'veforall-parsoid-utils' ].content;
-				self.realPostComment( parentPageId, cst_id, commentText );
+				self.realPostComment( parentPageId, commentblockid, commentText );
 			} )
 				.fail( function () {
 					self.reportError( 'commentstreams-ve-conversion-error' );
 				} );
 		},
-		realPostComment: function ( parentPageId, cst_id, commentText ) {
+		realPostComment: function ( parentPageId, commentblockid, commentText ) {
 			var self = this;
 
 			var commentTitle;
@@ -1106,7 +1102,7 @@ var commentstreams_controller = ( function () {
 
 				var associatedPageId = mw.config.get( 'wgArticleId' );
 				CommentStreamsQuerier.postComment( commentTitle, commentText,
-					associatedPageId, parentPageId, cst_id, function ( result ) {
+					associatedPageId, parentPageId, commentblockid, function ( result ) {
 						$( '.spinner' ).remove();
 						if ( result.error === undefined ) {
 							var comment = self.formatComment( result );
@@ -1129,11 +1125,11 @@ var commentstreams_controller = ( function () {
 							} else {
 								self.hideEditBox( false );
 								if ( self.newestStreamsOnTop ) {
-									comment.insertAfter( '#' + cst_id + ' .cs-header' )
+									comment.insertAfter( '#' + commentblockid + ' .cs-header' )
 										.hide()
 										.slideDown();
 								} else {
-									comment.insertBefore( '#' + cst_id + ' .cs-footer' )
+									comment.insertBefore( '#' + commentblockid + ' .cs-footer' )
 										.hide()
 										.slideDown();
 								}
@@ -1177,12 +1173,20 @@ var commentstreams_controller = ( function () {
 		realDeleteComment: function ( element, pageId ) {
 			var self = this;
 			this.disableAllButtons();
-			element.fadeTo( 100, 0.2, function () {
+			var parentId = element
+				.closest( '.cs-stream' )
+				.find( '.cs-head-comment' )
+				.attr( 'data-id' );
+			var fadeElement = element;
+			if ( parentId === pageId && self.moderatorFastDelete ) {
+				fadeElement = element.closest( '.cs-stream' );
+			}
+			fadeElement.fadeTo( 100, 0.2, function () {
 				new Spinner( self.spinnerOptions )
 					.spin( document.getElementById( element.attr( 'id' ) ) );
 				CommentStreamsQuerier.deleteComment( pageId, function ( result ) {
 					$( '.spinner' ).remove();
-					if ( result.error === undefined ||
+					if ( result === undefined ||
 						result.error === 'commentstreams-api-error-commentnotfound' ) {
 						if ( element.hasClass( 'cs-head-comment' ) ) {
 							element.closest( '.cs-stream' )
@@ -1191,10 +1195,6 @@ var commentstreams_controller = ( function () {
 									self.enableAllButtons();
 								} );
 						} else {
-							var parentId = element
-								.closest( '.cs-stream' )
-								.find( '.cs-head-comment' )
-								.attr( 'data-id' );
 							CommentStreamsQuerier.queryComment( parentId, function ( queryResult ) {
 								if ( queryResult.error === undefined &&
 									self.canDelete( queryResult ) &&
@@ -1214,7 +1214,7 @@ var commentstreams_controller = ( function () {
 						}
 					} else {
 						self.reportError( result.error );
-						element.fadeTo( 0.2, 100, function () {
+						fadeElement.fadeTo( 0.2, 100, function () {
 							self.enableAllButtons();
 						} );
 					}
@@ -1275,15 +1275,17 @@ var commentstreams_controller = ( function () {
 							.find( '.cs-head-comment' )
 							.attr( 'data-id' );
 						CommentStreamsQuerier.queryComment( parentId, function ( queryResult ) {
-							if ( queryResult.error === undefined &&
-								self.canDelete( queryResult ) &&
-								!self.moderatorFastDelete ) {
-								self.createDeleteButton( queryResult.username )
-									.insertAfter( element
-										.closest( '.cs-stream' )
-										.find( '.cs-head-comment' )
-										.find( '.cs-comment-header' )
-										.find( '.cs-edit-button' ) );
+							if ( queryResult.error === undefined ) {
+								if ( self.canDelete( queryResult ) && !self.moderatorFastDelete ) {
+									self.createDeleteButton( queryResult.username )
+										.insertAfter( element
+											.closest( '.cs-stream' )
+											.find( '.cs-head-comment' )
+											.find( '.cs-comment-header' )
+											.find( '.cs-edit-button' ) );
+								}
+							} else {
+								self.reportError( queryResult.error );
 							}
 							element.remove();
 							self.enableAllButtons();
@@ -1361,15 +1363,20 @@ var commentstreams_controller = ( function () {
 								.find( '.cs-head-comment' )
 								.attr( 'data-id' );
 							CommentStreamsQuerier.queryComment( parentId, function ( queryResult ) {
-								if ( queryResult.error === undefined &&
-								self.canDelete( queryResult ) &&
-								!self.moderatorFastDelete ) {
-									self.createDeleteButton( queryResult.username )
-										.insertAfter( element
-											.closest( '.cs-stream' )
-											.find( '.cs-head-comment' )
-											.find( '.cs-comment-header' )
-											.find( '.cs-edit-button' ) );
+								if ( queryResult.error === undefined ) {
+									if (
+										self.canDelete( queryResult ) &&
+										!self.moderatorFastDelete
+									) {
+										self.createDeleteButton( queryResult.usernam )
+											.insertAfter( element
+												.closest( '.cs-stream' )
+												.find( '.cs-head-comment' )
+												.find( '.cs-comment-header' )
+												.find( '.cs-edit-button' ) );
+									}
+								} else {
+									self.reportError( queryResult.error );
 								}
 								commentBox.slideUp( 'normal', function () {
 									commentBox.remove();
@@ -1431,6 +1438,8 @@ var commentstreams_controller = ( function () {
 window.CommentStreamsController = commentstreams_controller;
 
 ( function () {
+	'use strict';
+
 	$( document )
 		.ready( function () {
 			if ( mw.config.exists( 'CommentStreams' ) ) {

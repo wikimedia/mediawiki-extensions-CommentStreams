@@ -24,47 +24,46 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ApiBase;
+use ApiMain;
+use ApiUsageException;
 
 class ApiCSVote extends ApiCSBase {
-
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 */
-	public function __construct( $main, $action ) {
+	public function __construct( ApiMain $main, string $action ) {
 		parent::__construct( $main, $action, true );
 	}
 
 	/**
 	 * the real body of the execute function
-	 *
-	 * @return result of API request
+	 * @return ?array result of API request
+	 * @throws ApiUsageException
 	 */
-	protected function executeBody() {
+	protected function executeBody() : ?array {
 		if ( $this->getUser()->isAnon() ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-vote-notloggedin' );
+			$this->dieWithError( 'commentstreams-api-error-vote-notloggedin' );
 		}
 
 		$vote = $this->getMain()->getVal( 'vote' );
 
 		if ( $this->comment->getParentId() !== null ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-vote-novoteonreply' );
+			$this->dieWithError( 'commentstreams-api-error-vote-novoteonreply' );
 		}
 
 		$result = $this->comment->vote( $vote, $this->getUser() );
 		if ( !$result ) {
-			$this->dieCustomUsageMessage( 'commentstreams-api-error-vote' );
+			$this->dieWithError( 'commentstreams-api-error-vote' );
 		}
 
-		$this->getResult()->addValue( null, $this->getModuleName(), '' );
+		return null;
 	}
 
 	/**
 	 * @return array allowed parameters
 	 */
-	public function getAllowedParams() {
+	public function getAllowedParams() : array {
 		return array_merge( parent::getAllowedParams(),
 			[
 				'vote' =>
@@ -79,19 +78,19 @@ class ApiCSVote extends ApiCSBase {
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() {
+	public function getExamplesMessages() : array {
 		return [
 			'action=' . $this->getModuleName() . '&pageid=3&vote=1' =>
-			'apihelp-' . $this->getModuleName() . '-pageid-example',
+				'apihelp-' . $this->getModuleName() . '-pageid-example',
 			'action=' . $this->getModuleName() . '&title=CommentStreams:3&vote=-1' =>
-			'apihelp-' . $this->getModuleName() . '-title-example'
+				'apihelp-' . $this->getModuleName() . '-title-example'
 		];
 	}
 
 	/**
 	 * @return string indicates that this API module requires a CSRF toekn
 	 */
-	public function needsToken() {
+	public function needsToken() : string {
 		return 'csrf';
 	}
 }

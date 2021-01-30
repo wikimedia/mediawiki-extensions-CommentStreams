@@ -23,107 +23,121 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
+use ApiMain;
+use ApiUsageException;
+use ConfigException;
+use MediaWiki\MediaWikiServices;
+use MWException;
+use User;
+
 class ApiCSDeleteComment extends ApiCSBase {
+	/**
+	 * @var bool
+	 */
+	private $moderatorFastDelete;
 
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
+	 * @throws ConfigException
 	 */
-	public function __construct( $main, $action ) {
+	public function __construct( ApiMain $main, string $action ) {
 		parent::__construct( $main, $action, true );
+		$this->moderatorFastDelete = (bool)MediaWikiServices::getInstance()->getConfigFactory()->
+			makeConfig( 'CommentStreams' )->get( 'CommentStreamsModeratorFastDelete' );
 	}
 
 	/**
 	 * the real body of the execute function
 	 *
-	 * @return result of API request
+	 * @return ?array result of API request
+	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
-	protected function executeBody() {
+	protected function executeBody() : ?array {
 		$user = $this->getUser();
 		if ( $user->isAnon() ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-delete-notloggedin' );
+			$this->dieWithError( 'commentstreams-api-error-delete-notloggedin' );
 		}
 
-		if ( $this->getUser()->getId() ===
-			$this->comment->getWikiPage()->getOldestRevision()->getUser() &&
-			$this->comment->getNumReplies() === 0 ) {
+		if ( $this->comment->getParentId() !== null ) {
+			$replyCount = 0;
+		} else {
+			$replyCount = $this->comment->getNumReplies();
+		}
+
+		if ( $user->getId() === $this->comment->getAuthor()->getId() &&
+			$replyCount === 0 ) {
 			$action = 'cs-comment';
 		} else {
 			$action = 'cs-moderator-delete';
 		}
 
-		$title = $this->comment->getWikiPage()->getTitle();
-		if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
-			// MW 1.33+
-			if ( !\MediaWiki\MediaWikiServices::getInstance()
-				->getPermissionManager()
-				->userCan( $action, $user, $title )
-			) {
-				$this->dieCustomUsageMessage(
-					'commentstreams-api-error-delete-permissions' );
-			}
-		} else {
-			if ( !$title->userCan( $action, $user ) ) {
-				$this->dieCustomUsageMessage(
-					'commentstreams-api-error-delete-permissions' );
+		if ( $replyCount > 0 ) {
+			if ( $this->moderatorFastDelete ) {
+				$this->deleteReplies( $this->comment, $action, $user );
+			} else {
+				$this->dieWithError( 'commentstreams-api-error-delete-haschildren' );
 			}
 		}
 
-		$childCount = $this->comment->getNumReplies();
-		if ( $childCount > 0 ) {
-			if ( $GLOBALS['wgCommentStreamsModeratorFastDelete'] ) {
-				$result = $this->recursiveDelete( $this->comment );
-			} else {
-				$this->dieCustomUsageMessage(
-					'commentstreams-api-error-delete-haschildren' );
-			}
-		} else {
-			$result = $this->comment->delete( $user );
-			if ( $action === 'cs-comment' ) {
-				if ( $this->comment->getParentId() === null ) {
-					$this->logAction( 'comment-delete' );
-				} else {
-					$this->logAction( 'reply-delete' );
-				}
-			} else {
-				if ( $this->comment->getParentId() === null ) {
-					$this->logAction( 'comment-moderator-delete' );
-				} else {
-					$this->logAction( 'reply-moderator-delete' );
-				}
-			}
-		}
-
-		if ( !$result ) {
-			$this->dieCustomUsageMessage(
-				'commentstreams-api-error-delete' );
-		}
+		$this->deleteComment( $this->comment, $action, $user );
 
 		return null;
+	}
+
+	/**
+	 * @param Comment $comment
+	 * @param string $action
+	 * @param User $user
+	 * @throws ApiUsageException
+	 * @throws MWException
+	 */
+	private function deleteComment( Comment $comment, string $action, User $user ) {
+		$title = $comment->getTitle();
+		if ( !CommentStreamsUtils::userCan( $action, $user, $title ) ) {
+			$this->dieWithError( 'commentstreams-api-error-delete-permissions' );
+		}
+
+		$result = $comment->delete( $user );
+		if ( !$result ) {
+			$this->dieWithError( 'commentstreams-api-error-delete' );
+		}
+		if ( $action === 'cs-comment' ) {
+			if ( $comment->getParentId() === null ) {
+				$this->logAction( 'comment-delete' );
+			} else {
+				$this->logAction( 'reply-delete' );
+			}
+		} else {
+			if ( $comment->getParentId() === null ) {
+				$this->logAction( 'comment-moderator-delete' );
+			} else {
+				$this->logAction( 'reply-moderator-delete' );
+			}
+		}
 	}
 
 	/**
 	 * recursively delete comment and replies
 	 *
 	 * @param Comment $comment the comment to recursively delete
-	 * @return bool
+	 * @param string $action
+	 * @param User $user
+	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
-	private function recursiveDelete( $comment ) {
-		$replies = Comment::getReplies( $comment->getId() );
-		foreach ( $replies as $reply ) {
-			$result = $this->recursiveDelete( $reply );
-			if ( !$result ) {
-				return $result;
+	private function deleteReplies( Comment $comment, string $action, User $user ) {
+		$commentStreamsStore = MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' );
+		$replies = $commentStreamsStore->getReplies( $comment->getId() );
+		foreach ( $replies as $page_id ) {
+			$wikipage = CommentStreamsUtils::newWikiPageFromId( $page_id );
+			if ( $wikipage !== null ) {
+				$reply = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
+				if ( $reply !== null ) {
+					$this->deleteComment( $reply, $action, $user );
+				}
 			}
 		}
-		$result = $comment->delete( $this->getUser() );
-		$title = $comment->getWikiPage()->getTitle();
-		if ( $comment->getParentId() === null ) {
-			$this->logAction( 'comment-moderator-delete', $title );
-		} else {
-			$this->logAction( 'reply-moderator-delete', $title );
-		}
-		return $result;
 	}
 }
