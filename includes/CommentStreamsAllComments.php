@@ -141,6 +141,9 @@ class CommentStreamsAllComments extends SpecialPage {
 		}
 	}
 
+	/**
+	 * @param string $message
+	 */
 	private function displayMessage( $message ) {
 		$html = Html::openElement( 'p', [
 				'class' => 'csall-message'
@@ -150,6 +153,12 @@ class CommentStreamsAllComments extends SpecialPage {
 		$this->getOutput()->addHtml( $html );
 	}
 
+	/**
+	 * @param int $offset
+	 * @param bool $more
+	 * @param int $limit
+	 * @param string $paramname
+	 */
 	private function addTableNavigation( $offset, $more, $limit, $paramname ) {
 		$title = Title::newFromText( 'Special:' . __CLASS__ );
 		$url = $title->getFullURL();

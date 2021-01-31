@@ -34,10 +34,14 @@ class CommentStreamsHandler {
 	const COMMENTS_DISABLED = -1;
 	const COMMENTS_INHERITED = 0;
 
-	// no CommentStreams flag
+	/**
+	 * no CommentStreams flag
+	 */
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
-	// true if enabled due to wgCommentStreamsAllowedNamespaces
+	/**
+	 * true if enabled due to wgCommentStreamsAllowedNamespaces
+	 */
 	private $areNamespaceEnabled = false;
 
 	/**
@@ -100,7 +104,9 @@ class CommentStreamsHandler {
 		$this->areCommentsEnabled = self::COMMENTS_DISABLED;
 	}
 
-	// initially collapse CommentStreams flag
+	/**
+	 * initially collapse CommentStreams flag
+	 */
 	private $initiallyCollapseCommentStreams = false;
 
 	/**

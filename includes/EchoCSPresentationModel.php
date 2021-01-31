@@ -63,6 +63,9 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 		return $msg;
 	}
 
+	/**
+	 * @param Message $msg
+	 */
 	private function addMessageParams( Message $msg ) {
 		$msg->params( $this->event->getExtraParam(
 			'comment_author_display_name' ) );
