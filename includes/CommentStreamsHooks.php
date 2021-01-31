@@ -397,8 +397,7 @@ class CommentStreamsHooks {
 				}
 			}
 		}
-		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']
-			['cs-moderator-delete'] ) ) {
+		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] ) ) {
 			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] =
 				true;
 		}

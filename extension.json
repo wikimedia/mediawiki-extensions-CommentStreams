@@ -146,20 +146,20 @@
 		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::updateData",
 		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::onSMWInitialization"
 	},
-	"callback" : "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onRegistration",
+	"callback": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onRegistration",
 	"ConfigRegistry": {
 		"CommentStreams": "GlobalVarConfig::newInstance"
 	},
 	"config": {
 		"CommentStreamsNamespaceIndex": 844,
-		"CommentStreamsAllowedNamespaces" : null,
+		"CommentStreamsAllowedNamespaces": null,
 		"CommentStreamsEnableTalk": false,
 		"CommentStreamsNewestStreamsOnTop": true,
 		"CommentStreamsModeratorFastDelete": false,
 		"CommentStreamsShowLabels": true,
 		"CommentStreamsEnableVoting": false,
-		"CommentStreamsInitiallyCollapsedNamespaces" : [],
-		"CommentStreamsUserRealNamePropertyName" : null,
-		"CommentStreamsUserAvatarPropertyName" : null
+		"CommentStreamsInitiallyCollapsedNamespaces": [],
+		"CommentStreamsUserRealNamePropertyName": null,
+		"CommentStreamsUserAvatarPropertyName": null
 	}
 }
