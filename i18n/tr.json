@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"BaRaN6161 TURK",
+			"Joseph",
 			"MuratTheTurkish",
 			"Sayginer"
 		]
@@ -53,6 +54,7 @@
 	"apihelp-csunwatch-param-title": "izlenecek yorumu içeren sayfanın başlığı",
 	"apihelp-csunwatch-pageid-example": "sayfa kimliği 3 ile yorumu izlemeyin",
 	"apihelp-csunwatch-title-example": "sayfa başlığı CommentStreams:3 ile yorumu izlemeyin",
+	"commentstreams-api-error-invalid": "Geçersiz API cevabı.",
 	"commentstreams-api-error-notloggedin": "Oturum açmalısınız.",
 	"commentstreams-api-error-commentnotfound": "İstenen yorum bulunamadı.",
 	"commentstreams-api-error-notacomment": "Verilen sayfa kimliği geçerli bir açıklamaya gönderme yapmıyor.",
