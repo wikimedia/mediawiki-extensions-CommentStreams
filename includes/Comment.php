@@ -508,7 +508,7 @@ class Comment {
 				if ( $title->isKnown() && $title->getNamespace() === NS_FILE ) {
 					$file = CommentStreamsUtils::findFile( $title->getText() );
 					if ( $file ) {
-						$this->avatar = $file->getFullUrl();
+						$this->avatar = $file->createThumb( 48, 48 );
 					}
 				}
 			}
