@@ -7,5 +7,6 @@
 	"commentstreams-buttontooltip-edit": "redaktar",
 	"commentstreams-buttontooltip-delete": "efacar",
 	"commentstreams-buttontooltip-cancel": "anular",
-	"commentstreams-dialog-buttontext-cancel": "Nuligar"
+	"commentstreams-dialog-buttontext-cancel": "Nuligar",
+	"commentstreams-allcomments-label-author": "Autoro"
 }
