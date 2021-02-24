@@ -278,7 +278,7 @@ class CommentStreamsHooks {
 	 * Implements tag function, <no-comment-streams/>, which disables
 	 * CommentStreams on a page.
 	 *
-	 * @param string $input input between the tags (ignored)
+	 * @param ?string $input input between the tags (ignored)
 	 * @param array $args tag arguments
 	 * @param Parser $parser the parser
 	 * @param PPFrame $frame the parent frame
@@ -286,7 +286,7 @@ class CommentStreamsHooks {
 	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public static function disableCommentStreams(
-		string $input,
+		?string $input,
 		array $args,
 		Parser $parser,
 		PPFrame $frame
@@ -301,7 +301,7 @@ class CommentStreamsHooks {
 	 * Implements tag function, <comment-streams-initially-collapsed/>, which
 	 * makes CommentStreams on a page start as collapsed when the page is viewed.
 	 *
-	 * @param string $input input between the tags (ignored)
+	 * @param ?string $input input between the tags (ignored)
 	 * @param array $args tag arguments
 	 * @param Parser $parser the parser
 	 * @param PPFrame $frame the parent frame
@@ -309,7 +309,7 @@ class CommentStreamsHooks {
 	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public static function initiallyCollapseCommentStreams(
-		string $input,
+		?string $input,
 		array $args,
 		Parser $parser,
 		PPFrame $frame
