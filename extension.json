@@ -158,8 +158,9 @@
 		"CommentStreamsModeratorFastDelete": false,
 		"CommentStreamsShowLabels": true,
 		"CommentStreamsEnableVoting": false,
-		"CommentStreamsInitiallyCollapsedNamespaces" : [],
-		"CommentStreamsUserRealNamePropertyName" : null,
-		"CommentStreamsUserAvatarPropertyName" : null
+		"CommentStreamsInitiallyCollapsedNamespaces": [],
+		"CommentStreamsUserRealNamePropertyName": null,
+		"CommentStreamsUserAvatarPropertyName": null,
+		"CommentStreamsEnableSearch": true
 	}
 }

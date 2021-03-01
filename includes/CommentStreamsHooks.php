@@ -360,6 +360,9 @@ class CommentStreamsHooks {
 		array $terms,
 		SpecialSearch $page
 	) : bool {
+		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
+			return true;
+		}
 		$commentStreamsFactory =
 			MediaWikiServices::getInstance()->getService( 'CommentStreamsFactory' );
 		$comment = $commentStreamsFactory->newFromWikiPage(
@@ -381,7 +384,9 @@ class CommentStreamsHooks {
 	public static function onRegistration() {
 		define( 'NS_COMMENTSTREAMS', $GLOBALS['wgCommentStreamsNamespaceIndex'] );
 		define( 'NS_COMMENTSTREAMS_TALK', $GLOBALS['wgCommentStreamsNamespaceIndex'] + 1 );
-		$GLOBALS['wgNamespacesToBeSearchedDefault'][NS_COMMENTSTREAMS] = true;
+		if ( $GLOBALS['wgCommentStreamsEnableSearch'] ) {
+			$GLOBALS['wgNamespacesToBeSearchedDefault'][NS_COMMENTSTREAMS] = true;
+		}
 		$found = false;
 		foreach ( $GLOBALS['wgGroupPermissions'] as $groupperms ) {
 			if ( isset( $groupperms['cs-comment'] ) ) {
