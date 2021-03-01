@@ -160,6 +160,7 @@
 		"CommentStreamsEnableVoting": false,
 		"CommentStreamsInitiallyCollapsedNamespaces": [],
 		"CommentStreamsUserRealNamePropertyName": null,
-		"CommentStreamsUserAvatarPropertyName": null
+		"CommentStreamsUserAvatarPropertyName": null,
+		"CommentStreamsEnableSearch": true
 	}
 }
