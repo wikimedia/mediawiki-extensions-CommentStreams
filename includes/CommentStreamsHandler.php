@@ -323,7 +323,7 @@ class CommentStreamsHandler {
 		bool $enableVoting
 	) : array {
 		$array = array_filter(
-			$allComments, function ( $comment ) {
+			$allComments, static function ( $comment ) {
 				return $comment->getParentId() === null;
 			}
 		);
@@ -370,7 +370,7 @@ class CommentStreamsHandler {
 	 */
 	private function getReplies( array $allComments, int $parentId ) : array {
 		$array = array_filter(
-			$allComments, function ( $comment ) use ( $parentId ) {
+			$allComments, static function ( $comment ) use ( $parentId ) {
 				if ( $comment->getParentId() === $parentId ) {
 					return true;
 				}
@@ -378,7 +378,7 @@ class CommentStreamsHandler {
 			}
 		);
 		usort(
-			$array, function ( $comment1, $comment2 ) {
+			$array, static function ( $comment1, $comment2 ) {
 				$date1 = $comment1->getCreationTimestamp()->timestamp;
 				$date2 = $comment2->getCreationTimestamp()->timestamp;
 				return $date1 < $date2 ? -1 : 1;

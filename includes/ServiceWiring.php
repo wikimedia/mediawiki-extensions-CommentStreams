@@ -26,7 +26,7 @@ use MediaWiki\MediaWikiServices;
 
 return [
 	'CommentStreamsHandler' =>
-		function ( MediaWikiServices $services ) : CommentStreamsHandler {
+		static function ( MediaWikiServices $services ) : CommentStreamsHandler {
 			return new CommentStreamsHandler(
 				$services->getService( 'CommentStreamsFactory' ),
 				$services->getService( 'CommentStreamsStore' ),
@@ -36,13 +36,13 @@ return [
 			);
 		},
 	'CommentStreamsStore' =>
-		function ( MediaWikiServices $services ) : CommentStreamsStore {
+		static function ( MediaWikiServices $services ) : CommentStreamsStore {
 			return new CommentStreamsStore(
 				$services->getDBLoadBalancer()
 			);
 		},
 	'CommentStreamsFactory' =>
-		function ( MediaWikiServices $services ) : CommentStreamsFactory {
+		static function ( MediaWikiServices $services ) : CommentStreamsFactory {
 			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
 			if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
 				$config = new \MediaWiki\Config\ServiceOptions(
@@ -60,19 +60,19 @@ return [
 			);
 		},
 	'CommentStreamsEchoInterface' =>
-		function ( MediaWikiServices $services ) : CommentStreamsEchoInterface {
+		static function ( MediaWikiServices $services ) : CommentStreamsEchoInterface {
 			return new CommentStreamsEchoInterface(
 				ExtensionRegistry::getInstance()
 			);
 		},
 	'CommentStreamsSMWInterface' =>
-		function ( MediaWikiServices $services ) : CommentStreamsSMWInterface {
+		static function ( MediaWikiServices $services ) : CommentStreamsSMWInterface {
 			return new CommentStreamsSMWInterface(
 				ExtensionRegistry::getInstance()
 			);
 		},
 	'CommentStreamsSocialProfileInterface' =>
-		function ( MediaWikiServices $services ) : CommentStreamsSocialProfileInterface {
+		static function ( MediaWikiServices $services ) : CommentStreamsSocialProfileInterface {
 			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
 			if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
 				$config = new \MediaWiki\Config\ServiceOptions(
