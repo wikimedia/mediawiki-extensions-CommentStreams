@@ -294,6 +294,7 @@ class CommentStreamsUtils {
 			// MW 1.32+
 			$parser = MediaWikiServices::getInstance()->getParserFactory()->create();
 		} else {
+			// @phan-suppress-next-line PhanParamTooFew
 			$parser = new Parser();
 		}
 		if ( version_compare( MW_VERSION, '1.36', '<' ) ) {
