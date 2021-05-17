@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Beta16"
 		]
 	},
@@ -18,6 +19,7 @@
 	"commentstreams-buttontooltip-collapse": "comprimi",
 	"commentstreams-buttontooltip-expand": "espandi",
 	"commentstreams-buttontooltip-cancel": "annulla",
+	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-cancel": "Annulla",
 	"commentstreams-dialog-buttontext-yes": "Sì",
 	"commentstreams-dialog-buttontext-no": "No",
@@ -26,5 +28,6 @@
 	"action-cs-moderator-edit": "modificare i commenti degli altri utenti",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|ha creato}} il commento $3",
 	"commentstreams-allcomments-nocommentsfound": "Nessun commento trovato.",
+	"commentstreams-allcomments-label-author": "Autore",
 	"commentstreams-allcomments-label-lastedited": "Ultima modifica"
 }
