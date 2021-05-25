@@ -37,8 +37,10 @@ class CommentStreamsHandler {
 	// no CommentStreams flag
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
-	// true if enabled due to wgCommentStreamsAllowedNamespaces
-	private $areNamespaceEnabled = false;
+	/**
+	 * @var bool true if enabled due to wgCommentStreamsAllowedNamespaces
+	 */
+	private $isNamespaceEnabled = false;
 
 	/**
 	 * @var CommentStreamsFactory
@@ -149,7 +151,6 @@ class CommentStreamsHandler {
 		$csAllowedNamespaces = $config->get( 'CommentStreamsAllowedNamespaces' );
 		if ( $csAllowedNamespaces === null ) {
 			$csAllowedNamespaces = $config->get( 'ContentNamespaces' );
-			$this->areNamespaceEnabled = true;
 		} elseif ( $csAllowedNamespaces === self::COMMENTS_DISABLED ) {
 			return false;
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
@@ -174,6 +175,12 @@ class CommentStreamsHandler {
 			return false;
 		}
 
+		// if this namespace is one of the explicitly allowed namespace, set flag to enable
+		// default comment block
+		if ( in_array( $namespace, $csAllowedNamespaces ) ) {
+			$this->isNamespaceEnabled = true;
+		}
+
 		// display comments on this page if they are explicitly enabled
 		if ( $this->areCommentsEnabled === self::COMMENTS_ENABLED ) {
 			return true;
@@ -191,13 +198,9 @@ class CommentStreamsHandler {
 				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
 				return false;
 			}
-		} elseif ( !in_array( $namespace, $csAllowedNamespaces ) ) {
-			// only display comments in subject namespaces in the list of allowed
-			// namespaces
-			return false;
 		}
 
-		return true;
+		return $this->isNamespaceEnabled;
 	}
 
 	/**
@@ -290,7 +293,7 @@ class CommentStreamsHandler {
 			'showLabels' => $config->get( 'CommentStreamsShowLabels' ) ? 1 : 0,
 			'newestStreamsOnTop' => $config->get( 'CommentStreamsNewestStreamsOnTop' ) ? 1 : 0,
 			'initiallyCollapsed' => $initiallyCollapsed,
-			'areNamespaceEnabled' => $this->areNamespaceEnabled,
+			'isNamespaceEnabled' => $this->isNamespaceEnabled,
 			'enableVoting' => $config->get( 'CommentStreamsEnableVoting' ) ? 1 : 0,
 			'enableWatchlist' => $this->echoInterface->isLoaded() ? 1 : 0,
 			'comments' => $comments
