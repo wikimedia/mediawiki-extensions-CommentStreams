@@ -35,7 +35,7 @@ var commentstreams_controller = ( function () {
 		showLabels: false,
 		newestStreamsOnTop: false,
 		initiallyCollapsed: false,
-		areNamespaceEnabled: false,
+		isNamespaceEnabled: false,
 		enableVoting: false,
 		enableWatchlist: false,
 		comments: [],
@@ -78,7 +78,7 @@ var commentstreams_controller = ( function () {
 			this.showLabels = config.showLabels;
 			this.newestStreamsOnTop = config.newestStreamsOnTop;
 			this.initiallyCollapsed = config.initiallyCollapsed;
-			this.areNamespaceEnabled = config.areNamespaceEnabled;
+			this.isNamespaceEnabled = config.isNamespaceEnabled;
 			this.enableVoting = config.enableVoting;
 			this.enableWatchlist = config.enableWatchlist;
 			this.comments = config.comments;
@@ -97,7 +97,7 @@ var commentstreams_controller = ( function () {
 		setupDivs: function () {
 			var self = this;
 
-			if ( self.areNamespaceEnabled && $( '#cs-comments.cs-comments' ).length === 0 ) {
+			if ( self.isNamespaceEnabled && $( '#cs-comments.cs-comments' ).length === 0 ) {
 				var mainDiv = $( '<div>' ).attr( 'class', 'cs-comments' ).attr( 'id', 'cs-comments' );
 				mainDiv.insertAfter( '#catlinks' );
 			}
