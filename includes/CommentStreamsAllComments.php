@@ -28,7 +28,6 @@ use Html;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use SpecialPage;
-use Title;
 
 class CommentStreamsAllComments extends SpecialPage {
 	public function __construct() {
@@ -151,9 +150,6 @@ class CommentStreamsAllComments extends SpecialPage {
 	}
 
 	private function addTableNavigation( $offset, $more, $limit, $paramname ) {
-		$title = Title::newFromText( 'Special:' . __CLASS__ );
-		$url = $title->getFullURL();
-
 		$html = Html::openElement( 'table', [
 				'class' => 'csall-navigationtable'
 			] )
@@ -161,7 +157,7 @@ class CommentStreamsAllComments extends SpecialPage {
 			. Html::openElement( 'td' );
 
 		if ( $offset > 0 ) {
-			$prevurl = $url . '?' . $paramname . '=' . ( $offset - $limit );
+			$prevurl = $this->getFullTitle()->getFullURL( [ $paramname => ( $offset - $limit ) ] );
 			$html .= Html::openElement( 'a', [
 					'href' => $prevurl,
 					'class' => 'csall-button'
@@ -176,7 +172,7 @@ class CommentStreamsAllComments extends SpecialPage {
 			] );
 
 		if ( $more ) {
-			$nexturl = $url . '?' . $paramname . '=' . ( $offset + $limit );
+			$nexturl = $this->getFullTitle()->getFullURL( [ $paramname => ( $offset + $limit ) ] );
 			$html .= Html::openElement( 'a', [
 					'href' => $nexturl,
 					'class' => 'csall-button'

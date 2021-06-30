@@ -32,7 +32,6 @@ use MWException;
 use MWNamespace;
 use OutputPage;
 use Parser;
-use ParserOptions;
 use Status;
 use Title;
 use User;
@@ -296,11 +295,7 @@ class CommentStreamsUtils {
 		} else {
 			$parser = new Parser();
 		}
-		if ( version_compare( MW_VERSION, '1.36', '<' ) ) {
-			$parserOptions = new ParserOptions;
-		} else {
-			$parserOptions = $wikipage->makeParserOptions( $context );
-		}
+		$parserOptions = $wikipage->makeParserOptions( $context );
 		return $parser->parse( $wikitext, $wikipage->getTitle(), $parserOptions )->getText();
 	}
 
