@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Les Meloures",
 			"Robby"
 		]
 	},
@@ -19,7 +20,7 @@
 	"commentstreams-api-error-vote-notloggedin": "Dir musst ageloggt si fir kënnen ofzestëmmen.",
 	"commentstreams-buttontext-add": "Bemierkung derbäisetzen",
 	"commentstreams-buttontext-reply": "Äntwerten",
-	"commentstreams-buttontooltip-add": "eng Bemierkung dobäisetzen",
+	"commentstreams-buttontooltip-add": "eng Bemierkung derbäisetzen",
 	"commentstreams-buttontooltip-reply": "äntwerten",
 	"commentstreams-buttontooltip-edit": "änneren",
 	"commentstreams-buttontooltip-delete": "läschen",
