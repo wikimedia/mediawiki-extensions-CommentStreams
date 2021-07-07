@@ -35,13 +35,19 @@
 			"styles": [
 				"CommentStreams.css"
 			],
-			"scripts": [
-				"CommentStreamsQuerier.js",
+			"packageFiles": [
 				"CommentStreams.js",
-				"spin.min.js"
+				"Querier.js",
+				"Block.js",
+				"Stream.js"
 			],
 			"dependencies": [
-				"oojs-ui"
+				"oojs-ui",
+				"oojs-ui.styles.icons-alerts",
+				"oojs-ui.styles.icons-editing-core",
+				"oojs-ui.styles.icons-interactions",
+				"oojs-ui.styles.icons-moderation",
+				"oojs-ui.styles.icons-movement"
 			],
 			"targets": [
 				"desktop",
