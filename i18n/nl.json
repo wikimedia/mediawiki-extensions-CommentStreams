@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Hzjethro",
-			"Mainframe98"
+			"Mainframe98",
+			"Romaine"
 		]
 	},
 	"commentstreams-author-anonymous": "anoniem",
@@ -31,6 +32,7 @@
 	"commentstreams-dialog-buttontext-no": "Nee",
 	"commentstreams-datetext-postedon": "Geplaatst op",
 	"commentstreams-datetext-lasteditedon": "Laatste bewerkt op",
+	"commentstreams-datetext-moderated": "gemodereerd",
 	"commentstreams-title-field-placeholder": "Voer titel in...",
 	"commentstreams-body-field-placeholder": "Vul tekst nieuw commentaar in...",
 	"notification-link-label-commentstreams-reply-on-watched-page": "Bekijk reactie",
