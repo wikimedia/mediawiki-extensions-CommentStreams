@@ -30,9 +30,7 @@ return [
 			return new CommentStreamsHandler(
 				$services->getService( 'CommentStreamsFactory' ),
 				$services->getService( 'CommentStreamsStore' ),
-				$services->getService( 'CommentStreamsEchoInterface' ),
-				$services->getService( 'CommentStreamsSMWInterface' ),
-				$services->getService( 'CommentStreamsSocialProfileInterface' )
+				$services->getService( 'CommentStreamsEchoInterface' )
 			);
 		},
 	'CommentStreamsStore' =>
