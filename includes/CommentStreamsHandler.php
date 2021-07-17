@@ -40,7 +40,7 @@ class CommentStreamsHandler {
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
 	/**
-	 * true if enabled due to wgCommentStreamsAllowedNamespaces
+	 * @var bool true if enabled due to wgCommentStreamsAllowedNamespaces
 	 */
 	private $isNamespaceEnabled = false;
 
