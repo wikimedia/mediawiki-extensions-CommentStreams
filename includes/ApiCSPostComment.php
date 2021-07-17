@@ -124,7 +124,7 @@ class ApiCSPostComment extends ApiBase {
 					$comment,
 					$associated_page,
 					$this->getUser(),
-					$comment_title ?: $parent_comment_title
+					$parent_comment_title ?: $comment_title
 				);
 			}
 		}
