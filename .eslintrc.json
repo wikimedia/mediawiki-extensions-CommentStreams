@@ -15,7 +15,6 @@
 		"no-jquery/no-sizzle": "off",
 		"no-jquery/no-ready-shorthand": "off",
 		"no-jquery/variable-pattern": "off",
-		"one-var": "off",
 		"vars-on-top": "off",
 		"block-scoped-var": "warn"
 	},
