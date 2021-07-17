@@ -296,7 +296,10 @@ class CommentStreamsUtils {
 			$parser = new Parser();
 		}
 		$parserOptions = $wikipage->makeParserOptions( $context );
-		return $parser->parse( $wikitext, $wikipage->getTitle(), $parserOptions )->getText();
+		$parserOptions->setOption( 'enableLimitReport', false );
+		return $parser
+			->parse( $wikitext, $wikipage->getTitle(), $parserOptions )
+			->getText( [ 'wrapperDivClass' => '' ] );
 	}
 
 	/**
