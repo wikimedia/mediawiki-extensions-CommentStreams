@@ -58,34 +58,18 @@ class CommentStreamsHandler {
 	private $echoInterface;
 
 	/**
-	 * @var CommentStreamsSMWInterface
-	 */
-	private $smwInterface;
-
-	/**
-	 * @var CommentStreamsSocialProfileInterface
-	 */
-	private $socialProfileInterface;
-
-	/**
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param CommentStreamsEchoInterface $echoInterface
-	 * @param CommentStreamsSMWInterface $smwInterface
-	 * @param CommentStreamsSocialProfileInterface $socialProfileInterface
 	 */
 	public function __construct(
 		CommentStreamsFactory $commentStreamsFactory,
 		CommentStreamsStore $commentStreamsStore,
-		CommentStreamsEchoInterface $echoInterface,
-		CommentStreamsSMWInterface $smwInterface,
-		CommentStreamsSocialProfileInterface $socialProfileInterface
+		CommentStreamsEchoInterface $echoInterface
 	) {
 		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->echoInterface = $echoInterface;
-		$this->smwInterface = $smwInterface;
-		$this->socialProfileInterface = $socialProfileInterface;
 	}
 
 	/**
