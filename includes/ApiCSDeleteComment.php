@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -25,7 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
-use ConfigException;
+use Config;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use User;
@@ -39,12 +37,17 @@ class ApiCSDeleteComment extends ApiCSBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @throws ConfigException
+	 * @param CommentFactory $commentFactory
+	 * @param Config $config
 	 */
-	public function __construct( ApiMain $main, string $action ) {
-		parent::__construct( $main, $action, true );
-		$this->moderatorFastDelete = (bool)MediaWikiServices::getInstance()->getConfigFactory()->
-			makeConfig( 'CommentStreams' )->get( 'CommentStreamsModeratorFastDelete' );
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		CommentFactory $commentFactory,
+		Config $config
+	) {
+		parent::__construct( $main, $action, $commentFactory, true );
+		$this->moderatorFastDelete = (bool)$config->get( 'CommentStreamsModeratorFastDelete' );
 	}
 
 	/**
@@ -95,7 +98,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 	 */
 	private function deleteComment( Comment $comment, string $action, User $user ) {
 		$title = $comment->getTitle();
-		if ( !CommentStreamsUtils::userCan( $action, $user, $title ) ) {
+		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
 			$this->dieWithError( 'commentstreams-api-error-delete-permissions' );
 		}
 
@@ -133,7 +136,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 		foreach ( $replies as $page_id ) {
 			$wikipage = CommentStreamsUtils::newWikiPageFromId( $page_id );
 			if ( $wikipage !== null ) {
-				$reply = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
+				$reply = $this->commentFactory->newFromWikiPage( $wikipage );
 				if ( $reply !== null ) {
 					$this->deleteComment( $reply, $action, $user );
 				}

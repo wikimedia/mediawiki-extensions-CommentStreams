@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -28,11 +26,15 @@ use ApiMain;
 use ApiUsageException;
 use ManualLogEntry;
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\MediaWikiServices;
 use MWException;
 use Title;
 
 abstract class ApiCSBase extends ApiBase {
+	/**
+	 * @var CommentFactory
+	 */
+	protected $commentFactory;
+
 	/**
 	 * whether this API module will be editing the database
 	 * @var bool
@@ -45,20 +47,20 @@ abstract class ApiCSBase extends ApiBase {
 	protected $comment;
 
 	/**
-	 * @var CommentStreamsFactory
-	 */
-	protected $commentStreamsFactory;
-
-	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
+	 * @param CommentFactory $commentFactory
 	 * @param bool $edit whether this API module will be editing the database
 	 */
-	public function __construct( ApiMain $main, string $action, bool $edit = false ) {
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		CommentFactory $commentFactory,
+		bool $edit = false
+	) {
 		parent::__construct( $main, $action );
+		$this->commentFactory = $commentFactory;
 		$this->edit = $edit;
-		$services = MediaWikiServices::getInstance();
-		$this->commentStreamsFactory = $services->getService( 'CommentStreamsFactory' );
 	}
 
 	/**
@@ -69,7 +71,7 @@ abstract class ApiCSBase extends ApiBase {
 	public function execute() {
 		$params = $this->extractRequestParams();
 		$wikipage = $this->getTitleOrPageId( $params, $this->edit ? 'frommasterdb' : 'fromdb' );
-		$comment = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
+		$comment = $this->commentFactory->newFromWikiPage( $wikipage );
 		if ( $comment === null ) {
 			$this->dieWithError( 'commentstreams-api-error-notacomment' );
 		} else {

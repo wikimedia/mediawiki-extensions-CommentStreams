@@ -21,23 +21,27 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiMain;
+use DatabaseUpdater;
+use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
 
-class ApiCSQueryComment extends ApiCSBase {
+class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 	/**
-	 * @param ApiMain $main main module
-	 * @param string $action name of this module
-	 * @param CommentFactory $commentFactory
+	 * Updates database schema.
+	 *
+	 * @param DatabaseUpdater $updater database updater
 	 */
-	public function __construct( ApiMain $main, string $action, CommentFactory $commentFactory ) {
-		parent::__construct( $main, $action, $commentFactory );
-	}
-
-	/**
-	 * the real body of the execute function
-	 * @return ?array result of API request
-	 */
-	protected function executeBody(): ?array {
-		return $this->comment->getJSON( $this );
+	public function onLoadExtensionSchemaUpdates( $updater ) {
+		$dir = __DIR__ . '/../sql/';
+		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql' );
+		$updater->addExtensionTable( 'cs_votes', $dir . 'votes.sql' );
+		$updater->addExtensionTable( 'cs_watchlist', $dir . 'watch.sql' );
+		$updater->modifyExtensionField( 'cs_comment_data', 'page_id',
+			$dir . 'updateFieldNames.sql' );
+		$updater->dropExtensionIndex( 'cs_comment_data', 'assoc_page_id',
+			$dir . 'dropForeignKey1.sql' );
+		$updater->dropExtensionIndex( 'cs_comment_data', 'cst_assoc_page_id',
+			$dir . 'dropForeignKey2.sql' );
+		$updater->addExtensionField( 'cs_comment_data', 'cst_id',
+			$dir . 'addCommentId.sql' );
 	}
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,15 +22,20 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ConfigException;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Revision\RevisionStore;
+use MediaWiki\User\UserFactory;
 use MWException;
+use ParserFactory;
+use RepoGroup;
 use User;
 use Wikimedia\Assert\Assert;
 use WikiPage;
 
-class CommentStreamsFactory {
+class CommentFactory {
 	/**
-	 * @var \MediaWiki\Config\ServiceOptions|\Config
+	 * @var ServiceOptions
 	 */
 	private $options;
 
@@ -61,20 +65,48 @@ class CommentStreamsFactory {
 	private $linkRenderer;
 
 	/**
-	 * @param \MediaWiki\Config\ServiceOptions|\Config $options
+	 * @var RepoGroup
+	 */
+	private $repoGroup;
+
+	/**
+	 * @var RevisionStore
+	 */
+	private $revisionStore;
+
+	/**
+	 * @var ParserFactory
+	 */
+	private $parserFactory;
+
+	/**
+	 * @var UserFactory
+	 */
+	private $userFactory;
+
+	/**
+	 * @param ServiceOptions $options
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param CommentStreamsEchoInterface $echoInterface
 	 * @param CommentStreamsSMWInterface $smwInterface
 	 * @param CommentStreamsSocialProfileInterface $socialProfileInterface
 	 * @param LinkRenderer $linkRenderer
+	 * @param RepoGroup $repoGroup
+	 * @param RevisionStore $revisionStore
+	 * @param ParserFactory $parserFactory
+	 * @param UserFactory $userFactory
 	 */
 	public function __construct(
-		$options,
+		ServiceOptions $options,
 		CommentStreamsStore $commentStreamsStore,
 		CommentStreamsEchoInterface $echoInterface,
 		CommentStreamsSMWInterface $smwInterface,
 		CommentStreamsSocialProfileInterface $socialProfileInterface,
-		LinkRenderer $linkRenderer
+		LinkRenderer $linkRenderer,
+		RepoGroup $repoGroup,
+		RevisionStore $revisionStore,
+		ParserFactory $parserFactory,
+		UserFactory $userFactory
 	) {
 		$this->options = $options;
 		$this->commentStreamsStore = $commentStreamsStore;
@@ -82,6 +114,10 @@ class CommentStreamsFactory {
 		$this->smwInterface = $smwInterface;
 		$this->socialProfileInterface = $socialProfileInterface;
 		$this->linkRenderer = $linkRenderer;
+		$this->repoGroup = $repoGroup;
+		$this->revisionStore = $revisionStore;
+		$this->parserFactory = $parserFactory;
+		$this->userFactory = $userFactory;
 	}
 
 	/**
@@ -90,7 +126,6 @@ class CommentStreamsFactory {
 	 * @param WikiPage $wikipage WikiPage object corresponding to comment page
 	 * @return Comment|null the newly created comment or null if there was an
 	 * error
-	 * @throws MWException
 	 * @throws ConfigException
 	 */
 	public function newFromWikiPage( WikiPage $wikipage ): ?Comment {
@@ -111,6 +146,10 @@ class CommentStreamsFactory {
 			$this->smwInterface,
 			$this->socialProfileInterface,
 			$this->linkRenderer,
+			$this->repoGroup,
+			$this->revisionStore,
+			$this->parserFactory,
+			$this->userFactory,
 			$wikipage,
 			$result['comment_block_id'],
 			$result['assoc_page_id'],
@@ -172,6 +211,10 @@ class CommentStreamsFactory {
 			$this->smwInterface,
 			$this->socialProfileInterface,
 			$this->linkRenderer,
+			$this->repoGroup,
+			$this->revisionStore,
+			$this->parserFactory,
+			$this->userFactory,
 			$wikipage,
 			$comment_block_id,
 			$assoc_page_id,
