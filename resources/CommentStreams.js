@@ -78,7 +78,7 @@ const CommentStreams = ( function () {
 					$blockDiv
 						.detach()
 						.insertAfter( '#catlinks' );
-					self.defaultblock = new Block( self, env, querier, 'cs-comments', $blockDiv );
+					self.defaultblock = new Block( self, env, querier, null, $blockDiv );
 				} else {
 					self.namedblocks[ blockId ] =
 						new Block( self, env, querier, blockId, $blockDiv );
@@ -89,14 +89,14 @@ const CommentStreams = ( function () {
 				const $mainDiv = $( '<div>' )
 					.addClass( 'cs-comments' )
 					.insertAfter( '#catlinks' );
-				this.defaultblock = new Block( this, env, querier, 'cs-comments', $mainDiv );
+				this.defaultblock = new Block( this, env, querier, null, $mainDiv );
 			}
 		},
 
 		addInitialComments: function ( comments ) {
 			for ( const parentComment of comments ) {
 				const blockId = parentComment.commentblockid;
-				if ( blockId === 'cs-comments' && this.defaultblock ) {
+				if ( blockId === null && this.defaultblock ) {
 					this.defaultblock.addStream( parentComment );
 				} else if ( blockId in this.namedblocks ) {
 					this.namedblocks[ blockId ].addStream( parentComment );

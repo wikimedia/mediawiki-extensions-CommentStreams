@@ -111,11 +111,10 @@ class CommentStreamsHandler {
 		$parser->getOutput()->updateCacheExpiry( 0 );
 		$this->areCommentsEnabled = self::COMMENTS_ENABLED;
 		if ( isset( $args['id'] ) ) {
-			$ret = '<div class="cs-comments" data-id="csc_' . md5( $args['id'] ) . '"></div>';
+			$ret = '<div class="cs-comments" data-id="' . htmlspecialchars( $args['id'] ) . '"></div>';
 		} else {
 			$ret = '<div class="cs-comments"></div>';
 		}
-		// @phan-suppress-next-line SecurityCheck-XSS
 		return $ret;
 	}
 

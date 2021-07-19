@@ -71,7 +71,6 @@ module.exports = ( function () {
 			action: 'cspostcomment',
 			wikitext: wikitext,
 			associatedid: associatedid,
-			commentblockid: commentblockid,
 			token: mw.user.tokens.get( 'csrfToken' )
 		};
 		if ( commenttitle !== null ) {
@@ -79,6 +78,9 @@ module.exports = ( function () {
 		}
 		if ( parentid !== null ) {
 			data.parentid = parentid;
+		}
+		if ( commentblockid !== null ) {
+			data.commentblockid = commentblockid;
 		}
 		new mw.Api()
 			.post( data )

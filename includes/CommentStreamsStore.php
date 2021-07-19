@@ -133,16 +133,20 @@ class CommentStreamsStore {
 			}
 		} while ( !$success );
 
+		$data = [
+			'cst_page_id' => $wikipage->getId(),
+			'cst_assoc_page_id' => $assoc_page_id,
+			'cst_parent_page_id' => $parent_page_id,
+			'cst_comment_title' => $comment_title
+		];
+		if ( $comment_title !== null ) {
+			$data[ 'cst_id' ] = $comment_block_id;
+		}
+
 		$dbw = $this->getDBConnection( DB_PRIMARY );
 		$result = $dbw->insert(
 			'cs_comment_data',
-			[
-				'cst_page_id' => $wikipage->getId(),
-				'cst_id' => $comment_block_id,
-				'cst_assoc_page_id' => $assoc_page_id,
-				'cst_parent_page_id' => $parent_page_id,
-				'cst_comment_title' => $comment_title
-			],
+			$data,
 			__METHOD__
 		);
 
