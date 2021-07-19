@@ -156,6 +156,7 @@
 	"commentstreams-allcomments-label-created": "Table column label",
 	"commentstreams-allcomments-label-lasteditor": "Table column label",
 	"commentstreams-allcomments-label-lastedited": "Table column label",
+	"commentstreams-allcomments-label-blockid": "Table column label",
 	"commentstreams-allcomments-button-next": "Button label\n{{Identical|Next}}",
 	"commentstreams-allcomments-button-previous": "Button label\n{{Identical|Previous}}",
 	"commentstreams-ve-conversion-error": "Error message"

@@ -1320,8 +1320,9 @@ var commentstreams_controller = ( function () {
 		},
 		realEditComment: function ( element, commentBox, pageId, commentText ) {
 			var self = this;
+			var commentTitle = null;
 			if ( element.hasClass( 'cs-head-comment' ) ) {
-				var commentTitle = $( '#cs-title-edit-field' ).val();
+				commentTitle = $( '#cs-title-edit-field' ).val();
 				if ( commentTitle === null || commentTitle.trim() === '' ) {
 					self.reportError(
 						'commentstreams-validation-error-nocommenttitle' );
