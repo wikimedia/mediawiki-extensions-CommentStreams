@@ -89,13 +89,18 @@ var commentstreams_querier = ( function () {
 		editComment: function ( commenttitle, wikitext, pageid, reply ) {
 			var self = this;
 			var api = new mw.Api();
-			api.post( {
+			var data = {
 				action: 'cseditcomment',
 				pageid: pageid,
-				commenttitle: commenttitle,
 				wikitext: wikitext,
 				token: mw.user.tokens.get( 'csrfToken' )
-			} )
+			};
+			if ( commenttitle ) {
+				data.commenttitle = commenttitle;
+			}
+			api.post(
+				data
+			)
 				.done( function () {
 					self.queryComment( pageid, reply );
 				} )

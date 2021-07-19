@@ -78,6 +78,8 @@ class CommentStreamsAllComments extends SpecialPage {
 			'!' . wfMessage( 'commentstreams-allcomments-label-created' ) . PHP_EOL;
 		$wikitext .=
 			'!' . wfMessage( 'commentstreams-allcomments-label-lastedited' ) . PHP_EOL;
+		$wikitext .=
+			'!' . wfMessage( 'commentstreams-allcomments-label-blockid' ) . PHP_EOL;
 
 		$commentStreamsFactory =
 			MediaWikiServices::getInstance()->getService( 'CommentStreamsFactory' );
@@ -108,7 +110,7 @@ class CommentStreamsAllComments extends SpecialPage {
 							$modificationdate = '';
 						} else {
 							$lasteditor = $comment->getLastEditor();
-							if ( $lasteditor->isAnon() ) {
+							if ( $lasteditor->getId() === 0 ) {
 								$lasteditor = '<i>' .
 									wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
 							} else {
@@ -124,6 +126,7 @@ class CommentStreamsAllComments extends SpecialPage {
 						$wikitext .= '| ' . $lasteditor . PHP_EOL;
 						$wikitext .= '| ' . $comment->getCreationDate() . PHP_EOL;
 						$wikitext .= '| ' . $modificationdate . PHP_EOL;
+						$wikitext .= '| ' . $comment->getBlockId() . PHP_EOL;
 						$index++;
 					}
 				}

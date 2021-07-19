@@ -28,6 +28,7 @@ use FatalError;
 use Html;
 use IContextSource;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\User\UserIdentity;
 use MWException;
 use MWTimestamp;
 use PageProps;
@@ -133,7 +134,7 @@ class Comment {
 
 	/**
 	 * user object for the last editor of this comment
-	 * @var ?User
+	 * @var ?UserIdentity
 	 */
 	private $lastEditor;
 
@@ -237,6 +238,13 @@ class Comment {
 	}
 
 	/**
+	 * @return ?string comment block id
+	 */
+	public function getBlockId() : ?string {
+		return $this->comment_block_id;
+	}
+
+	/**
 	 * @return int page ID for the wiki page this comment is on
 	 */
 	public function getAssociatedId() : int {
@@ -310,9 +318,9 @@ class Comment {
 	}
 
 	/**
-	 * @return User the last editor of this comment
+	 * @return UserIdentity the last editor of this comment
 	 */
-	public function getLastEditor() : User {
+	public function getLastEditor() : UserIdentity {
 		return $this->lastEditor;
 	}
 
