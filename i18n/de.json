@@ -154,6 +154,7 @@
 	"commentstreams-allcomments-label-created": "Erstellt",
 	"commentstreams-allcomments-label-lasteditor": "Letzter Bearbeiter",
 	"commentstreams-allcomments-label-lastedited": "Zuletzt bearbeitet",
+	"commentstreams-allcomments-label-blockid": "Block-ID",
 	"commentstreams-allcomments-button-next": "Nächster",
 	"commentstreams-allcomments-button-previous": "Vorheriger",
 	"commentstreams-ve-conversion-error": "Fehler beim Konvertieren zwischen Wikitext und HTML für den visuellen Editor"
