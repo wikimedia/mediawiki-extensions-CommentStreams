@@ -171,7 +171,7 @@ class CommentStreamsStore {
 	 * @param int $offset
 	 * @return IResultWrapper
 	 */
-	public function getCommentPages( int $limit, int $offset ) : IResultWrapper {
+	public function getCommentPages( int $limit, int $offset ): IResultWrapper {
 		$dbr = $this->getDBConnection( DB_REPLICA );
 		return $dbr->select(
 			[
@@ -208,7 +208,7 @@ class CommentStreamsStore {
 		?string $comment_title,
 		string $wikitext,
 		User $user
-	) : bool {
+	): bool {
 		$annotated_wikitext = $this->addAnnotations( $wikitext, $comment_title );
 		$content = new WikitextContent( $annotated_wikitext );
 
@@ -242,7 +242,7 @@ class CommentStreamsStore {
 	 * @throws FatalError
 	 * @throws MWException
 	 */
-	public function deleteComment( WikiPage $wikipage, User $deleter ) : bool {
+	public function deleteComment( WikiPage $wikipage, User $deleter ): bool {
 		// must save page ID before deleting page
 		$pageid = $wikipage->getId();
 
@@ -270,7 +270,7 @@ class CommentStreamsStore {
 	 * @param int $id
 	 * @return array
 	 */
-	public function getAssociatedComments( int $id ) : array {
+	public function getAssociatedComments( int $id ): array {
 		$dbr = $this->getDBConnection( DB_REPLICA );
 		$result = $dbr->select(
 			'cs_comment_data',
@@ -334,7 +334,7 @@ class CommentStreamsStore {
 	 * @param int $user_id
 	 * @return int -1, 0, or 1
 	 */
-	public function getVote( int $page_id, int $user_id ) : int {
+	public function getVote( int $page_id, int $user_id ): int {
 		$dbr = $this->getDBConnection( DB_REPLICA );
 		$result = $dbr->selectRow(
 			'cs_votes',
@@ -401,7 +401,7 @@ class CommentStreamsStore {
 	 * @param int $user_id
 	 * @return bool true for OK, false for error
 	 */
-	public function vote( int $vote, int $page_id, int $user_id ) : bool {
+	public function vote( int $vote, int $page_id, int $user_id ): bool {
 		$dbw = $this->getDBConnection( DB_MASTER );
 		$result = $dbw->selectRow(
 			'cs_votes',
@@ -461,7 +461,7 @@ class CommentStreamsStore {
 	 * @param int $user_id the user ID of the user watching the comment
 	 * @return bool true for OK, false for error
 	 */
-	public function watch( int $page_id, int $user_id ) : bool {
+	public function watch( int $page_id, int $user_id ): bool {
 		if ( $this->isWatching( $page_id, $user_id, DB_MASTER ) ) {
 			return true;
 		}
@@ -557,7 +557,7 @@ class CommentStreamsStore {
 	 * @return string
 	 * @throws MWException
 	 */
-	public function getWikiText( WikiPage $wikipage, ?string $comment_title ) : string {
+	public function getWikiText( WikiPage $wikipage, ?string $comment_title ): string {
 		$wikitext = ContentHandler::getContentText( CommentStreamsUtils::getContent( $wikipage ) );
 		return $this->removeAnnotations( $wikitext, $comment_title );
 	}
@@ -569,7 +569,7 @@ class CommentStreamsStore {
 	 * @param ?string $comment_title string title of comment
 	 * @return string annotated wikitext
 	 */
-	private function addAnnotations( string $wikitext, ?string $comment_title ) : string {
+	private function addAnnotations( string $wikitext, ?string $comment_title ): string {
 		if ( $comment_title !== null ) {
 			$wikitext .= <<<EOT
 {{DISPLAYTITLE:
@@ -587,7 +587,7 @@ EOT;
 	 * @param ?string $comment_title
 	 * @return string wikitext without annotations
 	 */
-	private function removeAnnotations( string $wikitext, ?string $comment_title ) : string {
+	private function removeAnnotations( string $wikitext, ?string $comment_title ): string {
 		if ( $comment_title !== null ) {
 			$strip = <<<EOT
 {{DISPLAYTITLE:

@@ -8,7 +8,7 @@ class Store {
 	 * @param string[]|bool $filter
 	 * @return SemanticData
 	 */
-	public function getSemanticData( DIWikiPage $subject, $filter = false ) : SemanticData {
+	public function getSemanticData( DIWikiPage $subject, $filter = false ): SemanticData {
 		return new SemanticData();
 	}
 }

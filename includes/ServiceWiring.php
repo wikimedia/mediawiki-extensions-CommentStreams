@@ -26,7 +26,7 @@ use MediaWiki\MediaWikiServices;
 
 return [
 	'CommentStreamsHandler' =>
-		static function ( MediaWikiServices $services ) : CommentStreamsHandler {
+		static function ( MediaWikiServices $services ): CommentStreamsHandler {
 			return new CommentStreamsHandler(
 				$services->getService( 'CommentStreamsFactory' ),
 				$services->getService( 'CommentStreamsStore' ),
@@ -34,13 +34,13 @@ return [
 			);
 		},
 	'CommentStreamsStore' =>
-		static function ( MediaWikiServices $services ) : CommentStreamsStore {
+		static function ( MediaWikiServices $services ): CommentStreamsStore {
 			return new CommentStreamsStore(
 				$services->getDBLoadBalancer()
 			);
 		},
 	'CommentStreamsFactory' =>
-		static function ( MediaWikiServices $services ) : CommentStreamsFactory {
+		static function ( MediaWikiServices $services ): CommentStreamsFactory {
 			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
 			if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
 				$config = new \MediaWiki\Config\ServiceOptions(
@@ -58,19 +58,19 @@ return [
 			);
 		},
 	'CommentStreamsEchoInterface' =>
-		static function ( MediaWikiServices $services ) : CommentStreamsEchoInterface {
+		static function ( MediaWikiServices $services ): CommentStreamsEchoInterface {
 			return new CommentStreamsEchoInterface(
 				ExtensionRegistry::getInstance()
 			);
 		},
 	'CommentStreamsSMWInterface' =>
-		static function ( MediaWikiServices $services ) : CommentStreamsSMWInterface {
+		static function ( MediaWikiServices $services ): CommentStreamsSMWInterface {
 			return new CommentStreamsSMWInterface(
 				ExtensionRegistry::getInstance()
 			);
 		},
 	'CommentStreamsSocialProfileInterface' =>
-		static function ( MediaWikiServices $services ) : CommentStreamsSocialProfileInterface {
+		static function ( MediaWikiServices $services ): CommentStreamsSocialProfileInterface {
 			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
 			if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
 				$config = new \MediaWiki\Config\ServiceOptions(

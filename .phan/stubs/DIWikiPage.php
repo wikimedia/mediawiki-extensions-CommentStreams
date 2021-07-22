@@ -22,7 +22,7 @@ class DIWikiPage extends SMWDataItem {
 	 * @param Title $title
 	 * @return DIWikiPage
 	 */
-	public static function newFromTitle( Title $title ) : self {
+	public static function newFromTitle( Title $title ): self {
 		return new self( $title );
 	}
 

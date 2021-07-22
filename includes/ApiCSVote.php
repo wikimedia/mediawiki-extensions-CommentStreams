@@ -41,7 +41,7 @@ class ApiCSVote extends ApiCSBase {
 	 * @return ?array result of API request
 	 * @throws ApiUsageException
 	 */
-	protected function executeBody() : ?array {
+	protected function executeBody(): ?array {
 		if ( $this->getUser()->isAnon() ) {
 			$this->dieWithError( 'commentstreams-api-error-vote-notloggedin' );
 		}
@@ -63,7 +63,7 @@ class ApiCSVote extends ApiCSBase {
 	/**
 	 * @return array allowed parameters
 	 */
-	public function getAllowedParams() : array {
+	public function getAllowedParams(): array {
 		return array_merge( parent::getAllowedParams(),
 			[
 				'vote' =>
@@ -78,7 +78,7 @@ class ApiCSVote extends ApiCSBase {
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() : array {
+	public function getExamplesMessages(): array {
 		return [
 			'action=' . $this->getModuleName() . '&pageid=3&vote=1' =>
 				'apihelp-' . $this->getModuleName() . '-pageid-example',
@@ -90,7 +90,7 @@ class ApiCSVote extends ApiCSBase {
 	/**
 	 * @return string indicates that this API module requires a CSRF toekn
 	 */
-	public function needsToken() : string {
+	public function needsToken(): string {
 		return 'csrf';
 	}
 }

@@ -48,7 +48,7 @@ class CommentStreamsEchoInterface {
 	/**
 	 * @return bool
 	 */
-	public function isLoaded() : bool {
+	public function isLoaded(): bool {
 		return $this->isLoaded;
 	}
 
@@ -119,7 +119,7 @@ class CommentStreamsEchoInterface {
 	 * @param EchoEvent $event the Echo event
 	 * @return array array mapping user id to User object
 	 */
-	public static function locateUsersWatchingComment( EchoEvent $event ) : array {
+	public static function locateUsersWatchingComment( EchoEvent $event ): array {
 		$id = $event->getExtraParam( 'parent_id' );
 		if ( $id === null ) {
 			$id = $event->getExtraParam( 'comment_id' );

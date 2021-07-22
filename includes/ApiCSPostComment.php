@@ -133,7 +133,7 @@ class ApiCSPostComment extends ApiBase {
 	/**
 	 * @return array allowed parameters
 	 */
-	public function getAllowedParams() : array {
+	public function getAllowedParams(): array {
 		return [
 			'commenttitle' => [
 				ApiBase::PARAM_TYPE => 'string',
@@ -161,7 +161,7 @@ class ApiCSPostComment extends ApiBase {
 	/**
 	 * @return string indicates that this API module requires a CSRF token
 	 */
-	public function needstoken() : string {
+	public function needstoken(): string {
 		return 'csrf';
 	}
 

@@ -59,7 +59,7 @@ class CommentStreamsSocialProfileInterface {
 	 * @param User $user
 	 * @return ?string
 	 */
-	public function getAvatar( User $user ) : ?string {
+	public function getAvatar( User $user ): ?string {
 		if ( !$this->isLoaded ) {
 			return null;
 		}

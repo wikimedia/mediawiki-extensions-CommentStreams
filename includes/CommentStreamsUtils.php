@@ -47,7 +47,7 @@ class CommentStreamsUtils {
 	 * @param Title $title
 	 * @return bool
 	 */
-	public static function userCan( string $action, User $user, Title $title ) : bool {
+	public static function userCan( string $action, User $user, Title $title ): bool {
 		if ( class_exists( '\MediaWiki\Permissions\PermissionManager' ) ) {
 			// MW 1.33+
 			return MediaWikiServices::getInstance()->getPermissionManager()->
@@ -61,7 +61,7 @@ class CommentStreamsUtils {
 	 * @param string $right
 	 * @return bool
 	 */
-	public static function userHasRight( User $user, string $right ) : bool {
+	public static function userHasRight( User $user, string $right ): bool {
 		if ( class_exists( '\MediaWiki\Permissions\PermissionManager' ) &&
 			method_exists( '\MediaWiki\Permissions\PermissionManager', 'userHasRight' ) ) {
 			// MW 1.34+
@@ -85,7 +85,7 @@ class CommentStreamsUtils {
 	 *        - "fromdbmaster" or WikiPage::READ_LATEST to select from the master database
 	 * @return WikiPage|null
 	 */
-	public static function newWikiPageFromId( int $id, $from = 'fromdb' ) : ?WikiPage {
+	public static function newWikiPageFromId( int $id, $from = 'fromdb' ): ?WikiPage {
 		if ( class_exists( '\MediaWiki\Page\WikiPageFactory' ) ) {
 			// MW 1.36+
 			return MediaWikiServices::getInstance()->getWikiPageFactory()->newFromID( $id, $from );
@@ -111,7 +111,7 @@ class CommentStreamsUtils {
 	 * @param Title $title
 	 * @return bool
 	 */
-	public static function hasDeletedEdits( Title $title ) : bool {
+	public static function hasDeletedEdits( Title $title ): bool {
 		if ( method_exists( $title, 'hasDeletedEdits' ) ) {
 			// MW 1.36+
 			return $title->hasDeletedEdits();
@@ -151,7 +151,7 @@ class CommentStreamsUtils {
 	 * @param Title $title
 	 * @return ?string
 	 */
-	public static function getCreationTimestamp( Title $title ) : ?string {
+	public static function getCreationTimestamp( Title $title ): ?string {
 		if ( class_exists( '\MediaWiki\Revision\RevisionStore' ) &&
 			method_exists( '\MediaWiki\Revision\RevisionStore', 'getFirstRevision' ) ) {
 			// MW 1.35+
@@ -165,7 +165,7 @@ class CommentStreamsUtils {
 	 * @param Title $title
 	 * @return ?int
 	 */
-	public static function getFirstRevisionId( Title $title ) : ?int {
+	public static function getFirstRevisionId( Title $title ): ?int {
 		if ( class_exists( '\MediaWiki\Revision\RevisionStore' ) &&
 			method_exists( '\MediaWiki\Revision\RevisionStore', 'getFirstRevision' ) ) {
 			// MW 1.35+
@@ -187,7 +187,7 @@ class CommentStreamsUtils {
 	 * @param Title $title
 	 * @return ?User
 	 */
-	public static function getAuthor( Title $title ) : ?User {
+	public static function getAuthor( Title $title ): ?User {
 		if ( class_exists( '\MediaWiki\Revision\RevisionStore' ) &&
 			method_exists( '\MediaWiki\Revision\RevisionStore', 'getFirstRevision' ) ) {
 			// MW 1.35+
@@ -210,7 +210,7 @@ class CommentStreamsUtils {
 	 * @param WikiPage $wikipage
 	 * @return ?UserIdentity
 	 */
-	public static function getLastEditor( WikiPage $wikipage ) : ?UserIdentity {
+	public static function getLastEditor( WikiPage $wikipage ): ?UserIdentity {
 		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
 		$latestRevision = $revisionStore->getRevisionByTitle( $wikipage->getTitle(),
 			0, IDBAccessObject::READ_LATEST );
@@ -237,7 +237,7 @@ class CommentStreamsUtils {
 		Content $content,
 		User $user,
 		int $flags
-	) : Status {
+	): Status {
 		return $wikipage->doEditContent(
 			$content,
 			'',
@@ -259,7 +259,7 @@ class CommentStreamsUtils {
 		WikiPage $wikipage,
 		string $reason,
 		User $deleter
-	) : Status {
+	): Status {
 		if ( version_compare( MW_VERSION, '1.35', '<' ) ) {
 			return $wikipage->doDeleteArticleReal( $reason, true );
 		}
@@ -270,7 +270,7 @@ class CommentStreamsUtils {
 	 * @param int $namespace
 	 * @return int
 	 */
-	public static function getSubjectNamespace( int $namespace ) : int {
+	public static function getSubjectNamespace( int $namespace ): int {
 		if ( class_exists( 'NamespaceInfo' ) ) {
 			// MW 1.34+
 			return MediaWikiServices::getInstance()->getNamespaceInfo()->getSubject( $namespace );
@@ -288,7 +288,7 @@ class CommentStreamsUtils {
 		string $wikitext,
 		WikiPage $wikipage,
 		IContextSource $context
-	) : string {
+	): string {
 		if ( class_exists( '\ParserFactory' ) ) {
 			// MW 1.32+
 			$parser = MediaWikiServices::getInstance()->getParserFactory()->create();
@@ -307,7 +307,7 @@ class CommentStreamsUtils {
 	 * @param WikiPage $wikipage
 	 * @return Content
 	 */
-	public static function getContent( WikiPage $wikipage ) : Content {
+	public static function getContent( WikiPage $wikipage ): Content {
 		if ( class_exists( '\MediaWiki\Revision\RevisionRecord' ) ) {
 			return $wikipage->getContent( \MediaWiki\Revision\RevisionRecord::RAW );
 		}

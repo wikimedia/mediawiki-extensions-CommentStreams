@@ -18,21 +18,21 @@ class SMWDataItem {
 	/**
 	 * @return int
 	 */
-	public function getDIType() : int {
+	public function getDIType(): int {
 		return $this->type;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getString() : string {
+	public function getString(): string {
 		return '';
 	}
 
 	/**
 	 * @return Title
 	 */
-	public function getTitle() : Title {
+	public function getTitle(): Title {
 		return $this->title;
 	}
 }

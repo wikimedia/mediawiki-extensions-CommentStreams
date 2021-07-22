@@ -17,54 +17,54 @@ class UpdateJob implements IJobSpecification {
 	/**
 	 * @return bool|void
 	 */
-	public function run() : bool {
+	public function run(): bool {
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getType() : string {
+	public function getType(): string {
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getParams() : array {
+	public function getParams(): array {
 	}
 
 	/**
 	 * @return int|null
 	 */
-	public function getReleaseTimestamp() : ?int {
+	public function getReleaseTimestamp(): ?int {
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function ignoreDuplicates() : bool {
+	public function ignoreDuplicates(): bool {
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getDeduplicationInfo() : array {
+	public function getDeduplicationInfo(): array {
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getRootJobParams() : array {
+	public function getRootJobParams(): array {
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function hasRootJobParams() : bool {
+	public function hasRootJobParams(): bool {
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isRootJob() : bool {
+	public function isRootJob(): bool {
 	}
 }

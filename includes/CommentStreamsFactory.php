@@ -93,7 +93,7 @@ class CommentStreamsFactory {
 	 * @throws MWException
 	 * @throws ConfigException
 	 */
-	public function newFromWikiPage( WikiPage $wikipage ) : ?Comment {
+	public function newFromWikiPage( WikiPage $wikipage ): ?Comment {
 		if ( $wikipage->getTitle()->getNamespace() !== NS_COMMENTSTREAMS || !$wikipage->exists() ) {
 			return null;
 		}
@@ -144,7 +144,7 @@ class CommentStreamsFactory {
 		?string $comment_title,
 		string $wikitext,
 		User $user
-	) : ?Comment {
+	): ?Comment {
 		Assert::parameter(
 			( $comment_title === null && $parent_page_id !== null ) ||
 			( $comment_title !== null && $parent_page_id === null ),

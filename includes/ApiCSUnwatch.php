@@ -40,7 +40,7 @@ class ApiCSUnwatch extends ApiCSBase {
 	 * @return ?array result of API request
 	 * @throws ApiUsageException
 	 */
-	protected function executeBody() : ?array {
+	protected function executeBody(): ?array {
 		if ( $this->getUser()->isAnon() ) {
 			$this->dieWithError( 'commentstreams-api-error-unwatch-notloggedin' );
 		}
@@ -60,7 +60,7 @@ class ApiCSUnwatch extends ApiCSBase {
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() : array {
+	public function getExamplesMessages(): array {
 		return [
 			'action=' . $this->getModuleName() . '&pageid=3' =>
 				'apihelp-' . $this->getModuleName() . '-pageid-example',
@@ -72,7 +72,7 @@ class ApiCSUnwatch extends ApiCSBase {
 	/**
 	 * @return string indicates that this API module requires a CSRF toekn
 	 */
-	public function needsToken() : string {
+	public function needsToken(): string {
 		return 'csrf';
 	}
 }

@@ -54,7 +54,7 @@ class ApiCSDeleteComment extends ApiCSBase {
 	 * @throws ApiUsageException
 	 * @throws MWException
 	 */
-	protected function executeBody() : ?array {
+	protected function executeBody(): ?array {
 		$user = $this->getUser();
 		if ( $user->isAnon() ) {
 			$this->dieWithError( 'commentstreams-api-error-delete-notloggedin' );

@@ -30,14 +30,14 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	/**
 	 * @inheritDoc
 	 */
-	public function getIconType() : string {
+	public function getIconType(): string {
 		return 'chat';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getPrimaryLink() : array {
+	public function getPrimaryLink(): array {
 		$id = $this->event->getExtraParam( 'comment_id' );
 		return [
 			'url' => $this->event->getTitle()->getFullURL() . '#cs-comment-' . $id,
@@ -48,7 +48,7 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	/**
 	 * @inheritDoc
 	 */
-	public function getHeaderMessage() : Message {
+	public function getHeaderMessage(): Message {
 		$msg = wfMessage( "notification-header-{$this->type}" );
 		$this->addMessageParams( $msg );
 		return $msg;
@@ -82,7 +82,7 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	/**
 	 * @inheritDoc
 	 */
-	public function canRender() : bool {
+	public function canRender(): bool {
 		return $this->event->getTitle() !== null;
 	}
 }

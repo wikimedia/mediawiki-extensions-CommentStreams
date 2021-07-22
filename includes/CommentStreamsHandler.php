@@ -122,7 +122,7 @@ class CommentStreamsHandler {
 	 * @return bool true if comments should be displayed on this page
 	 * @throws ConfigException
 	 */
-	private function checkDisplayComments( OutputPage $output ) : bool {
+	private function checkDisplayComments( OutputPage $output ): bool {
 		// don't display comments on this page if they are explicitly disabled
 		if ( $this->areCommentsEnabled === self::COMMENTS_DISABLED ) {
 			return false;
@@ -199,7 +199,7 @@ class CommentStreamsHandler {
 	 * @throws MWException
 	 * @throws ConfigException
 	 */
-	private function getComments( OutputPage $output ) : array {
+	private function getComments( OutputPage $output ): array {
 		$commentData = [];
 		$pageId = $output->getTitle()->getArticleID();
 		$comment_page_ids = $this->commentStreamsStore->getAssociatedComments( $pageId );
@@ -306,7 +306,7 @@ class CommentStreamsHandler {
 		array $allComments,
 		bool $newestOnTop,
 		bool $enableVoting
-	) : array {
+	): array {
 		$array = array_filter(
 			$allComments, static function ( $comment ) {
 				return $comment->getParentId() === null;
@@ -353,7 +353,7 @@ class CommentStreamsHandler {
 	 * @param int $parentId the page ID of the discussion to get replies for
 	 * @return array an array of replies for the given discussion
 	 */
-	private function getReplies( array $allComments, int $parentId ) : array {
+	private function getReplies( array $allComments, int $parentId ): array {
 		$array = array_filter(
 			$allComments, static function ( $comment ) use ( $parentId ) {
 				if ( $comment->getParentId() === $parentId ) {

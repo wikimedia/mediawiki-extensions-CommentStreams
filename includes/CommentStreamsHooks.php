@@ -50,7 +50,7 @@ class CommentStreamsHooks {
 	 * @param DatabaseUpdater $updater database updater
 	 * @return bool continue checking hooks
 	 */
-	public static function addCommentTableToDatabase( DatabaseUpdater $updater ) : bool {
+	public static function addCommentTableToDatabase( DatabaseUpdater $updater ): bool {
 		$dir = __DIR__ . '/../sql/';
 		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql' );
 		$updater->addExtensionTable( 'cs_votes', $dir . 'votes.sql' );
@@ -75,7 +75,7 @@ class CommentStreamsHooks {
 	 * corresponding canonical names
 	 * @return bool continue checking hooks
 	 */
-	public static function addCommentStreamsNamespaces( array &$namespaces ) : bool {
+	public static function addCommentStreamsNamespaces( array &$namespaces ): bool {
 		$namespaces[NS_COMMENTSTREAMS] = 'CommentStreams';
 		$namespaces[NS_COMMENTSTREAMS_TALK] = 'CommentStreams_Talk';
 		return true;
@@ -104,7 +104,7 @@ class CommentStreamsHooks {
 		User $user,
 		WebRequest $request,
 		MediaWiki $wiki
-	) : bool {
+	): bool {
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return true;
 		}
@@ -167,7 +167,7 @@ class CommentStreamsHooks {
 		Title $oldTitle,
 		Title $newTitle,
 		Status $status
-	) : bool {
+	): bool {
 		if ( $oldTitle->getNamespace() === NS_COMMENTSTREAMS ||
 			$newTitle->getNamespace() === NS_COMMENTSTREAMS ) {
 			$status->fatal( wfMessage( 'commentstreams-error-prohibitedaction',
@@ -194,7 +194,7 @@ class CommentStreamsHooks {
 		User $user,
 		string $action,
 		bool &$result
-	) : bool {
+	): bool {
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return true;
 		}
@@ -233,7 +233,7 @@ class CommentStreamsHooks {
 	 * @return bool continue checking hooks
 	 * @throws MWException
 	 */
-	public static function onParserSetup( Parser $parser ) : bool {
+	public static function onParserSetup( Parser $parser ): bool {
 		$parser->setHook( 'comment-streams',
 			'MediaWiki\Extension\CommentStreams\CommentStreamsHooks::enableCommentStreams' );
 		$parser->setHook( 'no-comment-streams',
@@ -259,7 +259,7 @@ class CommentStreamsHooks {
 		array $args,
 		Parser $parser,
 		PPFrame $frame
-	) : string {
+	): string {
 		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = MediaWikiServices::getInstance()->getService( 'CommentStreamsHandler' );
 		$cs->enableCommentsOnPage();
@@ -290,7 +290,7 @@ class CommentStreamsHooks {
 		array $args,
 		Parser $parser,
 		PPFrame $frame
-	) : string {
+	): string {
 		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = MediaWikiServices::getInstance()->getService( 'CommentStreamsHandler' );
 		$cs->disableCommentsOnPage();
@@ -313,7 +313,7 @@ class CommentStreamsHooks {
 		array $args,
 		Parser $parser,
 		PPFrame $frame
-	) : string {
+	): string {
 		$parser->getOutput()->updateCacheExpiry( 0 );
 		$cs = MediaWikiServices::getInstance()->getService( 'CommentStreamsHandler' );
 		$cs->initiallyCollapseCommentsOnPage();
@@ -333,7 +333,7 @@ class CommentStreamsHooks {
 	public static function addCommentsAndInitializeJS(
 		OutputPage $output,
 		Skin $skin
-	) : bool {
+	): bool {
 		$cs = MediaWikiServices::getInstance()->getService( 'CommentStreamsHandler' );
 		$cs->init( $output );
 		return true;
@@ -359,7 +359,7 @@ class CommentStreamsHooks {
 		SearchResult $result,
 		array $terms,
 		SpecialSearch $page
-	) : bool {
+	): bool {
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return true;
 		}

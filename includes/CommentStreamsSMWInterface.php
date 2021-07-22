@@ -57,7 +57,7 @@ class CommentStreamsSMWInterface {
 	/**
 	 * @return bool
 	 */
-	public function isLoaded() : bool {
+	public function isLoaded(): bool {
 		return $this->isLoaded;
 	}
 
@@ -138,7 +138,7 @@ class CommentStreamsSMWInterface {
 	 * @noinspection PhpUnusedParameterInspection
 	 * @throws ConfigException
 	 */
-	public static function updateData( Store $store, SemanticData $semanticData ) : bool {
+	public static function updateData( Store $store, SemanticData $semanticData ): bool {
 		$subject = $semanticData->getSubject();
 		if ( $subject !== null && $subject->getTitle() !== null &&
 			$subject->getTitle()->getNamespace() === NS_COMMENTSTREAMS ) {

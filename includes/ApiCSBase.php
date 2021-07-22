@@ -85,7 +85,7 @@ abstract class ApiCSBase extends ApiBase {
 	 * the real body of the execute function
 	 * @return ?array result of API request
 	 */
-	abstract protected function executeBody() : ?array;
+	abstract protected function executeBody(): ?array;
 
 	/**
 	 * @return array allowed parameters

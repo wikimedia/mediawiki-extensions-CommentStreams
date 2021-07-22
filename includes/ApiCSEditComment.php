@@ -43,7 +43,7 @@ class ApiCSEditComment extends ApiCSBase {
 	 * @throws ApiUsageException
 	 * @throws MWException
 	 */
-	protected function executeBody() : ?array {
+	protected function executeBody(): ?array {
 		$user = $this->getUser();
 		if ( $user->isAnon() ) {
 			$this->dieWithError( 'commentstreams-api-error-edit-notloggedin' );
@@ -92,7 +92,7 @@ class ApiCSEditComment extends ApiCSBase {
 	/**
 	 * @return array allowed parameters
 	 */
-	public function getAllowedParams() : array {
+	public function getAllowedParams(): array {
 		return array_merge( parent::getAllowedParams(),
 			[
 				'commenttitle' =>
@@ -112,14 +112,14 @@ class ApiCSEditComment extends ApiCSBase {
 	/**
 	 * @return array examples of the use of this API module
 	 */
-	public function getExamplesMessages() : array {
+	public function getExamplesMessages(): array {
 		return [];
 	}
 
 	/**
 	 * @return string indicates that this API module requires a CSRF toekn
 	 */
-	public function needsToken() : string {
+	public function needsToken(): string {
 		return 'csrf';
 	}
 }

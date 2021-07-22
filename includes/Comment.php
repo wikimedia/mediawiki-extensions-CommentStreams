@@ -226,28 +226,28 @@ class Comment {
 	/**
 	 * @return int page ID of the comment's wiki page
 	 */
-	public function getId() : int {
+	public function getId(): int {
 		return $this->wikipage->getId();
 	}
 
 	/**
 	 * @return Title Title object associated with this comment page
 	 */
-	public function getTitle() : Title {
+	public function getTitle(): Title {
 		return $this->wikipage->getTitle();
 	}
 
 	/**
 	 * @return ?string comment block id
 	 */
-	public function getBlockId() : ?string {
+	public function getBlockId(): ?string {
 		return $this->comment_block_id;
 	}
 
 	/**
 	 * @return int page ID for the wiki page this comment is on
 	 */
-	public function getAssociatedId() : int {
+	public function getAssociatedId(): int {
 		return $this->assoc_page_id;
 	}
 
@@ -255,21 +255,21 @@ class Comment {
 	 * @return int|null page ID for the wiki page this comment is in reply to or
 	 * null if this comment is a discussion, not a reply
 	 */
-	public function getParentId() : ?int {
+	public function getParentId(): ?int {
 		return $this->parent_page_id;
 	}
 
 	/**
 	 * @return ?string the title of the comment
 	 */
-	public function getCommentTitle() : ?string {
+	public function getCommentTitle(): ?string {
 		return $this->comment_title;
 	}
 
 	/**
 	 * @return string wikitext of the comment
 	 */
-	public function getWikiText() : string {
+	public function getWikiText(): string {
 		return $this->wikitext;
 	}
 
@@ -277,28 +277,28 @@ class Comment {
 	 * @param IContextSource $context
 	 * @return string parsed HTML of the comment
 	 */
-	public function getHTML( IContextSource $context ) : string {
+	public function getHTML( IContextSource $context ): string {
 		return CommentStreamsUtils::parse( $this->wikitext, $this->wikipage, $context );
 	}
 
 	/**
 	 * @return int number of replies
 	 */
-	public function getNumReplies() : int {
+	public function getNumReplies(): int {
 		return $this->num_replies;
 	}
 
 	/**
 	 * @return ?User the author of this comment
 	 */
-	public function getAuthor() : ?User {
+	public function getAuthor(): ?User {
 		return $this->author;
 	}
 
 	/**
 	 * @return string username of the author of this comment
 	 */
-	public function getUsername() : string {
+	public function getUsername(): string {
 		return $this->author->getName();
 	}
 
@@ -306,21 +306,21 @@ class Comment {
 	 * @return string display name of the author of this comment linked to
 	 * the user's user page if it exists
 	 */
-	public function getUserDisplayName() : string {
+	public function getUserDisplayName(): string {
 		return $this->getDisplayNameFromUser( $this->author, true );
 	}
 
 	/**
 	 * @return string display name of the author of this comment
 	 */
-	public function getUserDisplayNameUnlinked() : string {
+	public function getUserDisplayNameUnlinked(): string {
 		return $this->getDisplayNameFromUser( $this->author, false );
 	}
 
 	/**
 	 * @return UserIdentity the last editor of this comment
 	 */
-	public function getLastEditor() : UserIdentity {
+	public function getLastEditor(): UserIdentity {
 		return $this->lastEditor;
 	}
 
@@ -328,28 +328,28 @@ class Comment {
 	 * @return bool true if the last edit to this comment was not done by the
 	 * original author
 	 */
-	public function isLastEditModerated() : bool {
+	public function isLastEditModerated(): bool {
 		return $this->author->getId() !== $this->lastEditor->getId();
 	}
 
 	/**
 	 * @return MWTimestamp
 	 */
-	public function getCreationTimestamp() : MWTimestamp {
+	public function getCreationTimestamp(): MWTimestamp {
 		return $this->creation_timestamp;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getCreationDate() : string {
+	public function getCreationDate(): string {
 		return $this->creation_timestamp->format( "M j \a\\t g:i a" );
 	}
 
 	/**
 	 * @return ?string
 	 */
-	public function getModificationDate() : ?string {
+	public function getModificationDate(): ?string {
 		return $this->modification_timestamp ?
 			$this->modification_timestamp->format( "M j \a\\t g:i a" ) : null;
 	}
@@ -358,7 +358,7 @@ class Comment {
 	 * @param IContextSource $context
 	 * @return array get comment data in array suitable for JSON
 	 */
-	public function getJSON( IContextSource $context ) : array {
+	public function getJSON( IContextSource $context ): array {
 		$json = [
 			'pageid' => $this->wikipage->getId(),
 			'commentblockid' => $this->comment_block_id,
@@ -400,7 +400,7 @@ class Comment {
 	 * @param User $user the user voting on the comment
 	 * @return bool database status code
 	 */
-	public function vote( string $vote, User $user ) : bool {
+	public function vote( string $vote, User $user ): bool {
 		Assert::parameter( $vote === "-1" || $vote === "0" || $vote === "1", '$vote',
 			'must be "-1", "0", or "1"' );
 		$result = $this->commentStreamsStore->vote( (int)$vote, $this->getId(), $user->getId() );
@@ -412,7 +412,7 @@ class Comment {
 	 * @param User $user
 	 * @return int
 	 */
-	public function getVote( User $user ) : int {
+	public function getVote( User $user ): int {
 		return $this->commentStreamsStore->getVote( $this->getId(), $user->getId() );
 	}
 
@@ -420,7 +420,7 @@ class Comment {
 	 * @param int $user_id
 	 * @return bool
 	 */
-	public function watch( int $user_id ) : bool {
+	public function watch( int $user_id ): bool {
 		return $this->commentStreamsStore->watch( $this->getId(), $user_id );
 	}
 
@@ -428,7 +428,7 @@ class Comment {
 	 * @param int $user_id
 	 * @return bool
 	 */
-	public function unwatch( int $user_id ) : bool {
+	public function unwatch( int $user_id ): bool {
 		return $this->commentStreamsStore->unwatch( $this->getId(), $user_id );
 	}
 
@@ -436,7 +436,7 @@ class Comment {
 	 * @param User $user
 	 * @return bool
 	 */
-	public function isWatching( User $user ) : bool {
+	public function isWatching( User $user ): bool {
 		return $this->commentStreamsStore->isWatching( $this->getId(), $user->getId() );
 	}
 
@@ -456,7 +456,7 @@ class Comment {
 		?string $comment_title,
 		string $wikitext,
 		User $user
-	) : bool {
+	): bool {
 		Assert::parameter(
 			( $comment_title === null && $this->parent_page_id !== null ) ||
 			( $comment_title !== null && $this->parent_page_id === null ),
@@ -494,7 +494,7 @@ class Comment {
 	 * @throws FatalError
 	 * @throws MWException
 	 */
-	public function delete( User $deleter ) : bool {
+	public function delete( User $deleter ): bool {
 		return $this->commentStreamsStore->deleteComment( $this->wikipage, $deleter );
 	}
 
@@ -554,7 +554,7 @@ class Comment {
 	private function getDisplayNameFromUser(
 		User $user,
 		bool $linked
-	) : string {
+	): string {
 		if ( $user->isAnon() ) {
 			return Html::openElement( 'span', [
 					'class' => 'cs-comment-author-anonymous'

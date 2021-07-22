@@ -18,7 +18,7 @@ class DIProperty extends SMWDataItem {
 	 * @param false $languageCode
 	 * @return DIProperty
 	 */
-	public static function newFromUserLabel( string $label, bool $inverse = false, $languageCode = false ) : self {
+	public static function newFromUserLabel( string $label, bool $inverse = false, $languageCode = false ): self {
 		return new self( $label );
 	}
 }
