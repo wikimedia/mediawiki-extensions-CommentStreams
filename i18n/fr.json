@@ -156,6 +156,7 @@
 	"commentstreams-allcomments-label-created": "Créé",
 	"commentstreams-allcomments-label-lasteditor": "Dernier contributeur",
 	"commentstreams-allcomments-label-lastedited": "Dernière modification",
+	"commentstreams-allcomments-label-blockid": "Id du blocage",
 	"commentstreams-allcomments-button-next": "Suivant",
 	"commentstreams-allcomments-button-previous": "Précédent",
 	"commentstreams-ve-conversion-error": "Erreur de conversion entre le wikitexte et le code HTML pour l’ÉditeurVisuel"
