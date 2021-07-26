@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"BaRaN6161 TURK",
+			"Hedda",
 			"Joseph",
 			"MuratTheTurkish",
 			"Sayginer"
@@ -156,6 +157,7 @@
 	"commentstreams-allcomments-label-created": "Oluşturuldu",
 	"commentstreams-allcomments-label-lasteditor": "Son Düzenleyen",
 	"commentstreams-allcomments-label-lastedited": "Son Düzenleme",
+	"commentstreams-allcomments-label-blockid": "Engel Kimliği",
 	"commentstreams-allcomments-button-next": "Sonraki",
 	"commentstreams-allcomments-button-previous": "Önceki",
 	"commentstreams-ve-conversion-error": "Görsel Düzenleyici için vikimetin ve HTML arasında dönüştürme hatası"

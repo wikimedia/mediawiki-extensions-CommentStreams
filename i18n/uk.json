@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"DDPAT",
 			"Piramidion",
 			"SimondR"
 		]
@@ -52,6 +53,7 @@
 	"apihelp-csunwatch-param-title": "назва сторінки, яка містить коментар, спостереження за яким слід припинити",
 	"apihelp-csunwatch-pageid-example": "припинити спостереження за коментарем з ідентифікатором сторінки 3",
 	"apihelp-csunwatch-title-example": "припинити спостереження за коментарем з назвою сторінки CommentStreams:3",
+	"commentstreams-api-error-invalid": "Недійсна відповідь API.",
 	"commentstreams-api-error-notloggedin": "Ви повинні увійти в систему.",
 	"commentstreams-api-error-commentnotfound": "Запитуваний коментар не знайдено.",
 	"commentstreams-api-error-notacomment": "Вказаний ідентифікатор сторінки не пов'язаний з валідним коментарем.",
@@ -153,6 +155,7 @@
 	"commentstreams-allcomments-label-created": "Створено",
 	"commentstreams-allcomments-label-lasteditor": "Останній редактор",
 	"commentstreams-allcomments-label-lastedited": "Востаннє відредаговано",
+	"commentstreams-allcomments-label-blockid": "ID блокування",
 	"commentstreams-allcomments-button-next": "Наступне",
 	"commentstreams-allcomments-button-previous": "Попереднє",
 	"commentstreams-ve-conversion-error": "Виникла помилка під час конвертування між вікірозміткою та HTML для Візуального редактора"
