@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,6 +25,7 @@ use ConfigException;
 use ExtensionRegistry;
 use JobQueueGroup;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\User\UserIdentity;
 use SMW\DIProperty;
 use SMW\DIWikiPage;
 use SMW\MediaWiki\Jobs\UpdateJob;
@@ -37,7 +37,6 @@ use SMWDataItem;
 use SMWDIBlob;
 use SMWDINumber;
 use Title;
-use User;
 
 class CommentStreamsSMWInterface {
 	/**
@@ -75,15 +74,15 @@ class CommentStreamsSMWInterface {
 	/**
 	 * return the value of a property on a user page
 	 *
-	 * @param User $user the user
+	 * @param UserIdentity $user the user
 	 * @param string $propertyName the name of the property
 	 * @return string|Title|null the value of the property
 	 */
-	public function getUserProperty( User $user, string $propertyName ) {
+	public function getUserProperty( UserIdentity $user, string $propertyName ) {
 		if ( !$this->isLoaded ) {
 			return null;
 		}
-		$userpage = $user->getUserPage();
+		$userpage = Title::makeTitle( NS_USER, $user->getName() );
 		if ( $userpage->exists() ) {
 			$subject = DIWikiPage::newFromTitle( $userpage );
 			$store = StoreFactory::getStore();
@@ -148,9 +147,8 @@ class CommentStreamsSMWInterface {
 				$page_id = $subject->getTitle()->getArticleID( Title::GAID_FOR_UPDATE );
 			}
 			$wikipage = CommentStreamsUtils::newWikiPageFromId( $page_id );
-			$commentStreamsFactory =
-				MediaWikiServices::getInstance()->getService( 'CommentStreamsFactory' );
-			$comment = $commentStreamsFactory->newFromWikiPage( $wikipage );
+			$commentFactory = MediaWikiServices::getInstance()->getService( 'CommentFactory' );
+			$comment = $commentFactory->newFromWikiPage( $wikipage );
 
 			if ( $comment === null ) {
 				return true;

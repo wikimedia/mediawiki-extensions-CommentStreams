@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -26,8 +24,11 @@ namespace MediaWiki\Extension\CommentStreams;
 use Action;
 use ConfigException;
 use ExtensionRegistry;
-use MWException;
+use MediaWiki\Permissions\PermissionManager;
+use NamespaceInfo;
 use OutputPage;
+use Parser;
+use PPFrame;
 
 class CommentStreamsHandler {
 	const COMMENTS_ENABLED = 1;
@@ -40,9 +41,14 @@ class CommentStreamsHandler {
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
 	/**
-	 * @var CommentStreamsFactory
+	 * initially collapse CommentStreams flag
 	 */
-	private $commentStreamsFactory;
+	private $initiallyCollapseCommentStreams = false;
+
+	/**
+	 * @var CommentFactory
+	 */
+	private $commentFactory;
 
 	/**
 	 * @var CommentStreamsStore
@@ -55,45 +61,108 @@ class CommentStreamsHandler {
 	private $echoInterface;
 
 	/**
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @var NamespaceInfo
+	 */
+	private $namespaceInfo;
+
+	/**
+	 * @var PermissionManager
+	 */
+	private $permissionManager;
+
+	/**
+	 * @param CommentFactory $commentFactory
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param CommentStreamsEchoInterface $echoInterface
+	 * @param NamespaceInfo $namespaceInfo
+	 * @param PermissionManager $permissionManager
 	 */
 	public function __construct(
-		CommentStreamsFactory $commentStreamsFactory,
+		CommentFactory $commentFactory,
 		CommentStreamsStore $commentStreamsStore,
-		CommentStreamsEchoInterface $echoInterface
+		CommentStreamsEchoInterface $echoInterface,
+		NamespaceInfo $namespaceInfo,
+		PermissionManager $permissionManager
 	) {
-		$this->commentStreamsFactory = $commentStreamsFactory;
+		$this->commentFactory = $commentFactory;
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->echoInterface = $echoInterface;
+		$this->namespaceInfo = $namespaceInfo;
+		$this->permissionManager = $permissionManager;
 	}
 
 	/**
-	 * enables the display of comments on the current page
+	 * Implements tag function, <comment-streams/>, which enables
+	 * CommentStreams on a page.
+	 *
+	 * @param ?string $input input between the tags (ignored)
+	 * @param array $args tag arguments
+	 * @param Parser $parser the parser
+	 * @param PPFrame $frame the parent frame
+	 * @return string to replace tag with
+	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public function enableCommentsOnPage() {
+	public function enableCommentStreams(
+		?string $input,
+		array $args,
+		Parser $parser,
+		PPFrame $frame
+	): string {
+		$parser->getOutput()->updateCacheExpiry( 0 );
 		$this->areCommentsEnabled = self::COMMENTS_ENABLED;
+		if ( isset( $args['id'] ) ) {
+			$ret = '<div class="cs-comments" id="csc_' . md5( $args['id'] ) . '"></div>';
+		} elseif ( isset( $args['location'] ) && $args['location'] === 'footer' ) {
+			$ret = '';
+		} else {
+			$ret = '<div class="cs-comments" id="cs-comments"></div>';
+		}
+		// @phan-suppress-next-line SecurityCheck-XSS
+		return $ret;
 	}
 
 	/**
-	 * disables the display of comments on the current page
+	 * Implements tag function, <no-comment-streams/>, which disables
+	 * CommentStreams on a page.
+	 *
+	 * @param ?string $input input between the tags (ignored)
+	 * @param array $args tag arguments
+	 * @param Parser $parser the parser
+	 * @param PPFrame $frame the parent frame
+	 * @return string to replace tag with
+	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public function disableCommentsOnPage() {
+	public function disableCommentStreams(
+		?string $input,
+		array $args,
+		Parser $parser,
+		PPFrame $frame
+	): string {
+		$parser->getOutput()->updateCacheExpiry( 0 );
 		$this->areCommentsEnabled = self::COMMENTS_DISABLED;
+		return '';
 	}
 
 	/**
-	 * initially collapse CommentStreams flag
+	 * Implements tag function, <comment-streams-initially-collapsed/>, which
+	 * makes CommentStreams on a page start as collapsed when the page is viewed.
+	 *
+	 * @param ?string $input input between the tags (ignored)
+	 * @param array $args tag arguments
+	 * @param Parser $parser the parser
+	 * @param PPFrame $frame the parent frame
+	 * @return string to replace tag with
+	 * @noinspection PhpUnusedParameterInspection
 	 */
-	private $initiallyCollapseCommentStreams = false;
-
-	/**
-	 * makes the comments appear initially collapsed when the current page
-	 * is viewed
-	 */
-	public function initiallyCollapseCommentsOnPage() {
+	public function initiallyCollapseCommentStreams(
+		?string $input,
+		array $args,
+		Parser $parser,
+		PPFrame $frame
+	): string {
+		$parser->getOutput()->updateCacheExpiry( 0 );
 		$this->initiallyCollapseCommentStreams = true;
+		return '';
 	}
 
 	/**
@@ -101,7 +170,6 @@ class CommentStreamsHandler {
 	 *
 	 * @param OutputPage $output OutputPage object
 	 * @throws ConfigException
-	 * @throws MWException
 	 */
 	public function init( OutputPage $output ) {
 		if ( $this->checkDisplayComments( $output ) ) {
@@ -172,7 +240,6 @@ class CommentStreamsHandler {
 	 *
 	 * @param OutputPage $output the OutputPage object for the current page
 	 * @return Comment[] array of comments
-	 * @throws MWException
 	 * @throws ConfigException
 	 */
 	private function getComments( OutputPage $output ): array {
@@ -183,7 +250,7 @@ class CommentStreamsHandler {
 		foreach ( $comment_page_ids as $id ) {
 			$wikipage = CommentStreamsUtils::newWikiPageFromId( $id );
 			if ( $wikipage !== null ) {
-				$comment = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
+				$comment = $this->commentFactory->newFromWikiPage( $wikipage );
 				if ( $comment !== null ) {
 					$allComments[] = $comment;
 				}
@@ -229,7 +296,7 @@ class CommentStreamsHandler {
 		$title = $output->getTitle();
 		$namespace = $title->getNamespace();
 		if ( $title->isTalkPage() ) {
-			$namespace = CommentStreamsUtils::getSubjectNamespace( $namespace );
+			$this->namespaceInfo->getSubject( $namespace );
 		}
 
 		$config = $output->getConfig();
@@ -243,15 +310,15 @@ class CommentStreamsHandler {
 		}
 
 		$canComment = true;
-		if ( !CommentStreamsUtils::userHasRight( $output->getUser(), 'cs-comment' ) ) {
+		if ( !$this->permissionManager->userHasRight( $output->getUser(), 'cs-comment' ) ) {
 			$canComment = false;
 		}
 
 		$commentStreamsParams = [
 			'canComment' => $canComment,
-			'moderatorEdit' => CommentStreamsUtils::userHasRight( $output->getUser(),
+			'moderatorEdit' => $this->permissionManager->userHasRight( $output->getUser(),
 				'cs-moderator-edit' ),
-			'moderatorDelete' => CommentStreamsUtils::userHasRight( $output->getUser(),
+			'moderatorDelete' => $this->permissionManager->userHasRight( $output->getUser(),
 				'cs-moderator-delete' ),
 			'moderatorFastDelete' => $config->get( 'CommentStreamsModeratorFastDelete' ) ? 1 : 0,
 			'showLabels' => $config->get( 'CommentStreamsShowLabels' ) ? 1 : 0,

@@ -22,39 +22,41 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ExtensionRegistry;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\MediaWikiServices;
 
 return [
 	'CommentStreamsHandler' =>
 		static function ( MediaWikiServices $services ): CommentStreamsHandler {
 			return new CommentStreamsHandler(
-				$services->getService( 'CommentStreamsFactory' ),
+				$services->getService( 'CommentFactory' ),
 				$services->getService( 'CommentStreamsStore' ),
-				$services->getService( 'CommentStreamsEchoInterface' )
+				$services->getService( 'CommentStreamsEchoInterface' ),
+				$services->getNamespaceInfo(),
+				$services->getPermissionManager()
 			);
 		},
 	'CommentStreamsStore' =>
 		static function ( MediaWikiServices $services ): CommentStreamsStore {
 			return new CommentStreamsStore(
-				$services->getDBLoadBalancer()
+				$services->getDBLoadBalancer(),
+				$services->getPermissionManager(),
+				$services->getUserFactory()
 			);
 		},
-	'CommentStreamsFactory' =>
-		static function ( MediaWikiServices $services ): CommentStreamsFactory {
-			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
-			if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
-				$config = new \MediaWiki\Config\ServiceOptions(
-					Comment::CONSTRUCTOR_OPTIONS,
-					$config
-				);
-			}
-			return new CommentStreamsFactory(
-				$config,
+	'CommentFactory' =>
+		static function ( MediaWikiServices $services ): CommentFactory {
+			return new CommentFactory(
+				new ServiceOptions( Comment::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
 				$services->getService( 'CommentStreamsStore' ),
 				$services->getService( 'CommentStreamsEchoInterface' ),
 				$services->getService( 'CommentStreamsSMWInterface' ),
 				$services->getService( 'CommentStreamsSocialProfileInterface' ),
-				$services->getLinkRenderer()
+				$services->getLinkRenderer(),
+				$services->getRepoGroup(),
+				$services->getRevisionStore(),
+				$services->getParserFactory(),
+				$services->getUserFactory()
 			);
 		},
 	'CommentStreamsEchoInterface' =>
@@ -71,15 +73,11 @@ return [
 		},
 	'CommentStreamsSocialProfileInterface' =>
 		static function ( MediaWikiServices $services ): CommentStreamsSocialProfileInterface {
-			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
-			if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
-				$config = new \MediaWiki\Config\ServiceOptions(
-					CommentStreamsSocialProfileInterface::CONSTRUCTOR_OPTIONS,
-					$config
-				);
-			}
 			return new CommentStreamsSocialProfileInterface(
-				$config
+				new ServiceOptions(
+					CommentStreamsSocialProfileInterface::CONSTRUCTOR_OPTIONS,
+					$services->getMainConfig()
+				)
 			);
 		},
 ];

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,7 +22,8 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ConfigException;
-use User;
+use MediaWiki\Config\ServiceOptions;
+use MediaWiki\User\UserIdentity;
 use wAvatar;
 
 class CommentStreamsSocialProfileInterface {
@@ -42,24 +42,20 @@ class CommentStreamsSocialProfileInterface {
 	private $uploadPath;
 
 	/**
-	 * @param \MediaWiki\Config\ServiceOptions|\Config $options
+	 * @param ServiceOptions $options
 	 * @throws ConfigException
 	 */
-	public function __construct(
-		$options
-	) {
-		if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
-			$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-		}
+	public function __construct( ServiceOptions $options ) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->isLoaded = class_exists( 'wAvatar' );
 		$this->uploadPath = $options->get( 'UploadPath' );
 	}
 
 	/**
-	 * @param User $user
+	 * @param UserIdentity $user
 	 * @return ?string
 	 */
-	public function getAvatar( User $user ): ?string {
+	public function getAvatar( UserIdentity $user ): ?string {
 		if ( !$this->isLoaded ) {
 			return null;
 		}

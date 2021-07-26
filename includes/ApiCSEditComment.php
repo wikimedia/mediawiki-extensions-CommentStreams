@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -32,9 +30,10 @@ class ApiCSEditComment extends ApiCSBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
+	 * @param CommentFactory $commentFactory
 	 */
-	public function __construct( ApiMain $main, string $action ) {
-		parent::__construct( $main, $action, true );
+	public function __construct( ApiMain $main, string $action, CommentFactory $commentFactory ) {
+		parent::__construct( $main, $action, $commentFactory, true );
 	}
 
 	/**
@@ -56,7 +55,7 @@ class ApiCSEditComment extends ApiCSBase {
 		}
 
 		$title = $this->comment->getTitle();
-		if ( !CommentStreamsUtils::userCan( $action, $user, $title ) ) {
+		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
 			$this->dieWithError( 'commentstreams-api-error-edit-permissions' );
 		}
 

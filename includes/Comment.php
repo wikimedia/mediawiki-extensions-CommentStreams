@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -23,15 +21,21 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ConfigException;
 use FatalError;
 use Html;
 use IContextSource;
+use IDBAccessObject;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Revision\RevisionStore;
+use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use MWException;
 use MWTimestamp;
 use PageProps;
+use ParserFactory;
+use RepoGroup;
 use Title;
 use User;
 use Wikimedia\Assert\Assert;
@@ -68,6 +72,26 @@ class Comment {
 	 * @var LinkRenderer
 	 */
 	private $linkRenderer;
+
+	/**
+	 * @var RepoGroup
+	 */
+	private $repoGroup;
+
+	/**
+	 * @var RevisionStore
+	 */
+	private $revisionStore;
+
+	/**
+	 * @var ParserFactory
+	 */
+	private $parserFactory;
+
+	/**
+	 * @var UserFactory
+	 */
+	private $userFactory;
 
 	/**
 	 * @var string
@@ -128,7 +152,7 @@ class Comment {
 
 	/**
 	 * user object for the author of this comment
-	 * @var User
+	 * @var UserIdentity
 	 */
 	private $author;
 
@@ -163,27 +187,34 @@ class Comment {
 
 	/**
 	 * Do not instantiate directly. Use CommentStreamsFactory instead.
-	 * @param \MediaWiki\Config\ServiceOptions|\Config $options
+	 * @param ServiceOptions $options
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param CommentStreamsEchoInterface $echoInterface
 	 * @param CommentStreamsSMWInterface $smwInterface
 	 * @param CommentStreamsSocialProfileInterface $socialProfileInterface
 	 * @param LinkRenderer $linkRenderer
-	 * @param WikiPage $wikipage WikiPage object corresponding to comment page
+	 * @param RepoGroup $repoGroup
+	 * @param RevisionStore $revisionStore
+	 * @param ParserFactory $parserFactory
+	 * @param UserFactory $userFactory
+	 * @param WikiPage $wikipage
 	 * @param ?string $comment_block_id
 	 * @param int $assoc_page_id
 	 * @param ?int $parent_page_id
 	 * @param ?string $comment_title
 	 * @param string $wikitext
-	 * @throws ConfigException
 	 */
 	public function __construct(
-		$options,
+		ServiceOptions $options,
 		CommentStreamsStore $commentStreamsStore,
 		CommentStreamsEchoInterface $echoInterface,
 		CommentStreamsSMWInterface $smwInterface,
 		CommentStreamsSocialProfileInterface $socialProfileInterface,
 		LinkRenderer $linkRenderer,
+		RepoGroup $repoGroup,
+		RevisionStore $revisionStore,
+		ParserFactory $parserFactory,
+		UserFactory $userFactory,
 		WikiPage $wikipage,
 		?string $comment_block_id,
 		int $assoc_page_id,
@@ -191,9 +222,7 @@ class Comment {
 		?string $comment_title,
 		string $wikitext
 	) {
-		if ( class_exists( '\MediaWiki\Config\ServiceOptions' ) ) {
-			$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-		}
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->userAvatarPropertyName = $options->get( 'CommentStreamsUserAvatarPropertyName' );
 		$this->userRealNamePropertyName = $options->get( 'CommentStreamsUserRealNamePropertyName' );
 		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
@@ -202,6 +231,10 @@ class Comment {
 		$this->smwInterface = $smwInterface;
 		$this->socialProfileInterface = $socialProfileInterface;
 		$this->linkRenderer = $linkRenderer;
+		$this->repoGroup = $repoGroup;
+		$this->revisionStore = $revisionStore;
+		$this->parserFactory = $parserFactory;
+		$this->userFactory = $userFactory;
 		$this->wikipage = $wikipage;
 		$this->comment_block_id = $comment_block_id;
 		$this->assoc_page_id = $assoc_page_id;
@@ -209,18 +242,18 @@ class Comment {
 		$this->comment_title = $comment_title;
 		$this->wikitext = $wikitext;
 		$this->num_replies = $commentStreamsStore->getNumReplies( $wikipage->getId() );
+
 		$title = $wikipage->getTitle();
-		$user = CommentStreamsUtils::getAuthor( $title );
-		if ( $user !== null ) {
-			$this->author = $user;
-		}
+		$firstRevision = $this->revisionStore->getFirstRevision( $title );
+		$latestRevision = $this->revisionStore->getRevisionByTitle( $title, 0, IDBAccessObject::READ_LATEST );
+
+		$this->author = $firstRevision->getUser( RevisionRecord::RAW );
 		$this->setAvatar();
-		$this->lastEditor = CommentStreamsUtils::getLastEditor( $wikipage ) ?: $this->author;
-		$timestamp = CommentStreamsUtils::getCreationTimestamp( $title );
-		if ( $timestamp !== null ) {
-			$this->creation_timestamp = MWTimestamp::getLocalInstance( $timestamp );
+		$this->lastEditor = $latestRevision->getUser( RevisionRecord::RAW );
+		$this->creation_timestamp = MWTimestamp::getLocalInstance( $firstRevision->getTimestamp() );
+		if ( $firstRevision->getId() !== $latestRevision->getId() ) {
+			$this->modification_timestamp = MWTimestamp::getLocalInstance( $latestRevision->getTimestamp() );
 		}
-		$this->setModificationTimestamp();
 	}
 
 	/**
@@ -278,7 +311,12 @@ class Comment {
 	 * @return string parsed HTML of the comment
 	 */
 	public function getHTML( IContextSource $context ): string {
-		return CommentStreamsUtils::parse( $this->wikitext, $this->wikipage, $context );
+		$parser = $this->parserFactory->create();
+		$parserOptions = $this->wikipage->makeParserOptions( $context );
+		$parserOptions->setOption( 'enableLimitReport', false );
+		return $parser
+			->parse( $this->wikitext, $this->wikipage->getTitle(), $parserOptions )
+			->getText( [ 'wrapperDivClass' => '' ] );
 	}
 
 	/**
@@ -289,9 +327,9 @@ class Comment {
 	}
 
 	/**
-	 * @return ?User the author of this comment
+	 * @return ?UserIdentity the author of this comment
 	 */
-	public function getAuthor(): ?User {
+	public function getAuthor(): ?UserIdentity {
 		return $this->author;
 	}
 
@@ -514,7 +552,7 @@ class Comment {
 					$title = Title::newFromText( $title );
 				}
 				if ( $title->isKnown() && $title->getNamespace() === NS_FILE ) {
-					$file = CommentStreamsUtils::findFile( $title->getText() );
+					$file = $this->repoGroup->findFile( $title->getText() );
 					if ( $file ) {
 						$this->avatar = $file->createThumb( 48, 48 );
 					}
@@ -525,44 +563,26 @@ class Comment {
 		self::$avatarCache[ $this->author->getId() ] = $this->avatar;
 	}
 
-	private function setModificationTimestamp() {
-		$title = $this->wikipage->getTitle();
-		$firstRevisionId = CommentStreamsUtils::getFirstRevisionId( $title );
-		if ( $firstRevisionId === null ) {
-			return;
-		}
-
-		$latestRevisionId = $title->getLatestRevId();
-		if ( $firstRevisionId === $latestRevisionId ) {
-			return;
-		}
-
-		$timestamp = CommentStreamsUtils::getTimestampFromId( $latestRevisionId, $title );
-		if ( $timestamp !== false ) {
-			$this->modification_timestamp = MWTimestamp::getLocalInstance( $timestamp );
-		}
-	}
-
 	/**
 	 * return the text to use to represent the user at the top of a comment
 	 *
-	 * @param User $user the user
+	 * @param UserIdentity $user the user
 	 * @param bool $linked whether to link the display name to the user page,
 	 *        if it exists
 	 * @return string display name for user
 	 */
 	private function getDisplayNameFromUser(
-		User $user,
+		UserIdentity $user,
 		bool $linked
 	): string {
-		if ( $user->isAnon() ) {
+		if ( $user->getId() === 0 ) {
 			return Html::openElement( 'span', [
 					'class' => 'cs-comment-author-anonymous'
 				] )
 				. wfMessage( 'commentstreams-author-anonymous' )
 				. Html::closeElement( 'span' );
 		}
-		$userpage = $user->getUserPage();
+		$userpage = Title::makeTitle( NS_USER, $user->getName() );
 		$displayname = null;
 		if ( $this->userRealNamePropertyName !== null ) {
 			$displayname = $this->smwInterface->getUserProperty(
@@ -578,7 +598,7 @@ class Comment {
 			}
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
-			$displayname = $user->getRealName();
+			$displayname = $this->userFactory->newFromUserIdentity( $user )->getRealName();
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
 			$displayname = $user->getName();

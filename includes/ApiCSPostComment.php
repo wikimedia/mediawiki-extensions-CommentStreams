@@ -1,7 +1,5 @@
 <?php
 /*
- * Copyright (c) 2016 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -28,15 +26,14 @@ use ApiMain;
 use ApiUsageException;
 use ManualLogEntry;
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\MediaWikiServices;
 use MWException;
 use Title;
 
 class ApiCSPostComment extends ApiBase {
 	/**
-	 * @var CommentStreamsFactory
+	 * @var CommentFactory
 	 */
-	private $commentStreamsFactory;
+	private $commentFactory;
 
 	/**
 	 * @var CommentStreamsEchoInterface
@@ -46,12 +43,18 @@ class ApiCSPostComment extends ApiBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
+	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsEchoInterface $commentStreamsEchoInterface
 	 */
-	public function __construct( ApiMain $main, string $action ) {
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		CommentFactory $commentFactory,
+		CommentStreamsEchoInterface $commentStreamsEchoInterface
+	) {
 		parent::__construct( $main, $action );
-		$services = MediaWikiServices::getInstance();
-		$this->commentStreamsFactory = $services->getService( 'CommentStreamsFactory' );
-		$this->echoInterface = $services->getService( 'CommentStreamsEchoInterface' );
+		$this->commentFactory = $commentFactory;
+		$this->echoInterface = $commentStreamsEchoInterface;
 	}
 
 	/**
@@ -60,7 +63,7 @@ class ApiCSPostComment extends ApiBase {
 	 * @throws MWException
 	 */
 	public function execute() {
-		if ( !CommentStreamsUtils::userHasRight( $this->getUser(), 'cs-comment' ) ) {
+		if ( !$this->getPermissionManager()->userHasRight( $this->getUser(), 'cs-comment' ) ) {
 			$this->dieWithError( 'commentstreams-api-error-post-permissions' );
 		}
 
@@ -85,7 +88,7 @@ class ApiCSPostComment extends ApiBase {
 			if ( $parent_page === null || !$parent_page->getTitle()->exists() ) {
 				$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 			} else {
-				$parent_comment = $this->commentStreamsFactory->newFromWikiPage( $parent_page );
+				$parent_comment = $this->commentFactory->newFromWikiPage( $parent_page );
 				if ( $parent_comment->getAssociatedId() !== (int)$associatedid ) {
 					$this->dieWithError( 'commentstreams-api-error-post-associatedpageidmismatch' );
 				}
@@ -99,7 +102,7 @@ class ApiCSPostComment extends ApiBase {
 			!$associated_page->getTitle()->exists() ) {
 			$this->dieWithError( 'commentstreams-api-error-post-associatedpagedoesnotexist' );
 		} else {
-			$comment = $this->commentStreamsFactory->newFromValues(
+			$comment = $this->commentFactory->newFromValues(
 				$commentblockid,
 				$associatedid,
 				$parentid,

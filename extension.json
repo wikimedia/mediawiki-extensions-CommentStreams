@@ -11,10 +11,16 @@
 	"type": "parserhook",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.31.0"
+		"MediaWiki": ">= 1.35.0"
 	},
 	"SpecialPages": {
-		"CommentStreamsAllComments": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsAllComments"
+		"CommentStreamsAllComments": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsAllComments",
+			"services": [
+				"CommentStreamsStore",
+				"CommentFactory"
+			]
+		}
 	},
 	"MessagesDirs": {
 		"CommentStreams": [
@@ -124,32 +130,81 @@
 		"MediaWiki\\Extension\\CommentStreams\\": "includes/"
 	},
 	"APIModules": {
-		"cspostcomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
-		"csquerycomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
-		"cseditcomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
-		"csdeletecomment": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
-		"csvote": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
-		"cswatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
-		"csunwatch": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch"
+		"cspostcomment": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
+			"services": [
+				"CommentFactory",
+				"CommentStreamsEchoInterface"
+			]
+		},
+		"csquerycomment": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
+			"services": [
+				"CommentFactory"
+			]
+		},
+		"cseditcomment": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
+			"services": [
+				"CommentFactory"
+			]
+		},
+		"csdeletecomment": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
+			"services": [
+				"CommentFactory",
+				"MainConfig"
+			]
+		},
+		"csvote": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
+			"services": [
+				"CommentFactory"
+			]
+		},
+		"cswatch": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
+			"services": [
+				"CommentFactory"
+			]
+		},
+		"csunwatch": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch",
+			"services": [
+				"CommentFactory"
+			]
+		}
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\MainHooks",
+			"services": [
+				"CommentStreamsHandler",
+				"CommentFactory",
+				"LinkRenderer",
+				"RevisionStore",
+				"PermissionManager"
+			]
+		},
+		"schema": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\SchemaHooks"
+		}
 	},
 	"Hooks": {
-		"LoadExtensionSchemaUpdates": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentTableToDatabase",
-		"CanonicalNamespaces": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentStreamsNamespaces",
-		"MediaWikiPerformAction": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onMediaWikiPerformAction",
-		"MovePageIsValidMove": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onMovePageIsValidMove",
-		"userCan": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::userCan",
-		"ParserFirstCallInit": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onParserSetup",
-		"BeforePageDisplay": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::addCommentsAndInitializeJS",
-		"ShowSearchHitTitle": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::showSearchHitTitle",
+		"CanonicalNamespaces": "main",
+		"MediaWikiPerformAction": "main",
+		"MovePageIsValidMove": "main",
+		"userCan": "main",
+		"BeforePageDisplay": "main",
+		"ShowSearchHitTitle": "main",
+		"ParserFirstCallInit": "main",
+		"LoadExtensionSchemaUpdates": "schema",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsEchoInterface::onBeforeCreateEchoEvent",
 		"smwInitProperties": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::initProperties",
 		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::updateData",
 		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::onSMWInitialization"
 	},
-	"callback": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsHooks::onRegistration",
-	"ConfigRegistry": {
-		"CommentStreams": "GlobalVarConfig::newInstance"
-	},
+	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"config": {
 		"CommentStreamsNamespaceIndex": 844,
 		"CommentStreamsAllowedNamespaces": null,

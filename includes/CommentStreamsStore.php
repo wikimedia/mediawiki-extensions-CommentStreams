@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -22,8 +21,10 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ContentHandler;
 use FatalError;
+use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\User\UserFactory;
 use MWException;
 use Title;
 use User;
@@ -40,10 +41,28 @@ class CommentStreamsStore {
 	private $loadBalancer;
 
 	/**
-	 * @param ILoadBalancer $loadBalancer
+	 * @var PermissionManager
 	 */
-	public function __construct( ILoadBalancer $loadBalancer ) {
+	private $permissionManager;
+
+	/**
+	 * @var UserFactory
+	 */
+	private $userFactory;
+
+	/**
+	 * @param ILoadBalancer $loadBalancer
+	 * @param PermissionManager $permissionManager
+	 * @param UserFactory $userFactory
+	 */
+	public function __construct(
+		ILoadBalancer $loadBalancer,
+		PermissionManager $permissionManager,
+		UserFactory $userFactory
+	) {
 		$this->loadBalancer = $loadBalancer;
+		$this->permissionManager = $permissionManager;
+		$this->userFactory = $userFactory;
 	}
 
 	/**
@@ -54,7 +73,7 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param int $mode DB_MASTER or DB_REPLICA
+	 * @param int $mode DB_PRIMARY or DB_REPLICA
 	 * @return IDatabase
 	 */
 	private function getDBConnection( int $mode ): IDatabase {
@@ -87,11 +106,11 @@ class CommentStreamsStore {
 		$success = false;
 		$index = wfRandomString();
 		do {
-			$title = Title::newFromText( (string)$index, NS_COMMENTSTREAMS );
+			$title = Title::newFromText( $index, NS_COMMENTSTREAMS );
 			$wikipage = new WikiPage( $title );
 			$deleted = CommentStreamsUtils::hasDeletedEdits( $title );
 			if ( !$deleted && !$title->exists() ) {
-				if ( !CommentStreamsUtils::userCan( 'cs-comment', $user, $title ) ) {
+				if ( !$this->permissionManager->userCan( 'cs-comment', $user, $title ) ) {
 					return null;
 				}
 				$status = CommentStreamsUtils::doEditContent(
@@ -114,7 +133,7 @@ class CommentStreamsStore {
 			}
 		} while ( !$success );
 
-		$dbw = $this->getDBConnection( DB_MASTER );
+		$dbw = $this->getDBConnection( DB_PRIMARY );
 		$result = $dbw->insert(
 			'cs_comment_data',
 			[
@@ -222,7 +241,7 @@ class CommentStreamsStore {
 			return false;
 		}
 
-		$dbw = $this->getDBConnection( DB_MASTER );
+		$dbw = $this->getDBConnection( DB_PRIMARY );
 		return $dbw->update(
 			'cs_comment_data',
 			[
@@ -246,17 +265,13 @@ class CommentStreamsStore {
 		// must save page ID before deleting page
 		$pageid = $wikipage->getId();
 
-		$status = CommentStreamsUtils::deDeleteArticle(
-			$wikipage,
-			'comment deleted',
-			$deleter
-		);
+		$status = $wikipage->doDeleteArticleReal( 'comment deleted', $deleter, true );
 
 		if ( !$status->isOK() && !$status->isGood() ) {
 			return false;
 		}
 
-		$dbw = $this->getDBConnection( DB_MASTER );
+		$dbw = $this->getDBConnection( DB_PRIMARY );
 		return $dbw->delete(
 			'cs_comment_data',
 			[
@@ -402,7 +417,7 @@ class CommentStreamsStore {
 	 * @return bool true for OK, false for error
 	 */
 	public function vote( int $vote, int $page_id, int $user_id ): bool {
-		$dbw = $this->getDBConnection( DB_MASTER );
+		$dbw = $this->getDBConnection( DB_PRIMARY );
 		$result = $dbw->selectRow(
 			'cs_votes',
 			[
@@ -462,10 +477,10 @@ class CommentStreamsStore {
 	 * @return bool true for OK, false for error
 	 */
 	public function watch( int $page_id, int $user_id ): bool {
-		if ( $this->isWatching( $page_id, $user_id, DB_MASTER ) ) {
+		if ( $this->isWatching( $page_id, $user_id, DB_PRIMARY ) ) {
 			return true;
 		}
-		$dbw = $this->getDBConnection( DB_MASTER );
+		$dbw = $this->getDBConnection( DB_PRIMARY );
 
 		return $dbw->insert(
 			'cs_watchlist',
@@ -483,10 +498,10 @@ class CommentStreamsStore {
 	 * @return bool true for OK, false for error
 	 */
 	public function unwatch( int $page_id, int $user_id ): bool {
-		if ( !$this->isWatching( $page_id, $user_id, DB_MASTER ) ) {
+		if ( !$this->isWatching( $page_id, $user_id, DB_PRIMARY ) ) {
 			return true;
 		}
-		$dbw = $this->getDBConnection( DB_MASTER );
+		$dbw = $this->getDBConnection( DB_PRIMARY );
 
 		return $dbw->delete(
 			'cs_watchlist',
@@ -501,7 +516,7 @@ class CommentStreamsStore {
 	/**
 	 * @param int $page_id the page ID of the comment to check
 	 * @param int $user_id the user ID of the user watching the comment
-	 * @param int $fromdb DB_MASTER or DB_REPLICA
+	 * @param int $fromdb DB_PRIMARY or DB_REPLICA
 	 * @return bool database true for OK, false for error
 	 */
 	public function isWatching( int $page_id, int $user_id, int $fromdb = DB_REPLICA ): bool {
@@ -544,7 +559,7 @@ class CommentStreamsStore {
 		$users = [];
 		foreach ( $result as $row ) {
 			$user_id = $row->cst_wl_user_id;
-			$user = User::newFromId( $user_id );
+			$user = $this->userFactory->newFromId( $user_id );
 			$users[$user_id] = $user;
 		}
 
@@ -555,10 +570,9 @@ class CommentStreamsStore {
 	 * @param WikiPage $wikipage
 	 * @param ?string $comment_title
 	 * @return string
-	 * @throws MWException
 	 */
 	public function getWikiText( WikiPage $wikipage, ?string $comment_title ): string {
-		$wikitext = ContentHandler::getContentText( CommentStreamsUtils::getContent( $wikipage ) );
+		$wikitext = $wikipage->getContent( RevisionRecord::RAW )->getWikitextForTransclusion();
 		return $this->removeAnnotations( $wikitext, $comment_title );
 	}
 

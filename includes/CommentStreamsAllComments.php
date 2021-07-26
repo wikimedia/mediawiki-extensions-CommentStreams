@@ -1,8 +1,5 @@
 <?php
-
 /*
- * Copyright (c) 2017 The MITRE Corporation
- *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -25,13 +22,31 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Html;
-use MediaWiki\MediaWikiServices;
 use MWException;
 use SpecialPage;
 
 class CommentStreamsAllComments extends SpecialPage {
-	public function __construct() {
+	/**
+	 * @var CommentStreamsStore
+	 */
+	private $commentStreamsStore;
+
+	/**
+	 * @var CommentFactory
+	 */
+	private $commentFactory;
+
+	/**
+	 * @param CommentStreamsStore $commentStreamsStore
+	 * @param CommentFactory $commentFactory
+	 */
+	public function __construct(
+		CommentStreamsStore $commentStreamsStore,
+		CommentFactory $commentFactory
+	) {
 		parent::__construct( 'CommentStreamsAllComments' );
+		$this->commentStreamsStore = $commentStreamsStore;
+		$this->commentFactory = $commentFactory;
 	}
 
 	/**
@@ -43,16 +58,13 @@ class CommentStreamsAllComments extends SpecialPage {
 		$this->setHeaders();
 		$this->getOutput()->addModuleStyles( 'ext.CommentStreamsAllComments' );
 
-		$commentStreamsStore =
-			MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' );
-
-		$offset = $request->getText( 'offset', '0' );
+		$offset = (int)$request->getText( 'offset', '0' );
 		$limit = 20;
-		$pages = $commentStreamsStore->getCommentPages( $limit + 1, $offset );
+		$pages = $this->commentStreamsStore->getCommentPages( $limit + 1, $offset );
 
 		if ( !$pages->valid() ) {
 			$offset = 0;
-			$pages = $commentStreamsStore->getCommentPages( $limit + 1, $offset );
+			$pages = $this->commentStreamsStore->getCommentPages( $limit + 1, $offset );
 			if ( !$pages->valid() ) {
 				$this->displayMessage(
 					wfMessage( 'commentstreams-allcomments-nocommentsfound' )
@@ -81,15 +93,15 @@ class CommentStreamsAllComments extends SpecialPage {
 		$wikitext .=
 			'!' . wfMessage( 'commentstreams-allcomments-label-blockid' ) . PHP_EOL;
 
-		$commentStreamsFactory =
-			MediaWikiServices::getInstance()->getService( 'CommentStreamsFactory' );
-
 		$index = 0;
 		$more = false;
 		foreach ( $pages as $page ) {
 			if ( $index < $limit ) {
 				$wikipage = CommentStreamsUtils::newWikiPageFromId( $page->page_id );
-				$comment = $commentStreamsFactory->newFromWikiPage( $wikipage );
+				if ( !$wikipage ) {
+					continue;
+				}
+				$comment = $this->commentFactory->newFromWikiPage( $wikipage );
 				if ( $comment !== null ) {
 					$pagename = $comment->getTitle()->getPrefixedText();
 					$associatedpageid = $comment->getAssociatedId();
@@ -98,9 +110,9 @@ class CommentStreamsAllComments extends SpecialPage {
 						$associatedpagename =
 							'[[' . $associatedpage->getTitle()->getPrefixedText() . ']]';
 						$author = $comment->getAuthor();
-						if ( $author->isAnon() ) {
-							$author = '<i>' . wfMessage( 'commentstreams-author-anonymous' )
-								. '</i>';
+						if ( $author->getId() === 0 ) {
+							$author =
+								'<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
 						} else {
 							$author = $author->getName();
 						}
@@ -111,8 +123,9 @@ class CommentStreamsAllComments extends SpecialPage {
 						} else {
 							$lasteditor = $comment->getLastEditor();
 							if ( $lasteditor->getId() === 0 ) {
-								$lasteditor = '<i>' .
-									wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
+								$lasteditor =
+									'<i>' . wfMessage( 'commentstreams-author-anonymous' ) .
+									'</i>';
 							} else {
 								$lasteditor = $lasteditor->getName();
 							}
@@ -136,17 +149,17 @@ class CommentStreamsAllComments extends SpecialPage {
 		}
 
 		$wikitext .= '|}' . PHP_EOL;
-		CommentStreamsUtils::addWikiTextToOutputPage( $wikitext, $this->getOutput() );
+		$this->getOutput()->addWikiTextAsInterface( $wikitext );
 
 		if ( $offset > 0 || $more ) {
-			$this->addTableNavigation( $offset, $more, $limit, 'offset' );
+			$this->addTableNavigation( $offset, $more, $limit );
 		}
 	}
 
 	/**
 	 * @param string $message
 	 */
-	private function displayMessage( $message ) {
+	private function displayMessage( string $message ) {
 		$html = Html::openElement( 'p', [
 				'class' => 'csall-message'
 			] )
@@ -159,9 +172,8 @@ class CommentStreamsAllComments extends SpecialPage {
 	 * @param int $offset
 	 * @param bool $more
 	 * @param int $limit
-	 * @param string $paramname
 	 */
-	private function addTableNavigation( $offset, $more, $limit, $paramname ) {
+	private function addTableNavigation( int $offset, bool $more, int $limit ) {
 		$html = Html::openElement( 'table', [
 				'class' => 'csall-navigationtable'
 			] )
@@ -169,7 +181,7 @@ class CommentStreamsAllComments extends SpecialPage {
 			. Html::openElement( 'td' );
 
 		if ( $offset > 0 ) {
-			$prevurl = $this->getFullTitle()->getFullURL( [ $paramname => ( $offset - $limit ) ] );
+			$prevurl = $this->getFullTitle()->getFullURL( [ 'offset' => ( $offset - $limit ) ] );
 			$html .= Html::openElement( 'a', [
 					'href' => $prevurl,
 					'class' => 'csall-button'
@@ -184,7 +196,7 @@ class CommentStreamsAllComments extends SpecialPage {
 			] );
 
 		if ( $more ) {
-			$nexturl = $this->getFullTitle()->getFullURL( [ $paramname => ( $offset + $limit ) ] );
+			$nexturl = $this->getFullTitle()->getFullURL( [ 'offset' => ( $offset + $limit ) ] );
 			$html .= Html::openElement( 'a', [
 					'href' => $nexturl,
 					'class' => 'csall-button'
