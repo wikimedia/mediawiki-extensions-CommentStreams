@@ -111,11 +111,9 @@ class CommentStreamsHandler {
 		$parser->getOutput()->updateCacheExpiry( 0 );
 		$this->areCommentsEnabled = self::COMMENTS_ENABLED;
 		if ( isset( $args['id'] ) ) {
-			$ret = '<div class="cs-comments" id="csc_' . md5( $args['id'] ) . '"></div>';
-		} elseif ( isset( $args['location'] ) && $args['location'] === 'footer' ) {
-			$ret = '';
+			$ret = '<div class="cs-comments" data-id="csc_' . md5( $args['id'] ) . '"></div>';
 		} else {
-			$ret = '<div class="cs-comments" id="cs-comments"></div>';
+			$ret = '<div class="cs-comments"></div>';
 		}
 		// @phan-suppress-next-line SecurityCheck-XSS
 		return $ret;
@@ -336,7 +334,9 @@ class CommentStreamsHandler {
 	}
 
 	/**
-	 * return all discussions (top level comments) in an array of comments
+	 * Return all discussions (top level comments) in an array of comments.
+	 * Counterintuitively, returns the oldest disussions/lowest vote disussions first if
+	 * $newestOnTop is true, since they will be added from bottom up.
 	 *
 	 * @param array $allComments an array of all comments on a page
 	 * @param bool $newestOnTop true if array should be sorted from newest to
@@ -367,21 +367,21 @@ class CommentStreamsHandler {
 				if ( $votediff1 === $votediff2 ) {
 					if ( $upvotes1 === $upvotes2 ) {
 						if ( $newestOnTop ) {
-							return $date1 > $date2 ? -1 : 1;
-						} else {
 							return $date1 < $date2 ? -1 : 1;
+						} else {
+							return $date1 > $date2 ? -1 : 1;
 						}
 					} else {
-						return $upvotes1 > $upvotes2 ? -1 : 1;
+						return $upvotes1 < $upvotes2 ? -1 : 1;
 					}
 				} else {
-					return $votediff1 > $votediff2 ? -1 : 1;
+					return $votediff1 < $votediff2 ? -1 : 1;
 				}
 			} else {
 				if ( $newestOnTop ) {
-					return $date1 > $date2 ? -1 : 1;
-				} else {
 					return $date1 < $date2 ? -1 : 1;
+				} else {
+					return $date1 > $date2 ? -1 : 1;
 				}
 			}
 		} );

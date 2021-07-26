@@ -2,7 +2,7 @@
 	display: none;
 }
 
-#cs-comments {
+.cs-comments {
 	margin-top: 10px;
 	font-family: sans-serif;
 }
@@ -75,7 +75,6 @@
 }
 
 .cs-comment-author {
-	padding-right: 5px;
 	font-size: 12px;
 }
 
@@ -86,8 +85,25 @@
 }
 
 .cs-comment-author a {
-	color: #00a7d8;
 	font-weight: bold;
+	color: #00a7d8;
+}
+
+.cs-comment-details {
+	font-size: 12px;
+	opacity: 0.8;
+	color: #555;
+}
+
+.cs-voting-span {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.cs-vote-up-count,
+.cs-vote-down-count {
+	position: relative;
+	margin-left: -5px;
 }
 
 .cs-comment-body {
@@ -95,75 +111,7 @@
 	font-size: 14px;
 }
 
-.cs-comment-details {
-	color: #555;
-	opacity: 0.8;
-	font-size: 12px;
-	padding-right: 5px;
-	padding-left: 5px;
-}
-
-.cs-comment-button-label {
-	padding-left: 5px;
-}
-
-.cs-button {
-	background-color: transparent;
-	border: 0;
-	font-family: sans-serif;
-	font-weight: bold;
-	text-decoration: none;
-	padding-left: 5px;
-	padding-right: 5px;
-	box-shadow: none;
-}
-
-.cs-button:hover {
-	background-color: #8eddf5;
-}
-
-.cs-button:disabled {
-	color: #95a5a6;
-	opacity: 0.2;
-}
-
-.cs-button:enabled:active {
-	opacity: 0.5;
-}
-
-.cs-button:enabled:hover {
-	color: #3ccefa;
-}
-
-.cs-moderator-button {
-	color: #f00;
-}
-
-.cs-moderator-button:enabled:hover {
-	color: #f55;
-}
-
-.cs-toggle-button {
-	border: 0;
-}
-
-.cs-vote-upcount,
-.cs-vote-downcount {
-	color: #555;
-	padding-left: 3px;
-}
-
-.cs-link-button {
-	border: 0;
-}
-
-#cs-add-button,
-.cs-reply-button {
-	font-size: 14px;
-	padding-left: 0;
-}
-
-#cs-edit-box {
+.cs-edit-box {
 	position: relative;
 	background-color: #e4f1ff;
 	padding: 5px 5px 5px 5px;
@@ -174,7 +122,7 @@
 	margin-left: 30px;
 }
 
-#cs-title-edit-field {
+.cs-title-edit-field {
 	border-radius: 2px;
 	border-width: 1px;
 	border-color: #00a7d8;
@@ -189,7 +137,7 @@
 	font-weight: bold;
 }
 
-#cs-body-edit-field {
+.cs-body-edit-field {
 	border-radius: 2px;
 	border-width: 1px;
 	border-color: #00a7d8;

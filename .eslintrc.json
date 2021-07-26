@@ -1,25 +1,15 @@
 {
 	"root": true,
 	"extends": [
-		"wikimedia/client-es5",
+		"wikimedia/client-es6",
 		"wikimedia/jquery",
 		"wikimedia/mediawiki"
 	],
 	"rules": {
-		"camelcase": "off",
-		"no-implicit-globals": "off",
 		"no-jquery/no-global-selector": "off",
-		"no-jquery/no-parse-html-literal": "off",
+		"no-jquery/no-class-state": "off",
 		"no-jquery/no-fade": "off",
 		"no-jquery/no-slide": "off",
-		"no-jquery/no-sizzle": "off",
-		"no-jquery/no-ready-shorthand": "off",
-		"no-jquery/variable-pattern": "off",
-		"vars-on-top": "off",
-		"block-scoped-var": "warn"
-	},
-	"globals": {
-		"CommentStreamsQuerier": "readonly",
-		"Spinner": "readonly"
+		"no-jquery/no-sizzle": "off"
 	}
 }
