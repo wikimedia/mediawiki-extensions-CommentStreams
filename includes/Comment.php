@@ -115,7 +115,8 @@ class Comment {
 	private $wikipage;
 
 	/**
-	 * unique id to identify comment block in a page
+	 * unique id to identify comment block on a page; null if comment is in default comment block
+	 * or is a reply
 	 * @var ?string
 	 */
 	private $comment_block_id;
@@ -236,9 +237,13 @@ class Comment {
 		$this->parserFactory = $parserFactory;
 		$this->userFactory = $userFactory;
 		$this->wikipage = $wikipage;
-		$this->comment_block_id = $comment_block_id;
 		$this->assoc_page_id = $assoc_page_id;
 		$this->parent_page_id = $parent_page_id;
+		if ( $this->comment_title === null ) {
+			$this->comment_block_id = $comment_block_id;
+		} else {
+			$this->comment_block_id = null;
+		}
 		$this->comment_title = $comment_title;
 		$this->wikitext = $wikitext;
 		$this->num_replies = $commentStreamsStore->getNumReplies( $wikipage->getId() );

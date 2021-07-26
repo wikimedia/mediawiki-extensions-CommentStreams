@@ -43,5 +43,8 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 			$dir . 'dropForeignKey2.sql' );
 		$updater->addExtensionField( 'cs_comment_data', 'cst_id',
 			$dir . 'addCommentId.sql' );
+		$updater->modifyExtensionField( 'cs_comment_data', 'cst_id',
+			$dir . 'cstIdDefault.sql' );
+		$updater->addPostDatabaseUpdateMaintenance( 'NullDefaultCommentBlock' );
 	}
 }
