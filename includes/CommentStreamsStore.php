@@ -83,110 +83,119 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param User $user
-	 * @param string $wikitext
-	 * @param ?string $comment_block_id
-	 * @param int $assoc_page_id
-	 * @param ?int $parent_page_id
-	 * @param ?string $comment_title
-	 * @return ?WikiPage
-	 * @throws MWException
+	 * @param int $id
+	 * @return ?array
 	 */
-	public function insertComment(
-		User $user,
-		string $wikitext,
-		?string $comment_block_id,
-		int $assoc_page_id,
-		?int $parent_page_id,
-		?string $comment_title
-	): ?WikiPage {
-		$annotated_wikitext = $this->addAnnotations( $wikitext, $comment_title );
-		$content = new WikitextContent( $annotated_wikitext );
-
-		$success = false;
-		$index = wfRandomString();
-		do {
-			$title = Title::newFromText( $index, NS_COMMENTSTREAMS );
-			$wikipage = new WikiPage( $title );
-			$deleted = CommentStreamsUtils::hasDeletedEdits( $title );
-			if ( !$deleted && !$title->exists() ) {
-				if ( !$this->permissionManager->userCan( 'cs-comment', $user, $title ) ) {
-					return null;
-				}
-				$status = CommentStreamsUtils::doEditContent(
-					$wikipage,
-					$content,
-					$user,
-					EDIT_NEW | EDIT_SUPPRESS_RC
-				);
-				if ( !$status->isOK() && !$status->isGood() ) {
-					if ( $status->getMessage()->getKey() == 'edit-already-exists' ) {
-						$index = wfRandomString();
-					} else {
-						return null;
-					}
-				} else {
-					$success = true;
-				}
-			} else {
-				$index = wfRandomString();
-			}
-		} while ( !$success );
-
-		$data = [
-			'cst_page_id' => $wikipage->getId(),
-			'cst_assoc_page_id' => $assoc_page_id,
-			'cst_parent_page_id' => $parent_page_id,
-			'cst_comment_title' => $comment_title
-		];
-		if ( $comment_title !== null ) {
-			$data[ 'cst_id' ] = $comment_block_id;
+	public function getComment( int $id ): ?array {
+		$result = $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( [
+				'cst_c_assoc_page_id',
+				'cst_c_comment_title',
+				'cst_c_block_name'
+			] )
+			->from( 'cs_comments' )
+			->where( [
+				'cst_c_comment_page_id' => $id
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
+		if ( $result ) {
+			return [
+				'assoc_page_id' => (int)$result->cst_c_assoc_page_id,
+				'comment_title' => $result->cst_c_comment_title,
+				'block_name' => $result->cst_c_block_name
+			];
 		}
-
-		$dbw = $this->getDBConnection( DB_PRIMARY );
-		$result = $dbw->insert(
-			'cs_comment_data',
-			$data,
-			__METHOD__
-		);
-
-		if ( !$result ) {
-			return null;
-		}
-
-		return $wikipage;
+		return null;
 	}
 
 	/**
 	 * @param int $id
 	 * @return ?array
 	 */
-	public function getComment( int $id ): ?array {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-		$result = $dbr->selectRow(
-			'cs_comment_data',
-			[
-			'cst_id',
-			'cst_assoc_page_id',
-			'cst_parent_page_id',
-			'cst_comment_title'
-			],
-			[
-			'cst_page_id' => $id
-			],
-			__METHOD__
-		);
+	public function getReply( int $id ): ?array {
+		$result = $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( 'cst_r_comment_page_id' )
+			->from( 'cs_replies' )
+			->where( [
+				'cst_r_reply_page_id' => $id
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		if ( $result ) {
 			return [
-				'comment_block_id' => $result->cst_id,
-				'assoc_page_id' => (int)$result->cst_assoc_page_id,
-				'parent_page_id' => $result->cst_parent_page_id ? (int)$result->cst_parent_page_id
-					: null,
-				'comment_title' => $result->cst_comment_title
+				'comment_page_id' => (int)$result->cst_r_comment_page_id
 			];
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param int $assocPageId
+	 * @return WikiPage[]
+	 */
+	public function getAssociatedComments( int $assocPageId ): array {
+		$result = $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( [
+				'cst_c_comment_page_id'
+			] )
+			->from( 'cs_comments' )
+			->where( [
+				'cst_c_assoc_page_id' => $assocPageId
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
+		$commentWikiPages = [];
+		foreach ( $result as $row ) {
+			$wikiPage = CommentStreamsUtils::newWikiPageFromId( $row->cst_c_comment_page_id );
+			if ( $wikiPage ) {
+				$commentWikiPages[] = $wikiPage;
+			}
+		}
+		return $commentWikiPages;
+	}
+
+	/**
+	 * @param int $commentPageId
+	 * @return WikiPage[]
+	 */
+	public function getReplies( int $commentPageId ): array {
+		$result = $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( 'cst_r_reply_page_id' )
+			->from( 'cs_replies' )
+			->where( [
+				'cst_r_comment_page_id' => $commentPageId
+			] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
+		$replyWikiPages = [];
+		foreach ( $result as $row ) {
+			$wikiPage = CommentStreamsUtils::newWikiPageFromId( $row->cst_r_reply_page_id );
+			if ( $wikiPage ) {
+				$replyWikiPages[] = $wikiPage;
+			}
+		}
+		return $replyWikiPages;
+	}
+
+	/**
+	 * @param int $commentPageId
+	 * @return int
+	 */
+	public function getNumReplies( int $commentPageId ): int {
+		return $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->from( 'cs_replies' )
+			->where( [
+				'cst_r_comment_page_id' => $commentPageId
+			] )
+			->caller( __METHOD__ )
+			->fetchRowCount();
 	}
 
 	/**
@@ -196,176 +205,270 @@ class CommentStreamsStore {
 	 */
 	public function getCommentPages( int $limit, int $offset ): IResultWrapper {
 		$dbr = $this->getDBConnection( DB_REPLICA );
-		return $dbr->select(
-			[
-				'cs_comment_data',
-				'page',
-				'revision'
-			],
-			[
+		$union = $dbr->unionQueries( [
+			$dbr->newSelectQueryBuilder()
+				->field( 'cst_c_comment_page_id', 'union_page_id' )
+				->from( 'cs_comments' )
+				->getSQL(),
+			$dbr->newSelectQueryBuilder()
+				->field( 'cst_r_reply_page_id', 'union_page_id' )
+				->from( 'cs_replies' )
+				->getSQL()
+		], IDatabase::UNION_DISTINCT );
+		return $dbr->newSelectQueryBuilder()
+			->fields( [
 				'page_id'
-			],
-			[
-				'cst_page_id = page_id',
-				'page_latest = rev_id'
-			],
-			__METHOD__,
-			[
-				'ORDER BY' => 'rev_timestamp DESC' ,
-				'LIMIT' => $limit,
-				'OFFSET' => $offset
-			]
-		);
+			] )
+			->from( '(' . $union . ') AS union_table' )
+			->leftJoin( 'page', 'page', [
+				'union_page_id=page_id'
+			] )
+			->leftJoin( 'revision', 'revision', [
+				'page_latest=rev_id'
+			] )
+			->orderBy( 'rev_timestamp', 'DESC' )
+			->limit( $limit )
+			->offset( $offset )
+			->fetchResultSet();
 	}
 
 	/**
-	 * @param WikiPage $wikipage
-	 * @param ?string $comment_title
+	 * @param User $user
+	 * @param WikitextContent $content
+	 * @return WikiPage|null
+	 * @throws MWException
+	 */
+	private function createCommentPage( User $user, WikitextContent $content ): ?WikiPage {
+		do {
+			$index = wfRandomString();
+			$title = Title::newFromText( $index, NS_COMMENTSTREAMS );
+			$wikiPage = new WikiPage( $title );
+			$deleted = CommentStreamsUtils::hasDeletedEdits( $title );
+			if ( !$deleted && !$title->exists() ) {
+				if ( !$this->permissionManager->userCan( 'cs-comment', $user, $title ) ) {
+					return null;
+				}
+				$status = CommentStreamsUtils::doEditContent(
+					$wikiPage,
+					$content,
+					$user,
+					EDIT_NEW | EDIT_SUPPRESS_RC
+				);
+				if ( $status->isGood() ) {
+					return $wikiPage;
+				} elseif ( $status->getMessage()->getKey() !== 'edit-already-exists' ) {
+					return null;
+				}
+			}
+		} while ( true );
+	}
+
+	/**
+	 * @param User $user
+	 * @param string $wikitext
+	 * @param int $assocPageId
+	 * @param string $commentTitle
+	 * @param ?string $commentBlockName
+	 * @return ?WikiPage
+	 * @throws MWException
+	 */
+	public function insertComment(
+		User $user,
+		string $wikitext,
+		int $assocPageId,
+		string $commentTitle,
+		?string $commentBlockName
+	): ?WikiPage {
+		$annotatedWikitext = $this->addAnnotations( $wikitext, $commentTitle );
+		$content = new WikitextContent( $annotatedWikitext );
+
+		$wikiPage = $this->createCommentPage( $user, $content );
+		if ( !$wikiPage ) {
+			return null;
+		}
+
+		$dbw = $this->getDBConnection( DB_PRIMARY );
+		$result = $dbw->insert(
+			'cs_comments',
+			[
+				'cst_c_comment_page_id' => $wikiPage->getId(),
+				'cst_c_assoc_page_id' => $assocPageId,
+				'cst_c_comment_title' => $commentTitle,
+				'cst_c_block_name' => $commentBlockName
+			],
+			__METHOD__
+		);
+
+		if ( !$result ) {
+			return null;
+		}
+
+		return $wikiPage;
+	}
+
+	/**
+	 * @param User $user
+	 * @param string $wikitext
+	 * @param int $commentPageId
+	 * @return ?WikiPage
+	 * @throws MWException
+	 */
+	public function insertReply(
+		User $user,
+		string $wikitext,
+		int $commentPageId
+	): ?WikiPage {
+		$wikiPage = $this->createCommentPage( $user, new WikitextContent( $wikitext ) );
+		if ( !$wikiPage ) {
+			return null;
+		}
+
+		$dbw = $this->getDBConnection( DB_PRIMARY );
+		$result = $dbw->insert(
+			'cs_replies',
+			[
+				'cst_r_reply_page_id' => $wikiPage->getId(),
+				'cst_r_comment_page_id' => $commentPageId
+			],
+			__METHOD__
+		);
+
+		if ( !$result ) {
+			return null;
+		}
+
+		return $wikiPage;
+	}
+
+	/**
+	 * @param WikiPage $wikiPage
+	 * @param string $commentTitle
 	 * @param string $wikitext
 	 * @param User $user
 	 * @return bool
 	 * @throws MWException
 	 */
 	public function updateComment(
-		WikiPage $wikipage,
-		?string $comment_title,
+		WikiPage $wikiPage,
+		string $commentTitle,
 		string $wikitext,
 		User $user
 	): bool {
-		$annotated_wikitext = $this->addAnnotations( $wikitext, $comment_title );
-		$content = new WikitextContent( $annotated_wikitext );
+		$annotatedWikitext = $this->addAnnotations( $wikitext, $commentTitle );
+		$content = new WikitextContent( $annotatedWikitext );
 
 		$status = CommentStreamsUtils::doEditContent(
-			$wikipage,
+			$wikiPage,
 			$content,
 			$user,
 			EDIT_UPDATE | EDIT_SUPPRESS_RC
 		);
-		if ( !$status->isOK() && !$status->isGood() ) {
+		if ( !$status->isGood() ) {
 			return false;
 		}
 
 		$dbw = $this->getDBConnection( DB_PRIMARY );
 		return $dbw->update(
-			'cs_comment_data',
+			'cs_comments',
 			[
-				'cst_comment_title' => $comment_title
+				'cst_c_comment_title' => $commentTitle
 			],
 			[
-				'cst_page_id' => $wikipage->getId()
+				'cst_c_comment_page_id' => $wikiPage->getId()
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param WikiPage $wikipage
+	 * @param WikiPage $wikiPage
+	 * @param string $wikitext
+	 * @param User $user
+	 * @throws MWException
+	 */
+	public function updateReply(
+		WikiPage $wikiPage,
+		string $wikitext,
+		User $user
+	) {
+		CommentStreamsUtils::doEditContent(
+			$wikiPage,
+			new WikitextContent( $wikitext ),
+			$user,
+			EDIT_UPDATE | EDIT_SUPPRESS_RC
+		);
+	}
+
+	/**
+	 * @param WikiPage $wikiPage
 	 * @param User $deleter
 	 * @return bool
 	 * @throws FatalError
 	 * @throws MWException
 	 */
-	public function deleteComment( WikiPage $wikipage, User $deleter ): bool {
+	public function deleteComment( WikiPage $wikiPage, User $deleter ): bool {
 		// must save page ID before deleting page
-		$pageid = $wikipage->getId();
+		$pageid = $wikiPage->getId();
 
-		$status = $wikipage->doDeleteArticleReal( 'comment deleted', $deleter, true );
+		$status = $wikiPage->doDeleteArticleReal( 'comment deleted', $deleter, true );
 
-		if ( !$status->isOK() && !$status->isGood() ) {
+		if ( !$status->isGood() ) {
 			return false;
 		}
 
 		$dbw = $this->getDBConnection( DB_PRIMARY );
 		return $dbw->delete(
-			'cs_comment_data',
+			'cs_comments',
 			[
-				'cst_page_id' => $pageid
+				'cst_c_comment_page_id' => $pageid
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param int $id
-	 * @return array
+	 * @param WikiPage $wikiPage
+	 * @param User $deleter
+	 * @return bool
+	 * @throws FatalError
+	 * @throws MWException
 	 */
-	public function getAssociatedComments( int $id ): array {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-		$result = $dbr->select(
-			'cs_comment_data',
-			[
-				'cst_page_id'
-			],
-			[
-				'cst_assoc_page_id' => $id
-			],
-			__METHOD__
-		);
-		$comment_page_ids = [];
-		foreach ( $result as $row ) {
-			$comment_page_ids[] = $row->cst_page_id;
+	public function deleteReply( WikiPage $wikiPage, User $deleter ): bool {
+		// must save page ID before deleting page
+		$pageid = $wikiPage->getId();
+
+		$status = $wikiPage->doDeleteArticleReal( 'reply deleted', $deleter, true );
+
+		if ( !$status->isGood() ) {
+			return false;
 		}
-		return $comment_page_ids;
-	}
 
-	/**
-	 * @param int $id
-	 * @return array
-	 */
-	public function getReplies( int $id ): array {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-		$result = $dbr->select(
-			'cs_comment_data',
+		$dbw = $this->getDBConnection( DB_PRIMARY );
+		return $dbw->delete(
+			'cs_replies',
 			[
-				'cst_page_id'
-			],
-			[
-				'cst_parent_page_id' => $id
-			],
-			__METHOD__
-		);
-		$reply_ids = [];
-		foreach ( $result as $row ) {
-			$reply_ids[] = $row->cst_page_id;
-		}
-		return $reply_ids;
-	}
-
-	/**
-	 * @param int $id
-	 * @return int
-	 */
-	public function getNumReplies( int $id ): int {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-
-		return $dbr->selectRowCount(
-			'cs_comment_data',
-			'*',
-			[
-				'cst_parent_page_id' => $id
+				'cst_r_reply_page_id' => $pageid
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param int $page_id
-	 * @param int $user_id
+	 * @param int $pageId
+	 * @param int $userId
 	 * @return int -1, 0, or 1
 	 */
-	public function getVote( int $page_id, int $user_id ): int {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-		$result = $dbr->selectRow(
-			'cs_votes',
-			[
-				'cst_v_vote'
-			],
-			[
-				'cst_v_page_id' => $page_id,
-				'cst_v_user_id' => $user_id
-			],
-			__METHOD__
-		);
+	public function getVote( int $pageId, int $userId ): int {
+		$result = $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( 'cst_v_vote' )
+			->from( 'cs_votes' )
+			->where( [
+				'cst_v_page_id' => $pageId,
+				'cst_v_user_id' => $userId
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		if ( $result ) {
 			$vote = (int)$result->cst_v_vote;
 			if ( $vote > 0 ) {
@@ -401,38 +504,34 @@ class CommentStreamsStore {
 	 * @return int
 	 */
 	private function getNumVotes( int $id, bool $up ): int {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-
-		return $dbr->selectRowCount(
-			'cs_votes',
-			'*',
-			[
+		return $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->from( 'cs_votes' )
+			->where( [
 				'cst_v_page_id' => $id,
 				'cst_v_vote' => $up ? 1 : -1
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchRowCount();
 	}
 
 	/**
 	 * @param int $vote
-	 * @param int $page_id
-	 * @param int $user_id
+	 * @param int $pageId
+	 * @param int $userId
 	 * @return bool true for OK, false for error
 	 */
-	public function vote( int $vote, int $page_id, int $user_id ): bool {
+	public function vote( int $vote, int $pageId, int $userId ): bool {
 		$dbw = $this->getDBConnection( DB_PRIMARY );
-		$result = $dbw->selectRow(
-			'cs_votes',
-			[
-				'cst_v_vote'
-			],
-			[
-				'cst_v_page_id' => $page_id,
-				'cst_v_user_id' => $user_id
-			],
-			__METHOD__
-		);
+		$result = $dbw->newSelectQueryBuilder()
+			->select( 'cst_v_vote' )
+			->from( 'cs_votes' )
+			->where( [
+				'cst_v_page_id' => $pageId,
+				'cst_v_user_id' => $userId
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		if ( $result ) {
 			if ( $vote === (int)$result->cst_v_vote ) {
 				return true;
@@ -444,8 +543,8 @@ class CommentStreamsStore {
 						'cst_v_vote' => $vote
 					],
 					[
-						'cst_v_page_id' => $page_id,
-						'cst_v_user_id' => $user_id
+						'cst_v_page_id' => $pageId,
+						'cst_v_user_id' => $userId
 					],
 					__METHOD__
 				);
@@ -453,8 +552,8 @@ class CommentStreamsStore {
 				return $dbw->delete(
 					'cs_votes',
 					[
-						'cst_v_page_id' => $page_id,
-						'cst_v_user_id' => $user_id
+						'cst_v_page_id' => $pageId,
+						'cst_v_user_id' => $userId
 					],
 					__METHOD__
 				);
@@ -467,8 +566,8 @@ class CommentStreamsStore {
 		return $dbw->insert(
 			'cs_votes',
 			[
-				'cst_v_page_id' => $page_id,
-				'cst_v_user_id' => $user_id,
+				'cst_v_page_id' => $pageId,
+				'cst_v_user_id' => $userId,
 				'cst_v_vote' => $vote
 			],
 			__METHOD__
@@ -476,125 +575,115 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param int $page_id the page ID of the comment to watch
-	 * @param int $user_id the user ID of the user watching the comment
+	 * @param int $pageId the page ID of the comment to watch
+	 * @param int $userId the user ID of the user watching the comment
 	 * @return bool true for OK, false for error
 	 */
-	public function watch( int $page_id, int $user_id ): bool {
-		if ( $this->isWatching( $page_id, $user_id, DB_PRIMARY ) ) {
+	public function watch( int $pageId, int $userId ): bool {
+		if ( $this->isWatching( $pageId, $userId, DB_PRIMARY ) ) {
 			return true;
 		}
-		$dbw = $this->getDBConnection( DB_PRIMARY );
 
-		return $dbw->insert(
+		return $this->getDBConnection( DB_PRIMARY )->insert(
 			'cs_watchlist',
 			[
-				'cst_wl_page_id' => $page_id,
-				'cst_wl_user_id' => $user_id
+				'cst_wl_page_id' => $pageId,
+				'cst_wl_user_id' => $userId
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param int $page_id the page ID of the comment to watch
-	 * @param int $user_id the user ID of the user watching the comment
+	 * @param int $pageId the page ID of the comment to watch
+	 * @param int $userId the user ID of the user watching the comment
 	 * @return bool true for OK, false for error
 	 */
-	public function unwatch( int $page_id, int $user_id ): bool {
-		if ( !$this->isWatching( $page_id, $user_id, DB_PRIMARY ) ) {
+	public function unwatch( int $pageId, int $userId ): bool {
+		if ( !$this->isWatching( $pageId, $userId, DB_PRIMARY ) ) {
 			return true;
 		}
-		$dbw = $this->getDBConnection( DB_PRIMARY );
 
-		return $dbw->delete(
+		return $this->getDBConnection( DB_PRIMARY )->delete(
 			'cs_watchlist',
 			[
-				'cst_wl_page_id' => $page_id,
-				'cst_wl_user_id' => $user_id
+				'cst_wl_page_id' => $pageId,
+				'cst_wl_user_id' => $userId
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param int $page_id the page ID of the comment to check
-	 * @param int $user_id the user ID of the user watching the comment
+	 * @param int $pageId the page ID of the comment to check
+	 * @param int $userId the user ID of the user watching the comment
 	 * @param int $fromdb DB_PRIMARY or DB_REPLICA
 	 * @return bool database true for OK, false for error
 	 */
-	public function isWatching( int $page_id, int $user_id, int $fromdb = DB_REPLICA ): bool {
-		$db = $this->getDBConnection( $fromdb );
-		$result = $db->selectRow(
-			'cs_watchlist',
-			[
-				'cst_wl_page_id'
-			],
-			[
-				'cst_wl_page_id' => $page_id,
-				'cst_wl_user_id' => $user_id
-			],
-			__METHOD__
-		);
-
-		if ( $result ) {
-			return true;
-		}
-
-		return false;
+	public function isWatching( int $pageId, int $userId, int $fromdb = DB_REPLICA ): bool {
+		$count = $this->getDBConnection( $fromdb )
+			->newSelectQueryBuilder()
+			->select( 'cst_wl_page_id' )
+			->from( 'cs_watchlist' )
+			->where( [
+				'cst_wl_page_id' => $pageId,
+				'cst_wl_user_id' => $userId
+			] )
+			->caller( __METHOD__ )
+			->fetchRowCount();
+		return $count > 0;
 	}
 
 	/**
 	 * @param int $id
-	 * @return array of user IDs
+	 * @return User[] array of users indexed by user ID
 	 */
 	public function getWatchers( int $id ): array {
-		$dbr = $this->getDBConnection( DB_REPLICA );
-		$result = $dbr->select(
-			'cs_watchlist',
-			[
-				'cst_wl_user_id'
-			],
-			[
+		$result = $this->getDBConnection( DB_REPLICA )
+			->newSelectQueryBuilder()
+			->select( 'cst_wl_user_id' )
+			->from( 'cs_watchlist' )
+			->where( [
 				'cst_wl_page_id' => $id
-			],
-			__METHOD__
-		);
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		$users = [];
 		foreach ( $result as $row ) {
-			$user_id = $row->cst_wl_user_id;
-			$user = $this->userFactory->newFromId( $user_id );
-			$users[$user_id] = $user;
+			$userId = $row->cst_wl_user_id;
+			$user = $this->userFactory->newFromId( $userId );
+			$users[$userId] = $user;
 		}
 
 		return $users;
 	}
 
 	/**
-	 * @param WikiPage $wikipage
-	 * @param ?string $comment_title
+	 * @param WikiPage $wikiPage
+	 * @param ?string $commentTitle
 	 * @return string
 	 */
-	public function getWikiText( WikiPage $wikipage, ?string $comment_title ): string {
-		$wikitext = $wikipage->getContent( RevisionRecord::RAW )->getWikitextForTransclusion();
-		return $this->removeAnnotations( $wikitext, $comment_title );
+	public function getWikitext( WikiPage $wikiPage, ?string $commentTitle ): string {
+		$wikitext = $wikiPage->getContent( RevisionRecord::RAW )->getWikitextForTransclusion();
+		if ( $commentTitle ) {
+			return $this->removeAnnotations( $wikitext, $commentTitle );
+		}
+		return $wikitext;
 	}
 
 	/**
 	 * add extra information to wikitext before storage
 	 *
 	 * @param string $wikitext the wikitext to which to add
-	 * @param ?string $comment_title string title of comment
+	 * @param string $commentTitle string title of comment
 	 * @return string annotated wikitext
 	 */
-	private function addAnnotations( string $wikitext, ?string $comment_title ): string {
-		if ( $comment_title !== null ) {
-			$wikitext .= <<<EOT
+	private function addAnnotations( string $wikitext, string $commentTitle ): string {
+		$wikitext .= <<<EOT
 {{DISPLAYTITLE:
-$comment_title
+$commentTitle
 }}
 EOT;
-		}
 		return $wikitext;
 	}
 
@@ -602,18 +691,15 @@ EOT;
 	 * add extra information to wikitext before storage
 	 *
 	 * @param string $wikitext the wikitext to which to add
-	 * @param ?string $comment_title
+	 * @param string $commentTitle
 	 * @return string wikitext without annotations
 	 */
-	private function removeAnnotations( string $wikitext, ?string $comment_title ): string {
-		if ( $comment_title !== null ) {
-			$strip = <<<EOT
+	private function removeAnnotations( string $wikitext, string $commentTitle ): string {
+		$strip = <<<EOT
 {{DISPLAYTITLE:
-$comment_title
+$commentTitle
 }}
 EOT;
-			$wikitext = str_replace( $strip, '', $wikitext );
-		}
-		return $wikitext;
+		return str_replace( $strip, '', $wikitext );
 	}
 }

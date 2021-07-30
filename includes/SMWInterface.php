@@ -24,7 +24,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use ConfigException;
 use ExtensionRegistry;
 use JobQueueGroup;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\User\UserIdentity;
 use SMW\DIProperty;
 use SMW\DIWikiPage;
@@ -38,19 +38,40 @@ use SMWDIBlob;
 use SMWDINumber;
 use Title;
 
-class CommentStreamsSMWInterface {
+class SMWInterface {
+	public const CONSTRUCTOR_OPTIONS = [
+		'CommentStreamsEnableVoting'
+	];
+
 	/**
 	 * @var bool
 	 */
 	private $isLoaded;
 
 	/**
+	 * @var CommentStreamsStore
+	 */
+	private $commentStreamsStore;
+
+	/**
+	 * @var bool
+	 */
+	private $enableVoting;
+
+	/**
+	 * @param ServiceOptions $options
 	 * @param ExtensionRegistry $extensionRegistry
+	 * @param CommentStreamsStore $commentStreamsStore
 	 */
 	public function __construct(
-		ExtensionRegistry $extensionRegistry
+		ServiceOptions $options,
+		ExtensionRegistry $extensionRegistry,
+		CommentStreamsStore $commentStreamsStore
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
 		$this->isLoaded = $extensionRegistry->isLoaded( 'SemanticMediaWiki' );
+		$this->commentStreamsStore = $commentStreamsStore;
 	}
 
 	/**
@@ -109,15 +130,12 @@ class CommentStreamsSMWInterface {
 	 * This won't get called unless Semantic MediaWiki is installed.
 	 * @throws ConfigException
 	 */
-	public static function initProperties() {
-		$services = MediaWikiServices::getInstance();
-		$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
-		$enableVoting = (bool)$config->get( 'CommentStreamsEnableVoting' );
+	public function initProperties() {
 		$pr = PropertyRegistry::getInstance();
 		$pr->registerProperty( '___CS_ASSOCPG', '_wpg', 'Comment on' );
 		$pr->registerProperty( '___CS_REPLYTO', '_wpg', 'Reply to' );
 		$pr->registerProperty( '___CS_TITLE', '_txt', 'Comment title of' );
-		if ( $enableVoting ) {
+		if ( $this->enableVoting ) {
 			$pr->registerProperty( '___CS_UPVOTES', '_num', 'Comment up votes' );
 			$pr->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );
 			$pr->registerProperty( '___CS_VOTEDIFF', '_num', 'Comment vote diff' );
@@ -137,71 +155,57 @@ class CommentStreamsSMWInterface {
 	 * @noinspection PhpUnusedParameterInspection
 	 * @throws ConfigException
 	 */
-	public static function updateData( Store $store, SemanticData $semanticData ): bool {
+	public function updateData( Store $store, SemanticData $semanticData ): bool {
 		$subject = $semanticData->getSubject();
-		if ( $subject !== null && $subject->getTitle() !== null &&
-			$subject->getTitle()->getNamespace() === NS_COMMENTSTREAMS ) {
-			if ( defined( 'Title::READ_LATEST' ) ) {
-				$page_id = $subject->getTitle()->getArticleID( Title::READ_LATEST );
-			} else {
-				$page_id = $subject->getTitle()->getArticleID( Title::GAID_FOR_UPDATE );
-			}
-			$wikipage = CommentStreamsUtils::newWikiPageFromId( $page_id );
-			$commentFactory = MediaWikiServices::getInstance()->getService( 'CommentFactory' );
-			$comment = $commentFactory->newFromWikiPage( $wikipage );
+		if ( !$subject || !$subject->getTitle() || $subject->getTitle()->getNamespace() !== NS_COMMENTSTREAMS ) {
+			return true;
+		}
 
-			if ( $comment === null ) {
+		$pageId = $subject->getTitle()->getArticleID( Title::READ_LATEST );
+
+		$comment = $this->commentStreamsStore->getComment( $pageId );
+		if ( !$comment ) {
+			$reply = $this->commentStreamsStore->getReply( $pageId );
+			if ( !$reply ) {
 				return true;
 			}
 
-			$assoc_page_id = $comment->getAssociatedId();
-			if ( $assoc_page_id !== null ) {
-				$assoc_wikipage = CommentStreamsUtils::newWikiPageFromId( $assoc_page_id );
-				if ( $assoc_wikipage !== null ) {
-					$propertyDI = new DIProperty( '___CS_ASSOCPG' );
-					$dataItem =
-						DIWikiPage::newFromTitle( $assoc_wikipage->getTitle() );
-					$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-				}
-			}
-
-			$parent_page_id = $comment->getParentId();
-			if ( $parent_page_id !== null ) {
-				$parent_wikipage = CommentStreamsUtils::newWikiPageFromId( $parent_page_id );
-				if ( $parent_wikipage !== null ) {
-					$propertyDI = new DIProperty( '___CS_REPLYTO' );
-					$dataItem =
-						DIWikiPage::newFromTitle( $parent_wikipage->getTitle() );
-					$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-				}
-			}
-
-			$commentTitle = $comment->getCommentTitle();
-			if ( $commentTitle !== null ) {
-				$propertyDI = new DIProperty( '___CS_TITLE' );
-				$dataItem = new SMWDIBlob( $comment->getCommentTitle() );
+			$parentWikiPage = CommentStreamsUtils::newWikiPageFromId( $reply[ 'comment_page_id' ] );
+			if ( $parentWikiPage ) {
+				$propertyDI = new DIProperty( '___CS_REPLYTO' );
+				$dataItem = DIWikiPage::newFromTitle( $parentWikiPage->getTitle() );
 				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 			}
 
-			$services = MediaWikiServices::getInstance();
-			$commentStreamsStore = $services->getService( 'CommentStreamsStore' );
-			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
-			$enableVoting = (bool)$config->get( 'CommentStreamsEnableVoting' );
-			if ( $enableVoting ) {
-				$upvotes = $commentStreamsStore->getNumUpVotes( $comment->getId() );
-				$propertyDI = new DIProperty( '___CS_UPVOTES' );
-				$dataItem = new SMWDINumber( $upvotes );
-				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-				$downvotes = $commentStreamsStore->getNumDownVotes( $comment->getId() );
-				$propertyDI = new DIProperty( '___CS_DOWNVOTES' );
-				$dataItem = new SMWDINumber( $downvotes );
-				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-				$votediff = $upvotes - $downvotes;
-				$propertyDI = new DIProperty( '___CS_VOTEDIFF' );
-				$dataItem = new SMWDINumber( $votediff );
-				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-			}
+			return true;
 		}
+
+		$assocWikiPage = CommentStreamsUtils::newWikiPageFromId( $comment[ 'assoc_page_id' ] );
+		if ( $assocWikiPage ) {
+			$propertyDI = new DIProperty( '___CS_ASSOCPG' );
+			$dataItem = DIWikiPage::newFromTitle( $assocWikiPage->getTitle() );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+		}
+
+		$propertyDI = new DIProperty( '___CS_TITLE' );
+		$dataItem = new SMWDIBlob( $comment[ 'comment_title' ] );
+		$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+
+		if ( $this->enableVoting ) {
+			$upvotes = $this->commentStreamsStore->getNumUpVotes( $pageId );
+			$propertyDI = new DIProperty( '___CS_UPVOTES' );
+			$dataItem = new SMWDINumber( $upvotes );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+			$downvotes = $this->commentStreamsStore->getNumDownVotes( $pageId );
+			$propertyDI = new DIProperty( '___CS_DOWNVOTES' );
+			$dataItem = new SMWDINumber( $downvotes );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+			$votediff = $upvotes - $downvotes;
+			$propertyDI = new DIProperty( '___CS_VOTEDIFF' );
+			$dataItem = new SMWDINumber( $votediff );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+		}
+
 		return true;
 	}
 
@@ -212,7 +216,7 @@ class CommentStreamsSMWInterface {
 	 *
 	 * @param array &$configuration An array of the configuration options
 	 */
-	public static function onSMWInitialization( array &$configuration ) {
+	public function onSMWInitialization( array &$configuration ) {
 		$namespaceIndex = $GLOBALS['wgCommentStreamsNamespaceIndex'];
 		$configuration['smwgNamespacesWithSemanticLinks'][$namespaceIndex] = true;
 	}

@@ -21,11 +21,11 @@
 module.exports = ( function () {
 	'use strict';
 
-	function Block( controller, env, querier, blockId, $commentDiv ) {
+	function Block( controller, env, querier, blockName, $commentDiv ) {
 		this.controller = controller;
 		this.env = env;
 		this.querier = querier;
-		this.blockId = blockId;
+		this.blockName = blockName;
 
 		this.$commentDiv = null;
 		this.addButton = null;
@@ -310,17 +310,14 @@ module.exports = ( function () {
 			} );
 			progressBar.$element.insertAfter( self.$editBox );
 
-			self.querier.postComment(
-				commentTitle,
-				commentText,
-				self.env.associatedPageId,
-				parentPageId,
-				self.blockId,
-				function ( result ) {
-					progressBar.$element.remove();
-					if ( result.error === undefined ) {
-						self.hideEditBox( false );
-						if ( parentPageId ) {
+			if ( parentPageId ) {
+				self.querier.postReply(
+					commentText,
+					parentPageId,
+					function ( result ) {
+						progressBar.$element.remove();
+						if ( result.error === undefined ) {
+							self.hideEditBox( false );
 							self.streams[ parentPageId ].addReply( result );
 							self.querier.queryComment( parentPageId, function ( queryResult ) {
 								if ( queryResult.error === undefined ) {
@@ -328,17 +325,34 @@ module.exports = ( function () {
 								}
 							} );
 						} else {
+							self.reportError( result.error );
+							self.$editBox.fadeTo( 0.2, 100, function () {
+								self.submitButton.setDisabled( false );
+								self.cancelButton.setDisabled( false );
+							} );
+						}
+					} );
+			} else {
+				self.querier.postComment(
+					commentTitle,
+					commentText,
+					self.env.associatedPageId,
+					self.blockName,
+					function ( result ) {
+						progressBar.$element.remove();
+						if ( result.error === undefined ) {
+							self.hideEditBox( false );
 							const stream = self.addStream( result );
 							stream.adjustCommentOrder( 0, 0, result.created_timestamp );
+						} else {
+							self.reportError( result.error );
+							self.$editBox.fadeTo( 0.2, 100, function () {
+								self.submitButton.setDisabled( false );
+								self.cancelButton.setDisabled( false );
+							} );
 						}
-					} else {
-						self.reportError( result.error );
-						self.$editBox.fadeTo( 0.2, 100, function () {
-							self.submitButton.setDisabled( false );
-							self.cancelButton.setDisabled( false );
-						} );
-					}
-				} );
+					} );
+			}
 		} );
 	};
 

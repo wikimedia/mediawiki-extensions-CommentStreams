@@ -18,7 +18,8 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsAllComments",
 			"services": [
 				"CommentStreamsStore",
-				"CommentFactory"
+				"CommentStreamsFactory",
+				"LinkRenderer"
 			]
 		}
 	},
@@ -58,11 +59,9 @@
 				"commentstreams-api-error-notloggedin",
 				"commentstreams-api-error-commentnotfound",
 				"commentstreams-api-error-notacomment",
-				"commentstreams-api-error-missingcommenttitle",
+				"commentstreams-api-error-notareply",
 				"commentstreams-api-error-post-permissions",
-				"commentstreams-api-error-post-parentandtitle",
 				"commentstreams-api-error-post-parentpagedoesnotexist",
-				"commentstreams-api-error-post-associatedpageidmismatch",
 				"commentstreams-api-error-post-associatedpagedoesnotexist",
 				"commentstreams-api-error-post",
 				"commentstreams-api-error-edit-notloggedin",
@@ -136,51 +135,76 @@
 		"MediaWiki\\Extension\\CommentStreams\\": "includes/"
 	},
 	"AutoloadClasses": {
-		"NullDefaultCommentBlock": "maintenance/NullDefaultCommentBlock.php"
+		"MigrateToAbstractSchema": "maintenance/MigrateToAbstractSchema.php"
 	},
 	"APIModules": {
 		"cspostcomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
 			"services": [
-				"CommentFactory",
+				"CommentStreamsFactory",
+				"CommentStreamsEchoInterface"
+			]
+		},
+		"cspostreply": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostReply",
+			"services": [
+				"CommentStreamsFactory",
 				"CommentStreamsEchoInterface"
 			]
 		},
 		"csquerycomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
 			"services": [
-				"CommentFactory"
+				"CommentStreamsFactory"
+			]
+		},
+		"csqueryreply": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryReply",
+			"services": [
+				"CommentStreamsFactory"
 			]
 		},
 		"cseditcomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
 			"services": [
-				"CommentFactory"
+				"CommentStreamsFactory"
+			]
+		},
+		"cseditreply": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditReply",
+			"services": [
+				"CommentStreamsFactory"
 			]
 		},
 		"csdeletecomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
 			"services": [
-				"CommentFactory",
+				"CommentStreamsFactory",
 				"MainConfig"
+			]
+		},
+		"csdeletereply": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteReply",
+			"services": [
+				"CommentStreamsFactory"
 			]
 		},
 		"csvote": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
 			"services": [
-				"CommentFactory"
+				"CommentStreamsFactory"
 			]
 		},
 		"cswatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
 			"services": [
-				"CommentFactory"
+				"CommentStreamsFactory"
 			]
 		},
 		"csunwatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch",
 			"services": [
-				"CommentFactory"
+				"CommentStreamsFactory"
 			]
 		}
 	},
@@ -189,7 +213,7 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\MainHooks",
 			"services": [
 				"CommentStreamsHandler",
-				"CommentFactory",
+				"CommentStreamsFactory",
 				"LinkRenderer",
 				"RevisionStore",
 				"PermissionManager"
@@ -203,15 +227,15 @@
 		"CanonicalNamespaces": "main",
 		"MediaWikiPerformAction": "main",
 		"MovePageIsValidMove": "main",
-		"userCan": "main",
+		"GetUserPermissionsErrors": "main",
 		"BeforePageDisplay": "main",
 		"ShowSearchHitTitle": "main",
 		"ParserFirstCallInit": "main",
 		"LoadExtensionSchemaUpdates": "schema",
-		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsEchoInterface::onBeforeCreateEchoEvent",
-		"smwInitProperties": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::initProperties",
-		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::updateData",
-		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsSMWInterface::onSMWInitialization"
+		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\EchoInterface::onBeforeCreateEchoEvent",
+		"smwInitProperties": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::initProperties",
+		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::updateData",
+		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::onSMWInitialization"
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"config": {

@@ -23,32 +23,59 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
+use ManualLogEntry;
+use MWException;
 
-class ApiCSUnwatch extends ApiCSCommentBase {
+abstract class ApiCSCommentBase extends ApiCSBase {
+	/**
+	 * @var Comment
+	 */
+	protected $comment;
+
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param bool $edit whether this API module will be editing the database
 	 */
-	public function __construct( ApiMain $main, string $action, CommentStreamsFactory $commentStreamsFactory ) {
-		parent::__construct( $main, $action, $commentStreamsFactory, true );
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		CommentStreamsFactory $commentStreamsFactory,
+		bool $edit = false
+	) {
+		parent::__construct( $main, $action, $commentStreamsFactory, $edit );
 	}
 
 	/**
-	 * the real body of the execute function
-	 * @return ?array result of API request
+	 * execute the API request
 	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
-	protected function executeBody(): ?array {
-		if ( $this->getUser()->isAnon() ) {
-			$this->dieWithError( 'commentstreams-api-error-unwatch-notloggedin' );
+	public function execute() {
+		$params = $this->extractRequestParams();
+		$wikiPage = $this->getTitleOrPageId( $params, $this->edit ? 'frommasterdb' : 'fromdb' );
+		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+		if ( $comment ) {
+			$this->comment = $comment;
+			$result = $this->executeBody();
+			if ( $result ) {
+				$this->getResult()->addValue( null, $this->getModuleName(), $result );
+			}
+		} else {
+			$this->dieWithError( 'commentstreams-api-error-notacomment' );
 		}
+	}
 
-		$result = $this->comment->unwatch( $this->getUser()->getId() );
-		if ( !$result ) {
-			$this->dieWithError( 'commentstreams-api-error-unwatch' );
-		}
-
-		return null;
+	/**
+	 * log action
+	 * @param string $action the name of the action to be logged
+	 * @throws MWException
+	 */
+	protected function logAction( string $action ) {
+		$logEntry = new ManualLogEntry( 'commentstreams', $action );
+		$logEntry->setPerformer( $this->getUser() );
+		$logEntry->setTarget( $this->comment->getTitle() );
+		$logEntry->insert();
 	}
 }

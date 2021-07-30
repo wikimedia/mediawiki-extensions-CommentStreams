@@ -32,7 +32,7 @@ class ListCommentBlocks extends Maintenance {
 	public function execute() {
 		$includePages = $this->hasOption( 'pages' );
 		$columns = [
-			'cst_id'
+			'cst_c_block_name'
 		];
 		$options = [
 			'DISTINCT'
@@ -43,7 +43,7 @@ class ListCommentBlocks extends Maintenance {
 		}
 		$rows = $this->getDB( DB_REPLICA )->select(
 			[
-				'cs_comment_data'
+				'cs_comments'
 			],
 			$columns,
 			[],
@@ -54,7 +54,7 @@ class ListCommentBlocks extends Maintenance {
 			if ( $includePages ) {
 				$this->output( Title::newFromID( $row->cst_assoc_page_id )->getPrefixedText() . ': ' );
 			}
-			$this->output( $row->cst_id . PHP_EOL );
+			$this->output( $row->cst_c_block_name . PHP_EOL );
 		}
 	}
 }

@@ -46,9 +46,9 @@ class CommentStreamsHandler {
 	private $initiallyCollapseCommentStreams = false;
 
 	/**
-	 * @var CommentFactory
+	 * @var CommentStreamsFactory
 	 */
-	private $commentFactory;
+	private $commentStreamsFactory;
 
 	/**
 	 * @var CommentStreamsStore
@@ -56,7 +56,7 @@ class CommentStreamsHandler {
 	private $commentStreamsStore;
 
 	/**
-	 * @var CommentStreamsEchoInterface
+	 * @var EchoInterface
 	 */
 	private $echoInterface;
 
@@ -71,20 +71,20 @@ class CommentStreamsHandler {
 	private $permissionManager;
 
 	/**
-	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param CommentStreamsStore $commentStreamsStore
-	 * @param CommentStreamsEchoInterface $echoInterface
+	 * @param EchoInterface $echoInterface
 	 * @param NamespaceInfo $namespaceInfo
 	 * @param PermissionManager $permissionManager
 	 */
 	public function __construct(
-		CommentFactory $commentFactory,
+		CommentStreamsFactory $commentStreamsFactory,
 		CommentStreamsStore $commentStreamsStore,
-		CommentStreamsEchoInterface $echoInterface,
+		EchoInterface $echoInterface,
 		NamespaceInfo $namespaceInfo,
 		PermissionManager $permissionManager
 	) {
-		$this->commentFactory = $commentFactory;
+		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->echoInterface = $echoInterface;
 		$this->namespaceInfo = $namespaceInfo;
@@ -241,39 +241,47 @@ class CommentStreamsHandler {
 	 */
 	private function getComments( OutputPage $output ): array {
 		$commentData = [];
-		$pageId = $output->getTitle()->getArticleID();
-		$comment_page_ids = $this->commentStreamsStore->getAssociatedComments( $pageId );
-		$allComments = [];
-		foreach ( $comment_page_ids as $id ) {
-			$wikipage = CommentStreamsUtils::newWikiPageFromId( $id );
-			if ( $wikipage !== null ) {
-				$comment = $this->commentFactory->newFromWikiPage( $wikipage );
-				if ( $comment !== null ) {
-					$allComments[] = $comment;
-				}
+
+		$comments = [];
+		$commentWikiPages = $this->commentStreamsStore->getAssociatedComments( $output->getTitle()->getArticleID() );
+		foreach ( $commentWikiPages as $wikiPage ) {
+			$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+			if ( $comment ) {
+				$comments[] = $comment;
 			}
 		}
 
 		$config = $output->getConfig();
 		$newestStreamsOnTop = $config->get( 'CommentStreamsNewestStreamsOnTop' );
 		$votingEnabled = $config->get( 'CommentStreamsEnableVoting' );
-		$parentComments = $this->getDiscussions(
-			$allComments,
+		$sortedComments = $this->sortComments(
+			$comments,
 			$newestStreamsOnTop,
 			$votingEnabled
 		);
-		foreach ( $parentComments as $parentComment ) {
-			$parentJSON = $parentComment->getJSON( $output );
+
+		foreach ( $sortedComments as $comment ) {
+			$parentJSON = $comment->getJSON( $output );
+
 			if ( $votingEnabled ) {
-				$parentJSON['vote'] = $parentComment->getVote( $output->getUser() );
+				$parentJSON['vote'] = $comment->getVote( $output->getUser() );
 			}
+
 			if ( $this->echoInterface->isLoaded() ) {
-				$parentJSON['watching'] = $parentComment->isWatching( $output->getUser() );
+				$parentJSON['watching'] = $comment->isWatching( $output->getUser() );
 			}
-			$childComments = $this->getReplies( $allComments, $parentComment->getId() );
-			foreach ( $childComments as $childComment ) {
-				$childJSON = $childComment->getJSON( $output );
-				$parentJSON['children'][] = $childJSON;
+
+			$replies = [];
+			$replyWikiPages = $this->commentStreamsStore->getReplies( $comment->getId() );
+			foreach ( $replyWikiPages as $wikiPage ) {
+				$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+				if ( $reply ) {
+					$replies[] = $reply;
+				}
+			}
+			$sortedReplies = $this->sortReplies( $replies );
+			foreach ( $sortedReplies as $reply ) {
+				$parentJSON['children'][] = $reply->getJSON( $output );
 			}
 			$commentData[] = $parentJSON;
 		}
@@ -333,27 +341,21 @@ class CommentStreamsHandler {
 	}
 
 	/**
-	 * Return all discussions (top level comments) in an array of comments.
+	 * Sort an array of comments by creation date and, if enabled, vote diff
 	 * Counterintuitively, returns the oldest disussions/lowest vote disussions first if
 	 * $newestOnTop is true, since they will be added from bottom up.
 	 *
-	 * @param array $allComments an array of all comments on a page
-	 * @param bool $newestOnTop true if array should be sorted from newest to
+	 * @param Comment[] $comments an array of all comments on a page
+	 * @param bool $newestOnTop true if array should be sorted from newest to oldest
 	 * @param bool $enableVoting
-	 * @return array an array of all discussions
-	 * oldest
+	 * @return Comment[] sorted array of comments
 	 */
-	private function getDiscussions(
-		array $allComments,
+	private function sortComments(
+		array $comments,
 		bool $newestOnTop,
 		bool $enableVoting
 	): array {
-		$array = array_filter(
-			$allComments, static function ( $comment ) {
-				return $comment->getParentId() === null;
-			}
-		);
-		usort( $array, function ( $comment1, $comment2 ) use ( $newestOnTop, $enableVoting ) {
+		usort( $comments, function ( $comment1, $comment2 ) use ( $newestOnTop, $enableVoting ) {
 			$date1 = $comment1->getCreationTimestamp()->timestamp;
 			$date2 = $comment2->getCreationTimestamp()->timestamp;
 			if ( $enableVoting ) {
@@ -384,32 +386,23 @@ class CommentStreamsHandler {
 				}
 			}
 		} );
-		return $array;
+		return $comments;
 	}
 
 	/**
-	 * return all replies for a given discussion in an array of comments
+	 * sort replies to a comment
 	 *
-	 * @param array $allComments an array of all comments on a page
-	 * @param int $parentId the page ID of the discussion to get replies for
-	 * @return array an array of replies for the given discussion
+	 * @param Reply[] $replies an array of all replies to a comment
+	 * @return Reply[] sorted array of replies
 	 */
-	private function getReplies( array $allComments, int $parentId ): array {
-		$array = array_filter(
-			$allComments, static function ( $comment ) use ( $parentId ) {
-				if ( $comment->getParentId() === $parentId ) {
-					return true;
-				}
-				return false;
-			}
-		);
+	private function sortReplies( array $replies ): array {
 		usort(
-			$array, static function ( $comment1, $comment2 ) {
-				$date1 = $comment1->getCreationTimestamp()->timestamp;
-				$date2 = $comment2->getCreationTimestamp()->timestamp;
+			$replies, static function ( $reply1, $reply2 ) {
+				$date1 = $reply1->getCreationTimestamp()->timestamp;
+				$date2 = $reply2->getCreationTimestamp()->timestamp;
 				return $date1 < $date2 ? -1 : 1;
 			}
 		);
-		return $array;
+		return $replies;
 	}
 }

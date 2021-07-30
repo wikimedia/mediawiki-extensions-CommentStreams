@@ -23,71 +23,35 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiBase;
 use ApiMain;
-use ApiUsageException;
-use ManualLogEntry;
-use MediaWiki\Linker\LinkTarget;
-use MWException;
-use Title;
 
 abstract class ApiCSBase extends ApiBase {
 	/**
-	 * @var CommentFactory
+	 * @var CommentStreamsFactory
 	 */
-	protected $commentFactory;
+	protected $commentStreamsFactory;
 
 	/**
 	 * whether this API module will be editing the database
 	 * @var bool
 	 */
-	private $edit;
-
-	/**
-	 * @var Comment
-	 */
-	protected $comment;
+	protected $edit;
 
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param bool $edit whether this API module will be editing the database
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentFactory $commentFactory,
+		CommentStreamsFactory $commentStreamsFactory,
 		bool $edit = false
 	) {
 		parent::__construct( $main, $action );
-		$this->commentFactory = $commentFactory;
+		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->edit = $edit;
 	}
-
-	/**
-	 * execute the API request
-	 * @throws ApiUsageException
-	 * @throws MWException
-	 */
-	public function execute() {
-		$params = $this->extractRequestParams();
-		$wikipage = $this->getTitleOrPageId( $params, $this->edit ? 'frommasterdb' : 'fromdb' );
-		$comment = $this->commentFactory->newFromWikiPage( $wikipage );
-		if ( $comment === null ) {
-			$this->dieWithError( 'commentstreams-api-error-notacomment' );
-		} else {
-			$this->comment = $comment;
-			$result = $this->executeBody();
-			if ( $result !== null ) {
-				$this->getResult()->addValue( null, $this->getModuleName(), $result );
-			}
-		}
-	}
-
-	/**
-	 * the real body of the execute function
-	 * @return ?array result of API request
-	 */
-	abstract protected function executeBody(): ?array;
 
 	/**
 	 * @return array allowed parameters
@@ -129,20 +93,8 @@ abstract class ApiCSBase extends ApiBase {
 	}
 
 	/**
-	 * log action
-	 * @param string $action the name of the action to be logged
-	 * @param LinkTarget|Title|null $title the title of the page for the comment that the
-	 *        action was performed upon, if different from the current comment
-	 * @throws MWException
+	 * the real body of the execute function
+	 * @return ?array result of API request
 	 */
-	protected function logAction( string $action, $title = null ) {
-		$logEntry = new ManualLogEntry( 'commentstreams', $action );
-		$logEntry->setPerformer( $this->getUser() );
-		if ( $title ) {
-			$logEntry->setTarget( $title );
-		} else {
-			$logEntry->setTarget( $this->comment->getTitle() );
-		}
-		$logEntry->insert();
-	}
+	abstract protected function executeBody(): ?array;
 }

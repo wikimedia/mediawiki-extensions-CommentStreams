@@ -49,20 +49,16 @@ class MigrateDefaultCommentBlock extends Maintenance {
 	 * @return int
 	 */
 	private function numRows( IDatabase $db, ?string $value ): int {
-		$rows = $db->select(
+		return $db->selectRowCount(
 			[
-				'cs_comment_data'
+				'cs_comments'
 			],
+			'*',
 			[
-				'cst_id'
-			],
-			[
-				'cst_id' => $value,
-				'cst_parent_page_id' => null
+				'cst_c_block_name' => $value
 			],
 			__METHOD__
 		);
-		return $rows->numRows();
 	}
 
 	/**
@@ -93,13 +89,12 @@ class MigrateDefaultCommentBlock extends Maintenance {
 		$dbw = $this->getDB( DB_PRIMARY );
 		$this->report( 'Before migration', $dbw, $from, $to );
 		$dbw->update(
-			'cs_comment_data',
+			'cs_comments',
 			[
-				'cst_id' => $to
+				'cst_c_block_name' => $to
 			],
 			[
-				'cst_id' => $from,
-				'cst_parent_page_id' => null
+				'cst_c_block_name' => $from
 			],
 			__METHOD__
 		);

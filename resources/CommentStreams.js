@@ -73,15 +73,15 @@ const CommentStreams = ( function () {
 
 			$blocks.each( function () {
 				const $blockDiv = $( this );
-				const blockId = $blockDiv.attr( 'data-id' );
-				if ( blockId === undefined ) {
+				const blockName = $blockDiv.attr( 'data-id' );
+				if ( blockName === undefined ) {
 					$blockDiv
 						.detach()
 						.insertAfter( '#catlinks' );
 					self.defaultblock = new Block( self, env, querier, null, $blockDiv );
 				} else {
-					self.namedblocks[ blockId ] =
-						new Block( self, env, querier, blockId, $blockDiv );
+					self.namedblocks[ blockName ] =
+						new Block( self, env, querier, blockName, $blockDiv );
 				}
 			} );
 
@@ -95,11 +95,11 @@ const CommentStreams = ( function () {
 
 		addInitialComments: function ( comments ) {
 			for ( const parentComment of comments ) {
-				const blockId = parentComment.commentblockid;
-				if ( blockId === null && this.defaultblock ) {
+				const blockName = parentComment.commentblockname;
+				if ( blockName === null && this.defaultblock ) {
 					this.defaultblock.addStream( parentComment );
-				} else if ( blockId in this.namedblocks ) {
-					this.namedblocks[ blockId ].addStream( parentComment );
+				} else if ( blockName in this.namedblocks ) {
+					this.namedblocks[ blockName ].addStream( parentComment );
 				} else {
 					// ignore comments that do not match a block
 					// (may be legacy comments from a block that was deleted)

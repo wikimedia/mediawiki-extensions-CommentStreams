@@ -31,20 +31,11 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 	 * @param DatabaseUpdater $updater database updater
 	 */
 	public function onLoadExtensionSchemaUpdates( $updater ) {
-		$dir = __DIR__ . '/../sql/';
-		$updater->addExtensionTable( 'cs_comment_data', $dir . 'commentData.sql' );
-		$updater->addExtensionTable( 'cs_votes', $dir . 'votes.sql' );
-		$updater->addExtensionTable( 'cs_watchlist', $dir . 'watch.sql' );
-		$updater->modifyExtensionField( 'cs_comment_data', 'page_id',
-			$dir . 'updateFieldNames.sql' );
-		$updater->dropExtensionIndex( 'cs_comment_data', 'assoc_page_id',
-			$dir . 'dropForeignKey1.sql' );
-		$updater->dropExtensionIndex( 'cs_comment_data', 'cst_assoc_page_id',
-			$dir . 'dropForeignKey2.sql' );
-		$updater->addExtensionField( 'cs_comment_data', 'cst_id',
-			$dir . 'addCommentId.sql' );
-		$updater->modifyExtensionField( 'cs_comment_data', 'cst_id',
-			$dir . 'cstIdDefault.sql' );
-		$updater->addPostDatabaseUpdateMaintenance( 'NullDefaultCommentBlock' );
+		$dir = __DIR__ . '/../sql/' . $updater->getDB()->getType();
+		$updater->addExtensionTable( 'cs_comments', $dir . '/cs_comments.sql' );
+		$updater->addExtensionTable( 'cs_replies', $dir . '/cs_replies.sql' );
+		$updater->addExtensionTable( 'cs_votes', $dir . '/cs_votes.sql' );
+		$updater->addExtensionTable( 'cs_watchlist', $dir . '/cs_watchlist.sql' );
+		$updater->addPostDatabaseUpdateMaintenance( 'MigrateToAbstractSchema' );
 	}
 }

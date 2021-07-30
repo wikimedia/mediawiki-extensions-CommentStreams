@@ -26,7 +26,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\User\UserIdentity;
 use wAvatar;
 
-class CommentStreamsSocialProfileInterface {
+class SocialProfileInterface {
 	public const CONSTRUCTOR_OPTIONS = [
 		'UploadPath'
 	];

@@ -42,6 +42,24 @@ module.exports = ( function () {
 			} );
 	};
 
+	Querier.prototype.queryReply = function ( pageid, reply ) {
+		const self = this;
+		new mw.Api()
+			.get( {
+				action: 'csqueryreply',
+				pageid: pageid
+			} )
+			.done( function ( data ) {
+				if ( data.csqueryreply === undefined ) {
+					self.reportError( 'invalid', reply );
+				}
+				reply( data.csqueryreply );
+			} )
+			.fail( function ( code, error ) {
+				self.reportError( error, reply );
+			} );
+	};
+
 	Querier.prototype.deleteComment = function ( pageid, reply ) {
 		const self = this;
 		new mw.Api()
@@ -58,12 +76,27 @@ module.exports = ( function () {
 			} );
 	};
 
+	Querier.prototype.deleteReply = function ( pageid, reply ) {
+		const self = this;
+		new mw.Api()
+			.post( {
+				action: 'csdeletereply',
+				pageid: pageid,
+				token: mw.user.tokens.get( 'csrfToken' )
+			} )
+			.done( function () {
+				reply();
+			} )
+			.fail( function ( code, error ) {
+				self.reportError( error, reply );
+			} );
+	};
+
 	Querier.prototype.postComment = function (
 		commenttitle,
 		wikitext,
 		associatedid,
-		parentid,
-		commentblockid,
+		commentblockname,
 		reply
 	) {
 		const self = this;
@@ -71,16 +104,11 @@ module.exports = ( function () {
 			action: 'cspostcomment',
 			wikitext: wikitext,
 			associatedid: associatedid,
+			commenttitle: commenttitle,
 			token: mw.user.tokens.get( 'csrfToken' )
 		};
-		if ( commenttitle !== null ) {
-			data.commenttitle = commenttitle;
-		}
-		if ( parentid !== null ) {
-			data.parentid = parentid;
-		}
-		if ( commentblockid !== null ) {
-			data.commentblockid = commentblockid;
+		if ( commentblockname !== null ) {
+			data.commentblockname = commentblockname;
 		}
 		new mw.Api()
 			.post( data )
@@ -95,21 +123,62 @@ module.exports = ( function () {
 			} );
 	};
 
+	Querier.prototype.postReply = function (
+		wikitext,
+		parentid,
+		reply
+	) {
+		const self = this;
+		const data = {
+			action: 'cspostreply',
+			parentid: parentid,
+			wikitext: wikitext,
+			token: mw.user.tokens.get( 'csrfToken' )
+		};
+		new mw.Api()
+			.post( data )
+			.done( function ( postData ) {
+				if ( postData.cspostreply === undefined ) {
+					self.reportError( 'invalid', reply );
+				}
+				self.queryReply( postData.cspostreply, reply );
+			} )
+			.fail( function ( code, error ) {
+				self.reportError( error, reply );
+			} );
+	};
+
 	Querier.prototype.editComment = function ( commenttitle, wikitext, pageid, reply ) {
 		const self = this;
 		const params = {
 			action: 'cseditcomment',
 			pageid: pageid,
 			wikitext: wikitext,
+			commenttitle: commenttitle,
 			token: mw.user.tokens.get( 'csrfToken' )
 		};
-		if ( commenttitle ) {
-			params.commenttitle = commenttitle;
-		}
 		new mw.Api()
 			.post( params )
 			.done( function () {
 				self.queryComment( pageid, reply );
+			} )
+			.fail( function ( code, error ) {
+				self.reportError( error, reply );
+			} );
+	};
+
+	Querier.prototype.editReply = function ( wikitext, pageid, reply ) {
+		const self = this;
+		const params = {
+			action: 'cseditreply',
+			pageid: pageid,
+			wikitext: wikitext,
+			token: mw.user.tokens.get( 'csrfToken' )
+		};
+		new mw.Api()
+			.post( params )
+			.done( function () {
+				self.queryReply( pageid, reply );
 			} )
 			.fail( function ( code, error ) {
 				self.reportError( error, reply );

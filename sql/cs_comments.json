@@ -1,0 +1,46 @@
+[
+	{
+		"name": "cs_comments",
+		"columns": [
+			{
+				"name": "cst_c_comment_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "cst_c_assoc_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "cst_c_comment_title",
+				"type": "binary",
+				"options": {
+					"notnull": true,
+					"length": 255
+				}
+			},
+			{
+				"name": "cst_c_block_name",
+				"type": "binary",
+				"options": {
+					"notnull": false,
+					"default": null,
+					"length": 255
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [
+			"cst_c_comment_page_id"
+		]
+	}
+]

@@ -1,0 +1,35 @@
+[
+	{
+		"name": "cs_votes",
+		"columns": [
+			{
+				"name": "cst_v_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "cst_v_user_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "cst_v_vote",
+				"type": "mwtinyint",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{ "name": "cst_v_index", "columns": [ "cst_v_page_id", "cst_v_user_id" ], "unique": true }
+		]
+	}
+]
