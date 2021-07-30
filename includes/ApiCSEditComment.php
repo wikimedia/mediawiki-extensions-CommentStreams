@@ -26,14 +26,14 @@ use ApiMain;
 use ApiUsageException;
 use MWException;
 
-class ApiCSEditComment extends ApiCSBase {
+class ApiCSEditComment extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 */
-	public function __construct( ApiMain $main, string $action, CommentFactory $commentFactory ) {
-		parent::__construct( $main, $action, $commentFactory, true );
+	public function __construct( ApiMain $main, string $action, CommentStreamsFactory $commentStreamsFactory ) {
+		parent::__construct( $main, $action, $commentStreamsFactory, true );
 	}
 
 	/**
@@ -59,30 +59,18 @@ class ApiCSEditComment extends ApiCSBase {
 			$this->dieWithError( 'commentstreams-api-error-edit-permissions' );
 		}
 
-		$comment_title = $this->getMain()->getVal( 'commenttitle' );
+		$commentTitle = $this->getMain()->getVal( 'commenttitle' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
-		if ( $this->comment->getParentId() === null && $comment_title === null ) {
-			$this->dieWithError( 'commentstreams-api-error-missingcommenttitle' );
-		}
-
-		$result = $this->comment->update( $comment_title, $wikitext, $this->getUser() );
+		$result = $this->comment->update( $commentTitle, $wikitext, $this->getUser() );
 		if ( !$result ) {
 			$this->dieWithError( 'commentstreams-api-error-edit' );
 		}
 
 		if ( $action === 'cs-comment' ) {
-			if ( $this->comment->getParentId() === null ) {
-				$this->logAction( 'comment-edit' );
-			} else {
-				$this->logAction( 'reply-edit' );
-			}
+			$this->logAction( 'comment-edit' );
 		} else {
-			if ( $this->comment->getParentId() === null ) {
-				$this->logAction( 'comment-moderator-edit' );
-			} else {
-				$this->logAction( 'reply-moderator-edit' );
-			}
+			$this->logAction( 'comment-moderator-edit' );
 		}
 
 		return null;
@@ -94,31 +82,15 @@ class ApiCSEditComment extends ApiCSBase {
 	public function getAllowedParams(): array {
 		return array_merge( parent::getAllowedParams(),
 			[
-				'commenttitle' =>
-					[
-						ApiBase::PARAM_TYPE => 'string',
-						ApiBase::PARAM_REQUIRED => false
-					],
-				'wikitext' =>
-					[
-						ApiBase::PARAM_TYPE => 'string',
-						ApiBase::PARAM_REQUIRED => true
-					]
+				'commenttitle' => [
+					ApiBase::PARAM_TYPE => 'string',
+					ApiBase::PARAM_REQUIRED => true
+				],
+				'wikitext' => [
+					ApiBase::PARAM_TYPE => 'string',
+					ApiBase::PARAM_REQUIRED => true
+				],
 			]
 		);
-	}
-
-	/**
-	 * @return array examples of the use of this API module
-	 */
-	public function getExamplesMessages(): array {
-		return [];
-	}
-
-	/**
-	 * @return string indicates that this API module requires a CSRF toekn
-	 */
-	public function needsToken(): string {
-		return 'csrf';
 	}
 }

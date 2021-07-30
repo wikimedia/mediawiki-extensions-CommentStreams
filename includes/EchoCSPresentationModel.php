@@ -65,15 +65,11 @@ class EchoCSPresentationModel extends EchoEventPresentationModel {
 	 * @param Message $msg
 	 */
 	private function addMessageParams( Message $msg ) {
-		$msg->params( $this->event->getExtraParam(
-			'comment_author_display_name' ) );
+		$msg->params( $this->event->getExtraParam( 'comment_author_display_name' ) );
 		$msg->params( $this->event->getExtraParam( 'comment_title' ) );
-		$msg->params( $this->event->getExtraParam(
-			'associated_page_display_title' ) );
-		$msg->params( $this->event->getExtraParam(
-			'comment_author_username' ) );
-		$msg->params( $this->event->getExtraParam(
-			'comment_wikitext' ) );
+		$msg->params( $this->event->getExtraParam( 'associated_page_display_title' ) );
+		$msg->params( $this->event->getExtraParam( 'comment_author_username' ) );
+		$msg->params( $this->event->getExtraParam( 'comment_wikitext' ) );
 		$msg->params( $this->getViewingUserForGender() );
 	}
 

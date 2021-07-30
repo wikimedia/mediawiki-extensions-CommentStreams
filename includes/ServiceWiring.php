@@ -29,7 +29,7 @@ return [
 	'CommentStreamsHandler' =>
 		static function ( MediaWikiServices $services ): CommentStreamsHandler {
 			return new CommentStreamsHandler(
-				$services->getService( 'CommentFactory' ),
+				$services->getService( 'CommentStreamsFactory' ),
 				$services->getService( 'CommentStreamsStore' ),
 				$services->getService( 'CommentStreamsEchoInterface' ),
 				$services->getNamespaceInfo(),
@@ -44,10 +44,10 @@ return [
 				$services->getUserFactory()
 			);
 		},
-	'CommentFactory' =>
-		static function ( MediaWikiServices $services ): CommentFactory {
-			return new CommentFactory(
-				new ServiceOptions( Comment::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
+	'CommentStreamsFactory' =>
+		static function ( MediaWikiServices $services ): CommentStreamsFactory {
+			return new CommentStreamsFactory(
+				new ServiceOptions( CommentStreamsFactory::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
 				$services->getService( 'CommentStreamsStore' ),
 				$services->getService( 'CommentStreamsEchoInterface' ),
 				$services->getService( 'CommentStreamsSMWInterface' ),
@@ -60,22 +60,24 @@ return [
 			);
 		},
 	'CommentStreamsEchoInterface' =>
-		static function ( MediaWikiServices $services ): CommentStreamsEchoInterface {
-			return new CommentStreamsEchoInterface(
+		static function ( MediaWikiServices $services ): EchoInterface {
+			return new EchoInterface(
 				ExtensionRegistry::getInstance()
 			);
 		},
 	'CommentStreamsSMWInterface' =>
-		static function ( MediaWikiServices $services ): CommentStreamsSMWInterface {
-			return new CommentStreamsSMWInterface(
-				ExtensionRegistry::getInstance()
+		static function ( MediaWikiServices $services ): SMWInterface {
+			return new SMWInterface(
+				new ServiceOptions( SMWInterface::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
+				ExtensionRegistry::getInstance(),
+				$services->getService( 'CommentStreamsStore' )
 			);
 		},
 	'CommentStreamsSocialProfileInterface' =>
-		static function ( MediaWikiServices $services ): CommentStreamsSocialProfileInterface {
-			return new CommentStreamsSocialProfileInterface(
+		static function ( MediaWikiServices $services ): SocialProfileInterface {
+			return new SocialProfileInterface(
 				new ServiceOptions(
-					CommentStreamsSocialProfileInterface::CONSTRUCTOR_OPTIONS,
+					SocialProfileInterface::CONSTRUCTOR_OPTIONS,
 					$services->getMainConfig()
 				)
 			);

@@ -29,7 +29,7 @@ use PageProps;
 use User;
 use WikiPage;
 
-class CommentStreamsEchoInterface {
+class EchoInterface {
 	/**
 	 * @var bool
 	 */
@@ -55,62 +55,92 @@ class CommentStreamsEchoInterface {
 	 * Send Echo notifications if Echo is installed.
 	 *
 	 * @param Comment $comment the comment to send notifications for
-	 * @param WikiPage $associated_page the associated page for the comment
+	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
-	 * @param string $comment_title
+	 * @param string $commentTitle
 	 * @throws MWException
 	 */
-	public function sendNotifications(
+	public function sendCommentNotifications(
 		Comment $comment,
-		WikiPage $associated_page,
+		WikiPage $associatedPage,
 		User $user,
-		string $comment_title
+		string $commentTitle
 	) {
 		if ( !$this->isLoaded ) {
 			return;
 		}
 
-		$associated_page_display_title =
-			$associated_page->getTitle()->getPrefixedText();
-		$associated_title = $associated_page->getTitle();
-		$values = PageProps::getInstance()->getProperties( $associated_title,
-			'displaytitle' );
-		if ( array_key_exists( $associated_title->getArticleID(), $values ) ) {
-			$associated_page_display_title =
-				$values[$associated_title->getArticleID()];
+		$associatedPageDisplayTitle = $associatedPage->getTitle()->getPrefixedText();
+		$associatedTitle = $associatedPage->getTitle();
+		$values = PageProps::getInstance()->getProperties( $associatedTitle, 'displaytitle' );
+		if ( array_key_exists( $associatedTitle->getArticleID(), $values ) ) {
+			$associatedPageDisplayTitle = $values[$associatedTitle->getArticleID()];
 		}
 
 		$extra = [
 			'comment_id' => $comment->getId(),
-			'parent_id' => $comment->getParentId(),
 			'comment_author_username' => $comment->getUsername(),
 			'comment_author_display_name' => $comment->getUserDisplayNameUnlinked(),
-			'comment_title' => $comment_title,
-			'associated_page_display_title' => $associated_page_display_title,
+			'comment_title' => $commentTitle,
+			'associated_page_display_title' => $associatedPageDisplayTitle,
 			'comment_wikitext' => $comment->getWikitext()
 		];
 
-		if ( $comment->getParentId() !== null ) {
-			EchoEvent::create( [
-				'type' => 'commentstreams-reply-on-watched-page',
-				'title' => $associated_page->getTitle(),
-				'extra' => $extra,
-				'agent' => $user
-			] );
-			EchoEvent::create( [
-				'type' => 'commentstreams-reply-to-watched-comment',
-				'title' => $associated_page->getTitle(),
-				'extra' => $extra,
-				'agent' => $user
-			] );
-		} else {
-			EchoEvent::create( [
-				'type' => 'commentstreams-comment-on-watched-page',
-				'title' => $associated_page->getTitle(),
-				'extra' => $extra,
-				'agent' => $user
-			] );
+		EchoEvent::create( [
+			'type' => 'commentstreams-comment-on-watched-page',
+			'title' => $associatedPage->getTitle(),
+			'extra' => $extra,
+			'agent' => $user
+		] );
+	}
+
+	/**
+	 * Send Echo notifications if Echo is installed.
+	 *
+	 * @param Reply $reply the comment to send notifications for
+	 * @param WikiPage $associatedPage the associated page for the comment
+	 * @param User $user
+	 * @param Comment $parentComment
+	 * @throws MWException
+	 */
+	public function sendReplyNotifications(
+		Reply $reply,
+		WikiPage $associatedPage,
+		User $user,
+		Comment $parentComment
+	) {
+		if ( !$this->isLoaded ) {
+			return;
 		}
+
+		$associatedPageDisplayTitle = $associatedPage->getTitle()->getPrefixedText();
+		$associatedTitle = $associatedPage->getTitle();
+		$values = PageProps::getInstance()->getProperties( $associatedTitle, 'displaytitle' );
+		if ( array_key_exists( $associatedTitle->getArticleID(), $values ) ) {
+			$associatedPageDisplayTitle = $values[$associatedTitle->getArticleID()];
+		}
+
+		$extra = [
+			'comment_id' => $reply->getId(),
+			'comment_author_username' => $reply->getUsername(),
+			'comment_author_display_name' => $reply->getUserDisplayNameUnlinked(),
+			'comment_title' => $parentComment->getCommentTitle(),
+			'associated_page_display_title' => $associatedPageDisplayTitle,
+			'comment_wikitext' => $reply->getWikitext()
+		];
+
+		EchoEvent::create( [
+			'type' => 'commentstreams-reply-on-watched-page',
+			'title' => $associatedPage->getTitle(),
+			'extra' => $extra,
+			'agent' => $user
+		] );
+		EchoEvent::create( [
+			'type' => 'commentstreams-reply-to-watched-comment',
+			'title' => $associatedPage->getTitle(),
+			'extra' => $extra,
+			'agent' => $user
+		] );
 	}
 
 	/**
@@ -157,7 +187,7 @@ class CommentStreamsEchoInterface {
 			'presentation-model' => EchoCSPresentationModel::class,
 			'user-locators' => [ 'EchoUserLocator::locateUsersWatchingTitle' ],
 			'user-filters' =>
-				[ '\MediaWiki\Extension\CommentStreams\CommentStreamsEchoInterface::locateUsersWatchingComment' ]
+				[ '\MediaWiki\Extension\CommentStreams\EchoInterface::locateUsersWatchingComment' ]
 		];
 
 		$notifications['commentstreams-reply-to-watched-comment'] = [
@@ -166,7 +196,7 @@ class CommentStreamsEchoInterface {
 			'section' => 'alert',
 			'presentation-model' => EchoCSPresentationModel::class,
 			'user-locators' =>
-				[ '\MediaWiki\Extension\CommentStreams\CommentStreamsEchoInterface::locateUsersWatchingComment' ]
+				[ '\MediaWiki\Extension\CommentStreams\EchoInterface::locateUsersWatchingComment' ]
 		];
 	}
 }

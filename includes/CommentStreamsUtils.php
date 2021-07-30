@@ -58,7 +58,7 @@ class CommentStreamsUtils {
 	}
 
 	/**
-	 * @param WikiPage $wikipage
+	 * @param WikiPage $wikiPage
 	 * @param Content $content
 	 * @param User $user
 	 * @param int $flags
@@ -66,18 +66,17 @@ class CommentStreamsUtils {
 	 * @throws MWException
 	 */
 	public static function doEditContent(
-		WikiPage $wikipage,
+		WikiPage $wikiPage,
 		Content $content,
 		User $user,
 		int $flags
 	): Status {
-		return $wikipage->doEditContent(
+		return $wikiPage->doEditContent(
 			$content,
 			'',
 			$flags,
 			false,
-			$user,
-			null
+			$user
 		);
 	}
 }

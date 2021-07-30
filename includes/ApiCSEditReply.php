@@ -21,10 +21,12 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
+use ApiBase;
 use ApiMain;
 use ApiUsageException;
+use MWException;
 
-class ApiCSUnwatch extends ApiCSCommentBase {
+class ApiCSEditReply extends ApiCSReplyBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
@@ -38,17 +40,52 @@ class ApiCSUnwatch extends ApiCSCommentBase {
 	 * the real body of the execute function
 	 * @return ?array result of API request
 	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
 	protected function executeBody(): ?array {
-		if ( $this->getUser()->isAnon() ) {
-			$this->dieWithError( 'commentstreams-api-error-unwatch-notloggedin' );
+		$user = $this->getUser();
+		if ( $user->isAnon() ) {
+			$this->dieWithError( 'commentstreams-api-error-edit-notloggedin' );
 		}
 
-		$result = $this->comment->unwatch( $this->getUser()->getId() );
+		if ( $user->getId() === $this->reply->getAuthor()->getId() ) {
+			$action = 'cs-comment';
+		} else {
+			$action = 'cs-moderator-edit';
+		}
+
+		$title = $this->reply->getTitle();
+		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
+			$this->dieWithError( 'commentstreams-api-error-edit-permissions' );
+		}
+
+		$wikitext = $this->getMain()->getVal( 'wikitext' );
+
+		$result = $this->reply->update( $wikitext, $this->getUser() );
 		if ( !$result ) {
-			$this->dieWithError( 'commentstreams-api-error-unwatch' );
+			$this->dieWithError( 'commentstreams-api-error-edit' );
+		}
+
+		if ( $action === 'cs-comment' ) {
+			$this->logAction( 'reply-edit' );
+		} else {
+			$this->logAction( 'reply-moderator-edit' );
 		}
 
 		return null;
+	}
+
+	/**
+	 * @return array allowed parameters
+	 */
+	public function getAllowedParams(): array {
+		return array_merge( parent::getAllowedParams(),
+			[
+				'wikitext' => [
+					ApiBase::PARAM_TYPE => 'string',
+					ApiBase::PARAM_REQUIRED => true
+				]
+			]
+		);
 	}
 }
