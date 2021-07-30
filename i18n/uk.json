@@ -158,5 +158,5 @@
 	"commentstreams-allcomments-label-blockid": "ID блокування",
 	"commentstreams-allcomments-button-next": "Наступне",
 	"commentstreams-allcomments-button-previous": "Попереднє",
-	"commentstreams-ve-conversion-error": "Виникла помилка під час конвертування між вікірозміткою та HTML для Візуального редактора"
+	"commentstreams-ve-conversion-error": "Сталася помилка під час конвертування між вікірозміткою та HTML для візуального редактора"
 }
