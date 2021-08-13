@@ -6,5 +6,7 @@
 	},
 	"commentstreams-buttontooltip-delete": "cancella",
 	"commentstreams-buttontooltip-cancel": "annulla",
-	"commentstreams-dialog-buttontext-cancel": "Annulla"
+	"commentstreams-dialog-buttontext-cancel": "Annulla",
+	"commentstreams-dialog-buttontext-yes": "Sì",
+	"commentstreams-dialog-buttontext-no": "No"
 }
