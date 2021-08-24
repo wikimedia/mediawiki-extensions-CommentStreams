@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Ajeje Brazorf",
-			"Beta16"
+			"Beta16",
+			"Stefano"
 		]
 	},
 	"commentstreams-author-anonymous": "anonimo",
@@ -25,12 +26,18 @@
 	"commentstreams-dialog-buttontext-cancel": "Annulla",
 	"commentstreams-dialog-buttontext-yes": "Sì",
 	"commentstreams-dialog-buttontext-no": "No",
+	"commentstreams-datetext-postedon": "Pubblicato il",
+	"commentstreams-title-field-placeholder": "Scrivi il titolo…",
+	"commentstreams-body-field-placeholder": "Scrivi il testo del nuovo commento…",
 	"echo-category-title-commentstreams-notification-category": "Nuovi commenti e risposte",
+	"notification-body-commentstreams-comment-on-watched-page": "Il Commento è $5",
 	"notification-body-commentstreams-reply-on-watched-page": "La risposta è:\n\n\n$5",
 	"action-cs-moderator-edit": "modificare i commenti degli altri utenti",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|ha creato}} il commento $3",
 	"commentstreams-allcomments-nocommentsfound": "Nessun commento trovato.",
 	"commentstreams-allcomments-label-wikitext": "Commento",
 	"commentstreams-allcomments-label-author": "Autore",
-	"commentstreams-allcomments-label-lastedited": "Ultima modifica"
+	"commentstreams-allcomments-label-lastedited": "Ultima modifica",
+	"commentstreams-allcomments-button-next": "Successivo",
+	"commentstreams-allcomments-button-previous": "Precedente"
 }
