@@ -117,7 +117,7 @@ class CommentStreamsSMWInterface {
 		$pr->registerProperty( '___CS_ASSOCPG', '_wpg', 'Comment on' );
 		$pr->registerProperty( '___CS_REPLYTO', '_wpg', 'Reply to' );
 		$pr->registerProperty( '___CS_TITLE', '_txt', 'Comment title of' );
-		if ( $enableVoting === true ) {
+		if ( $enableVoting ) {
 			$pr->registerProperty( '___CS_UPVOTES', '_num', 'Comment up votes' );
 			$pr->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );
 			$pr->registerProperty( '___CS_VOTEDIFF', '_num', 'Comment vote diff' );
@@ -187,7 +187,7 @@ class CommentStreamsSMWInterface {
 			$commentStreamsStore = $services->getService( 'CommentStreamsStore' );
 			$config = $services->getConfigFactory()->makeConfig( 'CommentStreams' );
 			$enableVoting = (bool)$config->get( 'CommentStreamsEnableVoting' );
-			if ( $enableVoting === true ) {
+			if ( $enableVoting ) {
 				$upvotes = $commentStreamsStore->getNumUpVotes( $comment->getId() );
 				$propertyDI = new DIProperty( '___CS_UPVOTES' );
 				$dataItem = new SMWDINumber( $upvotes );

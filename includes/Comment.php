@@ -602,11 +602,11 @@ class Comment {
 				$displayname = $values[$userpage->getArticleID()];
 			}
 		}
-		if ( $displayname === null || strlen( $displayname ) == 0 ) {
+		if ( $displayname === null || strlen( $displayname ) === 0 ) {
 			$displayname = $this->userFactory->newFromUserIdentity( $user )->getRealName();
-		}
-		if ( $displayname === null || strlen( $displayname ) == 0 ) {
-			$displayname = $user->getName();
+			if ( strlen( $displayname ) === 0 ) {
+				$displayname = $user->getName();
+			}
 		}
 		if ( $linked && $userpage->exists() ) {
 			$displayname = $this->linkRenderer->makeLink( $userpage, $displayname );
