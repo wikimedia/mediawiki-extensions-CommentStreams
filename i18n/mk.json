@@ -153,6 +153,7 @@
 	"commentstreams-allcomments-label-created": "Создадено",
 	"commentstreams-allcomments-label-lasteditor": "Последен уредник",
 	"commentstreams-allcomments-label-lastedited": "Последно уредување",
+	"commentstreams-allcomments-label-blockid": "Назнака на блокот",
 	"commentstreams-allcomments-button-next": "Следно",
 	"commentstreams-allcomments-button-previous": "Претходно",
 	"commentstreams-ve-conversion-error": "Грешка при претворањето од викитекст во HTML за Нагледниот уредник"
