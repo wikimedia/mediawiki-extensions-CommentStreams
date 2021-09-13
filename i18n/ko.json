@@ -96,6 +96,8 @@
 	"action-cs-moderator-edit": "다른 사용자의 댓글 편집",
 	"right-cs-moderator-delete": "사용자의 댓글 삭제",
 	"action-cs-moderator-delete": "다른 사용자의 댓글 삭제",
+	"log-name-commentstreams": "CommentStreams 기록",
+	"log-description-commentstreams": "이 이벤트는 CommentStreams 이벤트가 발생할 때 추적합니다.",
 	"logentry-commentstreams-comment-create": "$1님이 $3 댓글을 {{GENDER:$2|만들었습니다}}",
 	"logentry-commentstreams-reply-create": "$1님이 $3 답변을 {{GENDER:$2|만들었습니다}}",
 	"logentry-commentstreams-comment-edit": "$1님이 $3 댓글을 {{GENDER:$2|편집했습니다}}",

@@ -52,6 +52,7 @@
 	"apihelp-csunwatch-param-title": "título da página que contém o comentário a deixar de ser vigiado",
 	"apihelp-csunwatch-pageid-example": "deixar de vigiar o comentário com o identificador de página 3",
 	"apihelp-csunwatch-title-example": "deixar de vigiar o comentário com o título de página CommentStreams:3",
+	"commentstreams-api-error-invalid": "Resposta inválida da API.",
 	"commentstreams-api-error-notloggedin": "Tem de ter uma sessão iniciada.",
 	"commentstreams-api-error-commentnotfound": "O comentário solicitado não foi encontrado.",
 	"commentstreams-api-error-notacomment": "O identificador de página fornecido não remete para um comentário válido.",
@@ -153,6 +154,7 @@
 	"commentstreams-allcomments-label-created": "Criado",
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
 	"commentstreams-allcomments-label-lastedited": "Última edição",
+	"commentstreams-allcomments-label-blockid": "Identificador do bloqueio",
 	"commentstreams-allcomments-button-next": "Seguinte",
 	"commentstreams-allcomments-button-previous": "Anterior",
 	"commentstreams-ve-conversion-error": "Ocorreu uma falha de conversão entre texto wiki e HTML para o Editor Visual"
