@@ -55,8 +55,12 @@ module.exports = ( function () {
 
 	Stream.prototype.enableButtons = function () {
 		this.replyButton.setDisabled( false );
-		this.upButton.setDisabled( false );
-		this.downButton.setDisabled( false );
+		if ( this.upButton ) {
+			this.upButton.setDisabled( false );
+		}
+		if ( this.downButton ) {
+			this.downButton.setDisabled( false );
+		}
 		this.streamMenu.setDisabled( false );
 		this.replyMenus.forEach( function ( replyMenu ) {
 			replyMenu.setDisabled( false );
@@ -65,12 +69,16 @@ module.exports = ( function () {
 
 	Stream.prototype.disableButtons = function () {
 		this.replyButton.setDisabled( true );
-		this.upButton.setDisabled( true );
-		this.downButton.setDisabled( true );
-		this.streamMenu.setDisabled( true );
-		for ( let index = 0; index < this.replyMenus.length; index++ ) {
-			this.replyMenus[ index ].setDisabled( true );
+		if ( this.upButton ) {
+			this.upButton.setDisabled( true );
 		}
+		if ( this.downButton ) {
+			this.downButton.setDisabled( true );
+		}
+		this.streamMenu.setDisabled( true );
+		this.replyMenus.forEach( function ( replyMenu ) {
+			replyMenu.setDisabled( true );
+		} );
 	};
 
 	Stream.prototype.createStream = function ( commentData ) {
@@ -174,7 +182,7 @@ module.exports = ( function () {
 		const $centerDiv = $( '<div>' )
 			.addClass( 'cs-comment-header-center' );
 
-		if ( commentData.parentid === null ) {
+		if ( commentData.parentid === undefined ) {
 			const $title = $( '<div>' )
 				.addClass( 'cs-comment-title' )
 				.text( commentData.commenttitle );
@@ -208,7 +216,7 @@ module.exports = ( function () {
 		const $rightDiv = $( '<div>' )
 			.addClass( 'cs-comment-header-right' );
 
-		if ( commentData.parentid === null && this.env.enableVoting ) {
+		if ( commentData.parentid === undefined && this.env.enableVoting ) {
 			$rightDiv.append( this.createVotingButtons( commentData ) );
 		}
 
@@ -225,11 +233,11 @@ module.exports = ( function () {
 		const $comment = $( '<div>' )
 			.addClass( 'cs-comment' );
 
-		if ( commentData.parentid !== null ) {
-			$comment.addClass( 'cs-reply-comment' );
-		} else {
+		if ( commentData.parentid === undefined ) {
 			$comment.addClass( 'cs-head-comment' );
 			this.$headCommentBody = $commentBody;
+		} else {
+			$comment.addClass( 'cs-reply-comment' );
 		}
 
 		$comment.append( [ $commentHeader, $commentBody, $commentFooter ] );
@@ -388,7 +396,7 @@ module.exports = ( function () {
 			}
 		} );
 
-		if ( commentData.parentid === null ) {
+		if ( commentData.parentid === undefined ) {
 			this.streamMenu = menu;
 		} else {
 			this.replyMenus.push( menu );
@@ -445,7 +453,7 @@ module.exports = ( function () {
 			items.push( this.createDeleteButton( commentData.username ) );
 		}
 
-		if ( commentData.parentid === null ) {
+		if ( commentData.parentid === undefined ) {
 			if ( this.env.enableWatchlist && this.env.isLoggedIn ) {
 				items.push( this.createWatchButton( commentData ) );
 			}
@@ -466,7 +474,7 @@ module.exports = ( function () {
 	Stream.prototype.canDelete = function ( commentData ) {
 		return ( this.env.isLoggedIn &&
 		( this.env.username === commentData.username || this.env.moderatorDelete ) &&
-		( commentData.numreplies === 0 || this.env.moderatorFastDelete ) );
+		( commentData.numreplies === 0 || commentData.numreplies === undefined || this.env.moderatorFastDelete ) );
 	};
 
 	Stream.prototype.createEditButton = function ( username ) {
@@ -765,11 +773,11 @@ module.exports = ( function () {
 				progress: false
 			} );
 			progressBar.$element.insertAfter( $element );
-			self.querier.deleteComment( pageId, function ( result ) {
-				progressBar.$element.remove();
-				if ( result === undefined ||
-				result.error === 'commentstreams-api-error-commentnotfound' ) {
-					if ( $element.hasClass( 'cs-head-comment' ) ) {
+			if ( $element.hasClass( 'cs-head-comment' ) ) {
+				self.querier.deleteComment( pageId, function ( result ) {
+					progressBar.$element.remove();
+					if ( result === undefined ||
+						result.error === 'commentstreams-api-error-commentnotfound' ) {
 						self.$stream
 							.slideUp( 'normal', function () {
 								self.$stream.remove();
@@ -777,6 +785,17 @@ module.exports = ( function () {
 								delete self.block[ self.pageId ];
 							} );
 					} else {
+						self.reportError( result.error );
+						$fadeElement.fadeTo( 0.2, 100, function () {
+							self.block.enableAllButtons();
+						} );
+					}
+				} );
+			} else {
+				self.querier.deleteReply( pageId, function ( result ) {
+					progressBar.$element.remove();
+					if ( result === undefined ||
+						result.error === 'commentstreams-api-error-commentnotfound' ) {
 						self.querier.queryComment( self.pageId, function ( queryResult ) {
 							if ( queryResult.error === undefined ) {
 								self.recreateStreamMenu( queryResult );
@@ -786,87 +805,156 @@ module.exports = ( function () {
 								self.block.enableAllButtons();
 							} );
 						} );
+					} else {
+						self.reportError( result.error );
+						$fadeElement.fadeTo( 0.2, 100, function () {
+							self.block.enableAllButtons();
+						} );
 					}
-				} else {
-					self.reportError( result.error );
-					$fadeElement.fadeTo( 0.2, 100, function () {
-						self.block.enableAllButtons();
-					} );
-				}
-			} );
+				} );
+			}
 		} );
 	};
 
-	Stream.prototype.editComment = function ( element, pageId ) {
+	Stream.prototype.editComment = function ( $element, pageId ) {
 		const self = this;
+
 		self.block.disableAllButtons();
-		element.fadeTo( 100, 0.2, function () {
+
+		let isStream = false;
+		if ( $element.hasClass( 'cs-head-comment' ) ) {
+			isStream = true;
+		}
+
+		$element.fadeTo( 100, 0.2, function () {
 			const progressBar = new OO.ui.ProgressBarWidget( {
 				progress: false
 			} );
-			progressBar.$element.insertAfter( element );
-			self.querier.queryComment( pageId, function ( result ) {
-				progressBar.$element.remove();
+			progressBar.$element.insertAfter( $element );
 
-				if ( result.error === undefined ) {
-					const isStream = element.hasClass( 'cs-head-comment' );
+			if ( isStream ) {
+				self.querier.queryComment( pageId, function ( result ) {
+					progressBar.$element.remove();
 
-					self.block.createEditBox( isStream );
-					element.hide();
-					self.block.$editBox
-						.insertAfter( element )
-						.hide()
-						.slideDown();
+					if ( result.error === undefined ) {
+						self.block.createEditBox( isStream );
+						$element.hide();
+						self.block.$editBox
+							.insertAfter( $element )
+							.hide()
+							.slideDown();
 
-					self.block.$bodyField.val( $( '<textarea>' ).html( result.wikitext ).text() );
-					if ( isStream ) {
-						self.block.$titleField.val( result.commenttitle );
-						self.block.$titleField.trigger( 'focus' );
-					} else {
-						self.block.$bodyField.trigger( 'focus' );
-					}
-					if ( $.fn.applyVisualEditor ) {
-					// VEForAll is installed.
-						self.block.$bodyField.applyVisualEditor();
-					}
-
-					self.block.submitButton.onClick = function () {
-						if ( self.block.$bodyField.css( 'display' ) === 'none' ) {
-							self.editCommentFromVE( element, pageId );
+						self.block.$bodyField.val( $( '<textarea>' ).html( result.wikitext ).text() );
+						if ( isStream ) {
+							self.block.$titleField.val( result.commenttitle );
+							self.block.$titleField.trigger( 'focus' );
 						} else {
-							const commentText = self.block.$bodyField.val();
-							self.realEditComment( element, pageId, commentText );
+							self.block.$bodyField.trigger( 'focus' );
 						}
-					};
-					self.block.submitButton.on( 'click', self.block.submitButton.onClick );
+						if ( $.fn.applyVisualEditor ) {
+							// VEForAll is installed.
+							self.block.$bodyField.applyVisualEditor();
+						}
 
-					self.block.cancelButton.onClick = function () {
-						self.block.$editBox.slideUp( 'normal', function () {
-							element.fadeTo( 0.2, 100, function () {
-								self.block.$editBox.remove();
-								self.block.enableAllButtons();
+						self.block.submitButton.onClick = function () {
+							if ( self.block.$bodyField.css( 'display' ) === 'none' ) {
+								self.editCommentFromVE( $element, pageId );
+							} else {
+								const commentText = self.block.$bodyField.val();
+								self.realEditComment( $element, pageId, commentText );
+							}
+						};
+						self.block.submitButton.on( 'click', self.block.submitButton.onClick );
+
+						self.block.cancelButton.onClick = function () {
+							self.block.$editBox.slideUp( 'normal', function () {
+								$element.fadeTo( 0.2, 100, function () {
+									self.block.$editBox.remove();
+									self.block.enableAllButtons();
+								} );
 							} );
+						};
+						self.block.cancelButton.on( 'click', self.block.cancelButton.onClick );
+					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
+						self.reportError( result.error );
+						self.querier.queryComment( self.pageId, function ( queryResult ) {
+							if ( queryResult.error === undefined ) {
+								self.recreateStreamMenu( queryResult );
+							} else {
+								self.reportError( queryResult.error );
+							}
+							$element.remove();
+							self.block.enableAllButtons();
 						} );
-					};
-					self.block.cancelButton.on( 'click', self.block.cancelButton.onClick );
-				} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
-					self.reportError( result.error );
-					self.querier.queryComment( self.pageId, function ( queryResult ) {
-						if ( queryResult.error === undefined ) {
-							self.recreateStreamMenu( queryResult );
+					} else {
+						self.reportError( result.error );
+						$element.fadeTo( 0.2, 100, function () {
+							self.block.enableAllButtons();
+						} );
+					}
+				} );
+			} else {
+				self.querier.queryReply( pageId, function ( result ) {
+					progressBar.$element.remove();
+
+					if ( result.error === undefined ) {
+						self.block.createEditBox( isStream );
+						$element.hide();
+						self.block.$editBox
+							.insertAfter( $element )
+							.hide()
+							.slideDown();
+
+						self.block.$bodyField.val( $( '<textarea>' ).html( result.wikitext ).text() );
+						if ( isStream ) {
+							self.block.$titleField.val( result.commenttitle );
+							self.block.$titleField.trigger( 'focus' );
 						} else {
-							self.reportError( queryResult.error );
+							self.block.$bodyField.trigger( 'focus' );
 						}
-						element.remove();
-						self.block.enableAllButtons();
-					} );
-				} else {
-					self.reportError( result.error );
-					element.fadeTo( 0.2, 100, function () {
-						self.block.enableAllButtons();
-					} );
-				}
-			} );
+						if ( $.fn.applyVisualEditor ) {
+							// VEForAll is installed.
+							self.block.$bodyField.applyVisualEditor();
+						}
+
+						self.block.submitButton.onClick = function () {
+							if ( self.block.$bodyField.css( 'display' ) === 'none' ) {
+								self.editCommentFromVE( $element, pageId );
+							} else {
+								const commentText = self.block.$bodyField.val();
+								self.realEditComment( $element, pageId, commentText );
+							}
+						};
+						self.block.submitButton.on( 'click', self.block.submitButton.onClick );
+
+						self.block.cancelButton.onClick = function () {
+							self.block.$editBox.slideUp( 'normal', function () {
+								$element.fadeTo( 0.2, 100, function () {
+									self.block.$editBox.remove();
+									self.block.enableAllButtons();
+								} );
+							} );
+						};
+						self.block.cancelButton.on( 'click', self.block.cancelButton.onClick );
+					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
+						self.reportError( result.error );
+						self.querier.queryReply( self.pageId, function ( queryResult ) {
+							if ( queryResult.error === undefined ) {
+								self.recreateStreamMenu( queryResult );
+							} else {
+								self.reportError( queryResult.error );
+							}
+							$element.remove();
+							self.block.enableAllButtons();
+						} );
+					} else {
+						self.reportError( result.error );
+						$element.fadeTo( 0.2, 100, function () {
+							self.block.enableAllButtons();
+						} );
+					}
+				} );
+			}
 		} );
 	};
 
@@ -892,8 +980,13 @@ module.exports = ( function () {
 	Stream.prototype.realEditComment = function ( $element, pageId, commentText ) {
 		const self = this;
 
-		let commentTitle = null;
+		let isStream = false;
 		if ( $element.hasClass( 'cs-head-comment' ) ) {
+			isStream = true;
+		}
+
+		let commentTitle = null;
+		if ( isStream ) {
 			commentTitle = self.block.$titleField.val();
 			if ( commentTitle === null || commentTitle.trim() === '' ) {
 				self.reportError(
@@ -917,48 +1010,84 @@ module.exports = ( function () {
 			} );
 			progressBar.$element.insertAfter( self.block.$editBox );
 
-			self.querier.editComment(
-				commentTitle,
-				commentText,
-				pageId,
-				function ( result ) {
-					progressBar.$element.remove();
-					if ( result.error === undefined ) {
-						const $comment = self.createComment( result );
-						if ( self.collapsed ) {
-							$comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
-						}
-						self.block.$editBox.slideUp( 'normal', function () {
-							$comment.insertAfter( self.block.$editBox );
-							self.block.$editBox.remove();
-							self.block.$editBox = null;
-							$element.remove();
-							self.block.enableAllButtons();
-							self.controller.scrollToElement( $comment );
-						} );
-					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
-						self.reportError( result.error );
-						self.querier.queryComment( self.pageId, function ( queryResult ) {
-							if ( queryResult.error === undefined ) {
-								self.recreateStreamMenu( queryResult );
-							} else {
-								self.reportError( queryResult.error );
+			if ( isStream ) {
+				self.querier.editComment(
+					commentTitle,
+					commentText,
+					pageId,
+					function ( result ) {
+						progressBar.$element.remove();
+						if ( result.error === undefined ) {
+							const $comment = self.createComment( result );
+							if ( self.collapsed ) {
+								$comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
 							}
+							self.block.$editBox.slideUp( 'normal', function () {
+								$comment.insertAfter( self.block.$editBox );
+								self.block.$editBox.remove();
+								self.block.$editBox = null;
+								$element.remove();
+								self.block.enableAllButtons();
+								self.controller.scrollToElement( $comment );
+							} );
+						} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
+							self.reportError( result.error );
+							self.querier.queryComment( self.pageId, function ( queryResult ) {
+								if ( queryResult.error === undefined ) {
+									self.recreateStreamMenu( queryResult );
+								} else {
+									self.reportError( queryResult.error );
+								}
+								self.block.$editBox.slideUp( 'normal', function () {
+									self.block.$editBox.remove();
+									self.block.$editBox = null;
+									$element.remove();
+									self.block.enableAllButtons();
+								} );
+							} );
+						} else {
+							self.reportError( result.error );
+							self.block.$editBox.fadeTo( 0.2, 100, function () {
+								self.block.submitButton.setDisabled( false );
+								self.block.cancelButton.setDisabled( false );
+							} );
+						}
+					} );
+			} else {
+				self.querier.editReply(
+					commentText,
+					pageId,
+					function ( result ) {
+						progressBar.$element.remove();
+						if ( result.error === undefined ) {
+							const $comment = self.createComment( result );
+							if ( self.collapsed ) {
+								$comment.find( '.cs-comment-body' ).addClass( 'cs-hidden' );
+							}
+							self.block.$editBox.slideUp( 'normal', function () {
+								$comment.insertAfter( self.block.$editBox );
+								self.block.$editBox.remove();
+								self.block.$editBox = null;
+								$element.remove();
+								self.block.enableAllButtons();
+								self.controller.scrollToElement( $comment );
+							} );
+						} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
 							self.block.$editBox.slideUp( 'normal', function () {
 								self.block.$editBox.remove();
 								self.block.$editBox = null;
 								$element.remove();
 								self.block.enableAllButtons();
 							} );
-						} );
-					} else {
-						self.reportError( result.error );
-						self.block.$editBox.fadeTo( 0.2, 100, function () {
-							self.block.submitButton.setDisabled( false );
-							self.block.cancelButton.setDisabled( false );
-						} );
-					}
-				} );
+						} else {
+							self.reportError( result.error );
+							self.block.$editBox.fadeTo( 0.2, 100, function () {
+								self.block.submitButton.setDisabled( false );
+								self.block.cancelButton.setDisabled( false );
+							} );
+						}
+					} );
+			}
 		} );
 	};
 

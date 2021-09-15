@@ -29,7 +29,7 @@ use MediaWiki\Linker\LinkTarget;
 use MWException;
 use Title;
 
-class ApiCSPostComment extends ApiBase {
+class ApiCSPostReply extends ApiBase {
 	/**
 	 * @var CommentStreamsFactory
 	 */
@@ -67,38 +67,45 @@ class ApiCSPostComment extends ApiBase {
 			$this->dieWithError( 'commentstreams-api-error-post-permissions' );
 		}
 
-		$associatedId = $this->getMain()->getVal( 'associatedid' );
-		$commentTitle = $this->getMain()->getVal( 'commenttitle' );
+		$parentId = $this->getMain()->getVal( 'parentid' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
-		$commentBlockName = $this->getMain()->getVal( 'commentblockname' );
 
-		$associatedId = (int)$associatedId;
-		$associatedPage = CommentStreamsUtils::newWikiPageFromId( $associatedId );
-		if ( $associatedPage === null || !$associatedPage->getTitle()->exists() ) {
-			$this->dieWithError( 'commentstreams-api-error-post-associatedpagedoesnotexist' );
+		$parentId = (int)$parentId;
+		$parentPage = CommentStreamsUtils::newWikiPageFromId( $parentId );
+		if ( !$parentPage || !$parentPage->getTitle()->exists() ) {
+			$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 		} else {
-			$comment = $this->commentStreamsFactory->newCommentFromValues(
-				$associatedId,
-				$commentTitle,
-				$commentBlockName,
-				$wikitext,
-				$this->getUser()
-			);
-
-			if ( !$comment ) {
-				$this->dieWithError( 'commentstreams-api-error-post' );
+			$parentComment = $this->commentStreamsFactory->newCommentFromWikiPage( $parentPage );
+			if ( !$parentComment ) {
+				$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 			} else {
-				$title = $comment->getTitle();
-				$this->logAction( 'comment-create', $title );
+				$associatedPage = CommentStreamsUtils::newWikiPageFromId( $parentComment->getAssociatedId() );
+				if ( !$associatedPage ) {
+					$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
+				} else {
+					$reply = $this->commentStreamsFactory->newReplyFromValues(
+						$parentId,
+						$wikitext,
+						$this->getUser()
+					);
 
-				$this->getResult()->addValue( null, $this->getModuleName(), $comment->getId() );
+					if ( !$reply ) {
+						$this->dieWithError( 'commentstreams-api-error-post' );
+					} else {
+						$title = $reply->getTitle();
+						$this->logAction( 'reply-create', $title );
 
-				$this->echoInterface->sendCommentNotifications(
-					$comment,
-					$associatedPage,
-					$this->getUser(),
-					$commentTitle
-				);
+						$this->getResult()->addValue( null, $this->getModuleName(), $reply->getId() );
+
+						$this->echoInterface->sendReplyNotifications(
+							$reply,
+							$associatedPage,
+							$this->getUser(),
+							$parentComment
+
+						);
+					}
+				}
 			}
 		}
 	}
@@ -108,21 +115,13 @@ class ApiCSPostComment extends ApiBase {
 	 */
 	public function getAllowedParams(): array {
 		return [
-			'commenttitle' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => true
-			],
 			'wikitext' => [
 				ApiBase::PARAM_TYPE => 'string',
 				ApiBase::PARAM_REQUIRED => true
 			],
-			'associatedid' => [
+			'parentid' => [
 				ApiBase::PARAM_TYPE => 'integer',
 				ApiBase::PARAM_REQUIRED => true
-			],
-			'commentblockname' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => false
 			]
 		];
 	}

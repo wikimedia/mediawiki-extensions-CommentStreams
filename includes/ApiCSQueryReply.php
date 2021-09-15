@@ -19,42 +19,25 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-$IP = dirname( __DIR__, 3 );
-require_once "$IP/maintenance/Maintenance.php";
+namespace MediaWiki\Extension\CommentStreams;
 
-class NullDefaultCommentBlock extends LoggedUpdateMaintenance {
+use ApiMain;
+
+class ApiCSQueryReply extends ApiCSReplyBase {
 	/**
-	 * @return bool
+	 * @param ApiMain $main main module
+	 * @param string $action name of this module
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 */
-	protected function doDBUpdates(): bool {
-		$dbw = $this->getDB( DB_PRIMARY );
-		$dbw->update(
-			'cs_comment_data',
-			[
-				'cst_id' => null
-			],
-			[
-				'cst_id' => 'cs-comments'
-			],
-			__METHOD__
-		);
-		$dbw->update(
-			'cs_comment_data',
-			[
-				'cst_id' => null
-			],
-			[
-				'cst_comment_title' => null
-			],
-			__METHOD__
-		);
-		return true;
+	public function __construct( ApiMain $main, string $action, CommentStreamsFactory $commentStreamsFactory ) {
+		parent::__construct( $main, $action, $commentStreamsFactory );
 	}
 
 	/**
-	 * @return string
+	 * the real body of the execute function
+	 * @return ?array result of API request
 	 */
-	protected function getUpdateKey(): string {
-		return 'comment-streams-nulldefaultcommentblock';
+	protected function executeBody(): ?array {
+		return $this->reply->getJSON( $this );
 	}
 }

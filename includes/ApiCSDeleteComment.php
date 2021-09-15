@@ -24,11 +24,11 @@ namespace MediaWiki\Extension\CommentStreams;
 use ApiMain;
 use ApiUsageException;
 use Config;
-use MediaWiki\MediaWikiServices;
+use FatalError;
 use MWException;
 use User;
 
-class ApiCSDeleteComment extends ApiCSBase {
+class ApiCSDeleteComment extends ApiCSCommentBase {
 	/**
 	 * @var bool
 	 */
@@ -37,16 +37,16 @@ class ApiCSDeleteComment extends ApiCSBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentFactory $commentFactory,
+		CommentStreamsFactory $commentStreamsFactory,
 		Config $config
 	) {
-		parent::__construct( $main, $action, $commentFactory, true );
+		parent::__construct( $main, $action, $commentStreamsFactory, true );
 		$this->moderatorFastDelete = (bool)$config->get( 'CommentStreamsModeratorFastDelete' );
 	}
 
@@ -63,14 +63,9 @@ class ApiCSDeleteComment extends ApiCSBase {
 			$this->dieWithError( 'commentstreams-api-error-delete-notloggedin' );
 		}
 
-		if ( $this->comment->getParentId() !== null ) {
-			$replyCount = 0;
-		} else {
-			$replyCount = $this->comment->getNumReplies();
-		}
+		$replyCount = $this->comment->getNumReplies();
 
-		if ( $user->getId() === $this->comment->getAuthor()->getId() &&
-			$replyCount === 0 ) {
+		if ( $user->getId() === $this->comment->getAuthor()->getId() && $replyCount === 0 ) {
 			$action = 'cs-comment';
 		} else {
 			$action = 'cs-moderator-delete';
@@ -87,6 +82,25 @@ class ApiCSDeleteComment extends ApiCSBase {
 		$this->deleteComment( $this->comment, $action, $user );
 
 		return null;
+	}
+
+	/**
+	 * recursively delete comment and replies
+	 *
+	 * @param Comment $comment the comment to recursively delete
+	 * @param string $action
+	 * @param User $user
+	 * @throws ApiUsageException
+	 * @throws MWException
+	 */
+	private function deleteReplies( Comment $comment, string $action, User $user ) {
+		$replies = $comment->getReplies();
+		foreach ( $replies as $wikiPage ) {
+			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+			if ( $reply ) {
+				$this->deleteReply( $reply, $action, $user );
+			}
+		}
 	}
 
 	/**
@@ -107,40 +121,35 @@ class ApiCSDeleteComment extends ApiCSBase {
 			$this->dieWithError( 'commentstreams-api-error-delete' );
 		}
 		if ( $action === 'cs-comment' ) {
-			if ( $comment->getParentId() === null ) {
-				$this->logAction( 'comment-delete' );
-			} else {
-				$this->logAction( 'reply-delete' );
-			}
+			$this->logAction( 'comment-delete' );
 		} else {
-			if ( $comment->getParentId() === null ) {
-				$this->logAction( 'comment-moderator-delete' );
-			} else {
-				$this->logAction( 'reply-moderator-delete' );
-			}
+			$this->logAction( 'comment-moderator-delete' );
 		}
 	}
 
 	/**
-	 * recursively delete comment and replies
-	 *
-	 * @param Comment $comment the comment to recursively delete
+	 * @param Reply $reply
 	 * @param string $action
 	 * @param User $user
 	 * @throws ApiUsageException
 	 * @throws MWException
+	 * @throws FatalError
 	 */
-	private function deleteReplies( Comment $comment, string $action, User $user ) {
-		$commentStreamsStore = MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' );
-		$replies = $commentStreamsStore->getReplies( $comment->getId() );
-		foreach ( $replies as $page_id ) {
-			$wikipage = CommentStreamsUtils::newWikiPageFromId( $page_id );
-			if ( $wikipage !== null ) {
-				$reply = $this->commentFactory->newFromWikiPage( $wikipage );
-				if ( $reply !== null ) {
-					$this->deleteComment( $reply, $action, $user );
-				}
-			}
+	private function deleteReply( Reply $reply, string $action, User $user ) {
+		$title = $reply->getTitle();
+		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
+			$this->dieWithError( 'commentstreams-api-error-delete-permissions' );
+		}
+
+		$result = $reply->delete( $user );
+		if ( !$result ) {
+			$this->dieWithError( 'commentstreams-api-error-delete' );
+		}
+
+		if ( $action === 'cs-comment' ) {
+			$this->logAction( 'reply-delete' );
+		} else {
+			$this->logAction( 'reply-moderator-delete' );
 		}
 	}
 }

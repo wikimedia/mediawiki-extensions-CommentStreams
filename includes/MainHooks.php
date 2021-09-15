@@ -30,7 +30,7 @@ use MediaWiki\Hook\MediaWikiPerformActionHook;
 use MediaWiki\Hook\MovePageIsValidMoveHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Permissions\Hook\UserCanHook;
+use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsHook;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
@@ -52,7 +52,7 @@ class MainHooks implements
 	CanonicalNamespacesHook,
 	MediaWikiPerformActionHook,
 	MovePageIsValidMoveHook,
-	UserCanHook,
+	GetUserPermissionsErrorsHook,
 	BeforePageDisplayHook,
 	ShowSearchHitTitleHook,
 	ParserFirstCallInitHook
@@ -63,7 +63,7 @@ class MainHooks implements
 	private $commentStreamsHandler;
 
 	/**
-	 * @var CommentFactory
+	 * @var CommentStreamsFactory
 	 */
 	private $commentStreamsFactory;
 
@@ -84,14 +84,14 @@ class MainHooks implements
 
 	/**
 	 * @param CommentStreamsHandler $commentStreamsHandler
-	 * @param CommentFactory $commentStreamsFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param LinkRenderer $linkRenderer
 	 * @param RevisionStore $revisionStore
 	 * @param PermissionManager $permissionManager
 	 */
 	public function __construct(
 		CommentStreamsHandler $commentStreamsHandler,
-		CommentFactory $commentStreamsFactory,
+		CommentStreamsFactory $commentStreamsFactory,
 		LinkRenderer $linkRenderer,
 		RevisionStore $revisionStore,
 		PermissionManager $permissionManager
@@ -123,6 +123,7 @@ class MainHooks implements
 	 * @param User $user Context user
 	 * @param WebRequest $request Context request
 	 * @param MediaWiki $mediaWiki
+	 * @return bool|void True or no return value to continue or false to abort
 	 * @throws MWException
 	 */
 	public function onMediaWikiPerformAction(
@@ -136,40 +137,51 @@ class MainHooks implements
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return;
 		}
+
 		$action = $mediaWiki->getAction();
 		if ( $action === 'info' || $action === 'history' ) {
 			return;
 		}
 		if ( $action !== 'view' ) {
-			$message =
-				wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
+			$message = wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
 			$output->addHTML( '<p class="error">' . htmlentities( $message ) . '</p>' );
+			return false;
 		}
 
-		$wikipage = new WikiPage( $title );
-		$comment = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
-		if ( $comment !== null ) {
-			$commentTitle = $comment->getCommentTitle();
-			if ( $commentTitle !== null ) {
-				$output->setPageTitle( $commentTitle );
-			}
+		$wikiPage = new WikiPage( $title );
+		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+		if ( $comment ) {
+			$output->setPageTitle( $comment->getCommentTitle() );
 			$associatedTitle = Title::newFromId( $comment->getAssociatedId() );
-			if ( $associatedTitle !== null ) {
-				$values = PageProps::getInstance()->getProperties( $associatedTitle,
-					'displaytitle' );
+			if ( $associatedTitle ) {
+				$values = PageProps::getInstance()->getProperties( $associatedTitle, 'displaytitle' );
 				if ( array_key_exists( $comment->getAssociatedId(), $values ) ) {
 					$displaytitle = $values[$comment->getAssociatedId()];
 				} else {
 					$displaytitle = $associatedTitle->getPrefixedText();
 				}
-				$output->setSubtitle(
-					$this->linkRenderer->makeLink( $associatedTitle, '< ' . $displaytitle ) );
+				$output->setSubtitle( $this->linkRenderer->makeLink( $associatedTitle, '< ' . $displaytitle ) );
 			} else {
-				$message =
-					wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
+				$message = wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
 				$output->addHTML( '<p class="error">' . htmlentities( $message ) . '</p>' );
 			}
-			$output->addWikiTextAsInterface( $comment->getHTML( $output->getContext() ) );
+		} else {
+			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+			if ( $reply ) {
+				$parentCommentTitle = Title::newFromId( $reply->getParentCommentPageId() );
+				if ( $parentCommentTitle ) {
+					$values = PageProps::getInstance()->getProperties( $parentCommentTitle, 'displaytitle' );
+					if ( array_key_exists( $reply->getParentCommentPageId(), $values ) ) {
+						$displaytitle = $values[$reply->getParentCommentPageId()];
+					} else {
+						$displaytitle = $parentCommentTitle->getPrefixedText();
+					}
+					$output->setSubtitle( $this->linkRenderer->makeLink( $parentCommentTitle, '< ' . $displaytitle ) );
+				} else {
+					$message = wfMessage( 'commentstreams-error-reply-to-deleted-comment' )->text();
+					$output->addHTML( '<p class="error">' . htmlentities( $message ) . '</p>' );
+				}
+			}
 		}
 	}
 
@@ -187,38 +199,42 @@ class MainHooks implements
 	}
 
 	/**
-	 * Implements userCan hook.
-	 * See https://www.mediawiki.org/wiki/Manual:Hooks/userCan
 	 * Ensures that only the original author can edit a comment
 	 *
 	 * @param Title $title Title being checked against
 	 * @param User $user Current user
 	 * @param string $action Action being checked
-	 * @param string &$result Pointer to result returned if hook returns false.
-	 *   If null is returned, userCan checks are continued by internal code.
+	 * @param array &$result Pointer to result, if any
+	 * @return bool|void True or no return value to continue or false to abort
 	 */
-	public function onUserCan( $title, $user, $action, &$result ) {
+	public function onGetUserPermissionsErrors( $title, $user, $action, &$result ) {
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return;
 		}
 
-		$wikipage = new WikiPage( $title );
+		$wikiPage = new WikiPage( $title );
 
-		if ( !$wikipage->exists() ) {
+		if ( !$wikiPage->exists() ) {
 			return;
 		}
 
+		$allowed = true;
 		if ( $action === 'cs-comment' ) {
 			$revisionRecord = $this->revisionStore->getFirstRevision( $title );
-			if ( $revisionRecord === null ) {
-				$result = false;
-			} else {
+			if ( $revisionRecord ) {
 				$author = $revisionRecord->getUser( RevisionRecord::RAW );
-				$result = ( $user->getId() === $author->getId() ) &&
+				$allowed = ( $user->getId() === $author->getId() ) &&
 					$this->permissionManager->userHasRight( $user, $action );
+			} else {
+				$allowed = false;
 			}
 		} elseif ( in_array( $action, [ 'cs-moderator-edit', 'cs-moderator-delete' ] ) ) {
-			$result = $this->permissionManager->userHasRight( $user, $action );
+			$allowed = $this->permissionManager->userHasRight( $user, $action );
+		}
+
+		if ( !$allowed ) {
+			$result = 'badaccess-group0';
+			return false;
 		}
 	}
 
@@ -260,14 +276,24 @@ class MainHooks implements
 			return;
 		}
 
-		$wikipage = CommentStreamsUtils::newWikiPageFromId( $title->getArticleID() );
-		if ( $wikipage ) {
-			$comment = $this->commentStreamsFactory->newFromWikiPage( $wikipage );
-			if ( $comment !== null ) {
-				$t = Title::newFromId( $comment->getAssociatedId() );
-				if ( $t !== null ) {
-					$title = $t;
-				}
+		$wikiPage = CommentStreamsUtils::newWikiPageFromId( $title->getArticleID() );
+		if ( !$wikiPage ) {
+			return;
+		}
+
+		$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+		if ( $reply ) {
+			$wikiPage = CommentStreamsUtils::newWikiPageFromId( $reply->getParentCommentPageId() );
+			if ( !$wikiPage ) {
+				return;
+			}
+		}
+
+		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+		if ( $comment ) {
+			$t = Title::newFromId( $comment->getAssociatedId() );
+			if ( $t ) {
+				$title = $t;
 			}
 		}
 	}

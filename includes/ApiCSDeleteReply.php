@@ -23,30 +23,55 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
+use MWException;
 
-class ApiCSUnwatch extends ApiCSCommentBase {
+class ApiCSDeleteReply extends ApiCSReplyBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 */
-	public function __construct( ApiMain $main, string $action, CommentStreamsFactory $commentStreamsFactory ) {
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		CommentStreamsFactory $commentStreamsFactory
+	) {
 		parent::__construct( $main, $action, $commentStreamsFactory, true );
 	}
 
 	/**
 	 * the real body of the execute function
+	 *
 	 * @return ?array result of API request
 	 * @throws ApiUsageException
+	 * @throws MWException
 	 */
 	protected function executeBody(): ?array {
-		if ( $this->getUser()->isAnon() ) {
-			$this->dieWithError( 'commentstreams-api-error-unwatch-notloggedin' );
+		$user = $this->getUser();
+		if ( $user->isAnon() ) {
+			$this->dieWithError( 'commentstreams-api-error-delete-notloggedin' );
 		}
 
-		$result = $this->comment->unwatch( $this->getUser()->getId() );
+		if ( $user->getId() === $this->reply->getAuthor()->getId() ) {
+			$action = 'cs-comment';
+		} else {
+			$action = 'cs-moderator-delete';
+		}
+
+		$title = $this->reply->getTitle();
+		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
+			$this->dieWithError( 'commentstreams-api-error-delete-permissions' );
+		}
+
+		$result = $this->reply->delete( $user );
 		if ( !$result ) {
-			$this->dieWithError( 'commentstreams-api-error-unwatch' );
+			$this->dieWithError( 'commentstreams-api-error-delete' );
+		}
+
+		if ( $action === 'cs-comment' ) {
+			$this->logAction( 'reply-delete' );
+		} else {
+			$this->logAction( 'reply-moderator-delete' );
 		}
 
 		return null;

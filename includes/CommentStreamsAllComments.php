@@ -22,7 +22,9 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Html;
-use MWException;
+use MediaWiki\Linker\LinkRenderer;
+use OOUI\ButtonWidget;
+use OOUI\IconWidget;
 use SpecialPage;
 
 class CommentStreamsAllComments extends SpecialPage {
@@ -32,30 +34,41 @@ class CommentStreamsAllComments extends SpecialPage {
 	private $commentStreamsStore;
 
 	/**
-	 * @var CommentFactory
+	 * @var CommentStreamsFactory
 	 */
-	private $commentFactory;
+	private $commentStreamsFactory;
+
+	/**
+	 * @var LinkRenderer
+	 */
+	private $linkRenderer;
 
 	/**
 	 * @param CommentStreamsStore $commentStreamsStore
-	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param LinkRenderer $linkRenderer
 	 */
 	public function __construct(
 		CommentStreamsStore $commentStreamsStore,
-		CommentFactory $commentFactory
+		CommentStreamsFactory $commentStreamsFactory,
+		LinkRenderer $linkRenderer
 	) {
 		parent::__construct( 'CommentStreamsAllComments' );
 		$this->commentStreamsStore = $commentStreamsStore;
-		$this->commentFactory = $commentFactory;
+		$this->commentStreamsFactory = $commentStreamsFactory;
+		$this->linkRenderer = $linkRenderer;
 	}
 
 	/**
 	 * @inheritDoc
-	 * @throws MWException
 	 */
 	public function execute( $subPage ) {
 		$request = $this->getRequest();
 		$this->setHeaders();
+		$this->getOutput()->enableOOUI();
+		$this->getOutput()->addModuleStyles( [ 'oojs-ui.styles.icons-editing-core' ] );
+		$this->getOutput()->addModuleStyles( [ 'oojs-ui.styles.icons-interactions' ] );
+		$this->getOutput()->addModuleStyles( [ 'oojs-ui.styles.icons-movement' ] );
 		$this->getOutput()->addModuleStyles( 'ext.CommentStreamsAllComments' );
 
 		$offset = (int)$request->getText( 'offset', '0' );
@@ -73,83 +86,159 @@ class CommentStreamsAllComments extends SpecialPage {
 			}
 		}
 
-		$wikitext = '{| class="wikitable csall-wikitable"' . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-page' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-associatedpage' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-commenttitle' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-wikitext' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-author' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-lasteditor' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-created' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-lastedited' ) . PHP_EOL;
-		$wikitext .=
-			'!' . wfMessage( 'commentstreams-allcomments-label-blockid' ) . PHP_EOL;
+		$html = Html::openElement( 'table', [
+				'class' => 'wikitable csall-wikitable'
+			] )
+			. Html::openElement( 'tr' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-wikitext' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-commenttitle' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-reply' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-author' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-lasteditor' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-created' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-lastedited' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-page' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-associatedpage' )
+			. Html::closeElement( 'th' )
+			. Html::openElement( 'th' )
+			. wfMessage( 'commentstreams-allcomments-label-blockid' )
+			. Html::closeElement( 'th' )
+			. Html::closeElement( 'tr' );
 
 		$index = 0;
 		$more = false;
 		foreach ( $pages as $page ) {
 			if ( $index < $limit ) {
-				$wikipage = CommentStreamsUtils::newWikiPageFromId( $page->page_id );
-				if ( !$wikipage ) {
+				$wikiPage = CommentStreamsUtils::newWikiPageFromId( $page->page_id );
+				if ( !$wikiPage ) {
 					continue;
 				}
-				$comment = $this->commentFactory->newFromWikiPage( $wikipage );
-				if ( $comment !== null ) {
-					$pagename = $comment->getTitle()->getPrefixedText();
-					$associatedpageid = $comment->getAssociatedId();
-					$associatedpage = CommentStreamsUtils::newWikiPageFromId( $associatedpageid );
-					if ( $associatedpage !== null ) {
-						$associatedpagename =
-							'[[' . $associatedpage->getTitle()->getPrefixedText() . ']]';
-						$author = $comment->getAuthor();
-						if ( $author->getId() === 0 ) {
-							$author =
-								'<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
-						} else {
-							$author = $author->getName();
-						}
-						$modificationdate = $comment->getModificationDate();
-						if ( $modificationdate === null ) {
-							$lasteditor = '';
-							$modificationdate = '';
-						} else {
-							$lasteditor = $comment->getLastEditor();
-							if ( $lasteditor->getId() === 0 ) {
-								$lasteditor =
-									'<i>' . wfMessage( 'commentstreams-author-anonymous' ) .
-									'</i>';
-							} else {
-								$lasteditor = $lasteditor->getName();
-							}
-						}
-						$wikitext .= '|-' . PHP_EOL;
-						$wikitext .= '|[[' . $pagename . ']]' . PHP_EOL;
-						$wikitext .= '| ' . $associatedpagename . PHP_EOL;
-						$wikitext .= '| ' . $comment->getCommentTitle() . PHP_EOL;
-						$wikitext .= '| ' . htmlentities( $comment->getWikiText() ) . PHP_EOL;
-						$wikitext .= '| ' . $author . PHP_EOL;
-						$wikitext .= '| ' . $lasteditor . PHP_EOL;
-						$wikitext .= '| ' . $comment->getCreationDate() . PHP_EOL;
-						$wikitext .= '| ' . $modificationdate . PHP_EOL;
-						$wikitext .= '| ' . $comment->getBlockId() . PHP_EOL;
-						$index++;
+				$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+				if ( !$comment ) {
+					$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+					if ( !$reply ) {
+						continue;
+					}
+					$commentWikiPage = CommentStreamsUtils::newWikiPageFromId( $reply->getParentCommentPageId() );
+					if ( !$commentWikiPage ) {
+						continue;
+					}
+					$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $commentWikiPage );
+					if ( !$comment ) {
+						continue;
+					}
+					$replyCheck = new IconWidget( [
+						'icon' => 'check',
+						'framed' => false
+					] );
+					$title = $reply->getTitle();
+					$wikitext = htmlentities( $reply->getWikitext() );
+					$author = $reply->getAuthor();
+					$lastEditor = $reply->getLastEditor();
+					$creationDate = $reply->getCreationDate();
+					$modificationDate = $reply->getModificationDate();
+				} else {
+					$replyCheck = '';
+					$title = $comment->getTitle();
+					$wikitext = htmlentities( $comment->getWikitext() );
+					$author = $comment->getAuthor();
+					$lastEditor = $comment->getLastEditor();
+					$creationDate = $comment->getCreationDate();
+					$modificationDate = $comment->getModificationDate();
+				}
+				$linkButton = new ButtonWidget( [
+					'icon' => 'link',
+					'framed' => false,
+					'href' => $title->getFullURL()
+				] );
+				$associatedPageId = $comment->getAssociatedId();
+				$associatedWikiPage = CommentStreamsUtils::newWikiPageFromId( $associatedPageId );
+				if ( $associatedWikiPage ) {
+					$associatedPageLink = $this->linkRenderer->makeLink( $associatedWikiPage->getTitle() );
+				} else {
+					$associatedPageLink = '';
+				}
+				$commentTitle = htmlentities( $comment->getCommentTitle() );
+				$commentBlockName = $comment->getBlockName();
+				if ( $commentBlockName ) {
+					$commentBlockName = htmlentities( $commentBlockName );
+				}
+				if ( $author->getId() === 0 ) {
+					$author = '<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
+				} else {
+					$author = $author->getName();
+				}
+				if ( !$modificationDate ) {
+					$lastEditor = '';
+					$modificationDate = '';
+				} else {
+					if ( $lastEditor->getId() === 0 ) {
+						$lastEditor = '<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
+					} else {
+						$lastEditor = $lastEditor->getName();
 					}
 				}
+				$html .= Html::openElement( 'tr' )
+					. Html::openElement( 'td' )
+					. $wikitext
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $commentTitle
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td', [
+						'style' => 'text-align:center;'
+					] )
+					. $replyCheck
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $author
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $lastEditor
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $creationDate
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $modificationDate
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td', [
+						'style' => 'text-align:center;'
+					] )
+					. $linkButton
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $associatedPageLink
+					. Html::closeElement( 'td' )
+					. Html::openElement( 'td' )
+					. $commentBlockName
+					. Html::closeElement( 'td' )
+					. Html::closeElement( 'tr' );
+				$index++;
 			} else {
 				$more = true;
 			}
 		}
 
-		$wikitext .= '|}' . PHP_EOL;
-		$this->getOutput()->addWikiTextAsInterface( $wikitext );
+		$html .= Html::closeElement( 'table' );
+		$this->getOutput()->addHtml( $html );
 
 		if ( $offset > 0 || $more ) {
 			$this->addTableNavigation( $offset, $more, $limit );
@@ -181,13 +270,11 @@ class CommentStreamsAllComments extends SpecialPage {
 			. Html::openElement( 'td' );
 
 		if ( $offset > 0 ) {
-			$prevurl = $this->getFullTitle()->getFullURL( [ 'offset' => ( $offset - $limit ) ] );
-			$html .= Html::openElement( 'a', [
-					'href' => $prevurl,
-					'class' => 'csall-button'
-				] )
-				. wfMessage( 'commentstreams-allcomments-button-previous' )
-				. Html::closeElement( 'a' );
+			$prevUrl = $this->getFullTitle()->getFullURL( [ 'offset' => ( $offset - $limit ) ] );
+			$html .= new ButtonWidget( [
+				'icon' => 'previous',
+				'href' => $prevUrl
+			] );
 		}
 
 		$html .= Html::closeElement( 'td' )
@@ -196,13 +283,11 @@ class CommentStreamsAllComments extends SpecialPage {
 			] );
 
 		if ( $more ) {
-			$nexturl = $this->getFullTitle()->getFullURL( [ 'offset' => ( $offset + $limit ) ] );
-			$html .= Html::openElement( 'a', [
-					'href' => $nexturl,
-					'class' => 'csall-button'
-				] )
-				. wfMessage( 'commentstreams-allcomments-button-next' )
-				. Html::closeElement( 'a' );
+			$nextUrl = $this->getFullTitle()->getFullURL( [ 'offset' => ( $offset + $limit ) ] );
+			$html .= new ButtonWidget( [
+				'icon' => 'next',
+				'href' => $nextUrl
+			] );
 		}
 
 		$html .= Html::closeElement( 'td' )

@@ -25,14 +25,14 @@ use ApiBase;
 use ApiMain;
 use ApiUsageException;
 
-class ApiCSVote extends ApiCSBase {
+class ApiCSVote extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentFactory $commentFactory
+	 * @param CommentStreamsFactory $commentStreamsFactory
 	 */
-	public function __construct( ApiMain $main, string $action, CommentFactory $commentFactory ) {
-		parent::__construct( $main, $action, $commentFactory, true );
+	public function __construct( ApiMain $main, string $action, CommentStreamsFactory $commentStreamsFactory ) {
+		parent::__construct( $main, $action, $commentStreamsFactory, true );
 	}
 
 	/**
@@ -46,10 +46,6 @@ class ApiCSVote extends ApiCSBase {
 		}
 
 		$vote = $this->getMain()->getVal( 'vote' );
-
-		if ( $this->comment->getParentId() !== null ) {
-			$this->dieWithError( 'commentstreams-api-error-vote-novoteonreply' );
-		}
 
 		$result = $this->comment->vote( $vote, $this->getUser() );
 		if ( !$result ) {
@@ -72,24 +68,5 @@ class ApiCSVote extends ApiCSBase {
 					]
 			]
 		);
-	}
-
-	/**
-	 * @return array examples of the use of this API module
-	 */
-	public function getExamplesMessages(): array {
-		return [
-			'action=' . $this->getModuleName() . '&pageid=3&vote=1' =>
-				'apihelp-' . $this->getModuleName() . '-pageid-example',
-			'action=' . $this->getModuleName() . '&title=CommentStreams:3&vote=-1' =>
-				'apihelp-' . $this->getModuleName() . '-title-example'
-		];
-	}
-
-	/**
-	 * @return string indicates that this API module requires a CSRF toekn
-	 */
-	public function needsToken(): string {
-		return 'csrf';
 	}
 }

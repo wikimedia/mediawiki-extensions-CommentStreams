@@ -1,0 +1,29 @@
+[
+	{
+		"name": "cs_replies",
+		"columns": [
+			{
+				"name": "cst_r_reply_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "cst_r_comment_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [
+			"cst_r_reply_page_id"
+		]
+	}
+]

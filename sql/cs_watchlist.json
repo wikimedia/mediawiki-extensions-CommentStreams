@@ -1,0 +1,28 @@
+[
+	{
+		"name": "cs_watchlist",
+		"columns": [
+			{
+				"name": "cst_wl_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "cst_wl_user_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			}
+		],
+		"indexes": [
+			{ "name": "cst_wl_index", "columns": [ "cst_wl_page_id", "cst_wl_user_id" ], "unique": true }
+		]
+	}
+]
