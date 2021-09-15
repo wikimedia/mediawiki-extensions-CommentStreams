@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "6.3",
+	"version": "7.0-dev",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -152,8 +152,7 @@
 	},
 	"config": {
 		"CommentStreamsNamespaceIndex": 844,
-		"CommentStreamsAllowedNamespaces" : null,
-		"CommentStreamsEnableTalk": false,
+		"CommentStreamsAllowedNamespaces": null,
 		"CommentStreamsNewestStreamsOnTop": true,
 		"CommentStreamsModeratorFastDelete": false,
 		"CommentStreamsShowLabels": true,
