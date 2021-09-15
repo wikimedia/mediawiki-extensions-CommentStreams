@@ -7,6 +7,12 @@
 		]
 	},
 	"commentstreams-author-anonymous": "anoniem",
+	"apihelp-cspostcomment-description": "Plaats nieuw commentaar.",
+	"apihelp-cspostcomment-summary": "Plaats nieuw commentaar.",
+	"apihelp-cspostcomment-param-commenttitle": "optionele titel voor commentaar.",
+	"apihelp-cspostcomment-param-wikitext": "wikitekst voor commentaar.",
+	"apihelp-cseditcomment-param-commenttitle": "optionele titel voor commentaar.",
+	"apihelp-cseditcomment-param-wikitext": "wikitekst voor commentaar.",
 	"commentstreams-api-error-notloggedin": "U moet ingelogd zijn.",
 	"commentstreams-api-error-edit-notloggedin": "U moet aangemeld zijn om te kunnen bewerken.",
 	"commentstreams-api-error-delete-notloggedin": "U moet aangemeld zijn om te kunnen verwijderen.",
