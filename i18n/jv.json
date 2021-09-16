@@ -22,7 +22,7 @@
 	"action-cs-moderator-edit": "besut tanggapané naraguna liyané",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|awèh}} tanggapan $3",
 	"commentstreams-allcomments-nocommentsfound": "Ora ana tanggapan.",
-	"commentstreams-allcomments-label-page": "Kaca Tanggapan",
 	"commentstreams-allcomments-label-commenttitle": "Sesirah Tanggapan",
-	"commentstreams-allcomments-label-lastedited": "Dibesut Pungkasan"
+	"commentstreams-allcomments-label-lastedited": "Dibesut Pungkasan",
+	"commentstreams-allcomments-label-page": "Kaca Tanggapan"
 }

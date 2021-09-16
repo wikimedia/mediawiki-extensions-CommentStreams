@@ -23,14 +23,12 @@
 	"commentstreams-dialog-buttontext-no": "မလုပ်ပါ",
 	"commentstreamsallcomments": "မှတ်ချက်များ အားလုံး",
 	"commentstreams-allcomments-nocommentsfound": "မှတ်ချက်များ မတွေ့ပါ",
-	"commentstreams-allcomments-label-page": "မှတ်ချက် စာမျက်နှာ",
-	"commentstreams-allcomments-label-associatedpage": "ဆက်နွယ်သော စာမျက်နှာ",
-	"commentstreams-allcomments-label-commenttitle": "မှတ်ချက် ခေါင်းစဉ်",
 	"commentstreams-allcomments-label-wikitext": "မှတ်ချက်",
+	"commentstreams-allcomments-label-commenttitle": "မှတ်ချက် ခေါင်းစဉ်",
 	"commentstreams-allcomments-label-author": "စာရေးသူ",
 	"commentstreams-allcomments-label-created": "ဖန်တီးခဲ့သည်",
 	"commentstreams-allcomments-label-lasteditor": "နောက်ဆုံး တည်းဖြတ်သူ",
 	"commentstreams-allcomments-label-lastedited": "နောက်ဆုံး တည်းဖြတ်ခဲ့",
-	"commentstreams-allcomments-button-next": "ရှေ့",
-	"commentstreams-allcomments-button-previous": "ယခင်"
+	"commentstreams-allcomments-label-page": "မှတ်ချက် စာမျက်နှာ",
+	"commentstreams-allcomments-label-associatedpage": "ဆက်နွယ်သော စာမျက်နှာ"
 }

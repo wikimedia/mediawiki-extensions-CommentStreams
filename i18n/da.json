@@ -17,11 +17,9 @@
 	"commentstreams-title-field-placeholder": "Indtast titel...",
 	"logentry-commentstreams-comment-delete": "$1 {{GENDER:$2|slettede}} kommentaren $3",
 	"commentstreamsallcomments": "Alle kommentarer",
-	"commentstreams-allcomments-label-commenttitle": "Kommentartitel",
 	"commentstreams-allcomments-label-wikitext": "Kommentar",
+	"commentstreams-allcomments-label-commenttitle": "Kommentartitel",
 	"commentstreams-allcomments-label-author": "Forfatter",
 	"commentstreams-allcomments-label-created": "Oprettet",
-	"commentstreams-allcomments-label-lastedited": "Sidst redigeret",
-	"commentstreams-allcomments-button-next": "Næste",
-	"commentstreams-allcomments-button-previous": "Forrige"
+	"commentstreams-allcomments-label-lastedited": "Sidst redigeret"
 }

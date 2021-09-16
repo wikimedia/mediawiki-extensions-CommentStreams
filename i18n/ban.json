@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Chinamoonroll"
+			"Chinamoonroll",
+			"Joseagush"
 		]
 	},
 	"commentstreams-buttontext-add": "Wewehin penampen",
@@ -10,7 +11,7 @@
 	"commentstreams-dialog-buttontext-cancel": "Wangdé",
 	"commentstreams-dialog-buttontext-yes": "Inggih",
 	"notification-link-label-commentstreams-comment-on-watched-page": "Rauhin penampen",
-	"commentstreams-allcomments-label-page": "Kaca Penampen",
-	"commentstreams-allcomments-label-commenttitle": "Penampen Murda",
-	"commentstreams-allcomments-label-wikitext": "Panampen"
+	"commentstreams-allcomments-label-wikitext": "Suratan",
+	"commentstreams-allcomments-label-commenttitle": "Murda",
+	"commentstreams-allcomments-label-page": "Kaca Penampen"
 }

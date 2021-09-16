@@ -45,11 +45,9 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "Bekijk reactie",
 	"log-name-commentstreams": "CommentStreams logboek",
 	"commentstreamsallcomments": "Alle reacties",
-	"commentstreams-allcomments-label-associatedpage": "Gekoppelde pagina",
 	"commentstreams-allcomments-label-author": "Auteur",
 	"commentstreams-allcomments-label-created": "Aangemaakt",
 	"commentstreams-allcomments-label-lasteditor": "Laatste bewerker",
 	"commentstreams-allcomments-label-lastedited": "Laatste bewerking",
-	"commentstreams-allcomments-button-next": "Volgende",
-	"commentstreams-allcomments-button-previous": "Vorige"
+	"commentstreams-allcomments-label-associatedpage": "Gekoppelde pagina"
 }

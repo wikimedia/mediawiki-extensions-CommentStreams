@@ -21,11 +21,9 @@
 	"commentstreams-datetext-lasteditedon": "تي آخري ڀيرو سنواريو ويو",
 	"commentstreams-title-field-placeholder": "عنوان ڏيو (اينٽر ٽائيٽل)",
 	"commentstreams-allcomments-nocommentsfound": "ڪي بہ رايا نہ لڌا.",
-	"commentstreams-allcomments-label-associatedpage": "لاڳاپيل صفحو",
 	"commentstreams-allcomments-label-author": "ليکڪ",
 	"commentstreams-allcomments-label-created": "سرجيل (Created)",
 	"commentstreams-allcomments-label-lasteditor": "آخري سنواريندڙ",
 	"commentstreams-allcomments-label-lastedited": "آخري ڀيرو سنواريل",
-	"commentstreams-allcomments-button-next": "اڳيون",
-	"commentstreams-allcomments-button-previous": "اڳوڻو"
+	"commentstreams-allcomments-label-associatedpage": "لاڳاپيل صفحو"
 }
