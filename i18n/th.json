@@ -22,7 +22,6 @@
 	"apihelp-cspostcomment-param-commenttitle": "ชื่อที่ไม่บังคับสำหรับความคิดเห็น",
 	"apihelp-cspostcomment-param-wikitext": "wikitext สำหรับความคิดเห็น",
 	"apihelp-cspostcomment-param-associatedid": "หน้าที่เกี่ยวข้องกับความคิดเห็นนี้",
-	"apihelp-cspostcomment-param-parentid": "รหัสหน้าของความคิดเห็นหลักหากเป็นการตอบกลับ",
 	"apihelp-cseditcomment-description": "แก้ไขความคิดเห็นที่มีอยู่ ต้องระบุ pageid หรือ title",
 	"apihelp-cseditcomment-summary": "แก้ไขความคิดเห็นที่มีอยู่ ต้องระบุ pageid หรือ title",
 	"apihelp-cseditcomment-param-pageid": "รหัสหน้าของหน้าที่เก็บความคิดเห็นเพื่อแก้ไข"

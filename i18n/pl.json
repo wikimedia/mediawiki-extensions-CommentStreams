@@ -41,9 +41,7 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderator) usunął|(moderatorka) usunęła}} odpowiedź $3",
 	"commentstreamsallcomments": "Wszystkie komentarze",
 	"commentstreams-allcomments-nocommentsfound": "Nie znaleziono komentarzy.",
-	"commentstreams-allcomments-label-commenttitle": "Tytuł komentarza",
 	"commentstreams-allcomments-label-wikitext": "Komentarz",
-	"commentstreams-allcomments-label-author": "Autor",
-	"commentstreams-allcomments-button-next": "Następny",
-	"commentstreams-allcomments-button-previous": "Poprzedni"
+	"commentstreams-allcomments-label-commenttitle": "Tytuł komentarza",
+	"commentstreams-allcomments-label-author": "Autor"
 }

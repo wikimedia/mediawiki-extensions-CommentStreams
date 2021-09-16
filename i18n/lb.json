@@ -43,12 +43,10 @@
 	"action-cs-moderator-delete": "Bemierkunge vun anere Benotzer ze läschen",
 	"commentstreamsallcomments": "All Bemierkungen",
 	"commentstreams-allcomments-nocommentsfound": "Keng Bemierkunge fonnt.",
-	"commentstreams-allcomments-label-page": "Bemierkungs-Säit",
 	"commentstreams-allcomments-label-wikitext": "Bemierkung",
 	"commentstreams-allcomments-label-author": "Auteur",
 	"commentstreams-allcomments-label-created": "Ugeluecht",
 	"commentstreams-allcomments-label-lasteditor": "Leschte Benotzer deen eppes geännert huet",
 	"commentstreams-allcomments-label-lastedited": "Lescht Ännerung",
-	"commentstreams-allcomments-button-next": "Virun",
-	"commentstreams-allcomments-button-previous": "Vireg"
+	"commentstreams-allcomments-label-page": "Bemierkungs-Säit"
 }
