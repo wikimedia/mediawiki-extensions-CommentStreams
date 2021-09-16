@@ -37,11 +37,15 @@ class CommentStreamsHandler {
 
 	/**
 	 * no CommentStreams flag
+	 *
+	 * @var int
 	 */
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
 	/**
 	 * initially collapse CommentStreams flag
+	 *
+	 * @var bool
 	 */
 	private $initiallyCollapseCommentStreams = false;
 
