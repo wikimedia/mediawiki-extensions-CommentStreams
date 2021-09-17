@@ -17,8 +17,8 @@
 	"commentstreams-title-field-placeholder": "Indtast titel...",
 	"logentry-commentstreams-comment-delete": "$1 {{GENDER:$2|slettede}} kommentaren $3",
 	"commentstreamsallcomments": "Alle kommentarer",
-	"commentstreams-allcomments-label-wikitext": "Kommentar",
-	"commentstreams-allcomments-label-commenttitle": "Kommentartitel",
+	"commentstreams-allcomments-label-wikitext": "Tekst",
+	"commentstreams-allcomments-label-commenttitle": "Titel",
 	"commentstreams-allcomments-label-author": "Forfatter",
 	"commentstreams-allcomments-label-created": "Oprettet",
 	"commentstreams-allcomments-label-lastedited": "Sidst redigeret"

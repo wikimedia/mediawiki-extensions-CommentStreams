@@ -35,7 +35,8 @@
 	"action-cs-moderator-edit": "modificare i commenti degli altri utenti",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|ha creato}} il commento $3",
 	"commentstreams-allcomments-nocommentsfound": "Nessun commento trovato.",
-	"commentstreams-allcomments-label-wikitext": "Commento",
+	"commentstreams-allcomments-label-wikitext": "Testo",
+	"commentstreams-allcomments-label-commenttitle": "Titolo",
 	"commentstreams-allcomments-label-author": "Autore",
 	"commentstreams-allcomments-label-lastedited": "Ultima modifica"
 }
