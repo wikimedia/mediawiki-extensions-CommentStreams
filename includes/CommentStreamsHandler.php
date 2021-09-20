@@ -38,6 +38,11 @@ class CommentStreamsHandler {
 	private $areCommentsEnabled = self::COMMENTS_INHERITED;
 
 	/**
+	 * @var bool true if enabled due to wgCommentStreamsAllowedNamespaces
+	 */
+	private $isNamespaceEnabled = false;
+
+	/**
 	 * @var CommentStreamsFactory
 	 */
 	private $commentStreamsFactory;
@@ -154,13 +159,32 @@ class CommentStreamsHandler {
 			return false;
 		}
 
-		// display comments on this page if it contains the <comment-streams/> tag function
+		// if this namespace is one of the explicitly allowed namespace, set flag to enable
+		// default comment block
+		if ( in_array( $namespace, $csAllowedNamespaces ) ) {
+			$this->isNamespaceEnabled = true;
+		}
+
+		// display comments on this page if they are explicitly enabled
 		if ( $this->areCommentsEnabled === self::COMMENTS_ENABLED ) {
 			return true;
 		}
 
-		// display comments on this page if this namespace is one of the explicitly allowed namespaces
-		return in_array( $namespace, $csAllowedNamespaces );
+		// don't display comments in a talk namespace unless:
+		// 1) $wgCommentStreamsEnableTalk is true, OR
+		// 2) the namespace is a talk namespace for a namespace in the array of
+		// allowed namespaces
+		// 3) comments have been explicitly enabled on that namespace with
+		// <comment-streams/>
+		if ( $title->isTalkPage() ) {
+			$subject_namespace = CommentStreamsUtils::getSubjectNamespace( $namespace );
+			if ( !$config->get( 'CommentStreamsEnableTalk' ) &&
+				!in_array( $subject_namespace, $csAllowedNamespaces ) ) {
+				return false;
+			}
+		}
+
+		return $this->isNamespaceEnabled;
 	}
 
 	/**
@@ -253,6 +277,7 @@ class CommentStreamsHandler {
 			'showLabels' => $config->get( 'CommentStreamsShowLabels' ) ? 1 : 0,
 			'newestStreamsOnTop' => $config->get( 'CommentStreamsNewestStreamsOnTop' ) ? 1 : 0,
 			'initiallyCollapsed' => $initiallyCollapsed,
+			'isNamespaceEnabled' => $this->isNamespaceEnabled,
 			'enableVoting' => $config->get( 'CommentStreamsEnableVoting' ) ? 1 : 0,
 			'enableWatchlist' => $this->echoInterface->isLoaded() ? 1 : 0,
 			'comments' => $comments
