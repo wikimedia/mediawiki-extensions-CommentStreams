@@ -62,12 +62,10 @@
 	"logentry-commentstreams-reply-delete": "$1 が返信 $3 を{{GENDER:$2|削除しました}}",
 	"commentstreamsallcomments": "すべてのコメント",
 	"commentstreams-allcomments-nocommentsfound": "コメントはありません。",
-	"commentstreams-allcomments-label-page": "コメントページ",
-	"commentstreams-allcomments-label-commenttitle": "コメントのタイトル",
 	"commentstreams-allcomments-label-wikitext": "コメント",
+	"commentstreams-allcomments-label-commenttitle": "コメントのタイトル",
 	"commentstreams-allcomments-label-created": "作成日時",
 	"commentstreams-allcomments-label-lasteditor": "最終編集者",
 	"commentstreams-allcomments-label-lastedited": "最終編集",
-	"commentstreams-allcomments-button-next": "次へ",
-	"commentstreams-allcomments-button-previous": "前へ"
+	"commentstreams-allcomments-label-page": "コメントページ"
 }

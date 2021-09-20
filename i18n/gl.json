@@ -57,14 +57,12 @@
 	"grouppage-csmoderator": "{{ns:project}}:Moderadores (CommentStreams)",
 	"commentstreamsallcomments": "Todos os comentarios",
 	"commentstreams-allcomments-nocommentsfound": "Non se atopou ningún comentario.",
-	"commentstreams-allcomments-label-page": "Páxina de comentarios",
-	"commentstreams-allcomments-label-associatedpage": "Páxina asociada",
-	"commentstreams-allcomments-label-commenttitle": "Título do comentario",
 	"commentstreams-allcomments-label-wikitext": "Comentario",
+	"commentstreams-allcomments-label-commenttitle": "Título do comentario",
 	"commentstreams-allcomments-label-author": "Autor",
 	"commentstreams-allcomments-label-created": "Creado",
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
 	"commentstreams-allcomments-label-lastedited": "Última edición",
-	"commentstreams-allcomments-button-next": "Seguinte",
-	"commentstreams-allcomments-button-previous": "Anterior"
+	"commentstreams-allcomments-label-page": "Páxina de comentarios",
+	"commentstreams-allcomments-label-associatedpage": "Páxina asociada"
 }

@@ -37,7 +37,5 @@
 	"commentstreams-allcomments-nocommentsfound": "Nessun commento trovato.",
 	"commentstreams-allcomments-label-wikitext": "Commento",
 	"commentstreams-allcomments-label-author": "Autore",
-	"commentstreams-allcomments-label-lastedited": "Ultima modifica",
-	"commentstreams-allcomments-button-next": "Successivo",
-	"commentstreams-allcomments-button-previous": "Precedente"
+	"commentstreams-allcomments-label-lastedited": "Ultima modifica"
 }

@@ -9,7 +9,5 @@
 	"commentstreams-buttontooltip-add": "lisää kommentti",
 	"commentstreams-buttontooltip-permalink": "ikilinkki",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
-	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu",
-	"commentstreams-allcomments-button-next": "Seuraava",
-	"commentstreams-allcomments-button-previous": "Edellinen"
+	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu"
 }
