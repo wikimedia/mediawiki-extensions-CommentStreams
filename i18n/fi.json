@@ -1,13 +1,28 @@
 {
 	"@metadata": {
 		"authors": [
+			"MITO",
 			"Nike",
 			"Silvonen",
 			"Yupik"
 		]
 	},
+	"apihelp-cspostcomment-param-commenttitle": "kommentin otsikko.",
+	"apihelp-cseditcomment-param-commenttitle": "kommentin otsikko.",
+	"apihelp-cseditcomment-pageid-example": "muokkaa kommenttia sivutunnisteella 3",
+	"apihelp-csdeletereply-summary": "Poista vastaus. Joko sivunumero tai otsikko on annettava.",
+	"apihelp-csdeletereply-pageid-example": "poista vastaus sivutunnisteella 3",
+	"apihelp-cspostreply-description": "Julkaise uusi vastaus.",
+	"apihelp-cspostreply-summary": "Julkaise uusi vastaus.",
+	"apihelp-cspostreply-param-wikitext": "wikiteksti vastaukseen.",
+	"apihelp-cseditreply-description": "Muokkaa olemassa olevaa vastausta. Joko sivunumero tai otsikko on annettava.",
+	"apihelp-cseditreply-param-wikitext": "wikiteksti vastaukseen.",
+	"apihelp-cseditreply-pageid-example": "muokkaa vastausta sivutunnisteella 3",
 	"commentstreams-buttontooltip-add": "lisää kommentti",
 	"commentstreams-buttontooltip-permalink": "ikilinkki",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
+	"commentstreams-allcomments-label-wikitext": "Teksti",
+	"commentstreams-allcomments-label-commenttitle": "Otsikko",
+	"commentstreams-allcomments-label-reply": "Vastaa",
 	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu"
 }
