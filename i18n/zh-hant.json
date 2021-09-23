@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Kly",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"列维劳德"
 		]
 	},
 	"commentstreams-desc": "允許在 wiki 頁面上評論",
@@ -64,7 +65,7 @@
 	"commentstreams-api-error-edit": "編輯評論時出錯。",
 	"commentstreams-api-error-delete-notloggedin": "您必須要先登入才能刪除。",
 	"commentstreams-api-error-delete-permissions": "使用者沒有權限刪除評論。",
-	"commentstreams-api-error-delete-haschildren": "不能刪除帶有回覆的話題。請重新整理頁面來查看更新的評論串流。",
+	"commentstreams-api-error-delete-haschildren": "不能刪除帶有回覆的評論。請重新整理頁面來查看更新的評論串流。",
 	"commentstreams-api-error-delete": "刪除評論時出錯。",
 	"commentstreams-api-error-vote-notloggedin": "您必須要先登入才能投票。",
 	"commentstreams-api-error-vote-novoteonreply": "不允許在回覆上投票。",
