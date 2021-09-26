@@ -138,8 +138,7 @@ class Reply extends AbstractComment {
 		);
 		$this->wikitext = $wikitext;
 		$this->modificationTimestamp = null;
-		$wikiPage = CommentStreamsUtils::newWikiPageFromId( $this->wikiPage->getId(),
-			'fromdbmaster' );
+		$wikiPage = CommentStreamsUtils::newWikiPageFromId( $this->wikiPage->getId(), WikiPage::READ_LATEST );
 		if ( $wikiPage ) {
 			$this->wikiPage = $wikiPage;
 		}

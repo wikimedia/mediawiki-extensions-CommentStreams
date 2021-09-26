@@ -32,12 +32,12 @@ use WikiPage;
 class CommentStreamsUtils {
 	/**
 	 * @param int $id Article ID to load
-	 * @param string|int $from One of the following values:
-	 *        - "fromdb" or WikiPage::READ_NORMAL to select from a replica DB
-	 *        - "fromdbmaster" or WikiPage::READ_LATEST to select from the master database
+	 * @param int $from One of the following values:
+	 *        - WikiPage::READ_NORMAL to select from a replica DB
+	 *        - WikiPage::READ_LATEST to select from the primary database
 	 * @return WikiPage|null
 	 */
-	public static function newWikiPageFromId( int $id, $from = 'fromdb' ): ?WikiPage {
+	public static function newWikiPageFromId( int $id, int $from = WikiPage::READ_NORMAL ): ?WikiPage {
 		if ( class_exists( '\MediaWiki\Page\WikiPageFactory' ) ) {
 			// MW 1.36+
 			return MediaWikiServices::getInstance()->getWikiPageFactory()->newFromID( $id, $from );
