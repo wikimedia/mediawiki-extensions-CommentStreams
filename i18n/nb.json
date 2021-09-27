@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abuluntu",
 			"Citadell",
 			"Jon Harald Søby",
 			"Orf3us"
@@ -10,7 +11,7 @@
 	"commentstreams-error-prohibitedaction": "Handlingen $1 er ikke tillatt på kommentarsider.",
 	"commentstreams-error-comment-on-deleted-page": "Siden kommentaren assosieres med har blitt slettet.",
 	"commentstreams-author-anonymous": "anonym",
-	"apihelp-csquerycomment-description": "Returner tittelen, brukeren, opprettelsestidspunktet og wikiteksten til en kommentar. Enten pageid eller title må angis.",
+	"apihelp-csquerycomment-description": "Returner detaljer om en kommentar. Enten pageid eller title må angis.",
 	"apihelp-csquerycomment-summary": "Returnerer tittelen, brukeren, opprettelsestidsstempelet og wikiteksten til en kommentar. Enten pageid eller title må oppgis.",
 	"apihelp-csquerycomment-param-pageid": "Side-ID-en til siden som inneholder kommentaren det skal spørres mot",
 	"apihelp-csquerycomment-param-title": "Tittelen til siden som inneholder kommentaren det skal spørres mot",
