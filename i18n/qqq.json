@@ -172,7 +172,7 @@
 	"commentstreamsallcomments": "Special page title",
 	"commentstreams-allcomments-nocommentsfound": "Message to user.",
 	"commentstreams-allcomments-label-wikitext": "Table column label\n{{Identical|Comment}}",
-	"commentstreams-allcomments-label-commenttitle": "Table column label",
+	"commentstreams-allcomments-label-commenttitle": "Table column label\n{{identical|Title}}",
 	"commentstreams-allcomments-label-reply": "Table column label",
 	"commentstreams-allcomments-label-author": "Table column label\n{{Identical|Author}}",
 	"commentstreams-allcomments-label-created": "Table column label",
