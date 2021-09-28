@@ -11,7 +11,7 @@
 	"type": "parserhook",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.36.0"
+		"MediaWiki": ">= 1.38.0"
 	},
 	"SpecialPages": {
 		"CommentStreamsAllComments": {
@@ -237,6 +237,7 @@
 		"BeforePageDisplay": "main",
 		"ShowSearchHitTitle": "main",
 		"ParserFirstCallInit": "main",
+		"SpecialExportGetExtraPages": "main",
 		"XmlDumpWriterOpenPage": "main",
 		"ImportHandlePageXMLTag": "main",
 		"AfterImportPage": "main",
@@ -257,6 +258,7 @@
 		"CommentStreamsInitiallyCollapsedNamespaces": [],
 		"CommentStreamsUserRealNamePropertyName": null,
 		"CommentStreamsUserAvatarPropertyName": null,
-		"CommentStreamsEnableSearch": true
+		"CommentStreamsEnableSearch": true,
+		"CommentStreamsExportCommentsAutomatically": true
 	}
 }

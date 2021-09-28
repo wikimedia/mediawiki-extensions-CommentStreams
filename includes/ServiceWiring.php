@@ -29,6 +29,7 @@ return [
 	'CommentStreamsHandler' =>
 		static function ( MediaWikiServices $services ): CommentStreamsHandler {
 			return new CommentStreamsHandler(
+				new ServiceOptions( CommentStreamsHandler::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
 				$services->getService( 'CommentStreamsFactory' ),
 				$services->getService( 'CommentStreamsStore' ),
 				$services->getService( 'CommentStreamsEchoInterface' ),

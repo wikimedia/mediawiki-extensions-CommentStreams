@@ -24,16 +24,28 @@ namespace MediaWiki\Extension\CommentStreams;
 use Action;
 use ConfigException;
 use ExtensionRegistry;
+use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Page\PageReference;
 use MediaWiki\Permissions\PermissionManager;
 use NamespaceInfo;
 use OutputPage;
 use Parser;
 use PPFrame;
+use Title;
 
 class CommentStreamsHandler {
+	public const CONSTRUCTOR_OPTIONS = [
+		'CommentStreamsExportCommentsAutomatically'
+	];
+
 	const COMMENTS_ENABLED = 1;
 	const COMMENTS_DISABLED = -1;
 	const COMMENTS_INHERITED = 0;
+
+	/**
+	 * @var bool
+	 */
+	private $exportCommentsAutomatically;
 
 	/**
 	 * no CommentStreams flag
@@ -75,6 +87,7 @@ class CommentStreamsHandler {
 	private $permissionManager;
 
 	/**
+	 * @param ServiceOptions $options
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param EchoInterface $echoInterface
@@ -82,12 +95,15 @@ class CommentStreamsHandler {
 	 * @param PermissionManager $permissionManager
 	 */
 	public function __construct(
+		ServiceOptions $options,
 		CommentStreamsFactory $commentStreamsFactory,
 		CommentStreamsStore $commentStreamsStore,
 		EchoInterface $echoInterface,
 		NamespaceInfo $namespaceInfo,
 		PermissionManager $permissionManager
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+		$this->exportCommentsAutomatically = $options->get( 'CommentStreamsExportCommentsAutomatically' );
 		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->echoInterface = $echoInterface;
@@ -408,5 +424,31 @@ class CommentStreamsHandler {
 			}
 		);
 		return $replies;
+	}
+
+	/**
+	 * Add extra pages to the list of pages to export.
+	 *
+	 * @param string[] $inputPages List of page titles to export
+	 * @return PageReference[] List of extra page titles
+	 */
+	public function getExtraExportPages( array $inputPages ): array {
+		$extraPages = [];
+		if ( $this->exportCommentsAutomatically ) {
+			foreach ( $inputPages as $page ) {
+				$title = Title::newFromText( $page );
+				if ( $title->exists() ) {
+					$comments = $this->commentStreamsStore->getAssociatedComments( $title->getArticleID() );
+					foreach ( $comments as $comment ) {
+						$extraPages[] = $comment->getTitle();
+						$replies = $this->commentStreamsStore->getReplies( $comment->getId() );
+						foreach ( $replies as $reply ) {
+							$extraPages[] = $reply->getTitle();
+						}
+					}
+				}
+			}
+		}
+		return $extraPages;
 	}
 }

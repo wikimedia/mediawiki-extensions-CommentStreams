@@ -32,8 +32,10 @@ use MediaWiki\Hook\ImportHandlePageXMLTagHook;
 use MediaWiki\Hook\MediaWikiPerformActionHook;
 use MediaWiki\Hook\MovePageIsValidMoveHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\Hook\SpecialExportGetExtraPagesHook;
 use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsHook;
 use MediaWiki\Permissions\PermissionManager;
@@ -66,6 +68,7 @@ class MainHooks implements
 	BeforePageDisplayHook,
 	ShowSearchHitTitleHook,
 	ParserFirstCallInitHook,
+	SpecialExportGetExtraPagesHook,
 	XmlDumpWriterOpenPageHook,
 	ImportHandlePageXMLTagHook,
 	AfterImportPageHook
@@ -387,6 +390,20 @@ class MainHooks implements
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
 		$GLOBALS['wgLogTypes'][] = 'commentstreams';
 		$GLOBALS['wgLogActionsHandlers']['commentstreams/*'] = 'LogFormatter';
+	}
+
+	/**
+	 * Add extra pages to the list of pages to export.
+	 *
+	 * @param string[] $inputPages List of page titles to export
+	 * @param PageReference[] &$extraPages List of extra page titles
+	 * @return bool|void True or no return value to continue or false to abort
+	 */
+	public function onSpecialExportGetExtraPages( $inputPages, array &$extraPages ) {
+		$pages = $this->commentStreamsHandler->getExtraExportPages( $inputPages );
+		foreach ( $pages as $page ) {
+			$extraPages[] = $page;
+		}
 	}
 
 	/**
