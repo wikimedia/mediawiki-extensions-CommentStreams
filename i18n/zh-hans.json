@@ -5,7 +5,8 @@
 			"GuoPC",
 			"Liuxinyu970226",
 			"NeverBehave",
-			"Tranve"
+			"Tranve",
+			"列维劳德"
 		]
 	},
 	"commentstreams-desc": "允许在wiki页面上评论",
@@ -144,7 +145,7 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1{{GENDER:$2|（版主）删除}}了回复$3",
 	"commentstreamsallcomments": "所有评论",
 	"commentstreams-allcomments-nocommentsfound": "找不到评论。",
-	"commentstreams-allcomments-label-wikitext": "评论",
+	"commentstreams-allcomments-label-wikitext": "文字",
 	"commentstreams-allcomments-label-commenttitle": "标题",
 	"commentstreams-allcomments-label-reply": "回复",
 	"commentstreams-allcomments-label-author": "作者",
