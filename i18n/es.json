@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Avengium",
+			"Fewasser Traduce",
 			"Fitoschido",
 			"Macofe"
 		]
@@ -143,6 +144,7 @@
 	"commentstreams-allcomments-nocommentsfound": "No se encontró ningún comentario.",
 	"commentstreams-allcomments-label-wikitext": "Comentario",
 	"commentstreams-allcomments-label-commenttitle": "Título del comentario",
+	"commentstreams-allcomments-label-reply": "Respuesta",
 	"commentstreams-allcomments-label-author": "Autor",
 	"commentstreams-allcomments-label-created": "Creación",
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
