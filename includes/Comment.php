@@ -27,6 +27,7 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\User\UserFactory;
 use MWException;
+use PageProps;
 use ParserFactory;
 use RepoGroup;
 use User;
@@ -79,6 +80,7 @@ class Comment extends AbstractComment {
 	 * @param RevisionStore $revisionStore
 	 * @param ParserFactory $parserFactory
 	 * @param UserFactory $userFactory
+	 * @param PageProps $pageProps
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param bool $enableVoting
@@ -98,6 +100,7 @@ class Comment extends AbstractComment {
 		RevisionStore $revisionStore,
 		ParserFactory $parserFactory,
 		UserFactory $userFactory,
+		PageProps $pageProps,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		bool $enableVoting,
@@ -115,6 +118,7 @@ class Comment extends AbstractComment {
 			$revisionStore,
 			$parserFactory,
 			$userFactory,
+			$pageProps,
 			$userAvatarPropertyName,
 			$userRealNamePropertyName,
 			$wikiPage,

@@ -56,13 +56,15 @@ return [
 				$services->getRepoGroup(),
 				$services->getRevisionStore(),
 				$services->getParserFactory(),
-				$services->getUserFactory()
+				$services->getUserFactory(),
+				$services->getPageProps()
 			);
 		},
 	'CommentStreamsEchoInterface' =>
 		static function ( MediaWikiServices $services ): EchoInterface {
 			return new EchoInterface(
-				ExtensionRegistry::getInstance()
+				ExtensionRegistry::getInstance(),
+				$services->getPageProps()
 			);
 		},
 	'CommentStreamsSMWInterface' =>

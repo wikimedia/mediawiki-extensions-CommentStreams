@@ -100,12 +100,18 @@ class MainHooks implements
 	private $permissionManager;
 
 	/**
+	 * @var PageProps
+	 */
+	private $pageProps;
+
+	/**
 	 * @param CommentStreamsHandler $commentStreamsHandler
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param LinkRenderer $linkRenderer
 	 * @param RevisionStore $revisionStore
 	 * @param PermissionManager $permissionManager
+	 * @param PageProps $pageProps
 	 */
 	public function __construct(
 		CommentStreamsHandler $commentStreamsHandler,
@@ -113,7 +119,8 @@ class MainHooks implements
 		CommentStreamsStore $commentStreamsStore,
 		LinkRenderer $linkRenderer,
 		RevisionStore $revisionStore,
-		PermissionManager $permissionManager
+		PermissionManager $permissionManager,
+		PageProps $pageProps
 	) {
 		$this->commentStreamsHandler = $commentStreamsHandler;
 		$this->commentStreamsFactory = $commentStreamsFactory;
@@ -121,6 +128,7 @@ class MainHooks implements
 		$this->linkRenderer = $linkRenderer;
 		$this->revisionStore = $revisionStore;
 		$this->permissionManager = $permissionManager;
+		$this->pageProps = $pageProps;
 	}
 
 	/**
@@ -174,7 +182,7 @@ class MainHooks implements
 			$output->setPageTitle( $comment->getCommentTitle() );
 			$associatedTitle = Title::newFromId( $comment->getAssociatedId() );
 			if ( $associatedTitle ) {
-				$values = PageProps::getInstance()->getProperties( $associatedTitle, 'displaytitle' );
+				$values = $this->pageProps->getProperties( $associatedTitle, 'displaytitle' );
 				if ( array_key_exists( $comment->getAssociatedId(), $values ) ) {
 					$displaytitle = $values[$comment->getAssociatedId()];
 				} else {
@@ -190,7 +198,7 @@ class MainHooks implements
 			if ( $reply ) {
 				$parentCommentTitle = Title::newFromId( $reply->getParentCommentPageId() );
 				if ( $parentCommentTitle ) {
-					$values = PageProps::getInstance()->getProperties( $parentCommentTitle, 'displaytitle' );
+					$values = $this->pageProps->getProperties( $parentCommentTitle, 'displaytitle' );
 					if ( array_key_exists( $reply->getParentCommentPageId(), $values ) ) {
 						$displaytitle = $values[$reply->getParentCommentPageId()];
 					} else {

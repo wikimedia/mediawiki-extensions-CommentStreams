@@ -27,6 +27,7 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\User\UserFactory;
 use MWException;
+use PageProps;
 use ParserFactory;
 use RepoGroup;
 use User;
@@ -100,6 +101,11 @@ class CommentStreamsFactory {
 	private $userFactory;
 
 	/**
+	 * @var PageProps
+	 */
+	private $pageProps;
+
+	/**
 	 * @param ServiceOptions $options
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param EchoInterface $echoInterface
@@ -110,6 +116,7 @@ class CommentStreamsFactory {
 	 * @param RevisionStore $revisionStore
 	 * @param ParserFactory $parserFactory
 	 * @param UserFactory $userFactory
+	 * @param PageProps $pageProps
 	 */
 	public function __construct(
 		ServiceOptions $options,
@@ -121,7 +128,8 @@ class CommentStreamsFactory {
 		RepoGroup $repoGroup,
 		RevisionStore $revisionStore,
 		ParserFactory $parserFactory,
-		UserFactory $userFactory
+		UserFactory $userFactory,
+		PageProps $pageProps
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->userAvatarPropertyName = $options->get( 'CommentStreamsUserAvatarPropertyName' );
@@ -136,6 +144,7 @@ class CommentStreamsFactory {
 		$this->revisionStore = $revisionStore;
 		$this->parserFactory = $parserFactory;
 		$this->userFactory = $userFactory;
+		$this->pageProps = $pageProps;
 	}
 
 	/**
@@ -167,6 +176,7 @@ class CommentStreamsFactory {
 			$this->revisionStore,
 			$this->parserFactory,
 			$this->userFactory,
+			$this->pageProps,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$this->enableVoting,
@@ -205,6 +215,7 @@ class CommentStreamsFactory {
 			$this->revisionStore,
 			$this->parserFactory,
 			$this->userFactory,
+			$this->pageProps,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$wikiPage,
@@ -254,6 +265,7 @@ class CommentStreamsFactory {
 			$this->revisionStore,
 			$this->parserFactory,
 			$this->userFactory,
+			$this->pageProps,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$this->enableVoting,
@@ -305,6 +317,7 @@ class CommentStreamsFactory {
 			$this->revisionStore,
 			$this->parserFactory,
 			$this->userFactory,
+			$this->pageProps,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$wikiPage,

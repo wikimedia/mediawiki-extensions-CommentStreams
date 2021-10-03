@@ -68,6 +68,11 @@ abstract class AbstractComment {
 	protected $userFactory;
 
 	/**
+	 * @var PageProps
+	 */
+	protected $pageProps;
+
+	/**
 	 * @var ?string
 	 */
 	protected $userAvatarPropertyName;
@@ -132,6 +137,7 @@ abstract class AbstractComment {
 	 * @param RevisionStore $revisionStore
 	 * @param ParserFactory $parserFactory
 	 * @param UserFactory $userFactory
+	 * @param PageProps $pageProps
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param WikiPage $wikiPage
@@ -145,6 +151,7 @@ abstract class AbstractComment {
 		RevisionStore $revisionStore,
 		ParserFactory $parserFactory,
 		UserFactory $userFactory,
+		PageProps $pageProps,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		WikiPage $wikiPage,
@@ -156,6 +163,7 @@ abstract class AbstractComment {
 		$this->repoGroup = $repoGroup;
 		$this->parserFactory = $parserFactory;
 		$this->userFactory = $userFactory;
+		$this->pageProps = $pageProps;
 		$this->userAvatarPropertyName = $userAvatarPropertyName;
 		$this->userRealNamePropertyName = $userRealNamePropertyName;
 		$this->wikiPage = $wikiPage;
@@ -335,7 +343,7 @@ abstract class AbstractComment {
 			);
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
-			$values = PageProps::getInstance()->getProperties( $userpage,
+			$values = $this->pageProps->getProperties( $userpage,
 				'displaytitle' );
 			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
 				$displayname = $values[$userpage->getArticleID()];

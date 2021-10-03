@@ -36,12 +36,20 @@ class EchoInterface {
 	private $isLoaded;
 
 	/**
+	 * @var PageProps
+	 */
+	private $pageProps;
+
+	/**
 	 * @param ExtensionRegistry $extensionRegistry
+	 * @param PageProps $pageProps
 	 */
 	public function __construct(
-		ExtensionRegistry $extensionRegistry
+		ExtensionRegistry $extensionRegistry,
+		PageProps $pageProps
 	) {
 		$this->isLoaded = $extensionRegistry->isLoaded( 'Echo' );
+		$this->pageProps = $pageProps;
 	}
 
 	/**
@@ -72,7 +80,7 @@ class EchoInterface {
 
 		$associatedPageDisplayTitle = $associatedPage->getTitle()->getPrefixedText();
 		$associatedTitle = $associatedPage->getTitle();
-		$values = PageProps::getInstance()->getProperties( $associatedTitle, 'displaytitle' );
+		$values = $this->pageProps->getProperties( $associatedTitle, 'displaytitle' );
 		if ( array_key_exists( $associatedTitle->getArticleID(), $values ) ) {
 			$associatedPageDisplayTitle = $values[$associatedTitle->getArticleID()];
 		}
@@ -115,7 +123,7 @@ class EchoInterface {
 
 		$associatedPageDisplayTitle = $associatedPage->getTitle()->getPrefixedText();
 		$associatedTitle = $associatedPage->getTitle();
-		$values = PageProps::getInstance()->getProperties( $associatedTitle, 'displaytitle' );
+		$values = $this->pageProps->getProperties( $associatedTitle, 'displaytitle' );
 		if ( array_key_exists( $associatedTitle->getArticleID(), $values ) ) {
 			$associatedPageDisplayTitle = $values[$associatedTitle->getArticleID()];
 		}

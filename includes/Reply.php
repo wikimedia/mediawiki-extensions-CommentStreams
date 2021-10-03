@@ -27,6 +27,7 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\User\UserFactory;
 use MWException;
+use PageProps;
 use ParserFactory;
 use RepoGroup;
 use User;
@@ -54,6 +55,7 @@ class Reply extends AbstractComment {
 	 * @param RevisionStore $revisionStore
 	 * @param ParserFactory $parserFactory
 	 * @param UserFactory $userFactory
+	 * @param PageProps $pageProps
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param WikiPage $wikiPage
@@ -69,6 +71,7 @@ class Reply extends AbstractComment {
 		RevisionStore $revisionStore,
 		ParserFactory $parserFactory,
 		UserFactory $userFactory,
+		PageProps $pageProps,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		WikiPage $wikiPage,
@@ -83,6 +86,7 @@ class Reply extends AbstractComment {
 			$revisionStore,
 			$parserFactory,
 			$userFactory,
+			$pageProps,
 			$userAvatarPropertyName,
 			$userRealNamePropertyName,
 			$wikiPage,
