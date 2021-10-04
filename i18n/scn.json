@@ -8,5 +8,7 @@
 	"commentstreams-buttontooltip-cancel": "annulla",
 	"commentstreams-dialog-buttontext-cancel": "Annulla",
 	"commentstreams-dialog-buttontext-yes": "Sì",
-	"commentstreams-dialog-buttontext-no": "No"
+	"commentstreams-dialog-buttontext-no": "No",
+	"commentstreams-allcomments-label-wikitext": "Testu",
+	"commentstreams-allcomments-label-commenttitle": "Tìtulu"
 }

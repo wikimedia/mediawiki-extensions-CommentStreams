@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"JSantos",
 			"Joao Xavier"
 		]
 	},
+	"commentstreams-author-anonymous": "anonimo",
 	"commentstreams-buttontext-reply": "Respondar",
 	"commentstreams-buttontooltip-reply": "respondez",
 	"commentstreams-buttontooltip-edit": "redaktar",
