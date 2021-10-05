@@ -2,11 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Dr Lotus Black",
+			"Ninjastrikers",
 			"ခွန်ပညာႏ(တောင်ႏကီꩻ)"
 		]
 	},
 	"commentstreams-author-anonymous": "အမည်မသိ",
-	"apihelp-cspostreply-summary": "ဒင်ႏလိတ်ပြန်ႏတသာ",
+	"apihelp-cspostreply-summary": "စာပြန်မှုအသစ် တင်ရန်။",
 	"commentstreams-buttontext-add": "မှတ်ချက် ပေါင်းထည့်ရန်",
 	"commentstreams-buttontext-reply": "အကြောင်းပြန်ရန်",
 	"commentstreams-buttontooltip-add": "မှတ်ချက် ပေါင်းထည့်ရန်",
@@ -27,7 +28,7 @@
 	"commentstreams-allcomments-nocommentsfound": "မှတ်ချက်များ မတွေ့ပါ",
 	"commentstreams-allcomments-label-wikitext": "မှတ်ချက်",
 	"commentstreams-allcomments-label-commenttitle": "ခေါင်းစဉ်",
-	"commentstreams-allcomments-label-reply": "ပြန်ႏချာ",
+	"commentstreams-allcomments-label-reply": "စာပြန်ရန်",
 	"commentstreams-allcomments-label-author": "စာရေးသူ",
 	"commentstreams-allcomments-label-created": "ဖန်တီးခဲ့သည်",
 	"commentstreams-allcomments-label-lasteditor": "နောက်ဆုံး တည်းဖြတ်သူ",
