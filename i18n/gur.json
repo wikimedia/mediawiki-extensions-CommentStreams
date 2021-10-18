@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"Akoonaba"
+		]
+	},
+	"apihelp-cspostcomment-param-commenttitle": "Tɔgum la zudaalekɔ",
+	"apihelp-cseditcomment-param-commenttitle": "Fu tɔgum la zudaalɛ",
+	"apihelp-cseditcomment-pageid-example": "Maliŋe tee fu yetɔgum na la pɛɛge la id 3",
+	"apihelp-csdeletereply-description": "Dileti lerekirɛ.yɛsabii pɛɛge la id bii bo zudaalekɔ",
+	"apihelp-csdeletereply-pageid-example": "Dileti lerekire la pɛɛge la id 3",
+	"apihelp-cspostreply-description": "Poste lerekpaalika",
+	"apihelp-cseditreply-pageid-example": "Maliŋe tee lerekire la la pɛɛge id 3",
+	"commentstreams-allcomments-label-wikitext": "Tɛxse",
+	"commentstreams-allcomments-label-commenttitle": "Zudaalekɔ"
+}
