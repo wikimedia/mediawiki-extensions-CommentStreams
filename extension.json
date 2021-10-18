@@ -19,7 +19,8 @@
 			"services": [
 				"CommentStreamsStore",
 				"CommentStreamsFactory",
-				"LinkRenderer"
+				"LinkRenderer",
+				"WikiPageFactory"
 			]
 		}
 	},
@@ -142,14 +143,16 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
 			"services": [
 				"CommentStreamsFactory",
-				"CommentStreamsEchoInterface"
+				"CommentStreamsEchoInterface",
+				"WikiPageFactory"
 			]
 		},
 		"cspostreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostReply",
 			"services": [
 				"CommentStreamsFactory",
-				"CommentStreamsEchoInterface"
+				"CommentStreamsEchoInterface",
+				"WikiPageFactory"
 			]
 		},
 		"csquerycomment": {
@@ -218,7 +221,8 @@
 				"LinkRenderer",
 				"RevisionStore",
 				"PermissionManager",
-				"PageProps"
+				"PageProps",
+				"WikiPageFactory"
 			]
 		},
 		"schema": {

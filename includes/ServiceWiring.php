@@ -41,7 +41,8 @@ return [
 			return new CommentStreamsStore(
 				$services->getDBLoadBalancer(),
 				$services->getPermissionManager(),
-				$services->getUserFactory()
+				$services->getUserFactory(),
+				$services->getWikiPageFactory()
 			);
 		},
 	'CommentStreamsFactory' =>
@@ -57,7 +58,8 @@ return [
 				$services->getRevisionStore(),
 				$services->getParserFactory(),
 				$services->getUserFactory(),
-				$services->getPageProps()
+				$services->getPageProps(),
+				$services->getWikiPageFactory()
 			);
 		},
 	'CommentStreamsEchoInterface' =>
@@ -72,7 +74,8 @@ return [
 			return new SMWInterface(
 				new ServiceOptions( SMWInterface::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
 				ExtensionRegistry::getInstance(),
-				$services->getService( 'CommentStreamsStore' )
+				$services->getService( 'CommentStreamsStore' ),
+				$services->getWikiPageFactory()
 			);
 		},
 	'CommentStreamsSocialProfileInterface' =>

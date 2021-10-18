@@ -34,6 +34,7 @@ use MediaWiki\Hook\MovePageIsValidMoveHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsHook;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Revision\RevisionRecord;
@@ -105,6 +106,11 @@ class MainHooks implements
 	private $pageProps;
 
 	/**
+	 * @var WikiPageFactory
+	 */
+	private $wikiPageFactory;
+
+	/**
 	 * @param CommentStreamsHandler $commentStreamsHandler
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param CommentStreamsStore $commentStreamsStore
@@ -112,6 +118,7 @@ class MainHooks implements
 	 * @param RevisionStore $revisionStore
 	 * @param PermissionManager $permissionManager
 	 * @param PageProps $pageProps
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		CommentStreamsHandler $commentStreamsHandler,
@@ -120,7 +127,8 @@ class MainHooks implements
 		LinkRenderer $linkRenderer,
 		RevisionStore $revisionStore,
 		PermissionManager $permissionManager,
-		PageProps $pageProps
+		PageProps $pageProps,
+		WikiPageFactory $wikiPageFactory
 	) {
 		$this->commentStreamsHandler = $commentStreamsHandler;
 		$this->commentStreamsFactory = $commentStreamsFactory;
@@ -129,6 +137,7 @@ class MainHooks implements
 		$this->revisionStore = $revisionStore;
 		$this->permissionManager = $permissionManager;
 		$this->pageProps = $pageProps;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -304,14 +313,14 @@ class MainHooks implements
 			return;
 		}
 
-		$wikiPage = CommentStreamsUtils::newWikiPageFromId( $title->getArticleID() );
+		$wikiPage = $this->wikiPageFactory->newFromID( $title->getArticleID() );
 		if ( !$wikiPage ) {
 			return;
 		}
 
 		$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
 		if ( $reply ) {
-			$wikiPage = CommentStreamsUtils::newWikiPageFromId( $reply->getParentCommentPageId() );
+			$wikiPage = $this->wikiPageFactory->newFromID( $reply->getParentCommentPageId() );
 			if ( !$wikiPage ) {
 				return;
 			}
@@ -475,12 +484,14 @@ class MainHooks implements
 	public function onAfterImportPage( $title, $foreignTitle, $revCount,
 									   $sRevCount, $pageInfo
 	) {
+		$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
 		if ( isset( $pageInfo['CommentMetadata'] ) ) {
 			$info = $pageInfo['CommentMetadata'];
 			$associatedPageName = $info['associatedPageName'];
 			$associatedTitle = Title::newFromText( $associatedPageName );
+			$associatedPage = $this->wikiPageFactory->newFromTitle( $associatedTitle );
 			if ( !$associatedTitle->exists() ) {
-				$associatedId = CommentStreamsUtils::createEmptyPage( $associatedTitle );
+				$associatedId = CommentStreamsUtils::createEmptyPage( $associatedPage, $user );
 			} else {
 				$associatedId = $associatedTitle->getId();
 			}
@@ -498,7 +509,8 @@ class MainHooks implements
 			$commentPageName = $info['parentCommentPageName'];
 			$commentTitle = Title::newFromText( $commentPageName );
 			if ( !$commentTitle->exists() ) {
-				$commentId = CommentStreamsUtils::createEmptyPage( $commentTitle );
+				$commentPage = $this->wikiPageFactory->newFromTitle( $commentTitle );
+				$commentId = CommentStreamsUtils::createEmptyPage( $commentPage, $user );
 			} else {
 				$commentId = $commentTitle->getId();
 			}

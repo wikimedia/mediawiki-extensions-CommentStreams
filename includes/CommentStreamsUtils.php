@@ -21,47 +21,20 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
+use CommentStoreComment;
 use Content;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Permissions\Authority;
+use MediaWiki\Revision\SlotRecord;
 use MWException;
 use Status;
-use Title;
-use User;
 use WikiPage;
 use WikitextContent;
 
 class CommentStreamsUtils {
 	/**
-	 * @param int $id Article ID to load
-	 * @param int $from One of the following values:
-	 *        - WikiPage::READ_NORMAL to select from a replica DB
-	 *        - WikiPage::READ_LATEST to select from the primary database
-	 * @return WikiPage|null
-	 */
-	public static function newWikiPageFromId( int $id, int $from = WikiPage::READ_NORMAL ): ?WikiPage {
-		if ( class_exists( '\MediaWiki\Page\WikiPageFactory' ) ) {
-			// MW 1.36+
-			return MediaWikiServices::getInstance()->getWikiPageFactory()->newFromID( $id, $from );
-		}
-		return WikiPage::newFromId( $id, $from );
-	}
-
-	/**
-	 * @param Title $title
-	 * @return bool
-	 */
-	public static function hasDeletedEdits( Title $title ): bool {
-		if ( method_exists( $title, 'hasDeletedEdits' ) ) {
-			// MW 1.36+
-			return $title->hasDeletedEdits();
-		}
-		return $title->isDeletedQuick();
-	}
-
-	/**
 	 * @param WikiPage $wikiPage
 	 * @param Content $content
-	 * @param User $user
+	 * @param Authority $authority
 	 * @param int $flags
 	 * @return Status
 	 * @throws MWException
@@ -69,33 +42,27 @@ class CommentStreamsUtils {
 	public static function doEditContent(
 		WikiPage $wikiPage,
 		Content $content,
-		User $user,
+		Authority $authority,
 		int $flags
 	): Status {
-		return $wikiPage->doEditContent(
-			$content,
-			'',
-			$flags,
-			false,
-			$user
-		);
+		$updater = $wikiPage->newPageUpdater( $authority );
+		$updater->setContent( SlotRecord::MAIN, $content );
+		$summary = CommentStoreComment::newUnsavedComment( '' );
+		$updater->saveRevision( $summary, $flags );
+		return $updater->getStatus();
 	}
 
 	/**
-	 * @param Title $title
+	 * @param WikiPage $wikiPage
+	 * @param Authority $authority
 	 * @return int|null
 	 * @throws MWException
 	 */
 	public static function createEmptyPage(
-		Title $title
+		WikiPage $wikiPage,
+		Authority $authority
 	) {
-		if ( class_exists( '\MediaWiki\Page\WikiPageFactory' ) ) {
-			// MW 1.36+
-			 $wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
-		} else {
-			$wikiPage = new WikiPage( $title );
-		}
-		$result = $wikiPage->doEditContent( new WikitextContent( '' ), '' );
+		$result = self::doEditContent( $wikiPage, new WikitextContent( '' ), $authority, EDIT_NEW );
 		if ( $result->isOK() ) {
 			return $result->getValue()['revision-record']->getId();
 		}

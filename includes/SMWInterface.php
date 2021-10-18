@@ -25,6 +25,7 @@ use ConfigException;
 use ExtensionRegistry;
 use JobQueueGroup;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\User\UserIdentity;
 use SMW\DIProperty;
 use SMW\DIWikiPage;
@@ -54,6 +55,11 @@ class SMWInterface {
 	private $commentStreamsStore;
 
 	/**
+	 * @var WikiPageFactory
+	 */
+	private $wikiPageFactory;
+
+	/**
 	 * @var bool
 	 */
 	private $enableVoting;
@@ -62,16 +68,19 @@ class SMWInterface {
 	 * @param ServiceOptions $options
 	 * @param ExtensionRegistry $extensionRegistry
 	 * @param CommentStreamsStore $commentStreamsStore
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ServiceOptions $options,
 		ExtensionRegistry $extensionRegistry,
-		CommentStreamsStore $commentStreamsStore
+		CommentStreamsStore $commentStreamsStore,
+		WikiPageFactory $wikiPageFactory
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
 		$this->isLoaded = $extensionRegistry->isLoaded( 'SemanticMediaWiki' );
 		$this->commentStreamsStore = $commentStreamsStore;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -170,7 +179,7 @@ class SMWInterface {
 				return true;
 			}
 
-			$parentWikiPage = CommentStreamsUtils::newWikiPageFromId( $reply[ 'comment_page_id' ] );
+			$parentWikiPage = $this->wikiPageFactory->newFromID( $reply[ 'comment_page_id' ] );
 			if ( $parentWikiPage ) {
 				$propertyDI = new DIProperty( '___CS_REPLYTO' );
 				$dataItem = DIWikiPage::newFromTitle( $parentWikiPage->getTitle() );
@@ -180,7 +189,7 @@ class SMWInterface {
 			return true;
 		}
 
-		$assocWikiPage = CommentStreamsUtils::newWikiPageFromId( $comment[ 'assoc_page_id' ] );
+		$assocWikiPage = $this->wikiPageFactory->newFromID( $comment[ 'assoc_page_id' ] );
 		if ( $assocWikiPage ) {
 			$propertyDI = new DIProperty( '___CS_ASSOCPG' );
 			$dataItem = DIWikiPage::newFromTitle( $assocWikiPage->getTitle() );

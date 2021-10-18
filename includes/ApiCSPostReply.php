@@ -26,6 +26,7 @@ use ApiMain;
 use ApiUsageException;
 use ManualLogEntry;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\WikiPageFactory;
 use MWException;
 use Title;
 
@@ -41,20 +42,28 @@ class ApiCSPostReply extends ApiBase {
 	private $echoInterface;
 
 	/**
+	 * @var WikiPageFactory
+	 */
+	private $wikiPageFactory;
+
+	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param EchoInterface $commentStreamsEchoInterface
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
 		CommentStreamsFactory $commentStreamsFactory,
-		EchoInterface $commentStreamsEchoInterface
+		EchoInterface $commentStreamsEchoInterface,
+		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
 		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->echoInterface = $commentStreamsEchoInterface;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -71,7 +80,7 @@ class ApiCSPostReply extends ApiBase {
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
 		$parentId = (int)$parentId;
-		$parentPage = CommentStreamsUtils::newWikiPageFromId( $parentId );
+		$parentPage = $this->wikiPageFactory->newFromId( $parentId );
 		if ( !$parentPage || !$parentPage->getTitle()->exists() ) {
 			$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 		} else {
@@ -79,7 +88,7 @@ class ApiCSPostReply extends ApiBase {
 			if ( !$parentComment ) {
 				$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 			} else {
-				$associatedPage = CommentStreamsUtils::newWikiPageFromId( $parentComment->getAssociatedId() );
+				$associatedPage = $this->wikiPageFactory->newFromId( $parentComment->getAssociatedId() );
 				if ( !$associatedPage ) {
 					$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 				} else {

@@ -26,6 +26,7 @@ use ApiMain;
 use ApiUsageException;
 use ManualLogEntry;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\WikiPageFactory;
 use MWException;
 use Title;
 
@@ -41,20 +42,28 @@ class ApiCSPostComment extends ApiBase {
 	private $echoInterface;
 
 	/**
+	 * @var WikiPageFactory
+	 */
+	private $wikiPageFactory;
+
+	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param EchoInterface $commentStreamsEchoInterface
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
 		CommentStreamsFactory $commentStreamsFactory,
-		EchoInterface $commentStreamsEchoInterface
+		EchoInterface $commentStreamsEchoInterface,
+		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
 		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->echoInterface = $commentStreamsEchoInterface;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -73,7 +82,7 @@ class ApiCSPostComment extends ApiBase {
 		$commentBlockName = $this->getMain()->getVal( 'commentblockname' );
 
 		$associatedId = (int)$associatedId;
-		$associatedPage = CommentStreamsUtils::newWikiPageFromId( $associatedId );
+		$associatedPage = $this->wikiPageFactory->newFromID( $associatedId );
 		if ( $associatedPage === null || !$associatedPage->getTitle()->exists() ) {
 			$this->dieWithError( 'commentstreams-api-error-post-associatedpagedoesnotexist' );
 		} else {

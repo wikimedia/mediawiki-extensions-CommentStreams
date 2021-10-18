@@ -24,6 +24,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use FatalError;
 use IContextSource;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\User\UserFactory;
 use MWException;
@@ -56,6 +57,7 @@ class Reply extends AbstractComment {
 	 * @param ParserFactory $parserFactory
 	 * @param UserFactory $userFactory
 	 * @param PageProps $pageProps
+	 * @param WikiPageFactory $wikiPageFactory
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param WikiPage $wikiPage
@@ -72,6 +74,7 @@ class Reply extends AbstractComment {
 		ParserFactory $parserFactory,
 		UserFactory $userFactory,
 		PageProps $pageProps,
+		WikiPageFactory $wikiPageFactory,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		WikiPage $wikiPage,
@@ -87,6 +90,7 @@ class Reply extends AbstractComment {
 			$parserFactory,
 			$userFactory,
 			$pageProps,
+			$wikiPageFactory,
 			$userAvatarPropertyName,
 			$userRealNamePropertyName,
 			$wikiPage,
@@ -142,7 +146,7 @@ class Reply extends AbstractComment {
 		);
 		$this->wikitext = $wikitext;
 		$this->modificationTimestamp = null;
-		$wikiPage = CommentStreamsUtils::newWikiPageFromId( $this->wikiPage->getId(), WikiPage::READ_LATEST );
+		$wikiPage = $this->wikiPageFactory->newFromID( $this->wikiPage->getId(), WikiPage::READ_LATEST );
 		if ( $wikiPage ) {
 			$this->wikiPage = $wikiPage;
 		}

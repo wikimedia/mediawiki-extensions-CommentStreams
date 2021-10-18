@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use Html;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\WikiPageFactory;
 use OOUI\ButtonWidget;
 use OOUI\IconWidget;
 use SpecialPage;
@@ -44,19 +45,27 @@ class CommentStreamsAllComments extends SpecialPage {
 	private $linkRenderer;
 
 	/**
+	 * @var WikiPageFactory
+	 */
+	private $wikiPageFactory;
+
+	/**
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param LinkRenderer $linkRenderer
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		CommentStreamsStore $commentStreamsStore,
 		CommentStreamsFactory $commentStreamsFactory,
-		LinkRenderer $linkRenderer
+		LinkRenderer $linkRenderer,
+		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( 'CommentStreamsAllComments' );
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->linkRenderer = $linkRenderer;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -126,7 +135,7 @@ class CommentStreamsAllComments extends SpecialPage {
 		$more = false;
 		foreach ( $pages as $page ) {
 			if ( $index < $limit ) {
-				$wikiPage = CommentStreamsUtils::newWikiPageFromId( $page->page_id );
+				$wikiPage = $this->wikiPageFactory->newFromID( $page->page_id );
 				if ( !$wikiPage ) {
 					continue;
 				}
@@ -136,7 +145,7 @@ class CommentStreamsAllComments extends SpecialPage {
 					if ( !$reply ) {
 						continue;
 					}
-					$commentWikiPage = CommentStreamsUtils::newWikiPageFromId( $reply->getParentCommentPageId() );
+					$commentWikiPage = $this->wikiPageFactory->newFromID( $reply->getParentCommentPageId() );
 					if ( !$commentWikiPage ) {
 						continue;
 					}
@@ -169,7 +178,7 @@ class CommentStreamsAllComments extends SpecialPage {
 					'href' => $title->getFullURL()
 				] );
 				$associatedPageId = $comment->getAssociatedId();
-				$associatedWikiPage = CommentStreamsUtils::newWikiPageFromId( $associatedPageId );
+				$associatedWikiPage = $this->wikiPageFactory->newFromID( $associatedPageId );
 				if ( $associatedWikiPage ) {
 					$associatedPageLink = $this->linkRenderer->makeLink( $associatedWikiPage->getTitle() );
 				} else {

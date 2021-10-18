@@ -22,6 +22,7 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use FatalError;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\User\UserFactory;
@@ -51,18 +52,26 @@ class CommentStreamsStore {
 	private $userFactory;
 
 	/**
+	 * @var WikiPageFactory
+	 */
+	private $wikiPageFactory;
+
+	/**
 	 * @param ILoadBalancer $loadBalancer
 	 * @param PermissionManager $permissionManager
 	 * @param UserFactory $userFactory
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ILoadBalancer $loadBalancer,
 		PermissionManager $permissionManager,
-		UserFactory $userFactory
+		UserFactory $userFactory,
+		WikiPageFactory $wikiPageFactory
 	) {
 		$this->loadBalancer = $loadBalancer;
 		$this->permissionManager = $permissionManager;
 		$this->userFactory = $userFactory;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -151,7 +160,7 @@ class CommentStreamsStore {
 			->fetchResultSet();
 		$commentWikiPages = [];
 		foreach ( $result as $row ) {
-			$wikiPage = CommentStreamsUtils::newWikiPageFromId( $row->cst_c_comment_page_id );
+			$wikiPage = $this->wikiPageFactory->newFromID( $row->cst_c_comment_page_id );
 			if ( $wikiPage ) {
 				$commentWikiPages[] = $wikiPage;
 			}
@@ -175,7 +184,7 @@ class CommentStreamsStore {
 			->fetchResultSet();
 		$replyWikiPages = [];
 		foreach ( $result as $row ) {
-			$wikiPage = CommentStreamsUtils::newWikiPageFromId( $row->cst_r_reply_page_id );
+			$wikiPage = $this->wikiPageFactory->newFromID( $row->cst_r_reply_page_id );
 			if ( $wikiPage ) {
 				$replyWikiPages[] = $wikiPage;
 			}
@@ -243,7 +252,7 @@ class CommentStreamsStore {
 			$index = wfRandomString();
 			$title = Title::newFromText( $index, NS_COMMENTSTREAMS );
 			$wikiPage = new WikiPage( $title );
-			$deleted = CommentStreamsUtils::hasDeletedEdits( $title );
+			$deleted = $title->hasDeletedEdits();
 			if ( !$deleted && !$title->exists() ) {
 				if ( !$this->permissionManager->userCan( 'cs-comment', $user, $title ) ) {
 					return null;

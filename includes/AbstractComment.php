@@ -25,6 +25,7 @@ use Html;
 use IContextSource;
 use IDBAccessObject;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\User\UserFactory;
@@ -71,6 +72,11 @@ abstract class AbstractComment {
 	 * @var PageProps
 	 */
 	protected $pageProps;
+
+	/**
+	 * @var WikiPageFactory
+	 */
+	protected $wikiPageFactory;
 
 	/**
 	 * @var ?string
@@ -138,6 +144,7 @@ abstract class AbstractComment {
 	 * @param ParserFactory $parserFactory
 	 * @param UserFactory $userFactory
 	 * @param PageProps $pageProps
+	 * @param WikiPageFactory $wikiPageFactory
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param WikiPage $wikiPage
@@ -152,6 +159,7 @@ abstract class AbstractComment {
 		ParserFactory $parserFactory,
 		UserFactory $userFactory,
 		PageProps $pageProps,
+		WikiPageFactory $wikiPageFactory,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		WikiPage $wikiPage,
@@ -164,6 +172,7 @@ abstract class AbstractComment {
 		$this->parserFactory = $parserFactory;
 		$this->userFactory = $userFactory;
 		$this->pageProps = $pageProps;
+		$this->wikiPageFactory = $wikiPageFactory;
 		$this->userAvatarPropertyName = $userAvatarPropertyName;
 		$this->userRealNamePropertyName = $userRealNamePropertyName;
 		$this->wikiPage = $wikiPage;
