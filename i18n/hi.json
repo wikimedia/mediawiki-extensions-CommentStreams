@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Bhatakati aatma",
 			"Rishi.Singh"
 		]
@@ -10,5 +11,6 @@
 	"commentstreams-buttontext-add": "टिप्पणी जोड़ें",
 	"commentstreams-buttontext-reply": "प्रत्युत्तर",
 	"commentstreams-allcomments-nocommentsfound": "और अधिक सीखें।",
+	"commentstreams-allcomments-label-reply": "जवाब दें",
 	"commentstreams-allcomments-label-lastedited": "अंतिम संपादन"
 }
