@@ -13,5 +13,7 @@
 	"commentstreams-buttontooltip-permalink": "Permananta ligilo",
 	"commentstreams-buttontooltip-cancel": "anular",
 	"commentstreams-dialog-buttontext-cancel": "Nuligar",
+	"commentstreams-dialog-buttontext-yes": "Yes",
+	"commentstreams-dialog-buttontext-no": "No",
 	"commentstreams-allcomments-label-author": "Autoro"
 }
