@@ -22,13 +22,17 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Article;
+use ForeignTitle;
 use HtmlArmor;
 use MediaWiki;
+use MediaWiki\Hook\AfterImportPageHook;
 use MediaWiki\Hook\BeforePageDisplayHook;
 use MediaWiki\Hook\CanonicalNamespacesHook;
+use MediaWiki\Hook\ImportHandlePageXMLTagHook;
 use MediaWiki\Hook\MediaWikiPerformActionHook;
 use MediaWiki\Hook\MovePageIsValidMoveHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsHook;
 use MediaWiki\Permissions\PermissionManager;
@@ -43,10 +47,15 @@ use SearchResult;
 use Skin;
 use SpecialSearch;
 use Status;
+use stdClass;
 use Title;
 use User;
 use WebRequest;
+use WikiImporter;
 use WikiPage;
+use Xml;
+use XmlDumpWriter;
+use XMLReader;
 
 class MainHooks implements
 	CanonicalNamespacesHook,
@@ -55,7 +64,10 @@ class MainHooks implements
 	GetUserPermissionsErrorsHook,
 	BeforePageDisplayHook,
 	ShowSearchHitTitleHook,
-	ParserFirstCallInitHook
+	ParserFirstCallInitHook,
+	XmlDumpWriterOpenPageHook,
+	ImportHandlePageXMLTagHook,
+	AfterImportPageHook
 {
 	/**
 	 * @var CommentStreamsHandler
@@ -66,6 +78,11 @@ class MainHooks implements
 	 * @var CommentStreamsFactory
 	 */
 	private $commentStreamsFactory;
+
+	/**
+	 * @var CommentStreamsStore
+	 */
+	private $commentStreamsStore;
 
 	/**
 	 * @var LinkRenderer
@@ -85,6 +102,7 @@ class MainHooks implements
 	/**
 	 * @param CommentStreamsHandler $commentStreamsHandler
 	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param LinkRenderer $linkRenderer
 	 * @param RevisionStore $revisionStore
 	 * @param PermissionManager $permissionManager
@@ -92,12 +110,14 @@ class MainHooks implements
 	public function __construct(
 		CommentStreamsHandler $commentStreamsHandler,
 		CommentStreamsFactory $commentStreamsFactory,
+		CommentStreamsStore $commentStreamsStore,
 		LinkRenderer $linkRenderer,
 		RevisionStore $revisionStore,
 		PermissionManager $permissionManager
 	) {
 		$this->commentStreamsHandler = $commentStreamsHandler;
 		$this->commentStreamsFactory = $commentStreamsFactory;
+		$this->commentStreamsStore = $commentStreamsStore;
 		$this->linkRenderer = $linkRenderer;
 		$this->revisionStore = $revisionStore;
 		$this->permissionManager = $permissionManager;
@@ -350,5 +370,136 @@ class MainHooks implements
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
 		$GLOBALS['wgLogTypes'][] = 'commentstreams';
 		$GLOBALS['wgLogActionsHandlers']['commentstreams/*'] = 'LogFormatter';
+	}
+
+	/**
+	 * This hook is called at the end of XmlDumpWriter::openPage, to allow
+	 * extra metadata to be added.
+	 * For comments, saves the associated page name and the comment title.
+	 * For replies, saves the parent comment page name.
+	 * Does not save votes, as users may be different between the source and target wiki.
+	 *
+	 * @param XmlDumpWriter $writer
+	 * @param string &$out Output string
+	 * @param stdClass $row Database row for the page
+	 * @param Title $title Title of the page
+	 * @return bool|void True or no return value to continue or false to abort
+	 */
+	public function onXmlDumpWriterOpenPage( $writer, &$out, $row, $title ) {
+		if ( $title->getNamespace() == NS_COMMENTSTREAMS ) {
+			$values = [];
+			$wikiPage = new WikiPage( $title );
+			$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+			if ( $comment ) {
+				$metadataTag = 'CommentMetadata';
+				$values['associatedPageName'] = $writer::canonicalTitle(
+					Title::newFromID( $comment->getAssociatedId() ) );
+				$values['commentTitle'] = $comment->getCommentTitle();
+				$values['blockName'] = $comment->getBlockName();
+			} else {
+				$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+				if ( $reply ) {
+					$metadataTag = 'ReplyMetadata';
+					$values['parentCommentPageName'] =
+						$writer::canonicalTitle( Title::newFromID( $reply->getParentCommentPageId() ) );
+				} else {
+					return false;
+				}
+			}
+			if ( $values != [] ) {
+				$out .= '    ' . Xml::openElement( $metadataTag ) . "\n";
+				foreach ( $values as $key => $value ) {
+					if ( !empty( $value ) ) {
+						$out .= '      ' . Xml::element( $key, null, $value ) . "\n";
+					}
+				}
+				$out .= '    ' . Xml::closeElement( $metadataTag ) . "\n";
+			}
+		}
+	}
+
+	/**
+	 * This hook is called when parsing an XML tag in a page.
+	 *
+	 * @param WikiImporter $wikiImporter
+	 * @param array &$pageInfo Array of information
+	 * @return bool|void True or no return value to continue, or false to stop further
+	 *   processing of the tag
+	 */
+	public function onImportHandlePageXMLTag( $wikiImporter, &$pageInfo ) {
+		$reader = $wikiImporter->getReader();
+		$metadataType = $reader->name;
+		if ( $metadataType === 'CommentMetadata' ) {
+			$fields = [
+				'associatedPageName',
+				'commentTitle',
+				'blockName'
+			];
+		} elseif ( $metadataType === 'ReplyMetadata' ) {
+			$fields = [
+				'parentCommentPageName'
+			];
+		} else {
+			return;
+		}
+
+		$pageInfo[$metadataType] = [];
+		while ( $reader->read() ) {
+			if ( $reader->nodeType == XmlReader::END_ELEMENT && $reader->name === $metadataType ) {
+				break;
+			}
+			if ( in_array( $reader->name, $fields ) ) {
+				$pageInfo[$metadataType][$reader->name] = $wikiImporter->nodeContents();
+			}
+		}
+	}
+
+	/**
+	 * This hook is called when a page import is completed.
+	 *
+	 * @param Title $title Title under which the revisions were imported
+	 * @param ForeignTitle $foreignTitle ForeignTitle object based on data provided by the XML file
+	 * @param int $revCount Number of revisions in the XML file
+	 * @param int $sRevCount Number of successfully imported revisions
+	 * @param array $pageInfo Associative array of page information
+	 * @return bool|void True or no return value to continue or false to abort
+	 */
+	public function onAfterImportPage( $title, $foreignTitle, $revCount,
+									   $sRevCount, $pageInfo
+	) {
+		if ( isset( $pageInfo['CommentMetadata'] ) ) {
+			$info = $pageInfo['CommentMetadata'];
+			$associatedPageName = $info['associatedPageName'];
+			$associatedTitle = Title::newFromText( $associatedPageName );
+			if ( !$associatedTitle->exists() ) {
+				$associatedId = CommentStreamsUtils::createEmptyPage( $associatedTitle );
+			} else {
+				$associatedId = $associatedTitle->getId();
+			}
+			$blockName = $info['blockName'] ?? null;
+			if ( $associatedId ) {
+				$this->commentStreamsStore->upsertCommentMetadata(
+					$title->getId(),
+					$associatedId,
+					$info['commentTitle'],
+					$blockName
+				);
+			}
+		} elseif ( isset( $pageInfo['ReplyMetadata'] ) ) {
+			$info = $pageInfo['ReplyMetadata'];
+			$commentPageName = $info['parentCommentPageName'];
+			$commentTitle = Title::newFromText( $commentPageName );
+			if ( !$commentTitle->exists() ) {
+				$commentId = CommentStreamsUtils::createEmptyPage( $commentTitle );
+			} else {
+				$commentId = $commentTitle->getId();
+			}
+			if ( $commentId ) {
+				$this->commentStreamsStore->upsertReplyMetadata(
+					$title->getId(),
+					$commentId
+				);
+			}
+		}
 	}
 }

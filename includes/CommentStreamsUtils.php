@@ -28,6 +28,7 @@ use Status;
 use Title;
 use User;
 use WikiPage;
+use WikitextContent;
 
 class CommentStreamsUtils {
 	/**
@@ -78,5 +79,26 @@ class CommentStreamsUtils {
 			false,
 			$user
 		);
+	}
+
+	/**
+	 * @param Title $title
+	 * @return int|null
+	 * @throws MWException
+	 */
+	public static function createEmptyPage(
+		Title $title
+	) {
+		if ( class_exists( '\MediaWiki\Page\WikiPageFactory' ) ) {
+			// MW 1.36+
+			 $wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
+		} else {
+			$wikiPage = new WikiPage( $title );
+		}
+		$result = $wikiPage->doEditContent( new WikitextContent( '' ), '' );
+		if ( $result->isOK() ) {
+			return $result->getValue()['revision-record']->getId();
+		}
+		return null;
 	}
 }
