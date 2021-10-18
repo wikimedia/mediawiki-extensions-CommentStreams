@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Kareyac",
+			"Okras",
 			"Thothsum",
 			"Vlad5250"
 		]
@@ -18,6 +19,7 @@
 	"commentstreams-buttontooltip-unwatch": "не следить",
 	"commentstreams-buttontooltip-cancel": "отмена",
 	"commentstreams-dialog-buttontext-ok": "ОК",
+	"commentstreams-dialog-buttontext-cancel": "Отмена",
 	"commentstreams-dialog-buttontext-yes": "Да",
 	"commentstreams-dialog-buttontext-no": "Нет",
 	"commentstreamsallcomments": "Все комментарии",
