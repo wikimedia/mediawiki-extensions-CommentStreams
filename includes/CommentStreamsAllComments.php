@@ -152,16 +152,16 @@ class CommentStreamsAllComments extends SpecialPage {
 					$wikitext = htmlentities( $reply->getWikitext() );
 					$author = $reply->getAuthor();
 					$lastEditor = $reply->getLastEditor();
-					$creationDate = $reply->getCreationDate();
-					$modificationDate = $reply->getModificationDate();
+					$creationDate = $reply->getCreationDate( $this->getUser() );
+					$modificationDate = $reply->getModificationDate( $this->getUser() );
 				} else {
 					$replyCheck = '';
 					$title = $comment->getTitle();
 					$wikitext = htmlentities( $comment->getWikitext() );
 					$author = $comment->getAuthor();
 					$lastEditor = $comment->getLastEditor();
-					$creationDate = $comment->getCreationDate();
-					$modificationDate = $comment->getModificationDate();
+					$creationDate = $comment->getCreationDate( $this->getUser() );
+					$modificationDate = $comment->getModificationDate( $this->getUser() );
 				}
 				$linkButton = new ButtonWidget( [
 					'icon' => 'link',

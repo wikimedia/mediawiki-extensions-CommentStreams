@@ -34,6 +34,7 @@ use PageProps;
 use ParserFactory;
 use RepoGroup;
 use Title;
+use User;
 use WikiPage;
 
 abstract class AbstractComment {
@@ -266,16 +267,20 @@ abstract class AbstractComment {
 	}
 
 	/**
+	 * @param User $user
 	 * @return string
 	 */
-	public function getCreationDate(): string {
+	public function getCreationDate( User $user ): string {
+		$this->creationTimestamp->offsetForUser( $user );
 		return $this->creationTimestamp->format( "M j \a\\t g:i a" );
 	}
 
 	/**
+	 * @param User $user
 	 * @return ?string
 	 */
-	public function getModificationDate(): ?string {
+	public function getModificationDate( User $user ): ?string {
+		$this->modificationTimestamp->offsetForUser( $user );
 		return $this->modificationTimestamp ?
 			$this->modificationTimestamp->format( "M j \a\\t g:i a" ) : null;
 	}
