@@ -169,6 +169,8 @@ class Comment extends AbstractComment {
 	 * @return array get comment data in array suitable for JSON
 	 */
 	public function getJSON( IContextSource $context ): array {
+		$user = $context->getUser();
+
 		$json = [
 			'pageid' => $this->wikiPage->getId(),
 			'commentblockname' => $this->commentBlockName,
@@ -181,12 +183,10 @@ class Comment extends AbstractComment {
 			'userdisplayname' => $this->getUserDisplayName(),
 			'avatar' => $this->avatar,
 			'moderated' => $this->isLastEditModerated() ? "moderated" : null,
-			'created' => $this->getCreationDate(),
+			'created' => $this->getCreationDate( $user ),
 			'created_timestamp' => $this->creationTimestamp->format( "U" ),
-			'modified' => $this->getModificationDate()
+			'modified' => $this->getModificationDate( $user )
 		];
-
-		$user = $context->getUser();
 
 		if ( $this->enableVoting ) {
 			$json['numupvotes'] = $this->commentStreamsStore->getNumUpVotes( $this->getId() );
