@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ConfigException;
 use MediaWiki\MediaWikiServices;
+use SMW\PropertyRegistry;
 use SMW\SemanticData;
 use SMW\Store;
 
@@ -30,10 +31,10 @@ class SMWHooks {
 	/**
 	 * Initialize extra Semantic MediaWiki properties.
 	 * This won't get called unless Semantic MediaWiki is installed.
-	 * @throws ConfigException
+	 * @param PropertyRegistry $propertyRegistry
 	 */
-	public static function initProperties() {
-		MediaWikiServices::getInstance()->get( 'CommentStreamsSMWInterface' )->initProperties();
+	public static function initProperties( PropertyRegistry $propertyRegistry ) {
+		MediaWikiServices::getInstance()->get( 'CommentStreamsSMWInterface' )->initProperties( $propertyRegistry );
 	}
 
 	/**
@@ -61,6 +62,7 @@ class SMWHooks {
 	 * @param array &$configuration An array of the configuration options
 	 */
 	public static function onSMWInitialization( array &$configuration ) {
-		MediaWikiServices::getInstance()->get( 'CommentStreamsSMWInterface' )->onSMWInitialization( $configuration );
+		$namespaceIndex = $GLOBALS['wgCommentStreamsNamespaceIndex'];
+		$configuration['smwgNamespacesWithSemanticLinks'][$namespaceIndex] = true;
 	}
 }

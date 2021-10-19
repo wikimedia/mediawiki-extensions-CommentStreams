@@ -128,17 +128,16 @@ class SMWInterface {
 	/**
 	 * Initialize extra Semantic MediaWiki properties.
 	 * This won't get called unless Semantic MediaWiki is installed.
-	 * @throws ConfigException
+	 * @param PropertyRegistry $propertyRegistry
 	 */
-	public function initProperties() {
-		$pr = PropertyRegistry::getInstance();
-		$pr->registerProperty( '___CS_ASSOCPG', '_wpg', 'Comment on' );
-		$pr->registerProperty( '___CS_REPLYTO', '_wpg', 'Reply to' );
-		$pr->registerProperty( '___CS_TITLE', '_txt', 'Comment title of' );
+	public function initProperties( PropertyRegistry $propertyRegistry ) {
+		$propertyRegistry->registerProperty( '___CS_ASSOCPG', '_wpg', 'Comment on' );
+		$propertyRegistry->registerProperty( '___CS_REPLYTO', '_wpg', 'Reply to' );
+		$propertyRegistry->registerProperty( '___CS_TITLE', '_txt', 'Comment title of' );
 		if ( $this->enableVoting ) {
-			$pr->registerProperty( '___CS_UPVOTES', '_num', 'Comment up votes' );
-			$pr->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );
-			$pr->registerProperty( '___CS_VOTEDIFF', '_num', 'Comment vote diff' );
+			$propertyRegistry->registerProperty( '___CS_UPVOTES', '_num', 'Comment up votes' );
+			$propertyRegistry->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );
+			$propertyRegistry->registerProperty( '___CS_VOTEDIFF', '_num', 'Comment vote diff' );
 		}
 	}
 
@@ -207,17 +206,5 @@ class SMWInterface {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Implements SMW::Settings::BeforeInitializationComplete callback.
-	 * See https://github.com/SemanticMediaWiki/SemanticMediaWiki/blob/master/docs/technical/hooks/hook.settings.beforeinitializationcomplete.md
-	 * Defines CommentStreams namespace constants.
-	 *
-	 * @param array &$configuration An array of the configuration options
-	 */
-	public function onSMWInitialization( array &$configuration ) {
-		$namespaceIndex = $GLOBALS['wgCommentStreamsNamespaceIndex'];
-		$configuration['smwgNamespacesWithSemanticLinks'][$namespaceIndex] = true;
 	}
 }

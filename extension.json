@@ -1,6 +1,6 @@
 {
 	"name": "CommentStreams",
-	"version": "7.1",
+	"version": "7.2",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
@@ -237,7 +237,7 @@
 		"AfterImportPage": "main",
 		"LoadExtensionSchemaUpdates": "schema",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\EchoInterface::onBeforeCreateEchoEvent",
-		"smwInitProperties": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::initProperties",
+		"SMW::Property::initProperties": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::initProperties",
 		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::updateData",
 		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::onSMWInitialization"
 	},
