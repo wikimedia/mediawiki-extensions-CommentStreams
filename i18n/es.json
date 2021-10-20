@@ -5,7 +5,8 @@
 			"Destinid10 2",
 			"Fewasser Traduce",
 			"Fitoschido",
-			"Macofe"
+			"Macofe",
+			"Whovian Biologist"
 		]
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas del wiki",
@@ -26,7 +27,7 @@
 	"apihelp-csdeletecomment-title-example": "eliminar comentario con título de página CommentStreams:3",
 	"apihelp-cspostcomment-description": "Publicar un comentario nuevo.",
 	"apihelp-cspostcomment-summary": "Publicar un comentario nuevo.",
-	"apihelp-cspostcomment-param-commenttitle": "título opcional para el comentario.",
+	"apihelp-cspostcomment-param-commenttitle": "título para el comentario.",
 	"apihelp-cspostcomment-param-wikitext": "wikitexto para comentario.",
 	"apihelp-cspostcomment-param-associatedid": "página a la que está asociado este comentario.",
 	"apihelp-cseditcomment-description": "Edita un comentario existente. Se debe proporcionar el identificador de página o el título.",
@@ -143,7 +144,7 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderador) eliminó}} la respuesta $3",
 	"commentstreamsallcomments": "Todos los comentarios",
 	"commentstreams-allcomments-nocommentsfound": "No se encontró ningún comentario.",
-	"commentstreams-allcomments-label-wikitext": "Comentario",
+	"commentstreams-allcomments-label-wikitext": "Texto",
 	"commentstreams-allcomments-label-commenttitle": "Título del comentario",
 	"commentstreams-allcomments-label-reply": "Responder",
 	"commentstreams-allcomments-label-author": "Autor",
