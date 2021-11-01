@@ -4,11 +4,27 @@
 			"Ajeje Brazorf"
 		]
 	},
+	"commentstreams-author-anonymous": "anònimu",
+	"apihelp-cspostcomment-param-commenttitle": "tìtulu pû cuummentu.",
+	"apihelp-cspostcomment-param-wikitext": "wikitestu pû cummentu.",
+	"apihelp-cseditcomment-param-commenttitle": "tìtulu pû cuummentu.",
+	"apihelp-cseditcomment-param-wikitext": "wikitestu pû cummentu.",
+	"commentstreams-buttontext-add": "Agghiunci cummentu",
+	"commentstreams-buttontooltip-add": "agghiunci cummentu",
+	"commentstreams-buttontooltip-edit": "cancia",
 	"commentstreams-buttontooltip-delete": "cancella",
+	"commentstreams-buttontooltip-watch": "talìa",
+	"commentstreams-buttontooltip-unwatch": "nun taliari cchiù",
 	"commentstreams-buttontooltip-cancel": "annulla",
+	"commentstreams-dialog-delete-message": "Sî sicuru di vuliri cancillari stu cummentu?",
+	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-cancel": "Annulla",
 	"commentstreams-dialog-buttontext-yes": "Sì",
 	"commentstreams-dialog-buttontext-no": "No",
+	"logentry-commentstreams-comment-edit": "$1 {{GENDER:$2|canciau}} lu cummentu $3",
+	"commentstreamsallcomments": "Tutti li cummenti",
 	"commentstreams-allcomments-label-wikitext": "Testu",
-	"commentstreams-allcomments-label-commenttitle": "Tìtulu"
+	"commentstreams-allcomments-label-commenttitle": "Tìtulu",
+	"commentstreams-allcomments-label-author": "Auturi",
+	"commentstreams-allcomments-label-lastedited": "Ùrtimu canciamentu"
 }
