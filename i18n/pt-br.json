@@ -154,6 +154,7 @@
 	"commentstreams-allcomments-label-created": "Criado",
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
 	"commentstreams-allcomments-label-lastedited": "Última edição",
+	"commentstreams-allcomments-label-blockid": "Identificador do bloqueio",
 	"commentstreams-allcomments-button-next": "Próximo",
 	"commentstreams-allcomments-button-previous": "Anterior",
 	"commentstreams-ve-conversion-error": "Ocorreu uma falha de conversão entre texto wiki e HTML para o Editor Visual"

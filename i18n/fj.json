@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Weather Top Wizard"
+		]
+	},
+	"commentstreams-buttontooltip-collapse": "kasura",
+	"commentstreams-buttontooltip-expand": "rabailevu",
+	"notification-link-label-commentstreams-comment-on-watched-page": "Sikova kaya",
+	"notification-link-label-commentstreams-reply-to-watched-comment": "Sikova sauma"
+}

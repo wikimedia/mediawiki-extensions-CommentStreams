@@ -2,7 +2,9 @@
 	"@metadata": {
 		"authors": [
 			"Kareyac",
-			"Vlad5250"
+			"Vlad5250",
+			"Okras",
+			"Thothsum"
 		]
 	},
 	"commentstreams-desc": "Позволяет комментировать викистраницы",
@@ -17,10 +19,12 @@
 	"commentstreams-buttontooltip-unwatch": "не следить",
 	"commentstreams-buttontooltip-cancel": "отмена",
 	"commentstreams-dialog-buttontext-ok": "ОК",
+	"commentstreams-dialog-buttontext-cancel": "Отмена",
 	"commentstreams-dialog-buttontext-yes": "Да",
 	"commentstreams-dialog-buttontext-no": "Нет",
 	"commentstreamsallcomments": "Все комментарии",
 	"commentstreams-allcomments-label-author": "Автор",
 	"commentstreams-allcomments-label-created": "Создано",
+	"commentstreams-allcomments-label-blockid": "Идентификатор блока",
 	"commentstreams-allcomments-button-previous": "Предыдущая"
 }

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ykhwong"
+			"Ykhwong",
+			"Apzp79"
 		]
 	},
 	"commentstreams-desc": "위키 문서에 댓글을 달 수 있게 합니다",
@@ -95,6 +96,8 @@
 	"action-cs-moderator-edit": "다른 사용자의 댓글 편집",
 	"right-cs-moderator-delete": "사용자의 댓글 삭제",
 	"action-cs-moderator-delete": "다른 사용자의 댓글 삭제",
+	"log-name-commentstreams": "CommentStreams 기록",
+	"log-description-commentstreams": "이 이벤트는 CommentStreams 이벤트가 발생할 때 추적합니다.",
 	"logentry-commentstreams-comment-create": "$1님이 $3 댓글을 {{GENDER:$2|만들었습니다}}",
 	"logentry-commentstreams-reply-create": "$1님이 $3 답변을 {{GENDER:$2|만들었습니다}}",
 	"logentry-commentstreams-comment-edit": "$1님이 $3 댓글을 {{GENDER:$2|편집했습니다}}",
@@ -115,6 +118,7 @@
 	"commentstreams-allcomments-label-created": "만들어짐",
 	"commentstreams-allcomments-label-lasteditor": "마지막 편집자",
 	"commentstreams-allcomments-label-lastedited": "최근 편집",
+	"commentstreams-allcomments-label-blockid": "ID 차단",
 	"commentstreams-allcomments-button-next": "다음",
 	"commentstreams-allcomments-button-previous": "이전",
 	"commentstreams-ve-conversion-error": "시각편집기에서 위키텍스트와 HTML 간 변환에 오류가 있습니다"
