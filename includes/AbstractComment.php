@@ -297,7 +297,10 @@ abstract class AbstractComment {
 	 * @return ?string
 	 */
 	public function getModificationDate( User $user ): ?string {
-		$this->modificationTimestamp->offsetForUser( $user );
+		if ( $this->modificationTimestamp ) {
+			$this->modificationTimestamp->offsetForUser( $user );
+		}
+
 		return $this->modificationTimestamp ?
 			$this->modificationTimestamp->format( "M j \a\\t g:i a" ) : null;
 	}
