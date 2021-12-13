@@ -5,6 +5,7 @@
 		]
 	},
 	"commentstreams-author-anonymous": "anonym",
+	"apihelp-csvote-param-vote": "stem (1, -1 eller 0).",
 	"commentstreams-buttontext-add": "Tilføj kommentar",
 	"commentstreams-buttontext-reply": "Svar",
 	"commentstreams-buttontooltip-add": "tilføj kommentar",

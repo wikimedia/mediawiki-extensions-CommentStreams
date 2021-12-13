@@ -4,6 +4,8 @@
 			"Eleassar"
 		]
 	},
+	"commentstreams-buttontooltip-edit": "uredi",
+	"commentstreams-buttontooltip-submit": "objavi",
 	"commentstreams-buttontooltip-cancel": "prekliči",
 	"commentstreams-dialog-buttontext-cancel": "Prekliči",
 	"commentstreams-dialog-buttontext-yes": "Da",

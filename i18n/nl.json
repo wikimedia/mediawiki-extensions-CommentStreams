@@ -2,10 +2,16 @@
 	"@metadata": {
 		"authors": [
 			"Hzjethro",
-			"Mainframe98"
+			"Mainframe98",
+			"McDutchie",
+			"Romaine"
 		]
 	},
 	"commentstreams-author-anonymous": "anoniem",
+	"apihelp-cspostcomment-description": "Plaats nieuw commentaar.",
+	"apihelp-cspostcomment-summary": "Plaats nieuw commentaar.",
+	"apihelp-cspostcomment-param-wikitext": "wikitekst voor commentaar.",
+	"apihelp-cseditcomment-param-wikitext": "wikitekst voor commentaar.",
 	"commentstreams-api-error-notloggedin": "U moet ingelogd zijn.",
 	"commentstreams-api-error-edit-notloggedin": "U moet aangemeld zijn om te kunnen bewerken.",
 	"commentstreams-api-error-delete-notloggedin": "U moet aangemeld zijn om te kunnen verwijderen.",
@@ -31,6 +37,7 @@
 	"commentstreams-dialog-buttontext-no": "Nee",
 	"commentstreams-datetext-postedon": "Geplaatst op",
 	"commentstreams-datetext-lasteditedon": "Laatste bewerkt op",
+	"commentstreams-datetext-moderated": "gemodereerd",
 	"commentstreams-title-field-placeholder": "Voer titel in...",
 	"commentstreams-body-field-placeholder": "Vul tekst nieuw commentaar in...",
 	"notification-link-label-commentstreams-reply-on-watched-page": "Bekijk reactie",

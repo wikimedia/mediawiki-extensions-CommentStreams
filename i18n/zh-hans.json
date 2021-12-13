@@ -2,7 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Liuxinyu970226",
-			"NeverBehave"
+			"NeverBehave",
+			")8",
+			"GuoPC",
+			"Tranve",
+			"列维劳德"
 		]
 	},
 	"commentstreams-desc": "允许在wiki页面上评论",
@@ -13,8 +17,8 @@
 	"apihelp-csquerycomment-summary": "返回评论标题、用户、创建时间戳和wiki文本。必须提供页面id或标题。",
 	"apihelp-csquerycomment-param-pageid": "保留评论用于查询的页面的页面ID",
 	"apihelp-csquerycomment-param-title": "保留评论用于查询的页面的标题",
-	"apihelp-csquerycomment-pageid-example": "查询wiki文本中，页面ID为3的评论",
-	"apihelp-csquerycomment-title-example": "查询wiki文本中，页面标题为CommentStreams:3的评论",
+	"apihelp-csquerycomment-pageid-example": "查询wikitext中，页面ID为3的评论",
+	"apihelp-csquerycomment-title-example": "查询wikitext中，页面标题为CommentStreams:3的评论",
 	"apihelp-csdeletecomment-description": "删除评论。必须提供页面id或标题。",
 	"apihelp-csdeletecomment-summary": "删除评论。必须提供页面id或标题。",
 	"apihelp-csdeletecomment-param-pageid": "保留评论用于删除的页面的页面ID",
@@ -24,7 +28,7 @@
 	"apihelp-cspostcomment-description": "发布新评论。",
 	"apihelp-cspostcomment-summary": "发布新评论。",
 	"apihelp-cspostcomment-param-commenttitle": "评论的可选标题。",
-	"apihelp-cspostcomment-param-wikitext": "评论的wiki文本。",
+	"apihelp-cspostcomment-param-wikitext": "评论的wikitext。",
 	"apihelp-cspostcomment-param-associatedid": "与此评论相关联的页面。",
 	"apihelp-cspostcomment-param-parentid": "如果该评论是回复的话，父评论的页面ID。",
 	"apihelp-cseditcomment-description": "编辑现有评论。必须提供页面id或标题。",
@@ -32,7 +36,7 @@
 	"apihelp-cseditcomment-param-pageid": "保留评论用于编辑的页面的页面ID",
 	"apihelp-cseditcomment-param-title": "保留评论用于编辑的页面的标题",
 	"apihelp-cseditcomment-param-commenttitle": "评论的可选标题。",
-	"apihelp-cseditcomment-param-wikitext": "评论的wiki文本。",
+	"apihelp-cseditcomment-param-wikitext": "评论的wikitext。",
 	"apihelp-csvote-description": "评论上的投票（上、下或中立）。",
 	"apihelp-csvote-summary": "评论上的投票（上、下或中立）。",
 	"apihelp-csvote-param-pageid": "保留评论用于投票的页面的页面ID",
@@ -153,6 +157,7 @@
 	"commentstreams-allcomments-label-created": "创建于",
 	"commentstreams-allcomments-label-lasteditor": "最后编辑者",
 	"commentstreams-allcomments-label-lastedited": "上次编辑于",
+	"commentstreams-allcomments-label-blockid": "封禁ID",
 	"commentstreams-allcomments-button-next": "下一个",
 	"commentstreams-allcomments-button-previous": "上一个",
 	"commentstreams-ve-conversion-error": "在可视化编辑器中转换wiki文本和HTML时出错"

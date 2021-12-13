@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Kly",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"列维劳德"
 		]
 	},
 	"commentstreams-desc": "允許在 wiki 頁面上評論",
@@ -52,6 +53,7 @@
 	"apihelp-csunwatch-param-title": "含有要取消監視評論的頁面標題",
 	"apihelp-csunwatch-pageid-example": "取消監視頁面 ID 為 3 的評論",
 	"apihelp-csunwatch-title-example": "取消監視頁面標題為 CommentStreams:3 的評論",
+	"commentstreams-api-error-invalid": "無效 API 回應。",
 	"commentstreams-api-error-notloggedin": "您必須要先登入。",
 	"commentstreams-api-error-commentnotfound": "找不到請求的評論。",
 	"commentstreams-api-error-notacomment": "提供的頁面 ID 沒有參照到有效的評論。",
@@ -153,6 +155,7 @@
 	"commentstreams-allcomments-label-created": "已建立",
 	"commentstreams-allcomments-label-lasteditor": "上一個編輯者",
 	"commentstreams-allcomments-label-lastedited": "上一次編輯",
+	"commentstreams-allcomments-label-blockid": "封鎖 ID",
 	"commentstreams-allcomments-button-next": "下一個",
 	"commentstreams-allcomments-button-previous": "上一個",
 	"commentstreams-ve-conversion-error": "視覺化編輯器在 wiki 文字與 HTML 之間轉換時發生錯誤"

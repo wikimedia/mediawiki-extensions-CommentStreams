@@ -3,7 +3,9 @@
 		"authors": [
 			"BaRaN6161 TURK",
 			"MuratTheTurkish",
-			"Sayginer"
+			"Sayginer",
+			"Hedda",
+			"Joseph"
 		]
 	},
 	"commentstreams-desc": "Viki sayfalarında yorum yapmaya izin verir",
@@ -53,6 +55,7 @@
 	"apihelp-csunwatch-param-title": "izlenecek yorumu içeren sayfanın başlığı",
 	"apihelp-csunwatch-pageid-example": "sayfa kimliği 3 ile yorumu izlemeyin",
 	"apihelp-csunwatch-title-example": "sayfa başlığı CommentStreams:3 ile yorumu izlemeyin",
+	"commentstreams-api-error-invalid": "Geçersiz API cevabı.",
 	"commentstreams-api-error-notloggedin": "Oturum açmalısınız.",
 	"commentstreams-api-error-commentnotfound": "İstenen yorum bulunamadı.",
 	"commentstreams-api-error-notacomment": "Verilen sayfa kimliği geçerli bir açıklamaya gönderme yapmıyor.",
@@ -154,6 +157,7 @@
 	"commentstreams-allcomments-label-created": "Oluşturuldu",
 	"commentstreams-allcomments-label-lasteditor": "Son Düzenleyen",
 	"commentstreams-allcomments-label-lastedited": "Son Düzenleme",
+	"commentstreams-allcomments-label-blockid": "Engel Kimliği",
 	"commentstreams-allcomments-button-next": "Sonraki",
 	"commentstreams-allcomments-button-previous": "Önceki",
 	"commentstreams-ve-conversion-error": "Görsel Düzenleyici için vikimetin ve HTML arasında dönüştürme hatası"
