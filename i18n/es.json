@@ -7,7 +7,8 @@
 			"Fitoschido",
 			"Macofe",
 			"Jakeukalane",
-			"Whovian Biologist"
+			"Whovian Biologist",
+			"DDPAT"
 		]
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas de la wiki",
@@ -146,7 +147,7 @@
 	"commentstreamsallcomments": "Todos los comentarios",
 	"commentstreams-allcomments-nocommentsfound": "No se encontró ningún comentario.",
 	"commentstreams-allcomments-label-wikitext": "Texto",
-	"commentstreams-allcomments-label-commenttitle": "Título del comentario",
+	"commentstreams-allcomments-label-commenttitle": "Título",
 	"commentstreams-allcomments-label-reply": "Responder",
 	"commentstreams-allcomments-label-author": "Autor",
 	"commentstreams-allcomments-label-created": "Creación",
