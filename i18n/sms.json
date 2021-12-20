@@ -4,8 +4,10 @@
 			"Yupik"
 		]
 	},
+	"commentstreams-api-error-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm.",
 	"commentstreams-buttontooltip-edit": "muuʹtt",
 	"commentstreams-buttontooltip-permalink": "põõšši liŋkk",
 	"commentstreams-buttontooltip-expand": "čuäʹjet",
+	"commentstreams-buttontooltip-watch": "vaalv",
 	"commentstreams-allcomments-label-created": "Rajjum"
 }
