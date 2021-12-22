@@ -18,6 +18,7 @@
 	"apihelp-cseditreply-description": "Muokkaa olemassa olevaa vastausta. Joko sivunumero tai otsikko on annettava.",
 	"apihelp-cseditreply-param-wikitext": "wikiteksti vastaukseen.",
 	"apihelp-cseditreply-pageid-example": "muokkaa vastausta sivutunnisteella 3",
+	"commentstreams-api-error-notloggedin": "Sinun täytyy olla sisäänkirjautuneena.",
 	"commentstreams-buttontooltip-add": "lisää kommentti",
 	"commentstreams-buttontooltip-permalink": "ikilinkki",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
