@@ -316,14 +316,6 @@ class CommentStreamsHandler {
 	 * @throws ConfigException
 	 */
 	private function initJS( OutputPage $output, array $comments ) {
-		// determine if comments should be initially collapsed or expanded
-		// if the namespace is a talk namespace, use state of its subject namespace
-		$title = $output->getTitle();
-		$namespace = $title->getNamespace();
-		if ( $title->isTalkPage() ) {
-			$this->namespaceInfo->getSubject( $namespace );
-		}
-
 		$config = $output->getConfig();
 
 		if ( $this->initiallyCollapseCommentStreams ) {
@@ -331,7 +323,7 @@ class CommentStreamsHandler {
 		} else {
 			$initiallyCollapsedNamespaces =
 				$config->get( 'CommentStreamsInitiallyCollapsedNamespaces' );
-			$initiallyCollapsed = in_array( $namespace, $initiallyCollapsedNamespaces );
+			$initiallyCollapsed = in_array( $output->getTitle()->getNamespace(), $initiallyCollapsedNamespaces );
 		}
 
 		$canComment = true;
