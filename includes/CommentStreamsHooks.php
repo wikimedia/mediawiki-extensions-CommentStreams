@@ -25,6 +25,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use Article;
 use DatabaseUpdater;
+use HtmlArmor;
 use MediaWiki;
 use MediaWiki\MediaWikiServices;
 use MWException;
@@ -345,21 +346,21 @@ class CommentStreamsHooks {
 	 * Modifies search results pointing to comment pages to point to the
 	 * associated content page instead.
 	 *
-	 * @param Title &$title title to link to
-	 * @param ?string &$text text to use for the link
-	 * @param SearchResult $result the search result
-	 * @param array $terms the search terms entered
-	 * @param SpecialSearch $page the SpecialSearch object
-	 * @return bool continue checking hooks
+	 * @param Title &$title Title to link to
+	 * @param string|HtmlArmor|null &$titleSnippet Label for the link representing
+	 *   the search result. Typically the article title.
+	 * @param SearchResult $result
+	 * @param array $terms Array of search terms extracted by SearchDatabase search engines
+	 *   (may not be populated by other search engines)
+	 * @param SpecialSearch $specialSearch
+	 * @param string[] &$query Array of query string parameters for the link representing the search
+	 *   result
+	 * @param string[] &$attributes Array of title link attributes, can be modified by extension
+	 * @return bool|void True or no return value to continue or false to abort
 	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public static function showSearchHitTitle(
-		Title &$title,
-		?string &$text,
-		SearchResult $result,
-		array $terms,
-		SpecialSearch $page
-	) : bool {
+	public static function showSearchHitTitle( &$title, &$titleSnippet, $result, $terms, $specialSearch, &$query,
+		&$attributes ) {
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return true;
 		}
