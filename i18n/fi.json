@@ -3,9 +3,11 @@
 		"authors": [
 			"Nike",
 			"Silvonen",
-			"Yupik"
+			"Yupik",
+			"MITO"
 		]
 	},
+	"commentstreams-api-error-notloggedin": "Sinun täytyy olla sisäänkirjautuneena.",
 	"commentstreams-buttontooltip-add": "lisää kommentti",
 	"commentstreams-buttontooltip-permalink": "ikilinkki",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
