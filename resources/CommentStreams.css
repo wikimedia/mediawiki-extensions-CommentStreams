@@ -178,9 +178,8 @@
 	border-radius: 2px;
 	border-width: 1px;
 	border-color: #00a7d8;
-	box-sizing: content-box;
-	-webkit-box-sizing: content-box;
-	width: 80%;
+	box-sizing: border-box;
+	width: 100%;
 	min-width: 400px;
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 5px;
