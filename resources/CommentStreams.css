@@ -70,12 +70,12 @@
 }
 
 .cs-comment-title {
-	font-size: 16px;
+	font-size: 1.14em;
 	font-weight: bold;
 }
 
 .cs-comment-author {
-	font-size: 12px;
+	font-size: 0.86em;
 }
 
 .cs-comment-author-anonymous {
@@ -90,7 +90,7 @@
 }
 
 .cs-comment-details {
-	font-size: 12px;
+	font-size: 0.86em;
 	opacity: 0.8;
 	color: #555;
 }
@@ -108,7 +108,7 @@
 
 .cs-comment-body {
 	margin-bottom: 5px;
-	font-size: 14px;
+	font-size: 1em;
 }
 
 .cs-edit-box {
@@ -133,7 +133,7 @@
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 5px;
 	font-family: sans-serif;
-	font-size: 16px;
+	font-size: 1.14em;
 	font-weight: bold;
 }
 
@@ -145,7 +145,7 @@
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 5px;
 	font-family: sans-serif;
-	font-size: 14px;
+	font-size: 1em;
 }
 
 /* VisualEditor/VEForAll CSS */
