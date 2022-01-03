@@ -151,6 +151,7 @@
 /* VisualEditor/VEForAll CSS */
 .ve-area-wrapper,
 .ve-ce-documentNode {
+	/* stylelint-disable-next-line declaration-no-important */
 	width: auto !important;
 }
 
