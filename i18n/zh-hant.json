@@ -3,6 +3,7 @@
 		"authors": [
 			"Kly",
 			"Liuxinyu970226",
+			"Tranve",
 			"列维劳德"
 		]
 	},
@@ -14,8 +15,8 @@
 	"apihelp-csquerycomment-summary": "返回標題、使用者、創建時間戳記、以及評論的 wiki 文字。需提供頁面 ID 或標題。",
 	"apihelp-csquerycomment-param-pageid": "含有要查詢評論的頁面 ID",
 	"apihelp-csquerycomment-param-title": "含有要查詢評論的頁面標題",
-	"apihelp-csquerycomment-pageid-example": "查詢在 wiki 文字上頁面 ID 為 3 的評論",
-	"apihelp-csquerycomment-title-example": "查詢在 wiki 文字上頁面標題爲 CommentStreams:3 的評論",
+	"apihelp-csquerycomment-pageid-example": "查詢 wikitext 上頁面 ID 為 3 的評論",
+	"apihelp-csquerycomment-title-example": "查詢在 wikitext 上頁面標題爲 CommentStreams:3 的評論",
 	"apihelp-csdeletecomment-description": "刪除評論。需提供頁面 ID 或標題。",
 	"apihelp-csdeletecomment-summary": "刪除評論。需提供頁面 ID 或標題。",
 	"apihelp-csdeletecomment-param-pageid": "含有要刪除評論的頁面 ID",
@@ -25,14 +26,14 @@
 	"apihelp-cspostcomment-description": "發佈新評論。",
 	"apihelp-cspostcomment-summary": "發佈新評論。",
 	"apihelp-cspostcomment-param-commenttitle": "評論的選用標題。",
-	"apihelp-cspostcomment-param-wikitext": "用於評論的 wiki 文字。",
+	"apihelp-cspostcomment-param-wikitext": "用於評論的 wikitext。",
 	"apihelp-cspostcomment-param-associatedid": "與此評論關聯的頁面。",
 	"apihelp-cseditcomment-description": "編輯現有評論。需提供頁面 ID 或標題。",
 	"apihelp-cseditcomment-summary": "編輯現有評論。需提供頁面 ID 或標題。",
 	"apihelp-cseditcomment-param-pageid": "含有要編輯評論的頁面 ID",
 	"apihelp-cseditcomment-param-title": "含有要編輯評論的頁面標題",
 	"apihelp-cseditcomment-param-commenttitle": "用於評論的選用標題。",
-	"apihelp-cseditcomment-param-wikitext": "用於評論的 wiki 文字。",
+	"apihelp-cseditcomment-param-wikitext": "用於評論的 wikitext。",
 	"apihelp-csvote-description": "在評論上投票（贊成、反對、或中立）。",
 	"apihelp-csvote-summary": "在評論上投票（贊成、反對、或中立）。",
 	"apihelp-csvote-param-pageid": "含有要評論投票的頁面 ID",
@@ -152,5 +153,5 @@
 	"commentstreams-allcomments-label-page": "評論頁面",
 	"commentstreams-allcomments-label-associatedpage": "相關頁面",
 	"commentstreams-allcomments-label-blockid": "封鎖 ID",
-	"commentstreams-ve-conversion-error": "視覺化編輯器在 wiki 文字與 HTML 之間轉換時發生錯誤"
+	"commentstreams-ve-conversion-error": "視覺化編輯器在 wikitext 與 HTML 之間轉換時發生錯誤"
 }
