@@ -60,6 +60,11 @@ class SMWInterface {
 	private $wikiPageFactory;
 
 	/**
+	 * @var JobQueueGroup
+	 */
+	private $jobQueueGroup;
+
+	/**
 	 * @var bool
 	 */
 	private $enableVoting;
@@ -69,18 +74,21 @@ class SMWInterface {
 	 * @param ExtensionRegistry $extensionRegistry
 	 * @param CommentStreamsStore $commentStreamsStore
 	 * @param WikiPageFactory $wikiPageFactory
+	 * @param JobQueueGroup $jobQueueGroup
 	 */
 	public function __construct(
 		ServiceOptions $options,
 		ExtensionRegistry $extensionRegistry,
 		CommentStreamsStore $commentStreamsStore,
-		WikiPageFactory $wikiPageFactory
+		WikiPageFactory $wikiPageFactory,
+		JobQueueGroup $jobQueueGroup
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
 		$this->isLoaded = $extensionRegistry->isLoaded( 'SemanticMediaWiki' );
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->wikiPageFactory = $wikiPageFactory;
+		$this->jobQueueGroup = $jobQueueGroup;
 	}
 
 	/**
@@ -98,7 +106,7 @@ class SMWInterface {
 			return;
 		}
 		$job = new UpdateJob( $title, [] );
-		JobQueueGroup::singleton()->push( $job );
+		$this->jobQueueGroup->push( $job );
 	}
 
 	/**
