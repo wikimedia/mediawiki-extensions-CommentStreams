@@ -76,7 +76,8 @@ return [
 				new ServiceOptions( SMWInterface::CONSTRUCTOR_OPTIONS, $services->getMainConfig() ),
 				ExtensionRegistry::getInstance(),
 				$services->getService( 'CommentStreamsStore' ),
-				$services->getWikiPageFactory()
+				$services->getWikiPageFactory(),
+				$services->getJobQueueGroup()
 			);
 		},
 	'CommentStreamsSocialProfileInterface' =>
