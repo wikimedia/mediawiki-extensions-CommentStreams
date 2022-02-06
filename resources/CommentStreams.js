@@ -47,10 +47,10 @@ const CommentStreams = ( function () {
 			this.setupDivs( env );
 
 			if ( window.location.hash ) {
-				let hash = window.location.hash.substring( 1 );
+				let hash = window.location.hash.slice( 1 );
 				const queryIndex = hash.indexOf( '?' );
 				if ( queryIndex !== -1 ) {
-					hash = hash.substring( 0, queryIndex );
+					hash = hash.slice( 0, Math.max( 0, queryIndex ) );
 				}
 				env.targetComment = hash;
 			}
