@@ -14,6 +14,8 @@
 	"apihelp-cspostcomment-param-wikitext": "wikitekst voor commentaar.",
 	"apihelp-cseditcomment-param-commenttitle": "titel voor commentaar.",
 	"apihelp-cseditcomment-param-wikitext": "wikitekst voor commentaar.",
+	"apihelp-cspostreply-description": "Plaats een nieuwe reactie.",
+	"apihelp-cspostreply-summary": "Plaats een nieuwe reactie.",
 	"commentstreams-api-error-notloggedin": "U moet ingelogd zijn.",
 	"commentstreams-api-error-edit-notloggedin": "U moet aangemeld zijn om te kunnen bewerken.",
 	"commentstreams-api-error-delete-notloggedin": "U moet aangemeld zijn om te kunnen verwijderen.",
