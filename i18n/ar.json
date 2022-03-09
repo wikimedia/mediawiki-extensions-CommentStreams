@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"ديفيد",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"FiberAhmed"
 		]
 	},
 	"commentstreams-desc": "يسمح بالتعليق على صفحات الويكي",
@@ -141,8 +142,9 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(مشرف) حذف|(مشرفة) حذفت}} الرد $3",
 	"commentstreamsallcomments": "كل التعليقات",
 	"commentstreams-allcomments-nocommentsfound": "لا توجد تعليقات.",
-	"commentstreams-allcomments-label-wikitext": " التعليق",
-	"commentstreams-allcomments-label-commenttitle": "عنوان التعليق",
+	"commentstreams-allcomments-label-wikitext": "النص",
+	"commentstreams-allcomments-label-commenttitle": "العنوان",
+	"commentstreams-allcomments-label-reply": "رد",
 	"commentstreams-allcomments-label-author": "المؤلف",
 	"commentstreams-allcomments-label-created": "أُنشِئت",
 	"commentstreams-allcomments-label-lasteditor": "آخر محرر",
