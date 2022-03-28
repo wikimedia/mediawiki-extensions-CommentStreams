@@ -5,7 +5,12 @@
 		]
 	},
 	"commentstreams-api-error-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm.",
+	"commentstreams-buttontext-add": "Lââʹzzet kommeeʹnt",
+	"commentstreams-buttontext-reply": "Vaʹstted",
+	"commentstreams-buttontooltip-add": "lââʹzzet kommeeʹnt",
+	"commentstreams-buttontooltip-reply": "vaʹstted",
 	"commentstreams-buttontooltip-edit": "muuʹtt",
+	"commentstreams-buttontooltip-delete": "jaukkâd",
 	"commentstreams-buttontooltip-permalink": "põõšši liŋkk",
 	"commentstreams-buttontooltip-expand": "čuäʹjet",
 	"commentstreams-buttontooltip-watch": "vaalv",
