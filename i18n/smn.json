@@ -1,10 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"Seipinne",
 			"Yupik"
 		]
 	},
 	"commentstreams-buttontooltip-expand": "čääiti",
+	"commentstreams-buttontooltip-watch": "tarkkuustâl",
+	"commentstreams-buttontooltip-unwatch": "jooskâ tarkkuustâllâm",
+	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-datetext-lasteditedon": "Majemustáá nubástittum",
 	"commentstreams-allcomments-label-lastedited": "Majemustáá nubástittum"
 }
