@@ -8,7 +8,9 @@
 			"Macofe",
 			"Jakeukalane",
 			"Whovian Biologist",
-			"DDPAT"
+			"DDPAT",
+			"DiegoAmbrocio",
+			"Ice bulldog"
 		]
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas de la wiki",
@@ -57,6 +59,16 @@
 	"apihelp-csunwatch-param-title": "título de la página que contiene el comentario que se va a dejar de seguir",
 	"apihelp-csunwatch-pageid-example": "dejar de seguir comentario con ID de página 3",
 	"apihelp-csunwatch-title-example": "dejar de seguir comentario con título de página CommentStreams:3",
+	"apihelp-cspostreply-description": "Publicar una nueva respuesta.",
+	"apihelp-cspostreply-summary": "Publicar una nueva respuesta.",
+	"apihelp-cspostreply-param-wikitext": "wikitexto para responder.",
+	"apihelp-cspostreply-param-parentid": "ID de página del comentario principal.",
+	"apihelp-cseditreply-description": "Editar una respuesta existente. Se debe proporcionar el pageid o el título.",
+	"apihelp-cseditreply-summary": "Editar una respuesta existente. Se debe proporcionar el pageid o el título.",
+	"apihelp-cseditreply-param-pageid": "ID de la página que contiene la respuesta a editar",
+	"apihelp-cseditreply-param-title": "título de la página que contiene la respuesta a editar",
+	"apihelp-cseditreply-param-wikitext": "wikitexto para responder.",
+	"apihelp-cseditreply-pageid-example": "editar la respuesta con el ID de la página 3",
 	"commentstreams-api-error-invalid": "Respuesta de API no válida.",
 	"commentstreams-api-error-notloggedin": "Debes estar conectado.",
 	"commentstreams-api-error-commentnotfound": "No se encontró el comentario solicitado.",
