@@ -1,9 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Akapochtli"
+			"Akapochtli",
+			"Languaeditor"
 		]
 	},
-	"commentstreams-buttontooltip-cancel": "moxitiniz",
-	"commentstreams-dialog-buttontext-cancel": "Moxitiniz"
+	"commentstreams-buttontooltip-cancel": "xikxolewa",
+	"commentstreams-dialog-buttontext-cancel": "Xikxolewa"
 }
