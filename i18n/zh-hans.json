@@ -5,6 +5,7 @@
 			"GuoPC",
 			"Liuxinyu970226",
 			"NeverBehave",
+			"StarrySky",
 			"Tranve",
 			"列维劳德"
 		]
@@ -12,6 +13,7 @@
 	"commentstreams-desc": "允许在wiki页面上评论",
 	"commentstreams-error-prohibitedaction": "操作$1不允许在评论页面上进行。",
 	"commentstreams-error-comment-on-deleted-page": "此评论所分配的页面已删除。",
+	"commentstreams-error-reply-to-deleted-comment": "此评论作为回复的评论已被删除。",
 	"commentstreams-author-anonymous": "匿名",
 	"apihelp-csquerycomment-description": "返回评论详细信息。必须提供页面ID或标题。",
 	"apihelp-csquerycomment-summary": "返回评论详细信息。必须提供页面ID或标题。",
