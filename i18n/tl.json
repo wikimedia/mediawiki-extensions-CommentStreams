@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jojit fb"
+			"Jojit fb",
+			"Ianlopez1115"
 		]
 	},
-	"commentstreams-buttontext-reply": "Tugon"
+	"commentstreams-buttontext-reply": "Tugon",
+	"commentstreams-datetext-lasteditedon": "Huling binago noong"
 }
