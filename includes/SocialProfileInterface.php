@@ -47,7 +47,7 @@ class SocialProfileInterface {
 	 */
 	public function __construct( ServiceOptions $options ) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-		$this->isLoaded = class_exists( 'wAvatar' );
+		$this->isLoaded = class_exists( \wAvatar::class );
 		$this->uploadPath = $options->get( 'UploadPath' );
 	}
 

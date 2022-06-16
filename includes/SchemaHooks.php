@@ -36,6 +36,6 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 		$updater->addExtensionTable( 'cs_replies', $dir . '/cs_replies.sql' );
 		$updater->addExtensionTable( 'cs_votes', $dir . '/cs_votes.sql' );
 		$updater->addExtensionTable( 'cs_watchlist', $dir . '/cs_watchlist.sql' );
-		$updater->addPostDatabaseUpdateMaintenance( 'MigrateToAbstractSchema' );
+		$updater->addPostDatabaseUpdateMaintenance( \MigrateToAbstractSchema::class );
 	}
 }
