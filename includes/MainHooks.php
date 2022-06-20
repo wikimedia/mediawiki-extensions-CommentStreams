@@ -27,7 +27,6 @@ use HtmlArmor;
 use MediaWiki;
 use MediaWiki\Hook\AfterImportPageHook;
 use MediaWiki\Hook\BeforePageDisplayHook;
-use MediaWiki\Hook\CanonicalNamespacesHook;
 use MediaWiki\Hook\ImportHandlePageXMLTagHook;
 use MediaWiki\Hook\MediaWikiPerformActionHook;
 use MediaWiki\Hook\MovePageIsValidMoveHook;
@@ -58,7 +57,6 @@ use XmlDumpWriter;
 use XMLReader;
 
 class MainHooks implements
-	CanonicalNamespacesHook,
 	MediaWikiPerformActionHook,
 	MovePageIsValidMoveHook,
 	GetUserPermissionsErrorsHook,
@@ -121,16 +119,6 @@ class MainHooks implements
 		$this->linkRenderer = $linkRenderer;
 		$this->revisionStore = $revisionStore;
 		$this->permissionManager = $permissionManager;
-	}
-
-	/**
-	 * Adds CommentStreams namespaces.
-	 *
-	 * @param string[] &$namespaces Array of namespace numbers with corresponding canonical names
-	 */
-	public function onCanonicalNamespaces( &$namespaces ) {
-		$namespaces[NS_COMMENTSTREAMS] = 'CommentStreams';
-		$namespaces[NS_COMMENTSTREAMS_TALK] = 'CommentStreams_Talk';
 	}
 
 	/**
