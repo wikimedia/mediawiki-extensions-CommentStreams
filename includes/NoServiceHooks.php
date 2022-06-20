@@ -22,9 +22,23 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use DatabaseUpdater;
+use MediaWiki\Hook\CanonicalNamespacesHook;
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
 
-class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
+class NoServiceHooks implements
+	CanonicalNamespacesHook,
+	LoadExtensionSchemaUpdatesHook
+{
+	/**
+	 * Adds CommentStreams namespaces.
+	 *
+	 * @param string[] &$namespaces Array of namespace numbers with corresponding canonical names
+	 */
+	public function onCanonicalNamespaces( &$namespaces ) {
+		$namespaces[NS_COMMENTSTREAMS] = 'CommentStreams';
+		$namespaces[NS_COMMENTSTREAMS_TALK] = 'CommentStreams_Talk';
+	}
+
 	/**
 	 * Updates database schema.
 	 *
