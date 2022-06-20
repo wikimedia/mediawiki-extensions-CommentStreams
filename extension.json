@@ -225,12 +225,11 @@
 				"WikiPageFactory"
 			]
 		},
-		"schema": {
-			"class": "MediaWiki\\Extension\\CommentStreams\\SchemaHooks"
+		"noservice": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\NoServiceHooks"
 		}
 	},
 	"Hooks": {
-		"CanonicalNamespaces": "main",
 		"MediaWikiPerformAction": "main",
 		"MovePageIsValidMove": "main",
 		"GetUserPermissionsErrors": "main",
@@ -241,7 +240,8 @@
 		"XmlDumpWriterOpenPage": "main",
 		"ImportHandlePageXMLTag": "main",
 		"AfterImportPage": "main",
-		"LoadExtensionSchemaUpdates": "schema",
+		"CanonicalNamespaces": "noservice",
+		"LoadExtensionSchemaUpdates": "noservice",
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\EchoInterface::onBeforeCreateEchoEvent",
 		"SMW::Property::initProperties": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::initProperties",
 		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::updateData",
