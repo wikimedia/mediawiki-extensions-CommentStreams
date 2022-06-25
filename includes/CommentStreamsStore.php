@@ -251,7 +251,7 @@ class CommentStreamsStore {
 		do {
 			$index = wfRandomString();
 			$title = Title::newFromText( $index, NS_COMMENTSTREAMS );
-			$wikiPage = new WikiPage( $title );
+			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
 			$deleted = $title->hasDeletedEdits();
 			if ( !$deleted && !$title->exists() ) {
 				if ( !$this->permissionManager->userCan( 'cs-comment', $user, $title ) ) {

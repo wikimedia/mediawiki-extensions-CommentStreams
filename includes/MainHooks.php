@@ -54,7 +54,6 @@ use Title;
 use User;
 use WebRequest;
 use WikiImporter;
-use WikiPage;
 use Xml;
 use XmlDumpWriter;
 use XMLReader;
@@ -176,7 +175,7 @@ class MainHooks implements
 			return false;
 		}
 
-		$wikiPage = new WikiPage( $title );
+		$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
 		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
 		if ( $comment ) {
 			$output->setPageTitle( $comment->getCommentTitle() );
@@ -240,7 +239,7 @@ class MainHooks implements
 			return;
 		}
 
-		$wikiPage = new WikiPage( $title );
+		$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
 
 		if ( !$wikiPage->exists() ) {
 			return;
@@ -410,7 +409,7 @@ class MainHooks implements
 	public function onXmlDumpWriterOpenPage( $writer, &$out, $row, $title ) {
 		if ( $title->getNamespace() == NS_COMMENTSTREAMS ) {
 			$values = [];
-			$wikiPage = new WikiPage( $title );
+			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
 			$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
 			if ( $comment ) {
 				$metadataTag = 'CommentMetadata';
