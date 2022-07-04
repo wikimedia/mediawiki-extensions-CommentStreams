@@ -4,7 +4,8 @@
 			"Cindy Cicalese",
 			"Jason Ji",
 			"Liuxinyu970226",
-			"Robby"
+			"Robby",
+			"Verdy p"
 		]
 	},
 	"commentstreams-desc": "{{desc|name=CommentStreams|url=https://www.mediawiki.org/wiki/Extension:CommentStreams}}",
@@ -154,7 +155,7 @@
 	"commentstreams-allcomments-label-wikitext": "Table column label\n{{Identical|Comment}}",
 	"commentstreams-allcomments-label-author": "Table column label\n{{Identical|Author}}",
 	"commentstreams-allcomments-label-created": "Table column label",
-	"commentstreams-allcomments-label-lasteditor": "Table column label",
+	"commentstreams-allcomments-label-lasteditor": "Table column label.\n{{Identical/Last editor}}",
 	"commentstreams-allcomments-label-lastedited": "Table column label",
 	"commentstreams-allcomments-label-blockid": "Table column label",
 	"commentstreams-allcomments-button-next": "Button label\n{{Identical|Next}}",
