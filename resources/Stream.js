@@ -110,7 +110,7 @@ module.exports = ( function () {
 				framed: false
 			};
 
-			const buttonText = mw.message( 'commentstreams-buttontext-reply' ).text();
+			const buttonText = mw.msg( 'commentstreams-buttontext-reply' );
 			if ( this.env.showLabels ) {
 				params.label = buttonText;
 			} else {
@@ -194,14 +194,14 @@ module.exports = ( function () {
 			.html( commentData.userdisplayname );
 		$centerDiv.append( $author );
 
-		let dateText = ' | ' + mw.message( 'commentstreams-datetext-postedon' ) +
+		let dateText = ' | ' + mw.msg( 'commentstreams-datetext-postedon' ) +
 		' ' + commentData.created;
 
 		if ( commentData.modified !== null ) {
-			dateText += ' | ' + mw.message( 'commentstreams-datetext-lasteditedon' ) +
+			dateText += ' | ' + mw.msg( 'commentstreams-datetext-lasteditedon' ) +
 			' ' + commentData.modified;
 			if ( commentData.moderated ) {
-				dateText += ' (' + mw.message( 'commentstreams-datetext-moderated' ) +
+				dateText += ' (' + mw.msg( 'commentstreams-datetext-moderated' ) +
 				')';
 			}
 		}
@@ -250,7 +250,7 @@ module.exports = ( function () {
 
 		const upParams = {
 			icon: 'upTriangle',
-			title: mw.message( 'commentstreams-buttontooltip-upvote' ).text(),
+			title: mw.msg( 'commentstreams-buttontooltip-upvote' ),
 			classes: [ 'cs-vote-up-button' ],
 			framed: false
 		};
@@ -268,7 +268,7 @@ module.exports = ( function () {
 
 		const downParams = {
 			icon: 'downTriangle',
-			title: mw.message( 'commentstreams-buttontooltip-downvote' ).text(),
+			title: mw.msg( 'commentstreams-buttontooltip-downvote' ),
 			classes: [ 'cs-vote-down-button' ],
 			framed: false
 		};
@@ -484,9 +484,9 @@ module.exports = ( function () {
 		};
 
 		if ( this.env.username !== username ) {
-			params.label = mw.message( 'commentstreams-buttontooltip-moderator-edit' ).text();
+			params.label = mw.msg( 'commentstreams-buttontooltip-moderator-edit' );
 		} else {
-			params.label = mw.message( 'commentstreams-buttontooltip-edit' ).text();
+			params.label = mw.msg( 'commentstreams-buttontooltip-edit' );
 		}
 
 		return new OO.ui.MenuOptionWidget( params );
@@ -500,9 +500,9 @@ module.exports = ( function () {
 		};
 
 		if ( this.env.username !== username ) {
-			params.label = mw.message( 'commentstreams-buttontooltip-moderator-delete' ).text();
+			params.label = mw.msg( 'commentstreams-buttontooltip-moderator-delete' );
 		} else {
-			params.label = mw.message( 'commentstreams-buttontooltip-delete' ).text();
+			params.label = mw.msg( 'commentstreams-buttontooltip-delete' );
 		}
 
 		return new OO.ui.MenuOptionWidget( params );
@@ -516,11 +516,11 @@ module.exports = ( function () {
 		if ( commentData.watching ) {
 			params.icon = 'unStar';
 			params.flags = 'progressive';
-			params.label = mw.message( 'commentstreams-buttontooltip-unwatch' ).text();
+			params.label = mw.msg( 'commentstreams-buttontooltip-unwatch' );
 			params.classes = [ 'cs-comment-watching' ];
 		} else {
 			params.icon = 'star';
-			params.label = mw.message( 'commentstreams-buttontooltip-watch' ).text();
+			params.label = mw.msg( 'commentstreams-buttontooltip-watch' );
 		}
 
 		this.watchButton = new OO.ui.MenuOptionWidget( params );
@@ -530,7 +530,7 @@ module.exports = ( function () {
 	Stream.prototype.createCollapseButton = function () {
 		this.collapseButton = new OO.ui.MenuOptionWidget( {
 			icon: 'collapse',
-			label: mw.message( 'commentstreams-buttontooltip-collapse' ).text(),
+			label: mw.msg( 'commentstreams-buttontooltip-collapse' ),
 			classes: [ 'cs-collapse-button' ],
 			data: 'collapse'
 		} );
@@ -540,7 +540,7 @@ module.exports = ( function () {
 	Stream.prototype.createPermalinkButton = function () {
 		return new OO.ui.MenuOptionWidget( {
 			icon: 'link',
-			label: mw.message( 'commentstreams-buttontooltip-permalink' ).text(),
+			label: mw.msg( 'commentstreams-buttontooltip-permalink' ),
 			data: 'link'
 		} );
 	};
@@ -560,11 +560,11 @@ module.exports = ( function () {
 				if ( watch ) {
 					self.watchButton.setIcon( 'unStar' );
 					self.watchButton.setFlags( 'progressive' );
-					self.watchButton.setLabel( mw.message( 'commentstreams-buttontooltip-unwatch' ).text() );
+					self.watchButton.setLabel( mw.msg( 'commentstreams-buttontooltip-unwatch' ) );
 					self.watchButton.$element.addClass( 'cs-comment-watching' );
 				} else {
 					self.watchButton.setIcon( 'star' );
-					self.watchButton.setLabel( mw.message( 'commentstreams-buttontooltip-watch' ).text() );
+					self.watchButton.setLabel( mw.msg( 'commentstreams-buttontooltip-watch' ) );
 					self.watchButton.$element.removeClass( 'cs-comment-watching' );
 				}
 			} else {
@@ -579,7 +579,7 @@ module.exports = ( function () {
 		this.$stream.find( '.cs-reply-comment' ).addClass( 'cs-hidden' );
 		this.$streamFooter.addClass( 'cs-hidden' );
 		this.collapseButton.setIcon( 'expand' );
-		this.collapseButton.setLabel( mw.message( 'commentstreams-buttontooltip-expand' ).text() );
+		this.collapseButton.setLabel( mw.msg( 'commentstreams-buttontooltip-expand' ) );
 		this.$stream.removeClass( 'cs-expanded' );
 		this.$stream.addClass( 'cs-collapsed' );
 		this.collapsed = true;
@@ -590,7 +590,7 @@ module.exports = ( function () {
 		this.$stream.find( '.cs-reply-comment' ).removeClass( 'cs-hidden' );
 		this.$streamFooter.removeClass( 'cs-hidden' );
 		this.collapseButton.setIcon( 'collapse' );
-		this.collapseButton.setLabel( mw.message( 'commentstreams-buttontooltip-collapse' ).text() );
+		this.collapseButton.setLabel( mw.msg( 'commentstreams-buttontooltip-collapse' ) );
 		this.$stream.removeClass( 'cs-collapsed' );
 		this.$stream.addClass( 'cs-expanded' );
 		this.collapsed = false;
@@ -737,12 +737,9 @@ module.exports = ( function () {
 
 	Stream.prototype.deleteComment = function ( element, pageId ) {
 		const self = this;
-		const messageText =
-		mw.message( 'commentstreams-dialog-delete-message' ).text();
-		const yesText =
-		mw.message( 'commentstreams-dialog-buttontext-yes' ).text();
-		const noText =
-		mw.message( 'commentstreams-dialog-buttontext-no' ).text();
+		const messageText = mw.msg( 'commentstreams-dialog-delete-message' );
+		const yesText = mw.msg( 'commentstreams-dialog-buttontext-yes' );
+		const noText = mw.msg( 'commentstreams-dialog-buttontext-no' );
 		const dialog = new OO.ui.MessageDialog();
 		const windowManager = new OO.ui.WindowManager();
 		this.block.$commentDiv.append( windowManager.$element );
@@ -1098,7 +1095,7 @@ module.exports = ( function () {
 		if ( mwmessage.exists() ) {
 			messageText = mwmessage.text();
 		}
-		const okText = mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
+		const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
 		const dialog = new OO.ui.MessageDialog();
 		const windowManager = new OO.ui.WindowManager();
 		this.block.$commentDiv.append( windowManager.$element );

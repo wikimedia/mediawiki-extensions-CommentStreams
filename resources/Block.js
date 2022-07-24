@@ -57,7 +57,7 @@ module.exports = ( function () {
 				icon: 'speechBubbleAdd'
 			};
 
-			const buttonText = mw.message( 'commentstreams-buttontext-add' ).text();
+			const buttonText = mw.msg( 'commentstreams-buttontext-add' );
 			if ( this.env.showLabels ) {
 				params.label = buttonText;
 			} else {
@@ -127,7 +127,7 @@ module.exports = ( function () {
 			this.$titleField = $( '<input>' )
 				.attr( {
 					type: 'text',
-					placeholder: mw.message( 'commentstreams-title-field-placeholder' )
+					placeholder: mw.msg( 'commentstreams-title-field-placeholder' )
 				} )
 				.addClass( 'cs-title-edit-field' );
 			this.$editBox.append( this.$titleField );
@@ -143,7 +143,7 @@ module.exports = ( function () {
 		this.$bodyField = $( '<textarea>' )
 			.attr( {
 				rows: 10,
-				placeholder: mw.message( 'commentstreams-body-field-placeholder' )
+				placeholder: mw.msg( 'commentstreams-body-field-placeholder' )
 			} )
 			.addClass( 'cs-body-edit-field' );
 		this.$editBox.append( this.$bodyField );
@@ -151,7 +151,7 @@ module.exports = ( function () {
 		this.submitButton = new OO.ui.ButtonWidget( {
 			icon: 'check',
 			flags: 'progressive',
-			title: mw.message( 'commentstreams-buttontooltip-submit' ).text(),
+			title: mw.msg( 'commentstreams-buttontooltip-submit' ),
 			framed: false
 		} );
 
@@ -160,7 +160,7 @@ module.exports = ( function () {
 		this.cancelButton = new OO.ui.ButtonWidget( {
 			icon: 'cancel',
 			flags: 'destructive',
-			title: mw.message( 'commentstreams-buttontooltip-cancel' ).text(),
+			title: mw.msg( 'commentstreams-buttontooltip-cancel' ),
 			framed: false
 		} );
 
@@ -224,12 +224,9 @@ module.exports = ( function () {
 		if ( this.env.isLoggedIn ) {
 			self.postComment2( parentPageId );
 		} else {
-			const messageText =
-				mw.message( 'commentstreams-dialog-anonymous-message' ).text();
-			const okText =
-				mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
-			const cancelText =
-				mw.message( 'commentstreams-dialog-buttontext-cancel' ).text();
+			const messageText = mw.msg( 'commentstreams-dialog-anonymous-message' );
+			const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
+			const cancelText = mw.msg( 'commentstreams-dialog-buttontext-cancel' );
 			const dialog = new OO.ui.MessageDialog();
 			const windowManager = new OO.ui.WindowManager();
 			this.$commentDiv.append( windowManager.$element );
@@ -363,7 +360,7 @@ module.exports = ( function () {
 		if ( mwmessage.exists() ) {
 			messageText = mwmessage.text();
 		}
-		const okText = mw.message( 'commentstreams-dialog-buttontext-ok' ).text();
+		const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
 		const dialog = new OO.ui.MessageDialog();
 		const windowManager = new OO.ui.WindowManager();
 		this.$commentDiv.append( windowManager.$element );
