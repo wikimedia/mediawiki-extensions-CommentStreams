@@ -5,6 +5,10 @@
 		]
 	},
 	"commentstreams-api-error-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm.",
+	"commentstreams-api-error-edit-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm, jõs haaʹlääk mõõn-ne muʹtted.",
+	"commentstreams-api-error-delete-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm, jõs haaʹlääk mõõn-ne jaukkeed.",
+	"commentstreams-api-error-vote-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm, jõs haaʹlääk jiõnsted.",
+	"commentstreams-api-error-watch-notloggedin": "Ton õõlǥak leeʹd sizz ǩeeʹrjtõõttâm, jõs haaʹlääk kommeeʹnt valvvâd.",
 	"commentstreams-buttontext-add": "Lââʹzzet kommeeʹnt",
 	"commentstreams-buttontext-reply": "Vaʹstted",
 	"commentstreams-buttontooltip-add": "lââʹzzet kommeeʹnt",
