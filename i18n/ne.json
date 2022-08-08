@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"हिमाल सुबेदी"
+			"हिमाल सुबेदी",
+			"Bada Kaji"
 		]
 	},
 	"commentstreams-author-anonymous": "अज्ञात",
@@ -16,7 +17,7 @@
 	"commentstreams-buttontooltip-delete": "मेटाउनु",
 	"commentstreams-buttontooltip-permalink": "स्थायी सूत्र",
 	"commentstreams-buttontooltip-collapse": "खुम्च्याउनुहाेस्",
-	"commentstreams-buttontooltip-expand": "फैलाउनुहोस्",
+	"commentstreams-buttontooltip-expand": "देखाउनुहोस्",
 	"commentstreams-buttontooltip-watch": "अवलोकन",
 	"commentstreams-buttontooltip-submit": "पेश गर्नुहोस्",
 	"commentstreams-buttontooltip-cancel": "रद्द गर्नुहोस्",
