@@ -1,8 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Pacha Tchernof",
 			"פוילישער"
 		]
 	},
-	"commentstreams-buttontooltip-add": "צולייגן א הערה"
+	"commentstreams-buttontooltip-add": "צולייגן א הערה",
+	"commentstreams-buttontooltip-cancel": "אַנולירן",
+	"commentstreams-dialog-buttontext-cancel": "אַנולירן",
+	"commentstreams-allcomments-label-commenttitle": "טיטל"
 }
