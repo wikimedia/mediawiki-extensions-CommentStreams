@@ -4,5 +4,9 @@
 			"Olve Utne"
 		]
 	},
-	"commentstreams-dialog-buttontext-ok": "Miededav"
+	"commentstreams-buttontooltip-add": "lasedä målgedimev",
+	"commentstreams-dialog-buttontext-ok": "Miededav",
+	"commentstreamsallcomments": "Gájjka målgedime",
+	"commentstreams-allcomments-label-page": "Målgedimbielle",
+	"commentstreams-allcomments-label-blockid": "Buđđusim-ID"
 }
