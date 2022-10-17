@@ -13,6 +13,9 @@
 	"commentstreams-dialog-buttontext-cancel": "Prekliči",
 	"commentstreams-dialog-buttontext-yes": "Da",
 	"commentstreams-dialog-buttontext-no": "Ne",
+	"notification-link-label-commentstreams-comment-on-watched-page": "Obišči komentar",
+	"notification-link-label-commentstreams-reply-on-watched-page": "Obišči odgovor",
+	"notification-link-label-commentstreams-reply-to-watched-comment": "Obišči odgovor",
 	"commentstreams-allcomments-label-author": "Avtor",
 	"commentstreams-allcomments-button-next": "Naprej"
 }
