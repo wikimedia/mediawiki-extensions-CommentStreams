@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Bjankuloski06"
+			"Bjankuloski06",
+			"Vlad5250"
 		]
 	},
 	"commentstreams-desc": "Овозможува коментирање во викистраници",
@@ -22,14 +23,14 @@
 	"apihelp-csdeletecomment-title-example": "избриши коментар со наслов на страница CommentStreams:3",
 	"apihelp-cspostcomment-description": "Ставете нов коментар.",
 	"apihelp-cspostcomment-summary": "Ставете нов коментар.",
-	"apihelp-cspostcomment-param-commenttitle": "незадолжителен наслов на коментарот.",
+	"apihelp-cspostcomment-param-commenttitle": "наслов на коментарот.",
 	"apihelp-cspostcomment-param-wikitext": "викитекст за коментарот.",
 	"apihelp-cspostcomment-param-associatedid": "со која страница е поврзан коментаров.",
 	"apihelp-cseditcomment-description": "Изменете постоечки коментар. Треба да се укаже назнака или наслов на страницата.",
 	"apihelp-cseditcomment-summary": "Изменете постоечки коменар. Треба да се укаже назнака или наслов на страницата.",
 	"apihelp-cseditcomment-param-pageid": "назнака на страницата каде се наоѓа коментарот за уредување",
 	"apihelp-cseditcomment-param-title": "наслов на страницата каде се наоѓа коментарот за уредување",
-	"apihelp-cseditcomment-param-commenttitle": "незадолжителен наслов на коментарот.",
+	"apihelp-cseditcomment-param-commenttitle": "наслов на коментарот.",
 	"apihelp-cseditcomment-param-wikitext": "викитекст за коментарот.",
 	"apihelp-csvote-description": "Гласај (за, против или воздржан) по коментарот.",
 	"apihelp-csvote-summary": "Гласај (за, против или воздржан) по коментарот.",
