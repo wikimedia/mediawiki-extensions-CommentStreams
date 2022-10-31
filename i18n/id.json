@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Veracious"
+		]
+	},
+	"commentstreams-desc": "Memungkinan untuk berkomentar di halaman wiki",
+	"commentstreams-error-prohibitedaction": "Tindakan $1 tidak diperbolehkan di halaman komentar.",
+	"commentstreams-error-comment-on-deleted-page": "Halaman yang terkait dengan komentar ini telah dihapus.",
+	"commentstreams-author-anonymous": "anonim",
+	"apihelp-csdeletecomment-pageid-example": "hapus komentar dengan ID halaman 3",
+	"apihelp-cspostcomment-description": "Pos komentar baru.",
+	"apihelp-cspostcomment-summary": "Pos komentar baru.",
+	"apihelp-cspostcomment-param-wikitext": "wikiteks untuk komentar."
+}
