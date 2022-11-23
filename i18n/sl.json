@@ -4,6 +4,9 @@
 			"Eleassar"
 		]
 	},
+	"commentstreams-api-error-post-parentpagedoesnotexist": "Komentar, na katerega odgovarjate, ne obstaja.",
+	"commentstreams-buttontext-reply": "Odgovori",
+	"commentstreams-buttontooltip-reply": "odgovori",
 	"commentstreams-buttontooltip-edit": "uredi",
 	"commentstreams-buttontooltip-delete": "izbriši",
 	"commentstreams-buttontooltip-collapse": "strni",
