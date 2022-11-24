@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cûndûllah el-Kurdî"
+			"Cûndûllah el-Kurdî",
+			"Balyozxane"
 		]
 	},
-	"commentstreams-buttontooltip-edit": "biguherîne",
+	"commentstreams-buttontooltip-edit": "biguhêre",
 	"commentstreams-buttontooltip-delete": "Jê bibe",
 	"commentstreams-buttontooltip-cancel": "betal bike",
 	"commentstreams-dialog-buttontext-cancel": "Betal bike",
