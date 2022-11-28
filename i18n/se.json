@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Kimberli Mäkäräinen (WMNO)",
 			"Yupik"
 		]
 	},
+	"commentstreams-buttontooltip-delete": "sihko",
+	"commentstreams-buttontooltip-collapse": "čiega",
 	"commentstreams-buttontooltip-expand": "čájet"
 }
