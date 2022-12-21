@@ -4,7 +4,9 @@
 			"Kly",
 			"Liuxinyu970226",
 			"Tranve",
-			"列维劳德"
+			"列维劳德",
+			"Diskdance",
+			"捍粵者"
 		]
 	},
 	"commentstreams-desc": "允許在 wiki 頁面上評論",
@@ -148,7 +150,7 @@
 	"commentstreams-allcomments-label-commenttitle": "評論標題",
 	"commentstreams-allcomments-label-author": "作者",
 	"commentstreams-allcomments-label-created": "已建立",
-	"commentstreams-allcomments-label-lasteditor": "上一個編輯者",
+	"commentstreams-allcomments-label-lasteditor": "上個編輯者",
 	"commentstreams-allcomments-label-lastedited": "上一次編輯",
 	"commentstreams-allcomments-label-page": "評論頁面",
 	"commentstreams-allcomments-label-associatedpage": "相關頁面",

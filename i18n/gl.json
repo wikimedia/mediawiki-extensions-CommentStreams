@@ -3,7 +3,8 @@
 		"authors": [
 			"ArenaL5",
 			"Athena in Wonderland",
-			"Elisardojm"
+			"Elisardojm",
+			"Toliño"
 		]
 	},
 	"commentstreams-desc": "Permite deixar comentarios nas páxinas da wiki",
@@ -57,8 +58,8 @@
 	"grouppage-csmoderator": "{{ns:project}}:Moderadores (CommentStreams)",
 	"commentstreamsallcomments": "Todos os comentarios",
 	"commentstreams-allcomments-nocommentsfound": "Non se atopou ningún comentario.",
-	"commentstreams-allcomments-label-wikitext": "Comentario",
-	"commentstreams-allcomments-label-commenttitle": "Título do comentario",
+	"commentstreams-allcomments-label-wikitext": "Texto",
+	"commentstreams-allcomments-label-commenttitle": "Título",
 	"commentstreams-allcomments-label-author": "Autor",
 	"commentstreams-allcomments-label-created": "Creado",
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
