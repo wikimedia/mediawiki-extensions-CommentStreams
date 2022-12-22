@@ -4,6 +4,10 @@
 			"Eleassar"
 		]
 	},
+	"apihelp-cspostcomment-param-wikitext": "Vikibesedilo za komentar.",
+	"apihelp-cseditcomment-param-wikitext": "Vikibesedilo za komentar.",
+	"apihelp-cspostreply-param-wikitext": "Vikibesedilo za odgovor.",
+	"apihelp-cseditreply-param-wikitext": "Vikibesedilo za odgovor.",
 	"commentstreams-api-error-post-parentpagedoesnotexist": "Komentar, na katerega odgovarjate, ne obstaja.",
 	"commentstreams-buttontext-reply": "Odgovori",
 	"commentstreams-buttontooltip-reply": "odgovori",
