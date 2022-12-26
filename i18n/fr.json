@@ -136,7 +136,7 @@
 	"action-cs-moderator-delete": "supprimer les commentaires des autres utilisateurs",
 	"log-name-commentstreams": "Journal de CommentStreams",
 	"log-description-commentstreams": "Ces événements tracent quand les événements de CommentStreams se produisent.",
-	"logentry-commentstreams-comment-create": "$1{{GENDER:$2|}} a créé le commentaire $3",
+	"logentry-commentstreams-comment-create": "{{GENDER:$2|}}$1 a créé le commentaire $3",
 	"logentry-commentstreams-reply-create": "$1{{GENDER:$2|}} a écrit la réponse $3",
 	"logentry-commentstreams-comment-edit": "$1{{GENDER:$2|}} a modifié le commentaire $3",
 	"logentry-commentstreams-comment-moderator-edit": "$1 (modérat{{GENDER:$2|eur|rice}}) a modifié le commentaire $3",
