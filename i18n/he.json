@@ -51,6 +51,8 @@
 	"apihelp-csunwatch-param-title": "כותרת הדף שבו נמצאת התגובה שברצונך להפסיק לעקוב אחריה",
 	"apihelp-csunwatch-pageid-example": "הפסקת המעקב אחרי תגובה בדף שהמזהה שלו הוא 3",
 	"apihelp-csunwatch-title-example": "הפסקת המעקב אחרי תגובה בדף שהכותרת שלו היא CommentStreams:3",
+	"apihelp-cspostreply-description": "פרסום תגובה חדשה.",
+	"apihelp-cspostreply-summary": "פרסום תגובה חדשה.",
 	"commentstreams-api-error-notloggedin": "יש להיכנס לחשבון.",
 	"commentstreams-api-error-commentnotfound": "התגובה שביקשת לא נמצאה.",
 	"commentstreams-api-error-notacomment": "מזהה הדף שסופק אינו תואם לתגובה תקינה.",
