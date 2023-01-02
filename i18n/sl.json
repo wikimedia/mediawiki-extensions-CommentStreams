@@ -4,7 +4,7 @@
 			"Eleassar"
 		]
 	},
-	"commentstreams-author-anonymous": "anonimnež",
+	"commentstreams-author-anonymous": "anonimni",
 	"apihelp-cspostcomment-param-wikitext": "Vikibesedilo za komentar.",
 	"apihelp-cseditcomment-param-wikitext": "Vikibesedilo za komentar.",
 	"apihelp-cspostreply-param-wikitext": "Vikibesedilo za odgovor.",
@@ -14,6 +14,9 @@
 	"commentstreams-api-error-edit-notloggedin": "Za urejanje morate biti prijavljeni.",
 	"commentstreams-api-error-delete-notloggedin": "Za brisanje morate biti prijavljeni.",
 	"commentstreams-api-error-vote-notloggedin": "Za glasovanje morate biti prijavljeni.",
+	"commentstreams-api-error-vote-novoteonreply": "Glasovanje o odgovorih ni dovoljeno.",
+	"commentstreams-api-error-watch-nowatchreply": "Opazovanje odgovorov ni dovoljeno.",
+	"commentstreams-api-error-unwatch-nounwatchreply": "Odopazovanje odgovorov ni dovoljeno.",
 	"commentstreams-buttontext-reply": "Odgovori",
 	"commentstreams-buttontooltip-reply": "odgovori",
 	"commentstreams-buttontooltip-edit": "uredi",
