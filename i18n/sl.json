@@ -5,8 +5,14 @@
 		]
 	},
 	"commentstreams-author-anonymous": "anonimni",
+	"apihelp-csquerycomment-title-example": "poizve komentar z naslovom strani CommentStreams:3 v vikibesedilu",
+	"apihelp-csdeletecomment-title-example": "izbriše komentar z naslovom strani CommentStreams:3",
+	"apihelp-cspostcomment-param-commenttitle": "naslov za komentar.",
 	"apihelp-cspostcomment-param-wikitext": "Vikibesedilo za komentar.",
+	"apihelp-cseditcomment-param-commenttitle": "naslov za komentar.",
 	"apihelp-cseditcomment-param-wikitext": "Vikibesedilo za komentar.",
+	"apihelp-csvote-param-title": "naslov strani, ki vsebuje komentar, o katerem se glasuje",
+	"apihelp-csvote-title-example": "odda glas o komentarju z naslovom strani CommentStreams:4",
 	"apihelp-cspostreply-param-wikitext": "Vikibesedilo za odgovor.",
 	"apihelp-cseditreply-param-wikitext": "Vikibesedilo za odgovor.",
 	"commentstreams-api-error-notloggedin": "Biti morate prijavljeni.",
@@ -21,6 +27,7 @@
 	"commentstreams-buttontooltip-reply": "odgovori",
 	"commentstreams-buttontooltip-edit": "uredi",
 	"commentstreams-buttontooltip-delete": "izbriši",
+	"commentstreams-buttontooltip-permalink": "trajna povezava",
 	"commentstreams-buttontooltip-collapse": "strni",
 	"commentstreams-buttontooltip-expand": "razširi",
 	"commentstreams-buttontooltip-submit": "objavi",
@@ -28,10 +35,13 @@
 	"commentstreams-dialog-buttontext-cancel": "Prekliči",
 	"commentstreams-dialog-buttontext-yes": "Da",
 	"commentstreams-dialog-buttontext-no": "Ne",
+	"commentstreams-title-field-placeholder": "Vnesite naslov ...",
 	"notification-link-label-commentstreams-comment-on-watched-page": "Obišči komentar",
 	"notification-link-label-commentstreams-reply-on-watched-page": "Obišči odgovor",
 	"notification-link-label-commentstreams-reply-to-watched-comment": "Obišči odgovor",
 	"commentstreams-allcomments-label-wikitext": "Besedilo",
 	"commentstreams-allcomments-label-commenttitle": "Naslov",
-	"commentstreams-allcomments-label-author": "Avtor"
+	"commentstreams-allcomments-label-author": "Avtor",
+	"commentstreams-allcomments-label-page": "Stran komentarja",
+	"commentstreams-allcomments-label-associatedpage": "Povezana stran"
 }
