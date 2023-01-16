@@ -1,9 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Patriot Kur"
+			"Patriot Kur",
+			"Patriot Kor"
 		]
 	},
+	"commentstreams-buttontooltip-submit": "təğdim",
 	"commentstreams-buttontooltip-cancel": "ləğv karde",
-	"commentstreams-dialog-buttontext-cancel": "Ləğv karde"
+	"commentstreams-dialog-buttontext-cancel": "Ləğv karde",
+	"commentstreams-dialog-buttontext-no": "Ne"
 }
