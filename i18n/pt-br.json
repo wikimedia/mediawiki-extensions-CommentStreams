@@ -2,15 +2,16 @@
 	"@metadata": {
 		"authors": [
 			"Eduardo Addad de Oliveira",
-			"Eduardoaddad"
+			"Eduardoaddad",
+			"Fúlvio"
 		]
 	},
 	"commentstreams-desc": "Permite deixar comentários nas páginas da wiki",
 	"commentstreams-error-prohibitedaction": "A ação $1 não é permitida nas páginas de comentários.",
 	"commentstreams-error-comment-on-deleted-page": "A página à qual este comentário está associado foi eliminada.",
 	"commentstreams-author-anonymous": "anônimo",
-	"apihelp-csquerycomment-description": "Devolver o título, o usuário, a data e hora de criação, e o texto wiki de um comentário. Tem de ser fornecido o identificador da página ou o título.",
-	"apihelp-csquerycomment-summary": "Devolver o título, o usuário, a data e hora de criação, e o texto wiki de um comentário. Tem de ser fornecido o identificador da página ou o título.",
+	"apihelp-csquerycomment-description": "Retorna detalhes de um comentário. Tem de ser fornecido o identificador da página ou o título.",
+	"apihelp-csquerycomment-summary": "Retorna detalhes de um comentário. Tem de ser fornecido o identificador da página ou o título.",
 	"apihelp-csquerycomment-param-pageid": "identificador da página que contém o comentário a ser consultado",
 	"apihelp-csquerycomment-param-title": "título da página que contém o comentário a ser consultado",
 	"apihelp-csquerycomment-pageid-example": "consultar o comentário com o identificador de página 3 em texto wiki",
