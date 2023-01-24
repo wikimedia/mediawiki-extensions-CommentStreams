@@ -5,6 +5,8 @@
 			"Yupik"
 		]
 	},
+	"commentstreams-buttontext-add": "Lasseet komment",
+	"commentstreams-buttontooltip-add": "lasseet komment",
 	"commentstreams-buttontooltip-delete": "siho",
 	"commentstreams-buttontooltip-collapse": "čievâ",
 	"commentstreams-buttontooltip-expand": "čääiti",
