@@ -4,6 +4,10 @@
 			"ToniSant"
 		]
 	},
+	"commentstreams-error-reply-to-deleted-comment": "Il-kumment li għalih dan il-kumment huwa risposta tħassar.",
 	"commentstreams-buttontext-reply": "Wieġeb",
-	"commentstreams-buttontooltip-reply": "wieġeb"
+	"commentstreams-buttontooltip-reply": "wieġeb",
+	"notification-body-commentstreams-reply-on-watched-page": "It-tweġiba hija:\n\n\n $5",
+	"notification-link-label-commentstreams-reply-on-watched-page": "Mur għat-tweġiba",
+	"commentstreams-allcomments-label-reply": "Wieġeb"
 }
