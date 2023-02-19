@@ -54,7 +54,7 @@ abstract class ApiCSCommentBase extends ApiCSBase {
 	 */
 	public function execute() {
 		$params = $this->extractRequestParams();
-		$wikiPage = $this->getTitleOrPageId( $params, $this->edit ? 'frommasterdb' : 'fromdb' );
+		$wikiPage = $this->getTitleOrPageId( $params, $this->edit ? 'fromdbmaster' : 'fromdb' );
 		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
 		if ( $comment ) {
 			$this->comment = $comment;
