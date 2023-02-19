@@ -54,7 +54,7 @@ abstract class ApiCSReplyBase extends ApiCSBase {
 	 */
 	public function execute() {
 		$params = $this->extractRequestParams();
-		$wikiPage = $this->getTitleOrPageId( $params, $this->edit ? 'frommasterdb' : 'fromdb' );
+		$wikiPage = $this->getTitleOrPageId( $params, $this->edit ? 'fromdbmaster' : 'fromdb' );
 		$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
 		if ( $reply ) {
 			$this->reply = $reply;
