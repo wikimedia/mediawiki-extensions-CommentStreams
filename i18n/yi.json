@@ -10,5 +10,7 @@
 	"commentstreams-buttontooltip-expand": "פֿאַרברייטערן",
 	"commentstreams-buttontooltip-cancel": "אַנולירן",
 	"commentstreams-dialog-buttontext-cancel": "אַנולירן",
+	"commentstreams-dialog-buttontext-no": "ניין",
+	"commentstreams-allcomments-label-wikitext": "טעקסט",
 	"commentstreams-allcomments-label-commenttitle": "טיטל"
 }
