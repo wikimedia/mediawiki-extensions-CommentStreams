@@ -6,7 +6,8 @@
 			"Tranve",
 			"列维劳德",
 			"Diskdance",
-			"捍粵者"
+			"捍粵者",
+			"Winston Sung"
 		]
 	},
 	"commentstreams-desc": "允許在 wiki 頁面上評論",
@@ -89,7 +90,7 @@
 	"commentstreams-buttontooltip-moderator-edit": "版主編輯",
 	"commentstreams-buttontooltip-delete": "刪除",
 	"commentstreams-buttontooltip-moderator-delete": "版主刪除",
-	"commentstreams-buttontooltip-permalink": "靜態連結",
+	"commentstreams-buttontooltip-permalink": "固定連結",
 	"commentstreams-buttontooltip-collapse": "摺疊",
 	"commentstreams-buttontooltip-expand": "展開",
 	"commentstreams-buttontooltip-upvote": "贊成",
