@@ -12,5 +12,6 @@
 	"commentstreams-dialog-buttontext-cancel": "אַנולירן",
 	"commentstreams-dialog-buttontext-no": "ניין",
 	"commentstreams-allcomments-label-wikitext": "טעקסט",
-	"commentstreams-allcomments-label-commenttitle": "טיטל"
+	"commentstreams-allcomments-label-commenttitle": "טיטל",
+	"commentstreams-allcomments-label-author": "מחבר"
 }
