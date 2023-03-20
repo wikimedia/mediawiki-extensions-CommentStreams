@@ -3,6 +3,7 @@
 		"authors": [
 			"Abuluntu",
 			"Citadell",
+			"EdoAug",
 			"Jon Harald Søby",
 			"Orf3us"
 		]
@@ -145,6 +146,7 @@
 	"commentstreams-allcomments-nocommentsfound": "Ingen kommentarer funnet.",
 	"commentstreams-allcomments-label-wikitext": "Tekst",
 	"commentstreams-allcomments-label-commenttitle": "Tittel",
+	"commentstreams-allcomments-label-reply": "Svar",
 	"commentstreams-allcomments-label-author": "Forfatter",
 	"commentstreams-allcomments-label-created": "Opprettet",
 	"commentstreams-allcomments-label-lasteditor": "Siste bidragsyter",
