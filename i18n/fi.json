@@ -4,12 +4,14 @@
 			"Nike",
 			"Silvonen",
 			"Yupik",
-			"MITO"
+			"MITO",
+			"Pyscowicz"
 		]
 	},
 	"commentstreams-api-error-notloggedin": "Sinun täytyy olla sisäänkirjautuneena.",
 	"commentstreams-buttontooltip-add": "lisää kommentti",
 	"commentstreams-buttontooltip-permalink": "ikilinkki",
+	"commentstreams-dialog-delete-message": "Haluatko varmasti poistaa tämän kommentin?",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
 	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu",
 	"commentstreams-allcomments-button-next": "Seuraava",
