@@ -3,6 +3,7 @@
 		"authors": [
 			"Gomoko",
 			"Thibaut120094",
+			"Urhixidur",
 			"Verdy p",
 			"Wladek92"
 		]
@@ -68,8 +69,8 @@
 	"apihelp-csdeletereply-param-title": "titre de la page qui détient la réponse à supprimer",
 	"apihelp-csdeletereply-pageid-example": "supprimer la réponse avec l’identifiant de page 3",
 	"apihelp-csdeletereply-title-example": "supprimer la réponse avec le titre de page CommentStreams:3",
-	"apihelp-cspostreply-description": "Poster une nouvelle réponse.",
-	"apihelp-cspostreply-summary": "Poster une nouvelle réponse.",
+	"apihelp-cspostreply-description": "Publier une nouvelle réponse.",
+	"apihelp-cspostreply-summary": "Publier une nouvelle réponse.",
 	"apihelp-cspostreply-param-wikitext": "wikicode pour la réponse.",
 	"apihelp-cspostreply-param-parentid": "identifiant de page du commentaire parent.",
 	"apihelp-cseditreply-description": "Modifier une réponse existante. L’identifiant de page ou le titre doit être fourni.",
