@@ -2,7 +2,10 @@
 	"@metadata": {
 		"authors": [
 			"ديفيد",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"Alshamiri1",
+			"FiberAhmed",
+			"أَحمد"
 		]
 	},
 	"commentstreams-desc": "يسمح بالتعليق على صفحات الويكي",
@@ -52,6 +55,7 @@
 	"apihelp-csunwatch-param-title": "عنوان الصفحة للصفحة التي تحمل التعليق المراد عدم مراقبته",
 	"apihelp-csunwatch-pageid-example": "عدم مراقبة تعليق بمعرف الصفحة 3",
 	"apihelp-csunwatch-title-example": "عدم مراقبة تعليق بعنوان الصفحة CommentStreams: 3",
+	"commentstreams-api-error-invalid": "استجابة API غير صالحة.",
 	"commentstreams-api-error-notloggedin": "يجب أن تكون مسجلا.",
 	"commentstreams-api-error-commentnotfound": "لم يتم العثور على التعليق المطلوب.",
 	"commentstreams-api-error-notacomment": "لا يشير معرف الصفحة الذي تم توفيره إلى تعليق صالح.",
@@ -153,6 +157,7 @@
 	"commentstreams-allcomments-label-created": "أُنشِئت",
 	"commentstreams-allcomments-label-lasteditor": "آخر محرر",
 	"commentstreams-allcomments-label-lastedited": "آخر تعديل",
+	"commentstreams-allcomments-label-blockid": "معرف الحظر",
 	"commentstreams-allcomments-button-next": "التالي",
 	"commentstreams-allcomments-button-previous": "السابق",
 	"commentstreams-ve-conversion-error": "خطأ في التحويل بين نص الويكي وHTML للمحرر المرئي"
