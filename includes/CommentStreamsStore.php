@@ -467,16 +467,15 @@ class CommentStreamsStore {
 	 * @param int $assocPageId
 	 * @param string $commentTitle
 	 * @param string|null $blockName
-	 * @return bool
 	 */
 	public function upsertCommentMetadata(
 		int $pageId,
 		int $assocPageId,
 		string $commentTitle,
 		?string $blockName
-	): bool {
+	) {
 		$dbw = $this->getDBConnection( DB_PRIMARY );
-		return $dbw->upsert(
+		$dbw->upsert(
 			'cs_comments',
 			[
 				'cst_c_comment_page_id' => $pageId,
@@ -500,7 +499,6 @@ class CommentStreamsStore {
 	/**
 	 * @param int $pageId
 	 * @param int $commentPageId
-	 * @return bool
 	 * @throws MWException
 	 */
 	public function upsertReplyMetadata(
@@ -508,7 +506,7 @@ class CommentStreamsStore {
 		int $commentPageId
 	) {
 		$dbw = $this->getDBConnection( DB_PRIMARY );
-		return $dbw->upsert(
+		$dbw->upsert(
 			'cs_replies',
 			[
 				'cst_r_reply_page_id' => $pageId,
