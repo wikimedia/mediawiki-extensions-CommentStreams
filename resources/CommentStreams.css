@@ -128,7 +128,6 @@
 	border-color: #00a7d8;
 	box-sizing: border-box;
 	width: 100%;
-	min-width: 400px;
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 5px;
 	font-family: sans-serif;
@@ -147,19 +146,7 @@
 	font-size: 1em;
 }
 
-/* VisualEditor/VEForAll CSS */
-.ve-area-wrapper,
-.ve-ce-documentNode {
-	/* stylelint-disable-next-line declaration-no-important */
-	width: auto !important;
-}
-
-.ve-area-wrapper {
-	z-index: 100;
-}
-
-div.ve-ce-branchNode {
+.cs-comments div.ve-ce-branchNode {
 	border: 1px solid #00a7d8;
-	background: #fff;
 	margin-bottom: 5px;
 }
