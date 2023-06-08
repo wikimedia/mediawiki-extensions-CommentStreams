@@ -144,6 +144,7 @@
 			"services": [
 				"CommentStreamsFactory",
 				"CommentStreamsEchoInterface",
+				"MainConfig",
 				"WikiPageFactory"
 			]
 		},
@@ -152,31 +153,36 @@
 			"services": [
 				"CommentStreamsFactory",
 				"CommentStreamsEchoInterface",
+				"MainConfig",
 				"WikiPageFactory"
 			]
 		},
 		"csquerycomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"csqueryreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryReply",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"cseditcomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"cseditreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditReply",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"csdeletecomment": {
@@ -189,25 +195,29 @@
 		"csdeletereply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteReply",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"csvote": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"cswatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		},
 		"csunwatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch",
 			"services": [
-				"CommentStreamsFactory"
+				"CommentStreamsFactory",
+				"MainConfig"
 			]
 		}
 	},
@@ -259,6 +269,7 @@
 		"CommentStreamsUserRealNamePropertyName": null,
 		"CommentStreamsUserAvatarPropertyName": null,
 		"CommentStreamsEnableSearch": true,
-		"CommentStreamsExportCommentsAutomatically": true
+		"CommentStreamsExportCommentsAutomatically": true,
+		"CommentStreamsSuppressLogsFromRCs": true
 	}
 }
