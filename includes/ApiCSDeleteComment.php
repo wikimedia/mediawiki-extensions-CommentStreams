@@ -46,7 +46,7 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 		CommentStreamsFactory $commentStreamsFactory,
 		Config $config
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, true );
+		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
 		$this->moderatorFastDelete = (bool)$config->get( 'CommentStreamsModeratorFastDelete' );
 	}
 
