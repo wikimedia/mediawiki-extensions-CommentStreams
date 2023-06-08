@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
+use Config;
 use MWException;
 
 class ApiCSDeleteReply extends ApiCSReplyBase {
@@ -34,9 +35,10 @@ class ApiCSDeleteReply extends ApiCSReplyBase {
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory
+		CommentStreamsFactory $commentStreamsFactory,
+		Config $config
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, true );
+		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
 	}
 
 	/**
