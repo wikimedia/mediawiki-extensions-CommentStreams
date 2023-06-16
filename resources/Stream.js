@@ -424,6 +424,9 @@ module.exports = ( function () {
 						self.collapse();
 					}
 					break;
+				case 'history':
+					location.href = mw.config.get( 'wgScript' ) + '?curid=' + pageId + '&action=history';
+					break;
 				case 'link':
 					$( '.cs-target-comment' ).removeClass( 'cs-target-comment' );
 					self.controller.scrollToElement( $comment );
@@ -461,6 +464,8 @@ module.exports = ( function () {
 			items.push( this.createCollapseButton() );
 		}
 
+		items.push( this.createHistoryButton( commentData.pageid ) );
+
 		items.push( this.createPermalinkButton( commentData.pageid ) );
 
 		return items;
@@ -474,7 +479,8 @@ module.exports = ( function () {
 	Stream.prototype.canDelete = function ( commentData ) {
 		return ( this.env.isLoggedIn &&
 		( this.env.username === commentData.username || this.env.moderatorDelete ) &&
-		( commentData.numreplies === 0 || commentData.numreplies === undefined || this.env.moderatorFastDelete ) );
+		( commentData.numreplies === 0 || commentData.numreplies === undefined ||
+		this.env.moderatorFastDelete ) );
 	};
 
 	Stream.prototype.createEditButton = function ( username ) {
@@ -537,10 +543,21 @@ module.exports = ( function () {
 		return this.collapseButton;
 	};
 
+	Stream.prototype.createHistoryButton = function () {
+		this.historyButton = new OO.ui.MenuOptionWidget( {
+			icon: 'history',
+			label: mw.msg( 'commentstreams-buttontooltip-history' ),
+			classes: [ 'cs-history-button' ],
+			data: 'history'
+		} );
+		return this.historyButton;
+	};
+
 	Stream.prototype.createPermalinkButton = function () {
 		return new OO.ui.MenuOptionWidget( {
 			icon: 'link',
 			label: mw.msg( 'commentstreams-buttontooltip-permalink' ),
+			classes: [ 'cs-link-button' ],
 			data: 'link'
 		} );
 	};
