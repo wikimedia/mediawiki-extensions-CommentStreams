@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
+use Config;
 use ManualLogEntry;
 use MWException;
 
@@ -33,18 +34,26 @@ abstract class ApiCSCommentBase extends ApiCSBase {
 	protected $comment;
 
 	/**
+	 * @var bool
+	 */
+	protected $suppressLogsFromRCs;
+
+	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param Config $config
 	 * @param bool $edit whether this API module will be editing the database
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
 		CommentStreamsFactory $commentStreamsFactory,
+		Config $config,
 		bool $edit = false
 	) {
 		parent::__construct( $main, $action, $commentStreamsFactory, $edit );
+		$this->suppressLogsFromRCs = (bool)$config->get( "CommentStreamsSuppressLogsFromRCs" );
 	}
 
 	/**
@@ -76,6 +85,10 @@ abstract class ApiCSCommentBase extends ApiCSBase {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );
 		$logEntry->setPerformer( $this->getUser() );
 		$logEntry->setTarget( $this->comment->getTitle() );
-		$logEntry->insert();
+		$logId = $logEntry->insert();
+
+		if ( !$this->suppressLogsFromRCs ) {
+			$logEntry->publish( $logId );
+		}
 	}
 }
