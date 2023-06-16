@@ -24,6 +24,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use ApiBase;
 use ApiMain;
 use ApiUsageException;
+use Config;
 use ManualLogEntry;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\WikiPageFactory;
@@ -42,6 +43,11 @@ class ApiCSPostReply extends ApiBase {
 	private $echoInterface;
 
 	/**
+	 * @var bool
+	 */
+	private $suppressLogsFromRCs;
+
+	/**
 	 * @var WikiPageFactory
 	 */
 	private $wikiPageFactory;
@@ -51,6 +57,7 @@ class ApiCSPostReply extends ApiBase {
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
 	 * @param EchoInterface $commentStreamsEchoInterface
+	 * @param Config $config
 	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
@@ -58,11 +65,13 @@ class ApiCSPostReply extends ApiBase {
 		string $action,
 		CommentStreamsFactory $commentStreamsFactory,
 		EchoInterface $commentStreamsEchoInterface,
+		Config $config,
 		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
 		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->echoInterface = $commentStreamsEchoInterface;
+		$this->suppressLogsFromRCs = (bool)$config->get( "CommentStreamsSuppressLogsFromRCs" );
 		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
@@ -153,6 +162,10 @@ class ApiCSPostReply extends ApiBase {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );
 		$logEntry->setPerformer( $this->getUser() );
 		$logEntry->setTarget( $target );
-		$logEntry->insert();
+		$logId = $logEntry->insert();
+
+		if ( !$this->suppressLogsFromRCs ) {
+			$logEntry->publish( $logId );
+		}
 	}
 }

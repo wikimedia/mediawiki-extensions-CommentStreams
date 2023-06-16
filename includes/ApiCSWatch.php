@@ -23,15 +23,22 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
+use Config;
 
 class ApiCSWatch extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param Config $config
 	 */
-	public function __construct( ApiMain $main, string $action, CommentStreamsFactory $commentStreamsFactory ) {
-		parent::__construct( $main, $action, $commentStreamsFactory, true );
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		CommentStreamsFactory $commentStreamsFactory,
+		Config $config
+	) {
+		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
 	}
 
 	/**
