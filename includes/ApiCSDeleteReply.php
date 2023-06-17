@@ -31,6 +31,7 @@ class ApiCSDeleteReply extends ApiCSReplyBase {
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
