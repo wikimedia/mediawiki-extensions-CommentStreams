@@ -372,7 +372,7 @@ class CommentStreamsStore {
 			$user,
 			EDIT_UPDATE | EDIT_SUPPRESS_RC
 		);
-		if ( !$status->isGood() ) {
+		if ( !$status->isOK() ) {
 			return false;
 		}
 
