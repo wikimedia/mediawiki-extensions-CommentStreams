@@ -80,6 +80,11 @@ abstract class AbstractComment {
 	protected $wikiPageFactory;
 
 	/**
+	 * @var string
+	 */
+	protected $timeFormat;
+
+	/**
 	 * @var ?string
 	 */
 	protected $userAvatarPropertyName;
@@ -146,6 +151,7 @@ abstract class AbstractComment {
 	 * @param UserFactory $userFactory
 	 * @param PageProps $pageProps
 	 * @param WikiPageFactory $wikiPageFactory
+	 * @param string $timeFormat
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param WikiPage $wikiPage
@@ -161,6 +167,7 @@ abstract class AbstractComment {
 		UserFactory $userFactory,
 		PageProps $pageProps,
 		WikiPageFactory $wikiPageFactory,
+		string $timeFormat,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		WikiPage $wikiPage,
@@ -174,6 +181,7 @@ abstract class AbstractComment {
 		$this->userFactory = $userFactory;
 		$this->pageProps = $pageProps;
 		$this->wikiPageFactory = $wikiPageFactory;
+		$this->timeFormat = $timeFormat;
 		$this->userAvatarPropertyName = $userAvatarPropertyName;
 		$this->userRealNamePropertyName = $userRealNamePropertyName;
 		$this->wikiPage = $wikiPage;
@@ -289,7 +297,7 @@ abstract class AbstractComment {
 	 */
 	public function getCreationDate( User $user ): string {
 		$this->creationTimestamp->offsetForUser( $user );
-		return $this->creationTimestamp->format( "M j \a\\t g:i a" );
+		return $this->creationTimestamp->format( $this->timeFormat );
 	}
 
 	/**
@@ -302,7 +310,7 @@ abstract class AbstractComment {
 		}
 
 		return $this->modificationTimestamp ?
-			$this->modificationTimestamp->format( "M j \a\\t g:i a" ) : null;
+			$this->modificationTimestamp->format( $this->timeFormat ) : null;
 	}
 
 	private function setAvatar() {

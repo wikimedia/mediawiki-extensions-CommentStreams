@@ -83,6 +83,7 @@ class Comment extends AbstractComment {
 	 * @param UserFactory $userFactory
 	 * @param PageProps $pageProps
 	 * @param WikiPageFactory $wikiPageFactory
+	 * @param string $timeFormat
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param bool $enableVoting
@@ -104,6 +105,7 @@ class Comment extends AbstractComment {
 		UserFactory $userFactory,
 		PageProps $pageProps,
 		WikiPageFactory $wikiPageFactory,
+		string $timeFormat,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		bool $enableVoting,
@@ -123,6 +125,7 @@ class Comment extends AbstractComment {
 			$userFactory,
 			$pageProps,
 			$wikiPageFactory,
+			$timeFormat,
 			$userAvatarPropertyName,
 			$userRealNamePropertyName,
 			$wikiPage,
