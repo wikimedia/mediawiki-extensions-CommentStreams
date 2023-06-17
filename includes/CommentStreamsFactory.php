@@ -36,10 +36,16 @@ use WikiPage;
 
 class CommentStreamsFactory {
 	public const CONSTRUCTOR_OPTIONS = [
+		'CommentStreamsTimeFormat',
 		'CommentStreamsUserAvatarPropertyName',
 		'CommentStreamsUserRealNamePropertyName',
 		'CommentStreamsEnableVoting'
 	];
+
+	/**
+	 * @var string
+	 */
+	private $timeFormat;
 
 	/**
 	 * @var string
@@ -140,6 +146,7 @@ class CommentStreamsFactory {
 		WikiPageFactory $wikiPageFactory
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+		$this->timeFormat = $options->get( 'CommentStreamsTimeFormat' );
 		$this->userAvatarPropertyName = $options->get( 'CommentStreamsUserAvatarPropertyName' );
 		$this->userRealNamePropertyName = $options->get( 'CommentStreamsUserRealNamePropertyName' );
 		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
@@ -187,6 +194,7 @@ class CommentStreamsFactory {
 			$this->userFactory,
 			$this->pageProps,
 			$this->wikiPageFactory,
+			$this->timeFormat,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$this->enableVoting,
@@ -227,6 +235,7 @@ class CommentStreamsFactory {
 			$this->userFactory,
 			$this->pageProps,
 			$this->wikiPageFactory,
+			$this->timeFormat,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$wikiPage,
@@ -278,6 +287,7 @@ class CommentStreamsFactory {
 			$this->userFactory,
 			$this->pageProps,
 			$this->wikiPageFactory,
+			$this->timeFormat,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$this->enableVoting,
@@ -331,6 +341,7 @@ class CommentStreamsFactory {
 			$this->userFactory,
 			$this->pageProps,
 			$this->wikiPageFactory,
+			$this->timeFormat,
 			$this->userAvatarPropertyName,
 			$this->userRealNamePropertyName,
 			$wikiPage,
