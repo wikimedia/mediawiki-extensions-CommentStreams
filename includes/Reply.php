@@ -58,6 +58,7 @@ class Reply extends AbstractComment {
 	 * @param UserFactory $userFactory
 	 * @param PageProps $pageProps
 	 * @param WikiPageFactory $wikiPageFactory
+	 * @param string $timeFormat
 	 * @param ?string $userAvatarPropertyName
 	 * @param ?string $userRealNamePropertyName
 	 * @param WikiPage $wikiPage
@@ -75,6 +76,7 @@ class Reply extends AbstractComment {
 		UserFactory $userFactory,
 		PageProps $pageProps,
 		WikiPageFactory $wikiPageFactory,
+		string $timeFormat,
 		?string $userAvatarPropertyName,
 		?string $userRealNamePropertyName,
 		WikiPage $wikiPage,
@@ -91,6 +93,7 @@ class Reply extends AbstractComment {
 			$userFactory,
 			$pageProps,
 			$wikiPageFactory,
+			$timeFormat,
 			$userAvatarPropertyName,
 			$userRealNamePropertyName,
 			$wikiPage,

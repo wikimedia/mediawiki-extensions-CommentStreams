@@ -272,6 +272,7 @@
 		"CommentStreamsUserAvatarPropertyName": null,
 		"CommentStreamsEnableSearch": true,
 		"CommentStreamsExportCommentsAutomatically": true,
-		"CommentStreamsSuppressLogsFromRCs": true
+		"CommentStreamsSuppressLogsFromRCs": true,
+		"CommentStreamsTimeFormat": "M j, Y \\a\\t g:i a"
 	}
 }
