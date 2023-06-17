@@ -33,6 +33,10 @@ class MigrateToAbstractSchema extends LoggedUpdateMaintenance {
 			return true;
 		}
 
+		if ( !$dbw->fieldExists( 'cs_comment_data', 'cst_id', __METHOD__ ) ) {
+			return true;
+		}
+
 		$rows = $dbw->select(
 			[
 				'cs_comment_data'
