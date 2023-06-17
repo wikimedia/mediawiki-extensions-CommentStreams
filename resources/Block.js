@@ -52,33 +52,34 @@ module.exports = ( function () {
 		this.$footerDiv = $( '<div>' ).addClass( 'cs-footer' );
 		this.$commentDiv.append( this.$footerDiv );
 
-		if ( this.env.canComment ) {
-			const params = {
-				icon: 'speechBubbleAdd'
-			};
+		const params = {
+			icon: 'speechBubbleAdd'
+		};
 
-			const buttonText = mw.msg( 'commentstreams-buttontext-add' );
-			if ( this.env.showLabels ) {
-				params.label = buttonText;
-			} else {
-				params.title = buttonText;
-				params.framed = false;
-			}
-
-			this.addButton = new OO.ui.ButtonWidget( params );
-
-			if ( this.env.newestStreamsOnTop ) {
-				this.$headerDiv.append( this.addButton.$element );
-			} else {
-				this.$footerDiv.append( this.addButton.$element );
-			}
-
-			this.addButton.onClick = function () {
-				self.showNewCommentStreamBox();
-			};
-
-			this.addButton.on( 'click', this.addButton.onClick );
+		const buttonText = mw.msg( 'commentstreams-buttontext-add' );
+		if ( this.env.showLabels ) {
+			params.label = buttonText;
+		} else {
+			params.title = buttonText;
+			params.framed = false;
 		}
+		if ( !this.env.canComment ) {
+			params.disabled = true;
+		}
+
+		this.addButton = new OO.ui.ButtonWidget( params );
+
+		if ( this.env.newestStreamsOnTop ) {
+			this.$headerDiv.append( this.addButton.$element );
+		} else {
+			this.$footerDiv.append( this.addButton.$element );
+		}
+
+		this.addButton.onClick = function () {
+			self.showNewCommentStreamBox();
+		};
+
+		this.addButton.on( 'click', this.addButton.onClick );
 	};
 
 	Block.prototype.addStream = function ( commentData ) {
