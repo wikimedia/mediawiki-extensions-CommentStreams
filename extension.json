@@ -46,6 +46,7 @@
 			"dependencies": [
 				"oojs-ui",
 				"oojs-ui.styles.icons-alerts",
+				"oojs-ui.styles.icons-content",
 				"oojs-ui.styles.icons-editing-core",
 				"oojs-ui.styles.icons-interactions",
 				"oojs-ui.styles.icons-moderation",
@@ -91,6 +92,7 @@
 				"commentstreams-buttontooltip-moderator-edit",
 				"commentstreams-buttontooltip-delete",
 				"commentstreams-buttontooltip-moderator-delete",
+				"commentstreams-buttontooltip-history",
 				"commentstreams-buttontooltip-permalink",
 				"commentstreams-buttontooltip-collapse",
 				"commentstreams-buttontooltip-expand",
