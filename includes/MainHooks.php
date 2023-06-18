@@ -171,7 +171,7 @@ class MainHooks implements
 		}
 		if ( $action !== 'view' ) {
 			$message = wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
-			$output->addHTML( '<p class="error">' . htmlentities( $message ) . '</p>' );
+			$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
 			return false;
 		}
 
@@ -190,7 +190,7 @@ class MainHooks implements
 				$output->setSubtitle( $this->linkRenderer->makeLink( $associatedTitle, '< ' . $displaytitle ) );
 			} else {
 				$message = wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
-				$output->addHTML( '<p class="error">' . htmlentities( $message ) . '</p>' );
+				$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
 			}
 		} else {
 			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
@@ -206,7 +206,7 @@ class MainHooks implements
 					$output->setSubtitle( $this->linkRenderer->makeLink( $parentCommentTitle, '< ' . $displaytitle ) );
 				} else {
 					$message = wfMessage( 'commentstreams-error-reply-to-deleted-comment' )->text();
-					$output->addHTML( '<p class="error">' . htmlentities( $message ) . '</p>' );
+					$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
 				}
 			}
 		}
