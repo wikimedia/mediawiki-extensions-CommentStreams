@@ -158,7 +158,7 @@ class CommentStreamsAllComments extends SpecialPage {
 						'framed' => false
 					] );
 					$title = $reply->getTitle();
-					$wikitext = htmlentities( $reply->getWikitext() );
+					$wikitext = htmlspecialchars( $reply->getWikitext() );
 					$author = $reply->getAuthor();
 					$lastEditor = $reply->getLastEditor();
 					$creationDate = $reply->getCreationDate( $this->getUser() );
@@ -166,7 +166,7 @@ class CommentStreamsAllComments extends SpecialPage {
 				} else {
 					$replyCheck = '';
 					$title = $comment->getTitle();
-					$wikitext = htmlentities( $comment->getWikitext() );
+					$wikitext = htmlspecialchars( $comment->getWikitext() );
 					$author = $comment->getAuthor();
 					$lastEditor = $comment->getLastEditor();
 					$creationDate = $comment->getCreationDate( $this->getUser() );
@@ -184,10 +184,10 @@ class CommentStreamsAllComments extends SpecialPage {
 				} else {
 					$associatedPageLink = '';
 				}
-				$commentTitle = htmlentities( $comment->getCommentTitle() );
+				$commentTitle = htmlspecialchars( $comment->getCommentTitle() );
 				$commentBlockName = $comment->getBlockName();
 				if ( $commentBlockName ) {
-					$commentBlockName = htmlentities( $commentBlockName );
+					$commentBlockName = htmlspecialchars( $commentBlockName );
 				}
 				if ( $author->getId() === 0 ) {
 					$author = '<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
