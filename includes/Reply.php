@@ -120,7 +120,7 @@ class Reply extends AbstractComment {
 		return [
 			'pageid' => $this->wikiPage->getId(),
 			'parentid' => $this->parentCommentPageId,
-			'wikitext' => htmlentities( $this->wikitext ),
+			'wikitext' => htmlspecialchars( $this->wikitext ),
 			'html' => $this->getHTML( $context ),
 			'username' => $this->getUsername(),
 			'userdisplayname' => $this->getUserDisplayName(),
