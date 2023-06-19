@@ -4,6 +4,7 @@
 			"Gomoko",
 			"Thibaut120094",
 			"Urhixidur",
+			"VIGNERON",
 			"Verdy p",
 			"Wladek92"
 		]
@@ -115,6 +116,7 @@
 	"commentstreams-buttontooltip-moderator-edit": "modification par un modérateur",
 	"commentstreams-buttontooltip-delete": "supprimer",
 	"commentstreams-buttontooltip-moderator-delete": "suppression par un modérateur",
+	"commentstreams-buttontooltip-history": "historique",
 	"commentstreams-buttontooltip-permalink": "lien permanent",
 	"commentstreams-buttontooltip-collapse": "replier",
 	"commentstreams-buttontooltip-expand": "développer",
