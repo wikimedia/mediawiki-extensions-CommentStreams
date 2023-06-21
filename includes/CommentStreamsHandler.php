@@ -215,11 +215,13 @@ class CommentStreamsHandler {
 
 		// if $wgCommentStreamsAllowedNamespaces is not set, display comments
 		// in all content namespaces and if set to -1, don't display comments
+		// unless they are explicitly enabled on the given page
 		$config = $output->getConfig();
 		$csAllowedNamespaces = $config->get( 'CommentStreamsAllowedNamespaces' );
 		if ( $csAllowedNamespaces === null ) {
 			$csAllowedNamespaces = $config->get( 'ContentNamespaces' );
-		} elseif ( $csAllowedNamespaces === self::COMMENTS_DISABLED ) {
+		} elseif ( $csAllowedNamespaces === self::COMMENTS_DISABLED &&
+			$this->areCommentsEnabled != self::COMMENTS_ENABLED ) {
 			return false;
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
 			$csAllowedNamespaces = [ $csAllowedNamespaces ];
