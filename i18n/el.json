@@ -6,7 +6,6 @@
 		]
 	},
 	"commentstreams-author-anonymous": "ανώνυμος",
-	"apihelp-cspostcomment-description": "Αποστολή νέου σχολίου.",
 	"apihelp-cspostcomment-summary": "Αποστολή νέου σχολίου.",
 	"apihelp-cspostcomment-param-commenttitle": "προαιρετικός τίτλος για το σχόλιο.",
 	"apihelp-cseditcomment-param-wikitext": "βικικείμενο για το σχόλιο.",

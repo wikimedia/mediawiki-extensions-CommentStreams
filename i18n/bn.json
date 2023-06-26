@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aftabuzzaman",
+			"Yahya",
 			"আফতাবুজ্জামান"
 		]
 	},
@@ -17,6 +18,7 @@
 	"commentstreams-buttontooltip-reply": "প্রত্যুত্তর",
 	"commentstreams-buttontooltip-edit": "সম্পাদনা",
 	"commentstreams-buttontooltip-delete": "অপসারণ",
+	"commentstreams-buttontooltip-history": "ইতিহাস",
 	"commentstreams-buttontooltip-permalink": "স্থায়ী সংযোগ",
 	"commentstreams-buttontooltip-collapse": "সংকোচন",
 	"commentstreams-buttontooltip-expand": "প্রসারণ",

@@ -10,7 +10,6 @@
 	"commentstreams-error-reply-to-deleted-comment": "Komentar yang dibalas dengan komentar ini telah dihapus.",
 	"commentstreams-author-anonymous": "anonim",
 	"apihelp-csdeletecomment-pageid-example": "hapus komentar dengan ID halaman 3",
-	"apihelp-cspostcomment-description": "Pos komentar baru.",
 	"apihelp-cspostcomment-summary": "Pos komentar baru.",
 	"apihelp-cspostcomment-param-commenttitle": "judul untuk komentar.",
 	"apihelp-cspostcomment-param-wikitext": "wikiteks untuk komentar."
