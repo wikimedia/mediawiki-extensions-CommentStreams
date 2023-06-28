@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Les Meloures",
-			"Robby"
+			"Robby",
+			"Volvox"
 		]
 	},
 	"commentstreams-error-prohibitedaction": "D'Aktioun $1 ass op Bemierkungssäiten net erlaabt.",
@@ -28,7 +29,7 @@
 	"commentstreams-buttontooltip-watch": "Iwwerwaachen",
 	"commentstreams-buttontooltip-submit": "späicheren",
 	"commentstreams-buttontooltip-cancel": "ofbriechen",
-	"commentstreams-dialog-delete-message": "Sidd Dir sécher datt Dir dës Bemierkung läsche wëllt?",
+	"commentstreams-dialog-delete-message": "Sidd Dir sécher, datt Dir dës Bemierkung läsche wëllt?",
 	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-cancel": "Ofbriechen",
 	"commentstreams-dialog-buttontext-yes": "Jo",
