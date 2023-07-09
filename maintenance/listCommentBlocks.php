@@ -19,7 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-$IP = dirname( __DIR__, 3 );
+$IP ??= getenv( "MW_INSTALL_PATH" ) ?: dirname( __DIR__, 3 );
 require_once "$IP/maintenance/Maintenance.php";
 
 class ListCommentBlocks extends Maintenance {
