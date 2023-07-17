@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Piano1forte2"
+		]
+	},
+	"commentstreams-urldialog-instructions": "Copy and paste the URL below to share a permalink to this comment. Press escape to dismiss this dialogue.",
+	"notification-header-commentstreams-comment-on-watched-page": "$1 {{GENDER:$4|commented}} '<i>$2</i>' on page '<i>$3</i>', which {{GENDER:$6|you}} are watching.",
+	"notification-header-commentstreams-reply-on-watched-page": "$1 {{GENDER:$4|replied}} to comment '<i>$2</i>' on page '<i>$3</i>', which {{GENDER:$6|you}} are watching.",
+	"notification-header-commentstreams-reply-to-watched-comment": "$1 {{GENDER:$4|replied}} to comment '<i>$2</i>', which {{GENDER:$6|you}} are watching, on page '<i>$3</i>'."
+}
