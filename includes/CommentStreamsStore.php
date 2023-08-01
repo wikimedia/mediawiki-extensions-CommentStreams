@@ -721,12 +721,13 @@ class CommentStreamsStore {
 			->caller( __METHOD__ )
 			->fetchRow();
 		$users = [];
-		foreach ( $result as $row ) {
-			$userId = $row->cst_wl_user_id;
-			$user = $this->userFactory->newFromId( $userId );
-			$users[$userId] = $user;
+		if ( $result ) {
+			foreach ( $result as $row ) {
+				$userId = $row->cst_wl_user_id;
+				$user = $this->userFactory->newFromId( $userId );
+				$users[$userId] = $user;
+			}
 		}
-
 		return $users;
 	}
 
