@@ -2,6 +2,14 @@
 	"name": "mediawiki/comment-streams",
 	"type": "mediawiki-extension",
 	"license": "MIT",
+	"require": {
+		"composer/installers": "^2.2.0|^1.0.1"
+	},
+	"config": {
+		"allow-plugins": {
+			"composer/installers": true
+		}
+	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "41.0.0",
 		"mediawiki/mediawiki-phan-config": "0.12.1",
