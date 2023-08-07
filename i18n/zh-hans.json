@@ -6,7 +6,10 @@
 			")8",
 			"GuoPC",
 			"Tranve",
-			"列维劳德"
+			"列维劳德",
+			"Diskdance",
+			"StarrySky",
+			"沈澄心"
 		]
 	},
 	"commentstreams-desc": "允许在wiki页面上评论",
@@ -56,6 +59,7 @@
 	"apihelp-csunwatch-param-title": "保留评论用于取消监视的页面的标题",
 	"apihelp-csunwatch-pageid-example": "取消监视页面ID为3的评论",
 	"apihelp-csunwatch-title-example": "取消监视页面标题为CommentStreams:3的评论",
+	"commentstreams-api-error-invalid": "无效API响应。",
 	"commentstreams-api-error-notloggedin": "您必须登录。",
 	"commentstreams-api-error-commentnotfound": "找不到请求的评论。",
 	"commentstreams-api-error-notacomment": "提供的页面ID并不指向有效的评论。",
