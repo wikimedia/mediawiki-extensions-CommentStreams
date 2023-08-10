@@ -27,6 +27,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "{{doc-apihelp-param|cspostcomment|commenttitle}}",
 	"apihelp-cspostcomment-param-wikitext": "{{doc-apihelp-param|cspostcomment|wikitext}}",
 	"apihelp-cspostcomment-param-associatedid": "{{doc-apihelp-param|cspostcomment|associatedid}}",
+	"apihelp-cspostcomment-param-commentblockname": "{{doc-apihelp-param|cspostcomment|commentblockname}}",
 	"apihelp-cseditcomment-summary": "{{doc-apihelp-summary|cseditcomment}}",
 	"apihelp-cseditcomment-param-pageid": "{{doc-apihelp-param|cseditcomment|pageid}}",
 	"apihelp-cseditcomment-param-title": "{{doc-apihelp-param|cseditcomment|title}}",

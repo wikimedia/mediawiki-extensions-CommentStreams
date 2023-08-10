@@ -24,6 +24,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "title for comment.",
 	"apihelp-cspostcomment-param-wikitext": "wikitext for comment.",
 	"apihelp-cspostcomment-param-associatedid": "page with which this comment is associated.",
+	"apihelp-cspostcomment-param-commentblockname": "name of comment block this comment appears in.",
 	"apihelp-cseditcomment-summary": "Edit an existing comment. Either pageid or title must be provided.",
 	"apihelp-cseditcomment-param-pageid": "page ID of the page which holds the comment to edit",
 	"apihelp-cseditcomment-param-title": "title of the page which holds the comment to edit",
