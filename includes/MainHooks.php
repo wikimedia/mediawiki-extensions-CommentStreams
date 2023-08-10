@@ -412,18 +412,20 @@ class MainHooks implements
 			$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
 			if ( $comment ) {
 				$metadataTag = 'CommentMetadata';
-				$values['associatedPageName'] = $writer::canonicalTitle(
-					Title::newFromID( $comment->getAssociatedId() )
-				);
-				$values['commentTitle'] = $comment->getCommentTitle();
-				$values['blockName'] = $comment->getBlockName();
+				$associatedTitle = Title::newFromId( $comment->getAssociatedId() );
+				if ( $associatedTitle ) {
+					$values['associatedPageName'] = $writer::canonicalTitle( $associatedTitle );
+					$values['commentTitle'] = $comment->getCommentTitle();
+					$values['blockName'] = $comment->getBlockName();
+				}
 			} else {
 				$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
 				if ( $reply ) {
 					$metadataTag = 'ReplyMetadata';
-					$values['parentCommentPageName'] = $writer::canonicalTitle(
-						Title::newFromID( $reply->getParentCommentPageId() )
-					);
+					$parentCommentTitle = Title::newFromId( $reply->getParentCommentPageId() );
+					if ( $parentCommentTitle ) {
+						$values['parentCommentPageName'] = $writer::canonicalTitle( $parentCommentTitle );
+					}
 				} else {
 					return false;
 				}
