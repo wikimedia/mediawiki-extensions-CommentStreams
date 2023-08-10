@@ -7,7 +7,7 @@
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:CommentStreams",
 	"descriptionmsg": "commentstreams-desc",
-	"manifest_version": 1,
+	"manifest_version": 2,
 	"type": "parserhook",
 	"license-name": "MIT",
 	"requires": {
@@ -259,18 +259,44 @@
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"config": {
-		"CommentStreamsNamespaceIndex": 844,
-		"CommentStreamsAllowedNamespaces": null,
-		"CommentStreamsNewestStreamsOnTop": true,
-		"CommentStreamsModeratorFastDelete": false,
-		"CommentStreamsShowLabels": true,
-		"CommentStreamsEnableVoting": false,
-		"CommentStreamsInitiallyCollapsedNamespaces": [],
-		"CommentStreamsUserRealNamePropertyName": null,
-		"CommentStreamsUserAvatarPropertyName": null,
-		"CommentStreamsEnableSearch": true,
-		"CommentStreamsExportCommentsAutomatically": true,
-		"CommentStreamsSuppressLogsFromRCs": true,
-		"CommentStreamsTimeFormat": "M j, Y \\a\\t g:i a"
+		"CommentStreamsNamespaceIndex": {
+			"value": 844
+		},
+		"CommentStreamsAllowedNamespaces": {
+			"value": null
+		},
+		"CommentStreamsNewestStreamsOnTop": {
+			"value": true
+		},
+		"CommentStreamsModeratorFastDelete": {
+			"value": false
+		},
+		"CommentStreamsShowLabels": {
+			"value": true
+		},
+		"CommentStreamsEnableVoting": {
+			"value": false
+		},
+		"CommentStreamsInitiallyCollapsedNamespaces": {
+			"value": []
+		},
+		"CommentStreamsUserRealNamePropertyName": {
+			"value": null
+		},
+		"CommentStreamsUserAvatarPropertyName": {
+			"value": null
+		},
+		"CommentStreamsEnableSearch": {
+			"value": true
+		},
+		"CommentStreamsExportCommentsAutomatically": {
+			"value": true
+		},
+		"CommentStreamsSuppressLogsFromRCs": {
+			"value": true
+		},
+		"CommentStreamsTimeFormat": {
+			"value": "M j, Y \\a\\t g:i a"
+		}
 	}
 }
