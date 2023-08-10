@@ -1,6 +1,7 @@
 {
 	"name": "mediawiki/comment-streams",
 	"type": "mediawiki-extension",
+	"license": "MIT",
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "39.0.0",
 		"mediawiki/mediawiki-phan-config": "0.11.1",
