@@ -28,6 +28,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "titre pour le commentaire.",
 	"apihelp-cspostcomment-param-wikitext": "wikicode pour le commentaire.",
 	"apihelp-cspostcomment-param-associatedid": "page à laquelle est associé le commentaire.",
+	"apihelp-cspostcomment-param-commentblockname": "nom du bloc de commentaire où apparaît ce commentaire.",
 	"apihelp-cseditcomment-summary": "Modifier un commentaire existant. Le ''pageid'' ou le titre doit être fourni.",
 	"apihelp-cseditcomment-param-pageid": "Identifiant de la page qui contient le commentaire à modifier",
 	"apihelp-cseditcomment-param-title": "titre de la page qui contient le commentaire à modifier",

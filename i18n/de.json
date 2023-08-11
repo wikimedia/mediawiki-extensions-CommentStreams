@@ -24,6 +24,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "Titel für den Kommentar.",
 	"apihelp-cspostcomment-param-wikitext": "Wikitext für den Kommentar.",
 	"apihelp-cspostcomment-param-associatedid": "Seite, mit der dieser Kommentar verknüpft ist.",
+	"apihelp-cspostcomment-param-commentblockname": "Name des Kommentarblocks, in dem dieser Kommentar erscheint.",
 	"apihelp-cseditcomment-summary": "Bearbeitet einen vorhandenen Kommentar. Entweder muss pageid oder title angegeben werden.",
 	"apihelp-cseditcomment-param-pageid": "Kennung der Seite, die den zu bearbeitenden Kommentar enthält.",
 	"apihelp-cseditcomment-param-title": "Titel der Seite, die den zu bearbeitenden Kommentar enthält.",
