@@ -21,7 +21,7 @@
 
 use Wikimedia\Rdbms\IDatabase;
 
-$IP = dirname( __DIR__, 3 );
+$IP ??= getenv( "MW_INSTALL_PATH" ) ?: dirname( __DIR__, 3 );
 require_once "$IP/maintenance/Maintenance.php";
 
 class MigrateCommentBlock extends Maintenance {
