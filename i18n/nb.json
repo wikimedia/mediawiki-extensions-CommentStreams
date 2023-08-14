@@ -4,6 +4,7 @@
 			"Abuluntu",
 			"Citadell",
 			"EdoAug",
+			"Event",
 			"Jon Harald Søby",
 			"Orf3us"
 		]
@@ -26,6 +27,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "tittel på kommentar.",
 	"apihelp-cspostcomment-param-wikitext": "wikitekst for kommentar.",
 	"apihelp-cspostcomment-param-associatedid": "Side kommentaren assosieres med.",
+	"apihelp-cspostcomment-param-commentblockname": "navn på kommentarblokken denne kommentaren vises i.",
 	"apihelp-cseditcomment-summary": "Rediger en eksisterende kommentar. Enten pageid eller title må oppgis.",
 	"apihelp-cseditcomment-param-pageid": "Side-ID-en til siden som inneholder kommentaren som skal redigeres",
 	"apihelp-cseditcomment-param-title": "Tittelen til siden som inneholder kommentaren som skal redigeres",

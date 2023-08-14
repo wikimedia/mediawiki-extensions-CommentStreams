@@ -23,6 +23,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "naslov za komentar.",
 	"apihelp-cspostcomment-param-wikitext": "Vikibesedilo za komentar.",
 	"apihelp-cspostcomment-param-associatedid": "stran, s katero je povezan ta komentar",
+	"apihelp-cspostcomment-param-commentblockname": "ime bloka komentarjev, v katerem se pojavi ta komentar.",
 	"apihelp-cseditcomment-summary": "Urejanje obstoječega komentarja. Predložiti je treba »pageid« ali »title«.",
 	"apihelp-cseditcomment-param-pageid": "ID strani, ki vsebuje komentar za urejanje",
 	"apihelp-cseditcomment-param-title": "naslov strani, ki vsebuje komentar za urejanje",

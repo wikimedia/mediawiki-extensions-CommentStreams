@@ -23,6 +23,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "titulo pro commento.",
 	"apihelp-cspostcomment-param-wikitext": "wikitexto pro commento.",
 	"apihelp-cspostcomment-param-associatedid": "pagina con le qual iste commento es associate.",
+	"apihelp-cspostcomment-param-commentblockname": "nomine del bloco de commentos ubi appare iste commento.",
 	"apihelp-cseditcomment-summary": "Modificar un commento existente. O pageid o title debe esser fornite.",
 	"apihelp-cseditcomment-param-pageid": "ID del pagina que tene le commento a modificar",
 	"apihelp-cseditcomment-param-title": "titulo del pagina que tene le commento a modificar",
