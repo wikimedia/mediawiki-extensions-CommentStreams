@@ -2,13 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"NikosLikomitros",
-			"Nikosgranturismogt"
+			"Nikosgranturismogt",
+			"Norhorn"
 		]
 	},
 	"commentstreams-author-anonymous": "ανώνυμος",
-	"apihelp-cspostcomment-description": "Αποστολή νέου σχολίου.",
 	"apihelp-cspostcomment-summary": "Αποστολή νέου σχολίου.",
-	"apihelp-cspostcomment-param-commenttitle": "προαιρετικός τίτλος για το σχόλιο.",
+	"apihelp-cspostcomment-param-commenttitle": "τίτλος για το σχόλιο.",
 	"apihelp-cseditcomment-param-wikitext": "βικικείμενο για το σχόλιο.",
 	"commentstreams-api-error-vote-notloggedin": "Πρέπει να είστε συνδεδεμένοι για να ψηφίσετε.",
 	"commentstreams-buttontext-add": "Πρόσθεση σχόλιου",
@@ -28,6 +28,6 @@
 	"commentstreams-dialog-buttontext-no": "Όχι",
 	"commentstreams-datetext-postedon": "Καταχωρήθηκε στις",
 	"notification-link-label-commentstreams-comment-on-watched-page": "Επίσκεψη σχόλιου",
-	"commentstreams-allcomments-label-wikitext": "Σχολιάστε",
+	"commentstreams-allcomments-label-wikitext": "Κείμενο",
 	"commentstreams-allcomments-label-author": "Συγγραφέας"
 }
