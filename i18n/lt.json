@@ -15,6 +15,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "komentaro pavadinimas.",
 	"apihelp-cspostcomment-param-wikitext": "komentaro vikitekstas.",
 	"apihelp-cspostcomment-param-associatedid": "puslapis, su kuriuo susijęs šis komentaras.",
+	"apihelp-cspostcomment-param-commentblockname": "komentarų bloko, kuriame rodomas šis komentaras, pavadinimas.",
 	"apihelp-cseditcomment-param-commenttitle": "komentaro pavadinimas.",
 	"apihelp-cseditcomment-param-wikitext": "komentaro vikitekstas.",
 	"apihelp-csvote-summary": "Balsuoti (aukštyn, žemyn arba neutraliai) už komentarą.",
