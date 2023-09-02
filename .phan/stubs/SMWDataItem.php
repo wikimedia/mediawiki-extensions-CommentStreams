@@ -1,7 +1,6 @@
 <?php
 
 class SMWDataItem {
-	const TYPE_STRING = 0;
 	const TYPE_BLOB = 0;
 	const TYPE_WIKIPAGE = 0;
 

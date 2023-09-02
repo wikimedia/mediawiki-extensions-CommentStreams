@@ -130,9 +130,7 @@ class SMWInterface {
 			if ( count( $values ) > 0 ) {
 				// this property should only have one value so pick the first one
 				$value = $values[0];
-				if ( ( defined( 'SMWDataItem::TYPE_STRING' ) &&
-						$value->getDIType() == SMWDataItem::TYPE_STRING ) ||
-					$value->getDIType() == SMWDataItem::TYPE_BLOB ) {
+				if ( $value->getDIType() == SMWDataItem::TYPE_BLOB ) {
 					return $value->getString();
 				} elseif ( $value->getDIType() == SMWDataItem::TYPE_WIKIPAGE ) {
 					return $value->getTitle();
