@@ -164,6 +164,16 @@ class CommentStreamsFactory {
 	}
 
 	/**
+	 * Internal utility to determine if the page exists and is a comment or reply
+	 *
+	 * @param WikiPage $wikiPage page to check
+	 * @return bool Page exists and is managed by CommentStreams
+	 */
+	private function isValidAbstractComment( WikiPage $wikiPage ): bool {
+		return $wikiPage->getTitle()->getNamespace() === NS_COMMENTSTREAMS && $wikiPage->exists();
+	}
+
+	/**
 	 * create a new Comment object from existing wiki page
 	 *
 	 * @param WikiPage $wikiPage WikiPage object corresponding to comment page
@@ -171,7 +181,7 @@ class CommentStreamsFactory {
 	 * @throws ConfigException
 	 */
 	public function newCommentFromWikiPage( WikiPage $wikiPage ): ?Comment {
-		if ( $wikiPage->getTitle()->getNamespace() !== NS_COMMENTSTREAMS || !$wikiPage->exists() ) {
+		if ( !$this->isValidAbstractComment( $wikiPage ) ) {
 			return null;
 		}
 
@@ -214,7 +224,7 @@ class CommentStreamsFactory {
 	 * @throws ConfigException
 	 */
 	public function newReplyFromWikiPage( WikiPage $wikiPage ): ?Reply {
-		if ( $wikiPage->getTitle()->getNamespace() !== NS_COMMENTSTREAMS || !$wikiPage->exists() ) {
+		if ( !$this->isValidAbstractComment( $wikiPage ) ) {
 			return null;
 		}
 
