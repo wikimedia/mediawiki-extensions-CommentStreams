@@ -3,7 +3,8 @@
 	"version": "8.0.1",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
-		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
+		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]",
+		"[https://www.mediawiki.org/wiki/User:MarkAHershberger Mark A. Hershberger]"
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:CommentStreams",
 	"descriptionmsg": "commentstreams-desc",
@@ -30,7 +31,7 @@
 		]
 	},
 	"ExtensionMessagesFiles": {
-		"CommentStreamsAlias": "includes/CommentStreamsAllComments.alias.php"
+		"CommentStreamsAlias": "includes/CommentStreams.alias.php"
 	},
 	"ResourceModules": {
 		"ext.CommentStreams": {
