@@ -250,8 +250,8 @@ class MainHooks implements
 			$revisionRecord = $this->revisionStore->getFirstRevision( $title );
 			if ( $revisionRecord ) {
 				$author = $revisionRecord->getUser( RevisionRecord::RAW );
-				$allowed = ( $user->getId() === $author->getId() ) &&
-					$this->permissionManager->userHasRight( $user, $action );
+				$allowed = ( $user->getId() === $author->getId() )
+						 && $this->permissionManager->userHasRight( $user, $action );
 			} else {
 				$allowed = false;
 			}
@@ -281,13 +281,13 @@ class MainHooks implements
 	 *
 	 * @param Title &$title Title to link to
 	 * @param string|HtmlArmor|null &$titleSnippet Label for the link representing
-	 *   the search result. Typically the article title.
+	 *	 the search result. Typically the article title.
 	 * @param SearchResult $result
 	 * @param array $terms Array of search terms extracted by SearchDatabase search engines
-	 *   (may not be populated by other search engines)
+	 *	 (may not be populated by other search engines)
 	 * @param SpecialSearch $specialSearch
 	 * @param string[] &$query Array of query string parameters for the link representing the search
-	 *   result
+	 *	 result
 	 * @param string[] &$attributes Array of title link attributes, can be modified by extension
 	 */
 	public function onShowSearchHitTitle(
@@ -334,8 +334,10 @@ class MainHooks implements
 	public function onParserFirstCallInit( $parser ) {
 		$parser->setHook( 'comment-streams', [ $this->commentStreamsHandler, 'enableCommentStreams' ] );
 		$parser->setHook( 'no-comment-streams', [ $this->commentStreamsHandler, 'disableCommentStreams' ] );
-		$parser->setHook( 'comment-streams-initially-collapsed',
-			[ $this->commentStreamsHandler, 'initiallyCollapseCommentStreams' ] );
+		$parser->setHook(
+			'comment-streams-initially-collapsed',
+			[ $this->commentStreamsHandler, 'initiallyCollapseCommentStreams' ]
+		);
 	}
 
 	/**
@@ -359,18 +361,15 @@ class MainHooks implements
 		if ( !$found ) {
 			foreach ( $GLOBALS['wgGroupPermissions'] as $group => $groupperms ) {
 				if ( isset( $groupperms['edit'] ) ) {
-					$GLOBALS['wgGroupPermissions'][$group]['cs-comment'] =
-						$groupperms['edit'];
+					$GLOBALS['wgGroupPermissions'][$group]['cs-comment'] = $groupperms['edit'];
 				}
 			}
 		}
 		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] ) ) {
-			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] =
-				true;
+			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-delete'] = true;
 		}
 		if ( !isset( $GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-edit'] ) ) {
-			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-edit'] =
-				false;
+			$GLOBALS['wgGroupPermissions']['csmoderator']['cs-moderator-edit'] = false;
 		}
 		$GLOBALS['wgAvailableRights'][] = 'cs-comment';
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-edit';
@@ -414,15 +413,17 @@ class MainHooks implements
 			if ( $comment ) {
 				$metadataTag = 'CommentMetadata';
 				$values['associatedPageName'] = $writer::canonicalTitle(
-					Title::newFromID( $comment->getAssociatedId() ) );
+					Title::newFromID( $comment->getAssociatedId() )
+				);
 				$values['commentTitle'] = $comment->getCommentTitle();
 				$values['blockName'] = $comment->getBlockName();
 			} else {
 				$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
 				if ( $reply ) {
 					$metadataTag = 'ReplyMetadata';
-					$values['parentCommentPageName'] =
-						$writer::canonicalTitle( Title::newFromID( $reply->getParentCommentPageId() ) );
+					$values['parentCommentPageName'] = $writer::canonicalTitle(
+						Title::newFromID( $reply->getParentCommentPageId() )
+					);
 				} else {
 					return false;
 				}
@@ -445,7 +446,7 @@ class MainHooks implements
 	 * @param WikiImporter $wikiImporter
 	 * @param array &$pageInfo Array of information
 	 * @return bool|void True or no return value to continue, or false to stop further
-	 *   processing of the tag
+	 *	 processing of the tag
 	 */
 	public function onImportHandlePageXMLTag( $wikiImporter, &$pageInfo ) {
 		$reader = $wikiImporter->getReader();

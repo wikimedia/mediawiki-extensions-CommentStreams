@@ -193,8 +193,7 @@ class Comment extends AbstractComment {
 
 		if ( $this->enableVoting ) {
 			$json['numupvotes'] = $this->commentStreamsStore->getNumUpVotes( $this->getId() );
-			$json['numdownvotes'] =
-				$this->commentStreamsStore->getNumDownVotes( $this->getId() );
+			$json['numdownvotes'] = $this->commentStreamsStore->getNumDownVotes( $this->getId() );
 			$json['vote'] = $this->getVote( $user );
 		}
 
@@ -213,8 +212,9 @@ class Comment extends AbstractComment {
 	 * @return bool database status code
 	 */
 	public function vote( string $vote, User $user ): bool {
-		Assert::parameter( $vote === "-1" || $vote === "0" || $vote === "1", '$vote',
-			'must be "-1", "0", or "1"' );
+		Assert::parameter(
+			$vote === "-1" || $vote === "0" || $vote === "1", '$vote', 'must be "-1", "0", or "1"'
+		);
 		$result = $this->commentStreamsStore->vote( (int)$vote, $this->getId(), $user->getId() );
 		$this->smwInterface->update( $this->getTitle() );
 		return $result;

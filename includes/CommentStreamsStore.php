@@ -97,18 +97,18 @@ class CommentStreamsStore {
 	 */
 	public function getComment( int $id ): ?array {
 		$result = $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->select( [
-				'cst_c_assoc_page_id',
-				'cst_c_comment_title',
-				'cst_c_block_name'
-			] )
-			->from( 'cs_comments' )
-			->where( [
-				'cst_c_comment_page_id' => $id
-			] )
-			->caller( __METHOD__ )
-			->fetchRow();
+				->newSelectQueryBuilder()
+				->select( [
+					'cst_c_assoc_page_id',
+					'cst_c_comment_title',
+					'cst_c_block_name'
+				] )
+				->from( 'cs_comments' )
+				->where( [
+					'cst_c_comment_page_id' => $id
+				] )
+				->caller( __METHOD__ )
+				->fetchRow();
 		if ( $result ) {
 			return [
 				'assoc_page_id' => (int)$result->cst_c_assoc_page_id,
@@ -125,14 +125,14 @@ class CommentStreamsStore {
 	 */
 	public function getReply( int $id ): ?array {
 		$result = $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->select( 'cst_r_comment_page_id' )
-			->from( 'cs_replies' )
-			->where( [
-				'cst_r_reply_page_id' => $id
-			] )
-			->caller( __METHOD__ )
-			->fetchRow();
+				->newSelectQueryBuilder()
+				->select( 'cst_r_comment_page_id' )
+				->from( 'cs_replies' )
+				->where( [
+					'cst_r_reply_page_id' => $id
+				] )
+				->caller( __METHOD__ )
+				->fetchRow();
 		if ( $result ) {
 			return [
 				'comment_page_id' => (int)$result->cst_r_comment_page_id
@@ -148,16 +148,16 @@ class CommentStreamsStore {
 	 */
 	public function getAssociatedComments( int $assocPageId ): array {
 		$result = $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->select( [
-				'cst_c_comment_page_id'
-			] )
-			->from( 'cs_comments' )
-			->where( [
-				'cst_c_assoc_page_id' => $assocPageId
-			] )
-			->caller( __METHOD__ )
-			->fetchResultSet();
+				->newSelectQueryBuilder()
+				->select( [
+					'cst_c_comment_page_id'
+				] )
+				->from( 'cs_comments' )
+				->where( [
+					'cst_c_assoc_page_id' => $assocPageId
+				] )
+				->caller( __METHOD__ )
+				->fetchResultSet();
 		$commentWikiPages = [];
 		foreach ( $result as $row ) {
 			$wikiPage = $this->wikiPageFactory->newFromID( $row->cst_c_comment_page_id );
@@ -174,14 +174,14 @@ class CommentStreamsStore {
 	 */
 	public function getReplies( int $commentPageId ): array {
 		$result = $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->select( 'cst_r_reply_page_id' )
-			->from( 'cs_replies' )
-			->where( [
-				'cst_r_comment_page_id' => $commentPageId
-			] )
-			->caller( __METHOD__ )
-			->fetchResultSet();
+				->newSelectQueryBuilder()
+				->select( 'cst_r_reply_page_id' )
+				->from( 'cs_replies' )
+				->where( [
+					'cst_r_comment_page_id' => $commentPageId
+				] )
+				->caller( __METHOD__ )
+				->fetchResultSet();
 		$replyWikiPages = [];
 		foreach ( $result as $row ) {
 			$wikiPage = $this->wikiPageFactory->newFromID( $row->cst_r_reply_page_id );
@@ -530,15 +530,15 @@ class CommentStreamsStore {
 	 */
 	public function getVote( int $pageId, int $userId ): int {
 		$result = $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->select( 'cst_v_vote' )
-			->from( 'cs_votes' )
-			->where( [
-				'cst_v_page_id' => $pageId,
-				'cst_v_user_id' => $userId
-			] )
-			->caller( __METHOD__ )
-			->fetchRow();
+				->newSelectQueryBuilder()
+				->select( 'cst_v_vote' )
+				->from( 'cs_votes' )
+				->where( [
+					'cst_v_page_id' => $pageId,
+					'cst_v_user_id' => $userId
+				] )
+				->caller( __METHOD__ )
+				->fetchRow();
 		if ( $result ) {
 			$vote = (int)$result->cst_v_vote;
 			if ( $vote > 0 ) {
@@ -594,14 +594,14 @@ class CommentStreamsStore {
 	public function vote( int $vote, int $pageId, int $userId ): bool {
 		$dbw = $this->getDBConnection( DB_PRIMARY );
 		$result = $dbw->newSelectQueryBuilder()
-			->select( 'cst_v_vote' )
-			->from( 'cs_votes' )
-			->where( [
-				'cst_v_page_id' => $pageId,
-				'cst_v_user_id' => $userId
-			] )
-			->caller( __METHOD__ )
-			->fetchRow();
+				->select( 'cst_v_vote' )
+				->from( 'cs_votes' )
+				->where( [
+					'cst_v_page_id' => $pageId,
+					'cst_v_user_id' => $userId
+				] )
+				->caller( __METHOD__ )
+				->fetchRow();
 		if ( $result ) {
 			if ( $vote === (int)$result->cst_v_vote ) {
 				return true;
@@ -692,15 +692,15 @@ class CommentStreamsStore {
 	 */
 	public function isWatching( int $pageId, int $userId, int $fromdb = DB_REPLICA ): bool {
 		$count = $this->getDBConnection( $fromdb )
-			->newSelectQueryBuilder()
-			->select( 'cst_wl_page_id' )
-			->from( 'cs_watchlist' )
-			->where( [
-				'cst_wl_page_id' => $pageId,
-				'cst_wl_user_id' => $userId
-			] )
-			->caller( __METHOD__ )
-			->fetchRowCount();
+			   ->newSelectQueryBuilder()
+			   ->select( 'cst_wl_page_id' )
+			   ->from( 'cs_watchlist' )
+			   ->where( [
+				   'cst_wl_page_id' => $pageId,
+				   'cst_wl_user_id' => $userId
+			   ] )
+			   ->caller( __METHOD__ )
+			   ->fetchRowCount();
 		return $count > 0;
 	}
 
@@ -710,14 +710,14 @@ class CommentStreamsStore {
 	 */
 	public function getWatchers( int $id ): array {
 		$result = $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->select( 'cst_wl_user_id' )
-			->from( 'cs_watchlist' )
-			->where( [
-				'cst_wl_page_id' => $id
-			] )
-			->caller( __METHOD__ )
-			->fetchRow();
+				->newSelectQueryBuilder()
+				->select( 'cst_wl_user_id' )
+				->from( 'cs_watchlist' )
+				->where( [
+					'cst_wl_page_id' => $id
+				] )
+				->caller( __METHOD__ )
+				->fetchRow();
 		$users = [];
 		if ( $result ) {
 			foreach ( $result as $row ) {

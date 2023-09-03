@@ -156,7 +156,7 @@ class ApiCSPostReply extends ApiBase {
 	 * log action
 	 * @param string $action the name of the action to be logged
 	 * @param LinkTarget|Title $target the title of the page for the comment that the
-	 *        action was performed upon, if different from the current comment
+	 *		  action was performed upon, if different from the current comment
 	 * @throws MWException
 	 */
 	protected function logAction( string $action, $target ) {

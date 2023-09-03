@@ -220,8 +220,9 @@ class CommentStreamsHandler {
 		$csAllowedNamespaces = $config->get( 'CommentStreamsAllowedNamespaces' );
 		if ( $csAllowedNamespaces === null ) {
 			$csAllowedNamespaces = $config->get( 'ContentNamespaces' );
-		} elseif ( $csAllowedNamespaces === self::COMMENTS_DISABLED &&
-			$this->areCommentsEnabled != self::COMMENTS_ENABLED ) {
+		} elseif (
+			$csAllowedNamespaces === self::COMMENTS_DISABLED && $this->areCommentsEnabled != self::COMMENTS_ENABLED
+		) {
 			return false;
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
 			$csAllowedNamespaces = [ $csAllowedNamespaces ];
@@ -323,8 +324,7 @@ class CommentStreamsHandler {
 		if ( $this->initiallyCollapseCommentStreams ) {
 			$initiallyCollapsed = true;
 		} else {
-			$initiallyCollapsedNamespaces =
-				$config->get( 'CommentStreamsInitiallyCollapsedNamespaces' );
+			$initiallyCollapsedNamespaces = $config->get( 'CommentStreamsInitiallyCollapsedNamespaces' );
 			$initiallyCollapsed = in_array( $output->getTitle()->getNamespace(), $initiallyCollapsedNamespaces );
 		}
 
@@ -335,10 +335,10 @@ class CommentStreamsHandler {
 
 		$commentStreamsParams = [
 			'canComment' => $canComment,
-			'moderatorEdit' => $this->permissionManager->userHasRight( $output->getUser(),
-				'cs-moderator-edit' ),
-			'moderatorDelete' => $this->permissionManager->userHasRight( $output->getUser(),
-				'cs-moderator-delete' ),
+			'moderatorEdit' => $this->permissionManager->userHasRight( $output->getUser(), 'cs-moderator-edit' ),
+			'moderatorDelete' => $this->permissionManager->userHasRight(
+				$output->getUser(), 'cs-moderator-delete'
+			),
 			'moderatorFastDelete' => $config->get( 'CommentStreamsModeratorFastDelete' ) ? 1 : 0,
 			'showLabels' => $config->get( 'CommentStreamsShowLabels' ) ? 1 : 0,
 			'newestStreamsOnTop' => $config->get( 'CommentStreamsNewestStreamsOnTop' ) ? 1 : 0,

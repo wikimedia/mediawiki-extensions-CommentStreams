@@ -322,8 +322,7 @@ abstract class AbstractComment {
 		$this->avatar = $this->socialProfileInterface->getAvatar( $this->author );
 
 		if ( $this->avatar === null && $this->userAvatarPropertyName !== null ) {
-			$title = $this->smwInterface->getUserProperty( $this->author,
-				$this->userAvatarPropertyName );
+			$title = $this->smwInterface->getUserProperty( $this->author, $this->userAvatarPropertyName );
 			if ( $title !== null ) {
 				if ( is_string( $title ) ) {
 					$title = Title::newFromText( $title );
@@ -345,7 +344,7 @@ abstract class AbstractComment {
 	 *
 	 * @param UserIdentity $user the user
 	 * @param bool $linked whether to link the display name to the user page,
-	 *        if it exists
+	 *		  if it exists
 	 * @return string display name for user
 	 */
 	private function getDisplayNameFromUser(
@@ -353,11 +352,9 @@ abstract class AbstractComment {
 		bool $linked
 	): string {
 		if ( $user->getId() === 0 ) {
-			return Html::openElement( 'span', [
-					'class' => 'cs-comment-author-anonymous'
-				] )
-				. wfMessage( 'commentstreams-author-anonymous' )
-				. Html::closeElement( 'span' );
+			return Html::rawElement( 'span', [
+				'class' => 'cs-comment-author-anonymous'
+			], wfMessage( 'commentstreams-author-anonymous' ) );
 		}
 		$userpage = Title::makeTitle( NS_USER, $user->getName() );
 		$displayname = null;
@@ -368,8 +365,7 @@ abstract class AbstractComment {
 			);
 		}
 		if ( $displayname === null || strlen( $displayname ) == 0 ) {
-			$values = $this->pageProps->getProperties( $userpage,
-				'displaytitle' );
+			$values = $this->pageProps->getProperties( $userpage, 'displaytitle' );
 			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
 				$displayname = $values[$userpage->getArticleID()];
 			}
