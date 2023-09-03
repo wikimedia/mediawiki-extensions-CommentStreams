@@ -89,7 +89,7 @@ class CommentStreamsAllComments extends SpecialPage {
 			$pages = $this->commentStreamsStore->getCommentPages( $limit + 1, $offset );
 			if ( !$pages->valid() ) {
 				$this->displayMessage(
-					wfMessage( 'commentstreams-allcomments-nocommentsfound' )
+					$this->msg( 'commentstreams-allcomments-nocommentsfound' )
 				);
 				return;
 			}
@@ -100,34 +100,34 @@ class CommentStreamsAllComments extends SpecialPage {
 			] )
 			. Html::openElement( 'tr' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-wikitext' )
+			. $this->msg( 'commentstreams-allcomments-label-wikitext' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-commenttitle' )
+			. $this->msg( 'commentstreams-allcomments-label-commenttitle' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-reply' )
+			. $this->msg( 'commentstreams-allcomments-label-reply' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-author' )
+			. $this->msg( 'commentstreams-allcomments-label-author' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-lasteditor' )
+			. $this->msg( 'commentstreams-allcomments-label-lasteditor' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-created' )
+			. $this->msg( 'commentstreams-allcomments-label-created' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-lastedited' )
+			. $this->msg( 'commentstreams-allcomments-label-lastedited' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-page' )
+			. $this->msg( 'commentstreams-allcomments-label-page' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-associatedpage' )
+			. $this->msg( 'commentstreams-allcomments-label-associatedpage' )
 			. Html::closeElement( 'th' )
 			. Html::openElement( 'th' )
-			. wfMessage( 'commentstreams-allcomments-label-blockid' )
+			. $this->msg( 'commentstreams-allcomments-label-blockid' )
 			. Html::closeElement( 'th' )
 			. Html::closeElement( 'tr' );
 
@@ -190,7 +190,7 @@ class CommentStreamsAllComments extends SpecialPage {
 					$commentBlockName = htmlspecialchars( $commentBlockName );
 				}
 				if ( $author->getId() === 0 ) {
-					$author = '<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
+					$author = Html::rawElement( "i", [], $this->msg( 'commentstreams-author-anonymous' ) );
 				} else {
 					$author = $author->getName();
 				}
@@ -199,7 +199,7 @@ class CommentStreamsAllComments extends SpecialPage {
 					$modificationDate = '';
 				} else {
 					if ( $lastEditor->getId() === 0 ) {
-						$lastEditor = '<i>' . wfMessage( 'commentstreams-author-anonymous' ) . '</i>';
+						$lastEditor = Html::rawElement( "i", [], $this->msg( 'commentstreams-author-anonymous' ) );
 					} else {
 						$lastEditor = $lastEditor->getName();
 					}
