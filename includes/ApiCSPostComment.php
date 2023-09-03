@@ -30,6 +30,7 @@ use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\WikiPageFactory;
 use MWException;
 use Title;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSPostComment extends ApiBase {
 	/**
@@ -127,20 +128,20 @@ class ApiCSPostComment extends ApiBase {
 	public function getAllowedParams(): array {
 		return [
 			'commenttitle' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => true
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => true
 			],
 			'wikitext' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => true
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => true
 			],
 			'associatedid' => [
-				ApiBase::PARAM_TYPE => 'integer',
-				ApiBase::PARAM_REQUIRED => true
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_REQUIRED => true
 			],
 			'commentblockname' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => false
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => false
 			]
 		];
 	}
@@ -156,7 +157,7 @@ class ApiCSPostComment extends ApiBase {
 	 * log action
 	 * @param string $action the name of the action to be logged
 	 * @param LinkTarget|Title $target the title of the page for the comment that the
-	 *        action was performed upon, if different from the current comment
+	 *		  action was performed upon, if different from the current comment
 	 * @throws MWException
 	 */
 	protected function logAction( string $action, $target ) {

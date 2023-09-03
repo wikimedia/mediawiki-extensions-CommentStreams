@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiBase;
 use ApiMain;
+use Wikimedia\ParamValidator\ParamValidator;
 
 abstract class ApiCSBase extends ApiBase {
 	/**
@@ -59,12 +60,12 @@ abstract class ApiCSBase extends ApiBase {
 	public function getAllowedParams(): array {
 		return [
 			'pageid' => [
-				ApiBase::PARAM_TYPE => 'integer',
-				ApiBase::PARAM_REQUIRED => false
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_REQUIRED => false
 			],
 			'title' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => false
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => false
 			]
 		];
 	}

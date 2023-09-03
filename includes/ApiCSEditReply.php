@@ -21,11 +21,11 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiBase;
 use ApiMain;
 use ApiUsageException;
 use Config;
 use MWException;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSEditReply extends ApiCSReplyBase {
 	/**
@@ -86,11 +86,12 @@ class ApiCSEditReply extends ApiCSReplyBase {
 	 * @return array allowed parameters
 	 */
 	public function getAllowedParams(): array {
-		return array_merge( parent::getAllowedParams(),
+		return array_merge(
+			parent::getAllowedParams(),
 			[
 				'wikitext' => [
-					ApiBase::PARAM_TYPE => 'string',
-					ApiBase::PARAM_REQUIRED => true
+					ParamValidator::PARAM_TYPE => 'string',
+					ParamValidator::PARAM_REQUIRED => true
 				]
 			]
 		);

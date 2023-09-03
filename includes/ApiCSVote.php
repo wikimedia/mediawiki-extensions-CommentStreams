@@ -21,10 +21,10 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiBase;
 use ApiMain;
 use ApiUsageException;
 use Config;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSVote extends ApiCSCommentBase {
 	/**
@@ -66,12 +66,13 @@ class ApiCSVote extends ApiCSCommentBase {
 	 * @return array allowed parameters
 	 */
 	public function getAllowedParams(): array {
-		return array_merge( parent::getAllowedParams(),
+		return array_merge(
+			parent::getAllowedParams(),
 			[
 				'vote' =>
 					[
-						ApiBase::PARAM_TYPE => 'integer',
-						ApiBase::PARAM_REQUIRED => true
+						ParamValidator::PARAM_TYPE => 'integer',
+						ParamValidator::PARAM_REQUIRED => true
 					]
 			]
 		);

@@ -30,6 +30,7 @@ use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\WikiPageFactory;
 use MWException;
 use Title;
+use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSPostReply extends ApiBase {
 	/**
@@ -134,12 +135,12 @@ class ApiCSPostReply extends ApiBase {
 	public function getAllowedParams(): array {
 		return [
 			'wikitext' => [
-				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => true
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => true
 			],
 			'parentid' => [
-				ApiBase::PARAM_TYPE => 'integer',
-				ApiBase::PARAM_REQUIRED => true
+				ParamValidator::PARAM_TYPE => 'integer',
+				ParamValidator::PARAM_REQUIRED => true
 			]
 		];
 	}
