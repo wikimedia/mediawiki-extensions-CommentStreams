@@ -24,6 +24,10 @@
 			"@phpcs",
 			"minus-x check ."
 		],
+		"error-format-test": [
+			"phpcs -sp --cache --report=emacs | sed s,^$PWD/,,",
+			"phan -d . -m text --analyze-twice --no-progress-bar | sed 's, ,:,'"
+		],
 		"fix": [
 			"minus-x fix .",
 			"phpcbf"
