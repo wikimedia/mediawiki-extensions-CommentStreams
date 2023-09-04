@@ -1,8 +1,8 @@
 <?php
 
 class SMWDataItem {
-	const TYPE_BLOB = 0;
-	const TYPE_WIKIPAGE = 0;
+	const TYPE_BLOB = 0; // phpcs:ignore
+	const TYPE_WIKIPAGE = 0; // phpcs:ignore
 
 	/**
 	 * @var int

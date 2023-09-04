@@ -38,9 +38,9 @@ class CommentStreamsHandler {
 		'CommentStreamsExportCommentsAutomatically'
 	];
 
-	const COMMENTS_ENABLED = 1;
-	const COMMENTS_DISABLED = -1;
-	const COMMENTS_INHERITED = 0;
+	public const COMMENTS_ENABLED = 1;
+	public const COMMENTS_DISABLED = -1;
+	public const COMMENTS_INHERITED = 0;
 
 	/**
 	 * @var bool
