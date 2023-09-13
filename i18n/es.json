@@ -10,7 +10,8 @@
 			"Jakeukalane",
 			"Macofe",
 			"Whovian Biologist",
-			"DiegoAmbrocio"
+			"DiegoAmbrocio",
+			"McDutchie"
 		]
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas de la wiki",
@@ -167,6 +168,6 @@
 	"commentstreams-allcomments-label-lastedited": "Última edición",
 	"commentstreams-allcomments-label-page": "Página de comentarios",
 	"commentstreams-allcomments-label-associatedpage": "Página asociada",
-	"commentstreams-allcomments-label-blockid": "Bloquear Id",
+	"commentstreams-allcomments-label-blockid": "ID de bloqueo",
 	"commentstreams-ve-conversion-error": "Error al convertir entre wikitexto y HTML para VisualEditor"
 }
