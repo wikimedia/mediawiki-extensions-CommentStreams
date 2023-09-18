@@ -8,7 +8,10 @@
 			"Destinid10 2",
 			"Fewasser Traduce",
 			"Jakeukalane",
-			"Whovian Biologist"
+			"Whovian Biologist",
+			"DiegoAmbrocio",
+			"Ice bulldog",
+			"McDutchie"
 		]
 	},
 	"commentstreams-desc": "Permite dejar comentarios en las páginas de la wiki",
@@ -150,7 +153,7 @@
 	"commentstreams-allcomments-label-created": "Creación",
 	"commentstreams-allcomments-label-lasteditor": "Último editor",
 	"commentstreams-allcomments-label-lastedited": "Última edición",
-	"commentstreams-allcomments-label-blockid": "Bloquear Id",
+	"commentstreams-allcomments-label-blockid": "ID de bloqueo",
 	"commentstreams-allcomments-button-next": "Siguiente",
 	"commentstreams-allcomments-button-previous": "Anterior",
 	"commentstreams-ve-conversion-error": "Error al convertir entre wikitexto y HTML para VisualEditor"
