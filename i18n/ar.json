@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Alshamiri1",
+			"Amire80",
 			"FiberAhmed",
 			"أيوب",
 			"أَحمد",
@@ -14,7 +15,7 @@
 	"commentstreams-error-comment-on-deleted-page": "الصفحة التي يرتبط بها هذا التعليق تم حذفها.",
 	"commentstreams-error-reply-to-deleted-comment": "تم حذف التعليق الذي يعتبر هذا التعليق رداً عليه.",
 	"commentstreams-author-anonymous": "مجهول",
-	"apihelp-csquerycomment-summary": "أعد العنوان، والمستخدم والطابع الزمني للإنشاء ونص الويكي للتعليق، يجب توفير إما معرف  أو عنوان الصفحة.",
+	"apihelp-csquerycomment-summary": "أعد العنوان، والمستخدم والطابع الزمني للإنشاء ونص الويكي للتعليق، يجب توفير إما معرف أو عنوان الصفحة.",
 	"apihelp-csquerycomment-param-pageid": "معرف الصفحة للصفحة التي تحمل التعليق للاستعلام",
 	"apihelp-csquerycomment-param-title": "عنوان الصفحة للصفحة التي تحمل التعليق للاستعلام",
 	"apihelp-csquerycomment-pageid-example": "تعليق الاستعلام بمعرف الصفحة 3 في نص الويكي",
