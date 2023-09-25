@@ -3,7 +3,9 @@
 		"authors": [
 			"Piramidion",
 			"SimondR",
-			"DDPAT"
+			"DDPAT",
+			"Amire80",
+			"Ice bulldog"
 		]
 	},
 	"commentstreams-desc": "Дає можливість коментувати вікісторінки",
@@ -12,7 +14,7 @@
 	"commentstreams-author-anonymous": "анонім",
 	"apihelp-csquerycomment-description": "Вивести назву, користувача, час створення та вікірозмітку коментаря. Слід вказати або pageid або назву.",
 	"apihelp-csquerycomment-summary": "Вивести назву, користувача, час створення та вікірозмітку коментаря. Слід вказати або pageid або назву.",
-	"apihelp-csquerycomment-param-pageid": "ідентифікатор сторінки,  яка містить коментар, щодо якого слід надіслати запит",
+	"apihelp-csquerycomment-param-pageid": "ідентифікатор сторінки, яка містить коментар, щодо якого слід надіслати запит",
 	"apihelp-csquerycomment-param-title": "назва сторінки, яка містить коментар, щодо якого слід надіслати запит",
 	"apihelp-csquerycomment-pageid-example": "надіслати запит щодо коментаря з ідентифікатором сторінки 3 у вікірозмітці",
 	"apihelp-csquerycomment-title-example": "надіслати запит щодо коментаря із назвою сторінки CommentStreams:3 у вікірозмітці",

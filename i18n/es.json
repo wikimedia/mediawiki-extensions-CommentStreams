@@ -11,10 +11,11 @@
 			"Whovian Biologist",
 			"DiegoAmbrocio",
 			"Ice bulldog",
-			"McDutchie"
+			"McDutchie",
+			"DarkGames26"
 		]
 	},
-	"commentstreams-desc": "Permite dejar comentarios en las páginas de la wiki",
+	"commentstreams-desc": "Permite dejar comentarios en las páginas del wiki",
 	"commentstreams-error-prohibitedaction": "No se permite efectuar la acción $1 en las páginas de comentarios.",
 	"commentstreams-error-comment-on-deleted-page": "Se eliminó la página que estaba asociada con este comentario.",
 	"commentstreams-author-anonymous": "anónimo",
@@ -58,7 +59,7 @@
 	"apihelp-csunwatch-pageid-example": "dejar de seguir comentario con ID de página 3",
 	"apihelp-csunwatch-title-example": "dejar de seguir comentario con título de página CommentStreams:3",
 	"commentstreams-api-error-invalid": "Respuesta de API no válida.",
-	"commentstreams-api-error-notloggedin": "Debes estar conectado.",
+	"commentstreams-api-error-notloggedin": "Debes haber iniciado sesión.",
 	"commentstreams-api-error-commentnotfound": "No se encontró el comentario solicitado.",
 	"commentstreams-api-error-notacomment": "La ID de página proporcionada no hace referencia a un comentario válido.",
 	"commentstreams-api-error-post-permissions": "El usuario no tiene permiso para publicar un comentario.",
@@ -89,6 +90,7 @@
 	"commentstreams-buttontooltip-edit": "editar",
 	"commentstreams-buttontooltip-moderator-edit": "edición de moderador",
 	"commentstreams-buttontooltip-delete": "borrar",
+	"commentstreams-buttontooltip-moderator-delete": "eliminar como moderador",
 	"commentstreams-buttontooltip-permalink": "enlace permanente",
 	"commentstreams-buttontooltip-collapse": "contraer",
 	"commentstreams-buttontooltip-expand": "expandir",
@@ -132,6 +134,7 @@
 	"action-cs-moderator-edit": "editar comentarios de otros usuarios",
 	"right-cs-moderator-delete": "Eliminar los comentarios de cualquier usuario",
 	"action-cs-moderator-delete": "Eliminar comentarios de otros usuarios",
+	"log-name-commentstreams": "Registros de CommentStreams",
 	"log-description-commentstreams": "Estos eventos rastrean cuándo ocurren los eventos de CommentStreams.",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|creó}} el comentario $3",
 	"logentry-commentstreams-reply-create": "$1 {{GENDER:$2|creó}} la respuesta $3",
