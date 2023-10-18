@@ -77,7 +77,7 @@
 	"action-cs-moderator-edit": "他の利用者のコメントの編集",
 	"right-cs-moderator-delete": "あらゆる利用者のコメントを削除",
 	"action-cs-moderator-delete": "他の利用者のコメントの削除",
-	"log-name-commentstreams": "CommentStreamsログ",
+	"log-name-commentstreams": "CommentStreams記録",
 	"logentry-commentstreams-comment-create": "$1 がコメント $3 を{{GENDER:$2|作成しました}}",
 	"logentry-commentstreams-reply-create": "$1 が返信 $3 を{{GENDER:$2|作成しました}}",
 	"logentry-commentstreams-comment-edit": "$1 がコメント $3 を{{GENDER:$2|編集しました}}",
