@@ -166,7 +166,7 @@ class MainHooks implements
 		}
 
 		$action = $mediaWiki->getAction();
-		if ( $action === 'info' || $action === 'history' ) {
+		if ( $action === 'info' || $action === 'history' || $action === 'raw' ) {
 			return;
 		}
 		if ( $action !== 'view' ) {
