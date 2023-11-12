@@ -155,12 +155,14 @@ class EchoInterface {
 	 * Used by Echo to locate the users watching a comment being replied to.
 	 * @param EchoEvent $event the Echo event
 	 * @return array array mapping user id to User object
+	 * @throws MWException
 	 */
 	public static function locateUsersWatchingComment( EchoEvent $event ): array {
-		$id = $event->getExtraParam( 'parent_id' );
+		$id = $event->getExtraParam( 'comment_id' );
 		if ( $id === null ) {
-			$id = $event->getExtraParam( 'comment_id' );
+			throw new MWException( wfMessage( 'commentstreams-no-comment_id' )->plain() );
 		}
+
 		return MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' )->
 			getWatchers( $id );
 	}
