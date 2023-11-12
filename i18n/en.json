@@ -171,5 +171,6 @@
 	"commentstreams-allcomments-label-page": "Comment Page",
 	"commentstreams-allcomments-label-associatedpage": "Associated Page",
 	"commentstreams-allcomments-label-blockid": "Block Id",
-	"commentstreams-ve-conversion-error": "Error converting between wikitext and HTML for VisualEditor"
+	"commentstreams-ve-conversion-error": "Error converting between wikitext and HTML for VisualEditor",
+	"commentstreams-no-comment_id": "Internal error: No comment_id found"
 }

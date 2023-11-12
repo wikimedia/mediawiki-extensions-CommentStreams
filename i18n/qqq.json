@@ -174,5 +174,6 @@
 	"commentstreams-allcomments-label-page": "Table column label",
 	"commentstreams-allcomments-label-associatedpage": "Table column label",
 	"commentstreams-allcomments-label-blockid": "Table column label",
-	"commentstreams-ve-conversion-error": "Error message"
+	"commentstreams-ve-conversion-error": "Error message",
+	"commentstreams-no-comment_id": "Internal error message"
 }
