@@ -7,7 +7,8 @@
 			"Tranve",
 			"Winston Sung",
 			"列维劳德",
-			"捍粵者"
+			"捍粵者",
+			"SunAfterRain"
 		]
 	},
 	"commentstreams-desc": "允許在 wiki 頁面上評論",
@@ -49,6 +50,7 @@
 	"apihelp-csunwatch-param-title": "含有要取消監視評論的頁面標題",
 	"apihelp-csunwatch-pageid-example": "取消監視頁面 ID 為 3 的評論",
 	"apihelp-csunwatch-title-example": "取消監視頁面標題為 CommentStreams:3 的評論",
+	"apihelp-cspostreply-summary": "發布新回覆。",
 	"commentstreams-api-error-invalid": "無效 API 回應。",
 	"commentstreams-api-error-notloggedin": "您必須要先登入。",
 	"commentstreams-api-error-commentnotfound": "找不到請求的評論。",
