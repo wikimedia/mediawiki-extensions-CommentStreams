@@ -69,7 +69,7 @@
 	"apihelp-cseditreply-pageid-example": "antwoord met pagina-ID 3 bewerken",
 	"apihelp-cseditreply-title-example": "antwoord met paginatitel CommentStreams:3 bewerken",
 	"commentstreams-api-error-invalid": "Ongeldige API-reactie.",
-	"commentstreams-api-error-notloggedin": "U moet ingelogd zijn.",
+	"commentstreams-api-error-notloggedin": "U moet aangemeld zijn.",
 	"commentstreams-api-error-commentnotfound": "De gevraagde reactie is niet gevonden.",
 	"commentstreams-api-error-notacomment": "De opgegeven pagina-ID verwijst niet naar een geldige reactie.",
 	"commentstreams-api-error-notareply": "De opgegeven pagina-ID verwijst niet naar een geldig antwoord.",
