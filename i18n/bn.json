@@ -3,7 +3,8 @@
 		"authors": [
 			"Aftabuzzaman",
 			"Yahya",
-			"আফতাবুজ্জামান"
+			"আফতাবুজ্জামান",
+			"Aishik Rehman"
 		]
 	},
 	"commentstreams-desc": "উইকি পাতাগুলিতে মন্তব্য করতে দেয়",
@@ -39,7 +40,7 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "উত্তর দেখুন",
 	"action-cs-moderator-delete": "অন্যান্য ব্যবহারকারীদের মন্তব্য অপসারণ করার",
 	"commentstreamsallcomments": "সকল মন্তব্য",
-	"commentstreams-allcomments-nocommentsfound": "কোন মন্তব্য পাওয়া যায়নি।",
+	"commentstreams-allcomments-nocommentsfound": "কোনো মন্তব্য পাওয়া যায়নি।",
 	"commentstreams-allcomments-label-wikitext": "লেখা",
 	"commentstreams-allcomments-label-commenttitle": "শিরোনাম",
 	"commentstreams-allcomments-label-author": "লেখক",
