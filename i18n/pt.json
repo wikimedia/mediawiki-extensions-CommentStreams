@@ -24,6 +24,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "título para o comentário.",
 	"apihelp-cspostcomment-param-wikitext": "texto wiki para o comentário.",
 	"apihelp-cspostcomment-param-associatedid": "página à qual este comentário está associado.",
+	"apihelp-cspostcomment-param-commentblockname": "nome do bloco de comentários em que este comentário aparece.",
 	"apihelp-cseditcomment-summary": "Editar um comentário existente. Tem de ser fornecido o identificador da página ou o título.",
 	"apihelp-cseditcomment-param-pageid": "identificador da página que contém o comentário a ser editado",
 	"apihelp-cseditcomment-param-title": "título da página que contém o comentário a ser editado",
