@@ -6,7 +6,9 @@
 		]
 	},
 	"commentstreams-buttontext-add": "Lasseet komment",
+	"commentstreams-buttontext-reply": "Västid",
 	"commentstreams-buttontooltip-add": "lasseet komment",
+	"commentstreams-buttontooltip-reply": "västid",
 	"commentstreams-buttontooltip-delete": "siho",
 	"commentstreams-buttontooltip-permalink": "avalâš liŋkkâ",
 	"commentstreams-buttontooltip-collapse": "čievâ",
@@ -17,5 +19,6 @@
 	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-cancel": "Jooskâ",
 	"commentstreams-datetext-lasteditedon": "Majemustáá nubástittum",
+	"commentstreams-allcomments-label-reply": "Västid",
 	"commentstreams-allcomments-label-lastedited": "Majemustáá nubástittum"
 }
