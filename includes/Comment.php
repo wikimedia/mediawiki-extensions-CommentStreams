@@ -22,17 +22,17 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use FatalError;
-use IContextSource;
 use IDBAccessObject;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\PageProps;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionStore;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MWException;
-use PageProps;
 use ParserFactory;
 use RepoGroup;
-use User;
 use Wikimedia\Assert\Assert;
 use WikiPage;
 
@@ -179,7 +179,7 @@ class Comment extends AbstractComment {
 			'pageid' => $this->wikiPage->getId(),
 			'commentblockname' => $this->commentBlockName,
 			'associatedid' => $this->assocPageId,
-			'commenttitle' => htmlspecialchars( $this->commentTitle ),
+			'commenttitle' => $this->commentTitle,
 			'wikitext' => htmlspecialchars( $this->wikitext ),
 			'html' => $this->getHTML( $context ),
 			'username' => $this->getUsername(),

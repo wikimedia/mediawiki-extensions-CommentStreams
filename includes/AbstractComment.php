@@ -21,21 +21,21 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use Html;
-use IContextSource;
 use IDBAccessObject;
+use MediaWiki\Context\IContextSource;
+use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\PageProps;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
-use MWTimestamp;
-use PageProps;
+use MediaWiki\Utils\MWTimestamp;
 use ParserFactory;
 use RepoGroup;
-use Title;
-use User;
 use WikiPage;
 
 abstract class AbstractComment {
