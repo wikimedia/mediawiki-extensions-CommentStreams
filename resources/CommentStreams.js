@@ -42,6 +42,7 @@ const CommentStreams = ( function () {
 			};
 
 			this.defaultblock = null;
+			this.displayTitlesList( config.comments );
 			this.namedblocks = [];
 
 			this.setupDivs( env );
@@ -60,6 +61,25 @@ const CommentStreams = ( function () {
 			if ( env.targetComment ) {
 				this.scrollToElement( $( '#' + env.targetComment ) );
 			}
+		},
+
+		displayTitlesList: function ( comments ) {
+			const commentList = document.getElementById( 'cs-comment-list' );
+			if ( !commentList ) {
+				return;
+			}
+			Array.from( comments ).reverse().forEach(
+				( comment ) => {
+					const blockName = comment.commentblockname;
+					if ( blockName === null ) {
+						const anchorElement = document.createElement( 'a' );
+						anchorElement.innerHTML = comment.commenttitle;
+						anchorElement.href = `#cs-comment-${ comment.pageid }`;
+						const listItem = document.createElement( 'li' );
+						listItem.appendChild( anchorElement );
+						commentList.appendChild( listItem );
+					}
+				} );
 		},
 
 		setupDivs: function ( env ) {
