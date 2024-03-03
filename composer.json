@@ -32,7 +32,9 @@
 		],
 		"fix": [
 			"minus-x fix .",
-			"phpcbf"
+			"phpcbf",
+			"npm run-script fix",
+			"npm run-script fix:styles"
 		],
 		"phan": "phan -d . --long-progress-bar",
 		"phpcs": "phpcs -sp --cache"

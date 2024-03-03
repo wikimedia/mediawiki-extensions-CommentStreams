@@ -12,7 +12,10 @@
 	"type": "parserhook",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.38.0"
+		"MediaWiki": ">= 1.39.0",
+		"platform": {
+			"php": ">= 7.4"
+		}
 	},
 	"SpecialPages": {
 		"CommentStreamsAllComments": {
