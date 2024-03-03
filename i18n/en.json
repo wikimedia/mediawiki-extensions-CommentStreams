@@ -10,6 +10,7 @@
 	"commentstreams-error-comment-on-deleted-page": "The page with which this comment is associated has been deleted.",
 	"commentstreams-error-reply-to-deleted-comment": "The comment to which this comment is a reply has been deleted.",
 	"commentstreams-author-anonymous": "anonymous",
+	"commentstreams-toc": "Comments",
 	"apihelp-csquerycomment-summary": "Return details of a comment. Either pageid or title must be provided.",
 	"apihelp-csquerycomment-param-pageid": "page ID of the page which holds the comment to query",
 	"apihelp-csquerycomment-param-title": "title of the page which holds the comment to query",

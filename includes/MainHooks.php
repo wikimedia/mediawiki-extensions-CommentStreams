@@ -22,7 +22,6 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Article;
-use ForeignTitle;
 use HtmlArmor;
 use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Hook\AfterImportPageHook;
@@ -34,25 +33,26 @@ use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\SpecialExportGetExtraPagesHook;
 use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Page\PageProps;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsHook;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Request\WebRequest;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Search\Hook\ShowSearchHitTitleHook;
+use MediaWiki\Specials\SpecialSearch;
+use MediaWiki\Status\Status;
+use MediaWiki\Title\ForeignTitle;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use MWException;
-use OutputPage;
-use PageProps;
-use Parser;
 use SearchResult;
 use Skin;
-use SpecialSearch;
-use Status;
 use stdClass;
-use Title;
-use User;
-use WebRequest;
 use WikiImporter;
 use Xml;
 use XmlDumpWriter;
@@ -170,8 +170,8 @@ class MainHooks implements
 			return;
 		}
 		if ( $action !== 'view' ) {
-			$message = wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
-			$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
+			$message = wfMessage( 'commentstreams-error-prohibitedaction', $action )->escaped();
+			$output->addHTML( '<p class="error">' . $message . '</p>' );
 			return false;
 		}
 
@@ -189,8 +189,8 @@ class MainHooks implements
 				}
 				$output->setSubtitle( $this->linkRenderer->makeLink( $associatedTitle, '< ' . $displaytitle ) );
 			} else {
-				$message = wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
-				$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
+				$message = wfMessage( 'commentstreams-error-comment-on-deleted-page' )->escaped();
+				$output->addHTML( '<p class="error">' . $message . '</p>' );
 			}
 		} else {
 			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
@@ -205,8 +205,8 @@ class MainHooks implements
 					}
 					$output->setSubtitle( $this->linkRenderer->makeLink( $parentCommentTitle, '< ' . $displaytitle ) );
 				} else {
-					$message = wfMessage( 'commentstreams-error-reply-to-deleted-comment' )->text();
-					$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
+					$message = wfMessage( 'commentstreams-error-reply-to-deleted-comment' )->escaped();
+					$output->addHTML( '<p class="error">' . $message . '</p>' );
 				}
 			}
 		}
@@ -333,6 +333,7 @@ class MainHooks implements
 	 */
 	public function onParserFirstCallInit( $parser ) {
 		$parser->setHook( 'comment-streams', [ $this->commentStreamsHandler, 'enableCommentStreams' ] );
+		$parser->setHook( 'comment-streams-toc', [ $this->commentStreamsHandler, 'tocTag' ] );
 		$parser->setHook( 'no-comment-streams', [ $this->commentStreamsHandler, 'disableCommentStreams' ] );
 		$parser->setHook(
 			'comment-streams-initially-collapsed',
@@ -433,7 +434,7 @@ class MainHooks implements
 			if ( $values != [] ) {
 				$out .= '    ' . Xml::openElement( $metadataTag ) . "\n";
 				foreach ( $values as $key => $value ) {
-					if ( $value ) {
+					if ( $value !== null && $value !== "" ) {
 						$out .= '      ' . Xml::element( $key, null, $value ) . "\n";
 					}
 				}
@@ -469,7 +470,7 @@ class MainHooks implements
 
 		$pageInfo[$metadataType] = [];
 		while ( $reader->read() ) {
-			if ( $reader->nodeType == XmlReader::END_ELEMENT && $reader->name === $metadataType ) {
+			if ( $reader->nodeType == XMLReader::END_ELEMENT && $reader->name === $metadataType ) {
 				break;
 			}
 			if ( in_array( $reader->name, $fields ) ) {
