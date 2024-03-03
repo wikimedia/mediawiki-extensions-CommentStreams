@@ -24,7 +24,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use Article;
 use ForeignTitle;
 use HtmlArmor;
-use MediaWiki;
+use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Hook\AfterImportPageHook;
 use MediaWiki\Hook\BeforePageDisplayHook;
 use MediaWiki\Hook\ImportHandlePageXMLTagHook;
@@ -149,7 +149,7 @@ class MainHooks implements
 	 * @param Title $title Title on which the action will be performed
 	 * @param User $user Context user
 	 * @param WebRequest $request Context request
-	 * @param MediaWiki $mediaWiki
+	 * @param ActionEntryPoint $mediaWiki
 	 * @return bool|void True or no return value to continue or false to abort
 	 * @throws MWException
 	 */
@@ -170,8 +170,8 @@ class MainHooks implements
 			return;
 		}
 		if ( $action !== 'view' ) {
-			$message = wfMessage( 'commentstreams-error-prohibitedaction', $action )->text();
-			$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
+			$message = wfMessage( 'commentstreams-error-prohibitedaction', $action )->escaped();
+			$output->addHTML( '<p class="error">' . $message . '</p>' );
 			return false;
 		}
 
@@ -189,8 +189,8 @@ class MainHooks implements
 				}
 				$output->setSubtitle( $this->linkRenderer->makeLink( $associatedTitle, '< ' . $displaytitle ) );
 			} else {
-				$message = wfMessage( 'commentstreams-error-comment-on-deleted-page' )->text();
-				$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
+				$message = wfMessage( 'commentstreams-error-comment-on-deleted-page' )->escaped();
+				$output->addHTML( '<p class="error">' . $message . '</p>' );
 			}
 		} else {
 			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
@@ -205,8 +205,8 @@ class MainHooks implements
 					}
 					$output->setSubtitle( $this->linkRenderer->makeLink( $parentCommentTitle, '< ' . $displaytitle ) );
 				} else {
-					$message = wfMessage( 'commentstreams-error-reply-to-deleted-comment' )->text();
-					$output->addHTML( '<p class="error">' . htmlspecialchars( $message ) . '</p>' );
+					$message = wfMessage( 'commentstreams-error-reply-to-deleted-comment' )->escaped();
+					$output->addHTML( '<p class="error">' . $message . '</p>' );
 				}
 			}
 		}
@@ -333,6 +333,7 @@ class MainHooks implements
 	 */
 	public function onParserFirstCallInit( $parser ) {
 		$parser->setHook( 'comment-streams', [ $this->commentStreamsHandler, 'enableCommentStreams' ] );
+		$parser->setHook( 'comment-streams-toc', [ $this->commentStreamsHandler, 'tocTag' ] );
 		$parser->setHook( 'no-comment-streams', [ $this->commentStreamsHandler, 'disableCommentStreams' ] );
 		$parser->setHook(
 			'comment-streams-initially-collapsed',
@@ -433,7 +434,7 @@ class MainHooks implements
 			if ( $values != [] ) {
 				$out .= '    ' . Xml::openElement( $metadataTag ) . "\n";
 				foreach ( $values as $key => $value ) {
-					if ( !empty( $value ) ) {
+					if ( $value !== null && $value !== "" ) {
 						$out .= '      ' . Xml::element( $key, null, $value ) . "\n";
 					}
 				}

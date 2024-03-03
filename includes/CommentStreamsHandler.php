@@ -24,6 +24,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use Action;
 use ConfigException;
 use ExtensionRegistry;
+use Html;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Permissions\PermissionManager;
@@ -444,5 +445,46 @@ class CommentStreamsHandler {
 			}
 		}
 		return $extraPages;
+	}
+
+	/**
+	 * Show TOC for comment streams.
+	 *
+	 * @param ?string $input input between the tags (ignored)
+	 * @param array $args tag arguments
+	 * @param Parser $parser the parser
+	 * @param PPFrame $frame the parent frame
+	 * @return string to replace tag with
+	 */
+	public function tocTag(
+		?string $input,
+		array $args,
+		Parser $parser,
+		PPFrame $frame
+	): string {
+		$lang = $parser->getTargetLanguage();
+		$title = wfMessage( 'commentstreams-toc' )->inLanguage( $lang )->escaped();
+
+		return '<div role="navigation" aria-labelledby="cs-toc-heading">'
+			. Html::element( 'input', [
+				'type' => 'checkbox',
+				'role' => 'button',
+				'id' => 'cs-toctogglecheckbox',
+				'class' => 'toctogglecheckbox',
+				'style' => 'display:none',
+			] )
+			. Html::openElement( 'div', [
+				'class' => 'toctitle',
+				'lang' => $lang->getHtmlCode(),
+				'dir' => $lang->getDir(),
+			] )
+			. '<h2 id="cs-toc-heading">' . $title . '</h2>'
+			. '<span class="toctogglespan">'
+			. Html::label( '', 'cs-toctogglecheckbox', [
+				'class' => 'toctogglelabel',
+			] )
+			. '</span>'
+			. '</div>'
+			. '<ul id="cs-comment-list"></ul></div>';
 	}
 }
