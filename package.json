@@ -3,7 +3,8 @@
 	"private": true,
 	"scripts": {
 		"test": "grunt test",
-		"fix": "grunt fix"
+		"fix": "grunt fix",
+		"fix:styles": "npx stylelint 'resources/*.css' --fix"
 	},
 	"devDependencies": {
 		"eslint-config-wikimedia": "0.27.0",
