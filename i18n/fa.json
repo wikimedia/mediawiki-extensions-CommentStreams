@@ -2,14 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"Beginneruser",
+			"Ebraminio",
 			"Jeeputer",
 			"Ommmmid"
 		]
 	},
 	"commentstreams-desc": "امکان نظر دادن در صفحه‌های ویکی را فراهم می‌کند",
 	"commentstreams-error-prohibitedaction": "عمل $1 در صفحه‌های نظردهی مجاز نیست.",
-	"commentstreams-error-comment-on-deleted-page": "صفحه‌ای که این نظر با آن مرتبط است، حذف شده‌است.",
-	"commentstreams-error-reply-to-deleted-comment": "نظری که این نظر در پاسخ به آن ارسال شده‌است، حذف شده‌است.",
+	"commentstreams-error-comment-on-deleted-page": "صفحه‌ای که این نظر با آن مرتبط است، حذف شده است.",
+	"commentstreams-error-reply-to-deleted-comment": "نظری که این نظر در پاسخ به آن ارسال شده است، حذف شده است.",
 	"commentstreams-author-anonymous": "ناشناس",
 	"apihelp-csquerycomment-summary": "جزئیات نظر را برمی‌گرداند؛ شناسهٔ صفحه یا عنوان آن باید وارد شود.",
 	"apihelp-csquerycomment-param-pageid": "شناسهٔ صفحه‌ای که حاوی نظر مورد پرسمان است",
