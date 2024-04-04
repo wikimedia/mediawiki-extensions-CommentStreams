@@ -5,6 +5,7 @@
 			"MirukuPC",
 			"Otokoume",
 			"RYOUMA1117",
+			"Salvare",
 			"Shirayuki",
 			"Sou0012"
 		]
@@ -71,6 +72,7 @@
 	"notification-body-commentstreams-comment-on-watched-page": "コメントはこちらから確認できます:\n\n\n$5",
 	"notification-body-commentstreams-reply-on-watched-page": "返信はこちらから確認できます:\n\n\n$5",
 	"notification-body-commentstreams-reply-to-watched-comment": "返信はこちらから確認できます:\n\n\n$5",
+	"group-csmoderator": "モデレーター（CommentStreams）",
 	"right-cs-comment": "自身のコメントを投稿、編集、削除",
 	"action-cs-comment": "コメントの投稿、編集、削除",
 	"right-cs-moderator-edit": "あらゆる利用者のコメントを編集",
