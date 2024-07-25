@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use FatalError;
 use IContextSource;
+use IDBAccessObject;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Page\WikiPageFactory;
@@ -278,7 +279,7 @@ class Comment extends AbstractComment {
 		$this->commentTitle = $commentTitle;
 		$this->wikitext = $wikitext;
 		$this->modificationTimestamp = null;
-		$wikiPage = $this->wikiPageFactory->newFromId( $this->wikiPage->getId(), WikiPage::READ_LATEST );
+		$wikiPage = $this->wikiPageFactory->newFromId( $this->wikiPage->getId(), IDBAccessObject::READ_LATEST );
 		if ( $wikiPage ) {
 			$this->wikiPage = $wikiPage;
 		}
