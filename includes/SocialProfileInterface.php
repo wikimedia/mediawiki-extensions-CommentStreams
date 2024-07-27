@@ -21,7 +21,7 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ConfigException;
+use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\User\UserIdentity;
 use wAvatar;
@@ -47,7 +47,7 @@ class SocialProfileInterface {
 	 */
 	public function __construct( ServiceOptions $options ) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-		$this->isLoaded = class_exists( \wAvatar::class );
+		$this->isLoaded = class_exists( wAvatar::class );
 		$this->uploadPath = $options->get( 'UploadPath' );
 	}
 

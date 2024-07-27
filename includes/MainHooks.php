@@ -22,9 +22,8 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Article;
-use ForeignTitle;
 use HtmlArmor;
-use MediaWiki;
+use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Hook\AfterImportPageHook;
 use MediaWiki\Hook\BeforePageDisplayHook;
 use MediaWiki\Hook\ImportHandlePageXMLTagHook;
@@ -34,25 +33,26 @@ use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\SpecialExportGetExtraPagesHook;
 use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Output\OutputPage;
+use MediaWiki\Page\PageProps;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsHook;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Request\WebRequest;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Search\Hook\ShowSearchHitTitleHook;
+use MediaWiki\Specials\SpecialSearch;
+use MediaWiki\Status\Status;
+use MediaWiki\Title\ForeignTitle;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use MWException;
-use OutputPage;
-use PageProps;
-use Parser;
 use SearchResult;
 use Skin;
-use SpecialSearch;
-use Status;
 use stdClass;
-use Title;
-use User;
-use WebRequest;
 use WikiImporter;
 use Xml;
 use XmlDumpWriter;
@@ -149,7 +149,7 @@ class MainHooks implements
 	 * @param Title $title Title on which the action will be performed
 	 * @param User $user Context user
 	 * @param WebRequest $request Context request
-	 * @param MediaWiki $mediaWiki
+	 * @param ActionEntryPoint $mediaWiki
 	 * @return bool|void True or no return value to continue or false to abort
 	 * @throws MWException
 	 */
@@ -469,7 +469,7 @@ class MainHooks implements
 
 		$pageInfo[$metadataType] = [];
 		while ( $reader->read() ) {
-			if ( $reader->nodeType == XmlReader::END_ELEMENT && $reader->name === $metadataType ) {
+			if ( $reader->nodeType == XMLReader::END_ELEMENT && $reader->name === $metadataType ) {
 				break;
 			}
 			if ( in_array( $reader->name, $fields ) ) {

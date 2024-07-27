@@ -7,5 +7,6 @@ $cfg['directory_list'] = array_merge( $cfg['directory_list'] ?? [], $dirList );
 $cfg['exclude_analysis_directory_list'] = array_merge(
 	$cfg['exclude_analysis_directory_list'] ?? [], $dirList
 );
+$cfg['exclude_file_list'][] = '.phan/stubs/wAvatar.php';
 
 return $cfg;

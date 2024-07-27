@@ -21,8 +21,8 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use EchoEventPresentationModel;
-use Message;
+use MediaWiki\Extension\Notifications\Formatters\EchoEventPresentationModel;
+use MediaWiki\Message\Message;
 
 class EchoCSPresentationModel extends EchoEventPresentationModel {
 	/**
