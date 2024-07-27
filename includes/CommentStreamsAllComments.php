@@ -21,12 +21,12 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use Html;
+use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\SpecialPage\SpecialPage;
 use OOUI\ButtonWidget;
 use OOUI\IconWidget;
-use SpecialPage;
 
 class CommentStreamsAllComments extends SpecialPage {
 	/**

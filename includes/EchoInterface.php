@@ -21,12 +21,12 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use EchoEvent;
 use ExtensionRegistry;
+use MediaWiki\Extension\Notifications\Model\Event;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageProps;
+use MediaWiki\User\User;
 use MWException;
-use PageProps;
-use User;
 use WikiPage;
 
 class EchoInterface {
@@ -94,7 +94,7 @@ class EchoInterface {
 			'comment_wikitext' => $comment->getWikitext()
 		];
 
-		EchoEvent::create( [
+		Event::create( [
 			'type' => 'commentstreams-comment-on-watched-page',
 			'title' => $associatedPage->getTitle(),
 			'extra' => $extra,
@@ -137,13 +137,13 @@ class EchoInterface {
 			'comment_wikitext' => $reply->getWikitext()
 		];
 
-		EchoEvent::create( [
+		Event::create( [
 			'type' => 'commentstreams-reply-on-watched-page',
 			'title' => $associatedPage->getTitle(),
 			'extra' => $extra,
 			'agent' => $user
 		] );
-		EchoEvent::create( [
+		Event::create( [
 			'type' => 'commentstreams-reply-to-watched-comment',
 			'title' => $associatedPage->getTitle(),
 			'extra' => $extra,
@@ -153,10 +153,10 @@ class EchoInterface {
 
 	/**
 	 * Used by Echo to locate the users watching a comment being replied to.
-	 * @param EchoEvent $event the Echo event
+	 * @param Event $event the Echo event
 	 * @return array array mapping user id to User object
 	 */
-	public static function locateUsersWatchingComment( EchoEvent $event ): array {
+	public static function locateUsersWatchingComment( Event $event ): array {
 		$id = $event->getExtraParam( 'parent_id' );
 		if ( $id === null ) {
 			$id = $event->getExtraParam( 'comment_id' );

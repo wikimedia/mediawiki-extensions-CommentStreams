@@ -21,12 +21,12 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use CommentStoreComment;
 use Content;
+use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Status\Status;
 use MWException;
-use Status;
 use WikiPage;
 use WikitextContent;
 

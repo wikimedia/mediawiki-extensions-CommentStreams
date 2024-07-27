@@ -24,14 +24,14 @@ namespace MediaWiki\Extension\CommentStreams;
 use ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\PageProps;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionStore;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MWException;
-use PageProps;
 use ParserFactory;
 use RepoGroup;
-use User;
 use WikiPage;
 
 class CommentStreamsFactory {

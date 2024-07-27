@@ -27,10 +27,11 @@ use FatalError;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Status\Status;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MWException;
-use Title;
-use User;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\IResultWrapper;
@@ -414,6 +415,16 @@ class CommentStreamsStore {
 	}
 
 	/**
+	 * @param WikiPage $wikiPage to delete
+	 * @param string $comment log line
+	 * @param User $deleter actor
+	 * @return Status
+	 */
+	protected function realDelete( WikiPage $wikiPage, string $comment, User $deleter ): Status {
+		return $wikiPage->doDeleteArticleReal( $comment, $deleter, true );
+	}
+
+	/**
 	 * @param WikiPage $wikiPage
 	 * @param User $deleter
 	 * @return bool
@@ -424,7 +435,7 @@ class CommentStreamsStore {
 		// must save page ID before deleting page
 		$pageid = $wikiPage->getId();
 
-		$status = $wikiPage->doDeleteArticleReal( 'comment deleted', $deleter, true );
+		$status = $this->realDelete( $wikiPage, 'comment deleted', $deleter );
 
 		if ( !$status->isGood() ) {
 			return false;
@@ -451,7 +462,7 @@ class CommentStreamsStore {
 		// must save page ID before deleting page
 		$pageid = $wikiPage->getId();
 
-		$status = $wikiPage->doDeleteArticleReal( 'reply deleted', $deleter, true );
+		$status = $this->realDelete( $wikiPage, 'comment deleted', $deleter );
 
 		if ( !$status->isGood() ) {
 			return false;

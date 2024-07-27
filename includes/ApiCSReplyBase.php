@@ -23,8 +23,8 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
-use Config;
 use ManualLogEntry;
+use MediaWiki\Config\Config;
 use MWException;
 
 abstract class ApiCSReplyBase extends ApiCSBase {

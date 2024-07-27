@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
-use Config;
+use MediaWiki\Config\Config;
 use MWException;
 
 class ApiCSDeleteReply extends ApiCSReplyBase {

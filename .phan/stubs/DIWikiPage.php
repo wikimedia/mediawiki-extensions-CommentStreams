@@ -2,8 +2,8 @@
 
 namespace SMW;
 
+use MediaWiki\Title\Title;
 use SMWDataItem;
-use Title;
 
 class DIWikiPage extends SMWDataItem {
 	/**
