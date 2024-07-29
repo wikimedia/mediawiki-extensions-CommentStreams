@@ -232,7 +232,8 @@ module.exports = ( function () {
 				.addClass( 'cs-comment-footer' );
 
 			const $comment = $( '<div>' )
-				.addClass( 'cs-comment' );
+				.addClass( 'cs-comment' )
+				.attr( 'id', 'cs-comment-' + commentData.pageid );
 
 			if ( commentData.parentid === undefined ) {
 				$comment.addClass( 'cs-head-comment' );

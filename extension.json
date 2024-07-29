@@ -37,6 +37,15 @@
 		"CommentStreamsAlias": "includes/CommentStreams.alias.php"
 	},
 	"ResourceModules": {
+		"ext.CommentStreams.searchUpdate": {
+			"packageFiles": [
+				"SearchUpdate.js"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		},
 		"ext.CommentStreams": {
 			"styles": [
 				"CommentStreams.css"
