@@ -303,13 +303,15 @@ class MainHooks implements
 			return;
 		}
 
-		$wikiPage = $this->wikiPageFactory->newFromID( $title->getArticleID() );
+		$foundId = $title->getArticleID();
+		$wikiPage = $this->wikiPageFactory->newFromID( $foundId );
 		if ( !$wikiPage ) {
 			return;
 		}
 
 		$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
 		if ( $reply ) {
+			// FIXME This looks wrong.  Do we really want $wikiPage here to modify what comment looks up?
 			$wikiPage = $this->wikiPageFactory->newFromID( $reply->getParentCommentPageId() );
 			if ( !$wikiPage ) {
 				return;
@@ -323,6 +325,9 @@ class MainHooks implements
 				$title = $t;
 			}
 		}
+		$attributes['data-search-anchor'] = "cs-comment-" . $foundId;
+
+		$specialSearch->getOutput()->addModules( [ "ext.CommentStreams.searchUpdate" ] );
 	}
 
 	/**
