@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ConfigException;
 use ExtensionRegistry;
+use IDBAccessObject;
 use JobQueueGroup;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Page\WikiPageFactory;
@@ -175,7 +176,7 @@ class SMWInterface {
 			return true;
 		}
 
-		$pageId = $subject->getTitle()->getArticleID( Title::READ_LATEST );
+		$pageId = $subject->getTitle()->getArticleID( IDBAccessObject::READ_LATEST );
 
 		$comment = $this->commentStreamsStore->getComment( $pageId );
 		if ( !$comment ) {
