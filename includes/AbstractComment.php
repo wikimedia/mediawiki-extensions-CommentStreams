@@ -21,8 +21,8 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use IContextSource;
 use IDBAccessObject;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageProps;

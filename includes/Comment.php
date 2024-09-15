@@ -22,8 +22,8 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use FatalError;
-use IContextSource;
 use IDBAccessObject;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Page\WikiPageFactory;

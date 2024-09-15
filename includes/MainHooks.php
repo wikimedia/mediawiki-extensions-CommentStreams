@@ -25,7 +25,6 @@ use Article;
 use HtmlArmor;
 use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Hook\AfterImportPageHook;
-use MediaWiki\Hook\BeforePageDisplayHook;
 use MediaWiki\Hook\ImportHandlePageXMLTagHook;
 use MediaWiki\Hook\MediaWikiPerformActionHook;
 use MediaWiki\Hook\MovePageIsValidMoveHook;
@@ -33,6 +32,7 @@ use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\SpecialExportGetExtraPagesHook;
 use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Page\PageReference;
@@ -331,7 +331,8 @@ class MainHooks implements
 	}
 
 	/**
-	 * Adds comment-streams, no-comment-streams, and comment-streams-initially-collapsed magic words.
+	 * Adds comment-streams, comments-streams-toc, no-comment-streams, and comment-streams-initially-collapsed magic
+	 * words.
 	 *
 	 * @param Parser $parser Parser object being initialised
 	 * @throws MWException
