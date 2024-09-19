@@ -34,7 +34,6 @@ use User;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\IResultWrapper;
-use Wikimedia\Rdbms\Subquery;
 use WikiPage;
 use WikitextContent;
 
@@ -220,21 +219,22 @@ class CommentStreamsStore {
 	 */
 	public function getCommentPages( int $limit, int $offset ): IResultWrapper {
 		$dbr = $this->getDBConnection( DB_REPLICA );
-		$union = $dbr->unionQueries( [
+		$union = $dbr->newUnionQueryBuilder()->caller( __METHOD__ );
+		$union->add(
 			$dbr->newSelectQueryBuilder()
 				->field( 'cst_c_comment_page_id', 'union_page_id' )
 				->from( 'cs_comments' )
-				->getSQL(),
+		);
+		$union->add(
 			$dbr->newSelectQueryBuilder()
 				->field( 'cst_r_reply_page_id', 'union_page_id' )
 				->from( 'cs_replies' )
-				->getSQL()
-		], IDatabase::UNION_DISTINCT );
+		);
 		return $dbr->newSelectQueryBuilder()
 			->fields( [
 				'page_id'
 			] )
-			->from( new Subquery( $union ), 'union_table' )
+			->from( '(' . $union->getSQL() . ') AS union_table' )
 			->leftJoin( 'page', 'page', [
 				'union_page_id=page_id'
 			] )
