@@ -24,7 +24,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use Article;
 use ForeignTitle;
 use HtmlArmor;
-use MediaWiki;
+use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Hook\AfterImportPageHook;
 use MediaWiki\Hook\BeforePageDisplayHook;
 use MediaWiki\Hook\ImportHandlePageXMLTagHook;
@@ -149,7 +149,7 @@ class MainHooks implements
 	 * @param Title $title Title on which the action will be performed
 	 * @param User $user Context user
 	 * @param WebRequest $request Context request
-	 * @param MediaWiki $mediaWiki
+	 * @param ActionEntryPoint $mediaWiki
 	 * @return bool|void True or no return value to continue or false to abort
 	 * @throws MWException
 	 */
@@ -433,7 +433,7 @@ class MainHooks implements
 			if ( $values != [] ) {
 				$out .= '    ' . Xml::openElement( $metadataTag ) . "\n";
 				foreach ( $values as $key => $value ) {
-					if ( !empty( $value ) ) {
+					if ( $value ) {
 						$out .= '      ' . Xml::element( $key, null, $value ) . "\n";
 					}
 				}
