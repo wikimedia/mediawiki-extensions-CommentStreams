@@ -108,14 +108,14 @@ module.exports = ( function () {
 
 	Block.prototype.enableAllButtons = function () {
 		this.addButton.setDisabled( false );
-		this.streams.forEach( function ( stream ) {
+		this.streams.forEach( ( stream ) => {
 			stream.enableButtons();
 		} );
 	};
 
 	Block.prototype.disableAllButtons = function () {
 		this.addButton.setDisabled( true );
-		this.streams.forEach( function ( stream ) {
+		this.streams.forEach( ( stream ) => {
 			stream.disableButtons();
 		} );
 	};
@@ -209,7 +209,7 @@ module.exports = ( function () {
 	Block.prototype.hideEditBox = function ( animated ) {
 		const self = this;
 		if ( animated ) {
-			this.$editBox.slideUp( 'normal', function () {
+			this.$editBox.slideUp( 'normal', () => {
 				self.$editBox.remove();
 				self.$editBox = null;
 			} );
@@ -238,7 +238,7 @@ module.exports = ( function () {
 					{ label: okText, action: 'ok' },
 					{ label: cancelText, flags: 'primary' }
 				]
-			} ).closed.then( function ( data ) {
+			} ).closed.then( ( data ) => {
 				if ( data && data.action && data.action === 'ok' ) {
 					self.postComment2( parentPageId );
 				}
@@ -266,11 +266,11 @@ module.exports = ( function () {
 			to: 'wikitext',
 			content: curVEEditor.target.getSurface().getHtml(),
 			title: mw.config.get( 'wgPageName' ).split( /([\\/])/g ).pop()
-		} ).then( function ( data ) {
+		} ).then( ( data ) => {
 			const commentText = data[ 'veforall-parsoid-utils' ].content;
 			self.realPostComment( parentPageId, commentText );
 		} )
-			.fail( function () {
+			.fail( () => {
 				self.reportError( 'commentstreams-ve-conversion-error' );
 			} );
 	};
@@ -302,7 +302,7 @@ module.exports = ( function () {
 		this.submitButton.setDisabled( true );
 		this.cancelButton.setDisabled( true );
 
-		this.$editBox.fadeTo( 100, 0.2, function () {
+		this.$editBox.fadeTo( 100, 0.2, () => {
 			const progressBar = new OO.ui.ProgressBarWidget( {
 				progress: false
 			} );
@@ -312,19 +312,19 @@ module.exports = ( function () {
 				self.querier.postReply(
 					commentText,
 					parentPageId,
-					function ( result ) {
+					( result ) => {
 						progressBar.$element.remove();
 						if ( result.error === undefined ) {
 							self.hideEditBox( false );
 							self.streams[ parentPageId ].addReply( result );
-							self.querier.queryComment( parentPageId, function ( queryResult ) {
+							self.querier.queryComment( parentPageId, ( queryResult ) => {
 								if ( queryResult.error === undefined ) {
 									self.streams[ parentPageId ].recreateStreamMenu( queryResult );
 								}
 							} );
 						} else {
 							self.reportError( result.error );
-							self.$editBox.fadeTo( 0.2, 100, function () {
+							self.$editBox.fadeTo( 0.2, 100, () => {
 								self.submitButton.setDisabled( false );
 								self.cancelButton.setDisabled( false );
 							} );
@@ -336,7 +336,7 @@ module.exports = ( function () {
 					commentText,
 					self.env.associatedPageId,
 					self.blockName,
-					function ( result ) {
+					( result ) => {
 						progressBar.$element.remove();
 						if ( result.error === undefined ) {
 							self.hideEditBox( false );
@@ -344,7 +344,7 @@ module.exports = ( function () {
 							stream.adjustCommentOrder( 0, 0, result.created_timestamp );
 						} else {
 							self.reportError( result.error );
-							self.$editBox.fadeTo( 0.2, 100, function () {
+							self.$editBox.fadeTo( 0.2, 100, () => {
 								self.submitButton.setDisabled( false );
 								self.cancelButton.setDisabled( false );
 							} );

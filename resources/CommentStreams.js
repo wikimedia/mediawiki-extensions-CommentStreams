@@ -118,7 +118,7 @@ const CommentStreams = ( function () {
 ( function () {
 	'use strict';
 
-	$( function () {
+	$( () => {
 		if ( mw.config.exists( 'CommentStreams' ) ) {
 			CommentStreams.initialize();
 		}

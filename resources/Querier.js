@@ -31,13 +31,13 @@ module.exports = ( function () {
 				action: 'csquerycomment',
 				pageid: pageid
 			} )
-			.done( function ( data ) {
+			.done( ( data ) => {
 				if ( data.csquerycomment === undefined ) {
 					self.reportError( 'invalid', reply );
 				}
 				reply( data.csquerycomment );
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -49,13 +49,13 @@ module.exports = ( function () {
 				action: 'csqueryreply',
 				pageid: pageid
 			} )
-			.done( function ( data ) {
+			.done( ( data ) => {
 				if ( data.csqueryreply === undefined ) {
 					self.reportError( 'invalid', reply );
 				}
 				reply( data.csqueryreply );
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -68,10 +68,10 @@ module.exports = ( function () {
 				pageid: pageid,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-			.done( function () {
+			.done( () => {
 				reply();
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -84,10 +84,10 @@ module.exports = ( function () {
 				pageid: pageid,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-			.done( function () {
+			.done( () => {
 				reply();
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -112,13 +112,13 @@ module.exports = ( function () {
 		}
 		new mw.Api()
 			.post( data )
-			.done( function ( postData ) {
+			.done( ( postData ) => {
 				if ( postData.cspostcomment === undefined ) {
 					self.reportError( 'invalid', reply );
 				}
 				self.queryComment( postData.cspostcomment, reply );
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -137,13 +137,13 @@ module.exports = ( function () {
 		};
 		new mw.Api()
 			.post( data )
-			.done( function ( postData ) {
+			.done( ( postData ) => {
 				if ( postData.cspostreply === undefined ) {
 					self.reportError( 'invalid', reply );
 				}
 				self.queryReply( postData.cspostreply, reply );
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -159,10 +159,10 @@ module.exports = ( function () {
 		};
 		new mw.Api()
 			.post( params )
-			.done( function () {
+			.done( () => {
 				self.queryComment( pageid, reply );
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -177,10 +177,10 @@ module.exports = ( function () {
 		};
 		new mw.Api()
 			.post( params )
-			.done( function () {
+			.done( () => {
 				self.queryReply( pageid, reply );
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -194,10 +194,10 @@ module.exports = ( function () {
 				vote: vote,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-			.done( function () {
+			.done( () => {
 				reply();
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
@@ -210,10 +210,10 @@ module.exports = ( function () {
 				pageid: pageid,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
-			.done( function () {
+			.done( () => {
 				reply();
 			} )
-			.fail( function ( code, error ) {
+			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
