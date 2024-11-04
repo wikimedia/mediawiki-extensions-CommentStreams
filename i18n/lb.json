@@ -9,7 +9,6 @@
 	"commentstreams-error-prohibitedaction": "D'Aktioun $1 ass op Bemierkungssäiten net erlaabt.",
 	"commentstreams-error-comment-on-deleted-page": "D'Säit mat där dës Bemierkung associéiert ass gouf geläscht.",
 	"commentstreams-author-anonymous": "anonym",
-	"apihelp-cspostcomment-description": "Eng nei Bemierkung publizéieren.",
 	"apihelp-cspostcomment-summary": "En nei Bemierkung publizéieren.",
 	"apihelp-cspostcomment-param-commenttitle": "fakultativen Titel fir d'Bemierkung.",
 	"apihelp-cseditcomment-param-commenttitle": "fakultativen Titel fir d'Bemierkung.",
