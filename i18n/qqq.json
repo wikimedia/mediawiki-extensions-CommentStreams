@@ -13,6 +13,7 @@
 	"commentstreams-error-comment-on-deleted-page": "Error message.",
 	"commentstreams-error-reply-to-deleted-comment": "Error message.",
 	"commentstreams-author-anonymous": "The name displayed for anonymous comment authors\n{{Identical|Anonymous}}",
+	"commentstreams-toc": "This is the title of the comment list.\n{{Identical|Content}}",
 	"apihelp-csquerycomment-summary": "{{doc-apihelp-summary|csquerycomment}}",
 	"apihelp-csquerycomment-param-pageid": "{{doc-apihelp-param|csquerycomment|pageid}}",
 	"apihelp-csquerycomment-param-title": "{{doc-apihelp-param|csquerycomment|title}}",

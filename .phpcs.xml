@@ -5,6 +5,7 @@
 		<exclude-pattern>wAvatar\.php</exclude-pattern>
 	</rule>
 	<file>.</file>
+	<exclude-pattern type="relative">^(.phan/).+</exclude-pattern>
 	<arg name="extensions" value="php" />
 	<arg name="encoding" value="UTF-8" />
 </ruleset>
