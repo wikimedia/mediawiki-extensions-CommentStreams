@@ -6,7 +6,8 @@
 			"أيوب",
 			"أَحمد",
 			"ديفيد",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"Meno25"
 		]
 	},
 	"commentstreams-desc": "يسمح بالتعليق على صفحات الويكي",
@@ -28,6 +29,7 @@
 	"apihelp-cspostcomment-param-commenttitle": "عنوان اختياري للتعليق.",
 	"apihelp-cspostcomment-param-wikitext": "نص الويكي للتعليق",
 	"apihelp-cspostcomment-param-associatedid": "الصفحة التي يرتبط بها هذا التعليق.",
+	"apihelp-cspostcomment-param-commentblockname": "اسم كتلة التعليق التي يظهر فيها هذا التعليق.",
 	"apihelp-cseditcomment-summary": "تحرير تعليق موجود; يجب توفير إما معرف أو عنوان الصفحة.",
 	"apihelp-cseditcomment-param-pageid": "معرف الصفحة للصفحة التي تحمل التعليق للتعديل",
 	"apihelp-cseditcomment-param-title": "عنوان الصفحة للصفحة التي تحمل التعليق للتعديل",
