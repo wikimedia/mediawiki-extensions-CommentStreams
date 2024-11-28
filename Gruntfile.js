@@ -11,7 +11,13 @@ module.exports = function ( grunt ) {
 			options: {
 				cache: true
 			},
-			all: '.'
+			all: '.',
+			fix: {
+				options: {
+					fix: true
+				},
+				src: [ '.eslintrc.json', 'resources', 'Gruntfile.js' ]
+			}
 		},
 		stylelint: {
 			all: [
@@ -23,5 +29,6 @@ module.exports = function ( grunt ) {
 		banana: conf.MessagesDirs
 	} );
 	grunt.registerTask( 'test', [ 'eslint', 'banana', 'stylelint' ] );
+	grunt.registerTask( 'fix', [ 'eslint:fix' ] );
 	grunt.registerTask( 'default', 'test' );
 };

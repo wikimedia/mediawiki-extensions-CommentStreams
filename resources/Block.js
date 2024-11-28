@@ -21,360 +21,362 @@
 module.exports = ( function () {
 	'use strict';
 
-	function Block( controller, env, querier, blockName, $commentDiv ) {
-		this.controller = controller;
-		this.env = env;
-		this.querier = querier;
-		this.blockName = blockName;
+	class Block {
+		constructor( controller, env, querier, blockName, $commentDiv ) {
+			this.controller = controller;
+			this.env = env;
+			this.querier = querier;
+			this.blockName = blockName;
 
-		this.$commentDiv = null;
-		this.addButton = null;
-		this.$headerDiv = null;
-		this.$footerDiv = null;
-		this.$editBox = null;
-		this.$titleField = null;
-		this.$bodyField = null;
-		this.submitButton = null;
-		this.cancelButton = null;
+			this.$commentDiv = null;
+			this.addButton = null;
+			this.$headerDiv = null;
+			this.$footerDiv = null;
+			this.$editBox = null;
+			this.$titleField = null;
+			this.$bodyField = null;
+			this.submitButton = null;
+			this.cancelButton = null;
 
-		this.streams = [];
-		this.createBlock( $commentDiv );
-	}
-
-	Block.prototype.createBlock = function ( $commentDiv ) {
-		const self = this;
-
-		this.$commentDiv = $commentDiv;
-
-		this.$headerDiv = $( '<div>' ).addClass( 'cs-header' );
-		this.$commentDiv.append( this.$headerDiv );
-
-		this.$footerDiv = $( '<div>' ).addClass( 'cs-footer' );
-		this.$commentDiv.append( this.$footerDiv );
-
-		const params = {
-			icon: 'speechBubbleAdd'
-		};
-
-		const buttonText = mw.msg( 'commentstreams-buttontext-add' );
-		if ( this.env.showLabels ) {
-			params.label = buttonText;
-		} else {
-			params.title = buttonText;
-			params.framed = false;
-		}
-		if ( !this.env.canComment ) {
-			params.disabled = true;
+			this.streams = [];
+			this.createBlock( $commentDiv );
 		}
 
-		this.addButton = new OO.ui.ButtonWidget( params );
+		createBlock( $commentDiv ) {
+			const self = this;
 
-		if ( this.env.newestStreamsOnTop ) {
-			this.$headerDiv.append( this.addButton.$element );
-		} else {
-			this.$footerDiv.append( this.addButton.$element );
+			this.$commentDiv = $commentDiv;
+
+			this.$headerDiv = $( '<div>' ).addClass( 'cs-header' );
+			this.$commentDiv.append( this.$headerDiv );
+
+			this.$footerDiv = $( '<div>' ).addClass( 'cs-footer' );
+			this.$commentDiv.append( this.$footerDiv );
+
+			const params = {
+				icon: 'speechBubbleAdd'
+			};
+
+			const buttonText = mw.msg( 'commentstreams-buttontext-add' );
+			if ( this.env.showLabels ) {
+				params.label = buttonText;
+			} else {
+				params.title = buttonText;
+				params.framed = false;
+			}
+			if ( !this.env.canComment ) {
+				params.disabled = true;
+			}
+
+			this.addButton = new OO.ui.ButtonWidget( params );
+
+			if ( this.env.newestStreamsOnTop ) {
+				this.$headerDiv.append( this.addButton.$element );
+			} else {
+				this.$footerDiv.append( this.addButton.$element );
+			}
+
+			this.addButton.onClick = function () {
+				self.showNewCommentStreamBox();
+			};
+
+			this.addButton.on( 'click', this.addButton.onClick );
 		}
 
-		this.addButton.onClick = function () {
-			self.showNewCommentStreamBox();
-		};
+		addStream( commentData ) {
+			const Stream = require( './Stream.js' );
+			const stream = new Stream( this.controller, this.env, this, this.querier, commentData );
+			if ( this.env.newestStreamsOnTop ) {
+				stream.getStream().insertAfter( this.$headerDiv );
+			} else {
+				stream.getStream().insertBefore( this.$footerDiv );
+			}
 
-		this.addButton.on( 'click', this.addButton.onClick );
-	};
+			if ( this.env.initiallyCollapsed ) {
+				stream.collapse();
+			}
 
-	Block.prototype.addStream = function ( commentData ) {
-		const Stream = require( './Stream.js' );
-		const stream = new Stream( this.controller, this.env, this, this.querier, commentData );
-		if ( this.env.newestStreamsOnTop ) {
-			stream.getStream().insertAfter( this.$headerDiv );
-		} else {
-			stream.getStream().insertBefore( this.$footerDiv );
+			this.streams[ commentData.pageid ] = stream;
+
+			if ( commentData.children !== undefined ) {
+				for ( const childComment of commentData.children ) {
+					stream.addReply( childComment );
+				}
+			}
+
+			return stream;
 		}
 
-		if ( this.env.initiallyCollapsed ) {
-			stream.collapse();
+		enableAllButtons() {
+			this.addButton.setDisabled( false );
+			this.streams.forEach( function ( stream ) {
+				stream.enableButtons();
+			} );
 		}
 
-		this.streams[ commentData.pageid ] = stream;
+		disableAllButtons() {
+			this.addButton.setDisabled( true );
+			this.streams.forEach( function ( stream ) {
+				stream.disableButtons();
+			} );
+		}
 
-		if ( commentData.children !== undefined ) {
-			for ( const childComment of commentData.children ) {
-				stream.addReply( childComment );
+		createEditBox( isStream ) {
+			this.$editBox = $( '<div>' )
+				.addClass( 'cs-edit-box' );
+
+			if ( isStream ) {
+				this.$titleField = $( '<input>' )
+					.attr( {
+						type: 'text',
+						placeholder: mw.msg( 'commentstreams-title-field-placeholder' )
+					} )
+					.addClass( 'cs-title-edit-field' );
+				this.$editBox.append( this.$titleField );
+			} else {
+				this.$editBox.addClass( 'cs-reply-edit-box' );
+			}
+
+			if ( $.fn.applyVisualEditor ) {
+				// VEForAll is installed.
+				this.$editBox.addClass( 've-area-wrapper' );
+			}
+
+			this.$bodyField = $( '<textarea>' )
+				.attr( {
+					rows: 10,
+					placeholder: mw.msg( 'commentstreams-body-field-placeholder' )
+				} )
+				.addClass( 'cs-body-edit-field' );
+			this.$editBox.append( this.$bodyField );
+
+			this.submitButton = new OO.ui.ButtonWidget( {
+				icon: 'check',
+				flags: 'progressive',
+				title: mw.msg( 'commentstreams-buttontooltip-submit' ),
+				framed: false
+			} );
+
+			this.$editBox.append( this.submitButton.$element );
+
+			this.cancelButton = new OO.ui.ButtonWidget( {
+				icon: 'cancel',
+				flags: 'destructive',
+				title: mw.msg( 'commentstreams-buttontooltip-cancel' ),
+				framed: false
+			} );
+
+			this.$editBox.append( this.cancelButton.$element );
+		}
+
+		showNewCommentStreamBox() {
+			const self = this;
+
+			this.createEditBox( true );
+			if ( this.env.newestStreamsOnTop ) {
+				this.$headerDiv.append( this.$editBox );
+			} else {
+				this.$footerDiv.prepend( this.$editBox );
+			}
+
+			this.$editBox
+				.hide()
+				.slideDown();
+
+			if ( $.fn.applyVisualEditor ) {
+				// VEForAll is installed.
+				this.$bodyField.applyVisualEditor();
+			}
+
+			this.submitButton.onClick = function () {
+				self.postComment( null );
+			};
+			this.submitButton.on( 'click', this.submitButton.onClick );
+
+			this.cancelButton.onClick = function () {
+				self.hideEditBox( true );
+			};
+			this.cancelButton.on( 'click', this.cancelButton.onClick );
+
+			this.disableAllButtons();
+
+			if ( this.$titleField !== null ) {
+				this.$titleField.trigger( 'focus' );
+			} else {
+				this.$bodyField.trigger( 'focus' );
 			}
 		}
 
-		return stream;
-	};
-
-	Block.prototype.enableAllButtons = function () {
-		this.addButton.setDisabled( false );
-		this.streams.forEach( function ( stream ) {
-			stream.enableButtons();
-		} );
-	};
-
-	Block.prototype.disableAllButtons = function () {
-		this.addButton.setDisabled( true );
-		this.streams.forEach( function ( stream ) {
-			stream.disableButtons();
-		} );
-	};
-
-	Block.prototype.createEditBox = function ( isStream ) {
-		this.$editBox = $( '<div>' )
-			.addClass( 'cs-edit-box' );
-
-		if ( isStream ) {
-			this.$titleField = $( '<input>' )
-				.attr( {
-					type: 'text',
-					placeholder: mw.msg( 'commentstreams-title-field-placeholder' )
-				} )
-				.addClass( 'cs-title-edit-field' );
-			this.$editBox.append( this.$titleField );
-		} else {
-			this.$editBox.addClass( 'cs-reply-edit-box' );
+		hideEditBox( animated ) {
+			const self = this;
+			if ( animated ) {
+				this.$editBox.slideUp( 'normal', function () {
+					self.$editBox.remove();
+					self.$editBox = null;
+				} );
+			} else {
+				this.$editBox.remove();
+				this.$editBox = null;
+			}
+			this.enableAllButtons();
 		}
 
-		if ( $.fn.applyVisualEditor ) {
-			// VEForAll is installed.
-			this.$editBox.addClass( 've-area-wrapper' );
+		postComment( parentPageId ) {
+			const self = this;
+			if ( this.env.isLoggedIn ) {
+				self.postComment2( parentPageId );
+			} else {
+				const messageText = mw.msg( 'commentstreams-dialog-anonymous-message' );
+				const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
+				const cancelText = mw.msg( 'commentstreams-dialog-buttontext-cancel' );
+				const dialog = new OO.ui.MessageDialog();
+				const windowManager = new OO.ui.WindowManager();
+				this.$commentDiv.append( windowManager.$element );
+				windowManager.addWindows( [ dialog ] );
+				windowManager.openWindow( dialog, {
+					message: messageText,
+					actions: [
+						{ label: okText, action: 'ok' },
+						{ label: cancelText, flags: 'primary' }
+					]
+				} ).closed.then( function ( data ) {
+					if ( data && data.action && data.action === 'ok' ) {
+						self.postComment2( parentPageId );
+					}
+				} );
+			}
 		}
 
-		this.$bodyField = $( '<textarea>' )
-			.attr( {
-				rows: 10,
-				placeholder: mw.msg( 'commentstreams-body-field-placeholder' )
+		postComment2( parentPageId ) {
+			const self = this;
+			if ( this.$bodyField.css( 'display' ) === 'none' ) {
+				self.postCommentFromVE( parentPageId );
+			} else {
+				const commentText = this.$bodyField.val();
+				self.realPostComment( parentPageId, commentText );
+			}
+		}
+
+		postCommentFromVE( parentPageId ) {
+			const self = this;
+			const veInstances = this.$bodyField.getVEInstances();
+			const curVEEditor = veInstances[ veInstances.length - 1 ];
+			new mw.Api().post( {
+				action: 'veforall-parsoid-utils',
+				from: 'html',
+				to: 'wikitext',
+				content: curVEEditor.target.getSurface().getHtml(),
+				title: mw.config.get( 'wgPageName' ).split( /([\\/])/g ).pop()
+			} ).then( function ( data ) {
+				const commentText = data[ 'veforall-parsoid-utils' ].content;
+				self.realPostComment( parentPageId, commentText );
 			} )
-			.addClass( 'cs-body-edit-field' );
-		this.$editBox.append( this.$bodyField );
-
-		this.submitButton = new OO.ui.ButtonWidget( {
-			icon: 'check',
-			flags: 'progressive',
-			title: mw.msg( 'commentstreams-buttontooltip-submit' ),
-			framed: false
-		} );
-
-		this.$editBox.append( this.submitButton.$element );
-
-		this.cancelButton = new OO.ui.ButtonWidget( {
-			icon: 'cancel',
-			flags: 'destructive',
-			title: mw.msg( 'commentstreams-buttontooltip-cancel' ),
-			framed: false
-		} );
-
-		this.$editBox.append( this.cancelButton.$element );
-	};
-
-	Block.prototype.showNewCommentStreamBox = function () {
-		const self = this;
-
-		this.createEditBox( true );
-		if ( this.env.newestStreamsOnTop ) {
-			this.$headerDiv.append( this.$editBox );
-		} else {
-			this.$footerDiv.prepend( this.$editBox );
+				.fail( function () {
+					self.reportError( 'commentstreams-ve-conversion-error' );
+				} );
 		}
 
-		this.$editBox
-			.hide()
-			.slideDown();
+		realPostComment( parentPageId,
+			commentText ) {
+			const self = this;
 
-		if ( $.fn.applyVisualEditor ) {
-			// VEForAll is installed.
-			this.$bodyField.applyVisualEditor();
-		}
+			let commentTitle;
+			if ( parentPageId === null ) {
+				if ( this.$titleField !== null ) {
+					commentTitle = this.$titleField.val();
+					if ( commentTitle === null || commentTitle.trim() === '' ) {
+						this.reportError( 'commentstreams-validation-error-nocommenttitle' );
+						return;
+					}
+				}
+			} else {
+				commentTitle = null;
+			}
 
-		this.submitButton.onClick = function () {
-			self.postComment( null );
-		};
-		this.submitButton.on( 'click', this.submitButton.onClick );
+			if ( commentText === null || commentText.trim() === '' ) {
+				this.reportError( 'commentstreams-validation-error-nocommenttext' );
+				return;
+			}
 
-		this.cancelButton.onClick = function () {
-			self.hideEditBox( true );
-		};
-		this.cancelButton.on( 'click', this.cancelButton.onClick );
+			this.submitButton.setDisabled( true );
+			this.cancelButton.setDisabled( true );
 
-		this.disableAllButtons();
+			this.$editBox.fadeTo( 100, 0.2, function () {
+				const progressBar = new OO.ui.ProgressBarWidget( {
+					progress: false
+				} );
+				progressBar.$element.insertAfter( self.$editBox );
 
-		if ( this.$titleField !== null ) {
-			this.$titleField.trigger( 'focus' );
-		} else {
-			this.$bodyField.trigger( 'focus' );
-		}
-	};
-
-	Block.prototype.hideEditBox = function ( animated ) {
-		const self = this;
-		if ( animated ) {
-			this.$editBox.slideUp( 'normal', function () {
-				self.$editBox.remove();
-				self.$editBox = null;
+				if ( parentPageId ) {
+					self.querier.postReply(
+						commentText,
+						parentPageId,
+						function ( result ) {
+							progressBar.$element.remove();
+							if ( result.error === undefined ) {
+								self.hideEditBox( false );
+								self.streams[ parentPageId ].addReply( result );
+								self.querier.queryComment( parentPageId, function ( queryResult ) {
+									if ( queryResult.error === undefined ) {
+										self.streams[ parentPageId ].recreateStreamMenu(
+											queryResult
+										);
+									}
+								} );
+							} else {
+								self.reportError( result.error );
+								self.$editBox.fadeTo( 0.2, 100, function () {
+									self.submitButton.setDisabled( false );
+									self.cancelButton.setDisabled( false );
+								} );
+							}
+						} );
+				} else {
+					self.querier.postComment(
+						commentTitle,
+						commentText,
+						self.env.associatedPageId,
+						self.blockName,
+						function ( result ) {
+							progressBar.$element.remove();
+							if ( result.error === undefined ) {
+								self.hideEditBox( false );
+								const stream = self.addStream( result );
+								stream.adjustCommentOrder( 0, 0, result.created_timestamp );
+							} else {
+								self.reportError( result.error );
+								self.$editBox.fadeTo( 0.2, 100, function () {
+									self.submitButton.setDisabled( false );
+									self.cancelButton.setDisabled( false );
+								} );
+							}
+						} );
+				}
 			} );
-		} else {
-			this.$editBox.remove();
-			this.$editBox = null;
 		}
-		this.enableAllButtons();
-	};
 
-	Block.prototype.postComment = function ( parentPageId ) {
-		const self = this;
-		if ( this.env.isLoggedIn ) {
-			self.postComment2( parentPageId );
-		} else {
-			const messageText = mw.msg( 'commentstreams-dialog-anonymous-message' );
+		reportError( message ) {
+			/* eslint-disable mediawiki/msg-doc */
+			let messageText = message;
+			const mwmessage = mw.message( message );
+			if ( mwmessage.exists() ) {
+				messageText = mwmessage.text();
+			}
 			const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
-			const cancelText = mw.msg( 'commentstreams-dialog-buttontext-cancel' );
 			const dialog = new OO.ui.MessageDialog();
 			const windowManager = new OO.ui.WindowManager();
 			this.$commentDiv.append( windowManager.$element );
 			windowManager.addWindows( [ dialog ] );
 			windowManager.openWindow( dialog, {
 				message: messageText,
-				actions: [
-					{ label: okText, action: 'ok' },
-					{ label: cancelText, flags: 'primary' }
-				]
-			} ).closed.then( function ( data ) {
-				if ( data && data.action && data.action === 'ok' ) {
-					self.postComment2( parentPageId );
-				}
+				actions: [ {
+					action: 'accept',
+					label: okText,
+					flags: 'primary'
+				} ]
 			} );
 		}
-	};
-
-	Block.prototype.postComment2 = function ( parentPageId ) {
-		const self = this;
-		if ( this.$bodyField.css( 'display' ) === 'none' ) {
-			self.postCommentFromVE( parentPageId );
-		} else {
-			const commentText = this.$bodyField.val();
-			self.realPostComment( parentPageId, commentText );
-		}
-	};
-
-	Block.prototype.postCommentFromVE = function ( parentPageId ) {
-		const self = this;
-		const veInstances = this.$bodyField.getVEInstances();
-		const curVEEditor = veInstances[ veInstances.length - 1 ];
-		new mw.Api().post( {
-			action: 'veforall-parsoid-utils',
-			from: 'html',
-			to: 'wikitext',
-			content: curVEEditor.target.getSurface().getHtml(),
-			title: mw.config.get( 'wgPageName' ).split( /([\\/])/g ).pop()
-		} ).then( function ( data ) {
-			const commentText = data[ 'veforall-parsoid-utils' ].content;
-			self.realPostComment( parentPageId, commentText );
-		} )
-			.fail( function () {
-				self.reportError( 'commentstreams-ve-conversion-error' );
-			} );
-	};
-
-	Block.prototype.realPostComment = function (
-		parentPageId,
-		commentText
-	) {
-		const self = this;
-
-		let commentTitle;
-		if ( parentPageId === null ) {
-			if ( this.$titleField !== null ) {
-				commentTitle = this.$titleField.val();
-				if ( commentTitle === null || commentTitle.trim() === '' ) {
-					this.reportError( 'commentstreams-validation-error-nocommenttitle' );
-					return;
-				}
-			}
-		} else {
-			commentTitle = null;
-		}
-
-		if ( commentText === null || commentText.trim() === '' ) {
-			this.reportError( 'commentstreams-validation-error-nocommenttext' );
-			return;
-		}
-
-		this.submitButton.setDisabled( true );
-		this.cancelButton.setDisabled( true );
-
-		this.$editBox.fadeTo( 100, 0.2, function () {
-			const progressBar = new OO.ui.ProgressBarWidget( {
-				progress: false
-			} );
-			progressBar.$element.insertAfter( self.$editBox );
-
-			if ( parentPageId ) {
-				self.querier.postReply(
-					commentText,
-					parentPageId,
-					function ( result ) {
-						progressBar.$element.remove();
-						if ( result.error === undefined ) {
-							self.hideEditBox( false );
-							self.streams[ parentPageId ].addReply( result );
-							self.querier.queryComment( parentPageId, function ( queryResult ) {
-								if ( queryResult.error === undefined ) {
-									self.streams[ parentPageId ].recreateStreamMenu( queryResult );
-								}
-							} );
-						} else {
-							self.reportError( result.error );
-							self.$editBox.fadeTo( 0.2, 100, function () {
-								self.submitButton.setDisabled( false );
-								self.cancelButton.setDisabled( false );
-							} );
-						}
-					} );
-			} else {
-				self.querier.postComment(
-					commentTitle,
-					commentText,
-					self.env.associatedPageId,
-					self.blockName,
-					function ( result ) {
-						progressBar.$element.remove();
-						if ( result.error === undefined ) {
-							self.hideEditBox( false );
-							const stream = self.addStream( result );
-							stream.adjustCommentOrder( 0, 0, result.created_timestamp );
-						} else {
-							self.reportError( result.error );
-							self.$editBox.fadeTo( 0.2, 100, function () {
-								self.submitButton.setDisabled( false );
-								self.cancelButton.setDisabled( false );
-							} );
-						}
-					} );
-			}
-		} );
-	};
-
-	Block.prototype.reportError = function ( message ) {
-		/* eslint-disable mediawiki/msg-doc */
-		let messageText = message;
-		const mwmessage = mw.message( message );
-		if ( mwmessage.exists() ) {
-			messageText = mwmessage.text();
-		}
-		const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
-		const dialog = new OO.ui.MessageDialog();
-		const windowManager = new OO.ui.WindowManager();
-		this.$commentDiv.append( windowManager.$element );
-		windowManager.addWindows( [ dialog ] );
-		windowManager.openWindow( dialog, {
-			message: messageText,
-			actions: [ {
-				action: 'accept',
-				label: okText,
-				flags: 'primary'
-			} ]
-		} );
-	};
+	}
 
 	return Block;
 }() );
