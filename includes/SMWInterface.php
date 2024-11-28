@@ -21,12 +21,13 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ConfigException;
 use ExtensionRegistry;
 use IDBAccessObject;
 use JobQueueGroup;
+use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Title\Title;
 use MediaWiki\User\UserIdentity;
 use SMW\DIProperty;
 use SMW\DIWikiPage;
@@ -38,7 +39,6 @@ use SMW\StoreFactory;
 use SMWDataItem;
 use SMWDIBlob;
 use SMWDINumber;
-use Title;
 
 class SMWInterface {
 	public const CONSTRUCTOR_OPTIONS = [

@@ -23,10 +23,10 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
 use ApiUsageException;
-use Config;
 use FatalError;
+use MediaWiki\Config\Config;
+use MediaWiki\User\User;
 use MWException;
-use User;
 
 class ApiCSDeleteComment extends ApiCSCommentBase {
 	/**

@@ -25,14 +25,14 @@ use FatalError;
 use IContextSource;
 use IDBAccessObject;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\PageProps;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionStore;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MWException;
-use PageProps;
 use ParserFactory;
 use RepoGroup;
-use User;
 use Wikimedia\Assert\Assert;
 use WikiPage;
 

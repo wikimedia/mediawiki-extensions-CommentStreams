@@ -24,12 +24,12 @@ namespace MediaWiki\Extension\CommentStreams;
 use ApiBase;
 use ApiMain;
 use ApiUsageException;
-use Config;
 use ManualLogEntry;
+use MediaWiki\Config\Config;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Title\Title;
 use MWException;
-use Title;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSPostReply extends ApiBase {

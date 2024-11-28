@@ -22,16 +22,16 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Action;
-use ConfigException;
 use ExtensionRegistry;
+use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Permissions\PermissionManager;
-use NamespaceInfo;
+use MediaWiki\Title\NamespaceInfo;
+use MediaWiki\Title\Title;
 use OutputPage;
 use Parser;
 use PPFrame;
-use Title;
 
 class CommentStreamsHandler {
 	public const CONSTRUCTOR_OPTIONS = [

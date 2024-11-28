@@ -22,7 +22,7 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use ApiMain;
-use Config;
+use MediaWiki\Config\Config;
 
 class ApiCSQueryReply extends ApiCSReplyBase {
 	/**
