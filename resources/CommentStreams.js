@@ -98,7 +98,7 @@ const CommentStreams = ( function () {
 				if ( blockName === undefined ) {
 					$blockDiv
 						.detach()
-						.insertAfter( '#catlinks' );
+						.appendTo( '#bodyContent' );
 					self.defaultblock = new Block( self, env, querier, null, $blockDiv );
 				} else {
 					self.namedblocks[ blockName ] =
@@ -109,7 +109,7 @@ const CommentStreams = ( function () {
 			if ( $blocks.length === 0 ) {
 				const $mainDiv = $( '<div>' )
 					.addClass( 'cs-comments' )
-					.insertAfter( '#catlinks' );
+					.appendTo( '#bodyContent' );
 				this.defaultblock = new Block( this, env, querier, null, $mainDiv );
 			}
 		},
