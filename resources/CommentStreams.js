@@ -65,6 +65,10 @@ const CommentStreams = ( function () {
 
 		displayTitlesList: function ( comments ) {
 			const commentList = document.getElementById( 'cs-comment-list' );
+			if ( !commentList ) {
+				return;
+			}
+
 			Array.from( comments ).reverse().forEach(
 				( comment ) => {
 					const blockName = comment.commentblockname;
