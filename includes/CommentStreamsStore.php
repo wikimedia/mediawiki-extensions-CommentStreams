@@ -35,6 +35,7 @@ use MWException;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\IResultWrapper;
+use Wikimedia\Rdbms\Subquery;
 use WikiPage;
 use WikitextContent;
 
@@ -234,7 +235,7 @@ class CommentStreamsStore {
 			->fields( [
 				'page_id'
 			] )
-			->from( '(' . $union . ') AS union_table' )
+			->from( new Subquery( $union ), 'union_table' )
 			->leftJoin( 'page', 'page', [
 				'union_page_id=page_id'
 			] )
