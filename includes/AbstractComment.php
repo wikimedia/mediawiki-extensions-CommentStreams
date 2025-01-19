@@ -22,6 +22,7 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use Html;
+use HtmlArmor;
 use IContextSource;
 use IDBAccessObject;
 use MediaWiki\Linker\LinkRenderer;
@@ -357,27 +358,39 @@ abstract class AbstractComment {
 			], wfMessage( 'commentstreams-author-anonymous' ) );
 		}
 		$userpage = Title::makeTitle( NS_USER, $user->getName() );
-		$displayname = null;
+		$displayname = '';
+
 		if ( $this->userRealNamePropertyName !== null ) {
 			$displayname = $this->smwInterface->getUserProperty(
 				$user,
 				$this->userRealNamePropertyName
 			);
-		}
-		if ( $displayname === null || strlen( $displayname ) == 0 ) {
-			$values = $this->pageProps->getProperties( $userpage, 'displaytitle' );
-			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
-				$displayname = $values[$userpage->getArticleID()];
+
+			// This is not a $displayname === null check to appease Phan
+			if ( !is_string( $displayname ) ) {
+				$displayname = '';
 			}
 		}
-		if ( $displayname === null || strlen( $displayname ) == 0 ) {
+		if ( $displayname === '' ) {
+			$values = $this->pageProps->getProperties( $userpage, 'displaytitle' );
+			if ( array_key_exists( $userpage->getArticleID(), $values ) ) {
+				// @phan-suppress-next-line SecurityCheck-XSS Core already sanitized this
+				$displayname = new HtmlArmor( $values[$userpage->getArticleID()] );
+			}
+		}
+		if ( $displayname === '' ) {
 			$displayname = $this->userFactory->newFromUserIdentity( $user )->getRealName();
 		}
-		if ( strlen( $displayname ) == 0 ) {
+		if ( $displayname === '' ) {
 			$displayname = $user->getName();
 		}
+
 		if ( $linked && $userpage->exists() ) {
 			$displayname = $this->linkRenderer->makeLink( $userpage, $displayname );
+		} elseif ( $displayname instanceof HtmlArmor ) {
+			// To satisfy the function return type (plus, this function returns HTML as
+			// a string anyway)
+			$displayname = HtmlArmor::getHtml( $displayname ) ?? '';
 		}
 		return $displayname;
 	}
