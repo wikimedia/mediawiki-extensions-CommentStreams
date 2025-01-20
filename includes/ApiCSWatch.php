@@ -29,16 +29,16 @@ class ApiCSWatch extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
+		ICommentStreamsStore $commentStreamsStore,
 		Config $config
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
+		parent::__construct( $main, $action, $commentStreamsStore, $config, true );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class ApiCSWatch extends ApiCSCommentBase {
 			$this->dieWithError( 'commentstreams-api-error-watch-notloggedin' );
 		}
 
-		$result = $this->comment->watch( $this->getUser()->getId() );
+		$result = $this->commentStreamsStore->watch( $this->comment, $this->getUser() );
 		if ( !$result ) {
 			$this->dieWithError( 'commentstreams-api-error-watch' );
 		}

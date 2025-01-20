@@ -21,51 +21,43 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use CommentStoreComment;
-use Content;
-use MediaWiki\Permissions\Authority;
-use MediaWiki\Revision\SlotRecord;
-use MWException;
-use Status;
+use User;
 use WikiPage;
-use WikitextContent;
 
-class CommentStreamsUtils {
-	/**
-	 * @param WikiPage $wikiPage
-	 * @param Content $content
-	 * @param Authority $authority
-	 * @param int $flags
-	 * @return Status
-	 * @throws MWException
-	 */
-	public static function doEditContent(
-		WikiPage $wikiPage,
-		Content $content,
-		Authority $authority,
-		int $flags
-	): Status {
-		$updater = $wikiPage->newPageUpdater( $authority );
-		$updater->setContent( SlotRecord::MAIN, $content );
-		$summary = CommentStoreComment::newUnsavedComment( '' );
-		$updater->saveRevision( $summary, $flags );
-		return $updater->getStatus();
-	}
+interface NotifierInterface {
 
 	/**
-	 * @param WikiPage $wikiPage
-	 * @param Authority $authority
-	 * @return int|null
-	 * @throws MWException
+	 * @return bool
 	 */
-	public static function createEmptyPage(
-		WikiPage $wikiPage,
-		Authority $authority
-	) {
-		$result = self::doEditContent( $wikiPage, new WikitextContent( '' ), $authority, EDIT_NEW );
-		if ( $result->isOK() ) {
-			return $result->getValue()['revision-record']->getId();
-		}
-		return null;
-	}
+	public function isLoaded(): bool;
+
+	/**
+	 * Send Echo notifications if Echo is installed.
+	 *
+	 * @param Comment $comment the comment to send notifications for
+	 * @param WikiPage $associatedPage the associated page for the comment
+	 * @param User $user
+	 * @param string $commentTitle
+	 */
+	public function sendCommentNotifications(
+		Comment $comment,
+		WikiPage $associatedPage,
+		User $user,
+		string $commentTitle
+	);
+
+	/**
+	 * Send Echo notifications if Echo is installed.
+	 *
+	 * @param Reply $reply the comment to send notifications for
+	 * @param WikiPage $associatedPage the associated page for the comment
+	 * @param User $user
+	 * @param Comment $parentComment
+	 */
+	public function sendReplyNotifications(
+		Reply $reply,
+		WikiPage $associatedPage,
+		User $user,
+		Comment $parentComment
+	);
 }

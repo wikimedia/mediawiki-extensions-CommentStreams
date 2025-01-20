@@ -3,7 +3,7 @@
 		"name": "cs_watchlist",
 		"columns": [
 			{
-				"name": "cst_wl_page_id",
+				"name": "cst_wl_comment_id",
 				"type": "integer",
 				"options": {
 					"unsigned": true,
@@ -22,7 +22,7 @@
 			}
 		],
 		"indexes": [
-			{ "name": "cst_wl_index", "columns": [ "cst_wl_page_id", "cst_wl_user_id" ], "unique": true }
+			{ "name": "cst_wl_index", "columns": [ "cst_wl_comment_id", "cst_wl_user_id" ], "unique": true }
 		]
 	}
 ]

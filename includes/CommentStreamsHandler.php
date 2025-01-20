@@ -25,13 +25,14 @@ use Action;
 use ConfigException;
 use ExtensionRegistry;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CommentStreams\Store\NamespacePageStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Permissions\PermissionManager;
-use NamespaceInfo;
 use OutputPage;
 use Parser;
 use PPFrame;
+use Throwable;
 use Title;
 
 class CommentStreamsHandler {
@@ -63,24 +64,14 @@ class CommentStreamsHandler {
 	private $initiallyCollapseCommentStreams = false;
 
 	/**
-	 * @var CommentStreamsFactory
-	 */
-	private $commentStreamsFactory;
-
-	/**
-	 * @var CommentStreamsStore
+	 * @var ICommentStreamsStore
 	 */
 	private $commentStreamsStore;
 
 	/**
-	 * @var EchoInterface
+	 * @var NotifierInterface
 	 */
-	private $echoInterface;
-
-	/**
-	 * @var NamespaceInfo
-	 */
-	private $namespaceInfo;
+	private $notifier;
 
 	/**
 	 * @var PermissionManager
@@ -88,28 +79,30 @@ class CommentStreamsHandler {
 	private $permissionManager;
 
 	/**
+	 * @var CommentSerializer
+	 */
+	private $commentSerializer;
+
+	/**
 	 * @param ServiceOptions $options
-	 * @param CommentStreamsFactory $commentStreamsFactory
-	 * @param CommentStreamsStore $commentStreamsStore
-	 * @param EchoInterface $echoInterface
-	 * @param NamespaceInfo $namespaceInfo
+	 * @param ICommentStreamsStore $commentStreamsStore
+	 * @param NotifierInterface $notifier
 	 * @param PermissionManager $permissionManager
+	 * @param CommentSerializer $commentSerializer
 	 */
 	public function __construct(
 		ServiceOptions $options,
-		CommentStreamsFactory $commentStreamsFactory,
-		CommentStreamsStore $commentStreamsStore,
-		EchoInterface $echoInterface,
-		NamespaceInfo $namespaceInfo,
-		PermissionManager $permissionManager
+		ICommentStreamsStore $commentStreamsStore,
+		NotifierInterface $notifier,
+		PermissionManager $permissionManager,
+		CommentSerializer $commentSerializer
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->exportCommentsAutomatically = $options->get( 'CommentStreamsExportCommentsAutomatically' );
-		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->commentStreamsStore = $commentStreamsStore;
-		$this->echoInterface = $echoInterface;
-		$this->namespaceInfo = $namespaceInfo;
+		$this->notifier = $notifier;
 		$this->permissionManager = $permissionManager;
+		$this->commentSerializer = $commentSerializer;
 	}
 
 	/**
@@ -266,14 +259,7 @@ class CommentStreamsHandler {
 	private function getComments( OutputPage $output ): array {
 		$commentData = [];
 
-		$comments = [];
-		$commentWikiPages = $this->commentStreamsStore->getAssociatedComments( $output->getTitle()->getArticleID() );
-		foreach ( $commentWikiPages as $wikiPage ) {
-			$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
-			if ( $comment ) {
-				$comments[] = $comment;
-			}
-		}
+		$comments = $this->commentStreamsStore->getAssociatedComments( $output->getTitle() );
 
 		$config = $output->getConfig();
 		$newestStreamsOnTop = $config->get( 'CommentStreamsNewestStreamsOnTop' );
@@ -285,27 +271,12 @@ class CommentStreamsHandler {
 		);
 
 		foreach ( $sortedComments as $comment ) {
-			$parentJSON = $comment->getJSON( $output );
+			$parentJSON = $this->commentSerializer->serializeComment( $comment, $output );
 
-			if ( $votingEnabled ) {
-				$parentJSON['vote'] = $comment->getVote( $output->getUser() );
-			}
-
-			if ( $this->echoInterface->isLoaded() ) {
-				$parentJSON['watching'] = $comment->isWatching( $output->getUser() );
-			}
-
-			$replies = [];
-			$replyWikiPages = $this->commentStreamsStore->getReplies( $comment->getId() );
-			foreach ( $replyWikiPages as $wikiPage ) {
-				$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
-				if ( $reply ) {
-					$replies[] = $reply;
-				}
-			}
+			$replies = $this->commentStreamsStore->getReplies( $comment );
 			$sortedReplies = $this->sortReplies( $replies );
 			foreach ( $sortedReplies as $reply ) {
-				$parentJSON['children'][] = $reply->getJSON( $output );
+				$parentJSON['children'][] = $this->commentSerializer->serializeReply( $reply, $output );
 			}
 			$commentData[] = $parentJSON;
 		}
@@ -345,7 +316,7 @@ class CommentStreamsHandler {
 			'newestStreamsOnTop' => $config->get( 'CommentStreamsNewestStreamsOnTop' ) ? 1 : 0,
 			'initiallyCollapsed' => $initiallyCollapsed,
 			'enableVoting' => $config->get( 'CommentStreamsEnableVoting' ) ? 1 : 0,
-			'enableWatchlist' => $this->echoInterface->isLoaded() ? 1 : 0,
+			'enableWatchlist' => $this->notifier->isLoaded() ? 1 : 0,
 			'comments' => $comments
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
@@ -370,15 +341,15 @@ class CommentStreamsHandler {
 		bool $newestOnTop,
 		bool $enableVoting
 	): array {
-		usort( $comments, function ( $comment1, $comment2 ) use ( $newestOnTop, $enableVoting ) {
-			$date1 = $comment1->getCreationTimestamp()->timestamp;
-			$date2 = $comment2->getCreationTimestamp()->timestamp;
+		usort( $comments, function ( Comment $comment1, Comment $comment2 ) use ( $newestOnTop, $enableVoting ) {
+			$date1 = $comment1->getCreated()->timestamp;
+			$date2 = $comment2->getCreated()->timestamp;
 			if ( $enableVoting ) {
-				$upvotes1 = $this->commentStreamsStore->getNumUpVotes( $comment1->getId() );
-				$downvotes1 = $this->commentStreamsStore->getNumDownVotes( $comment1->getId() );
+				$upvotes1 = $this->commentStreamsStore->getNumUpVotes( $comment1 );
+				$downvotes1 = $this->commentStreamsStore->getNumDownVotes( $comment1 );
 				$votediff1 = $upvotes1 - $downvotes1;
-				$upvotes2 = $this->commentStreamsStore->getNumUpVotes( $comment2->getId() );
-				$downvotes2 = $this->commentStreamsStore->getNumDownVotes( $comment2->getId() );
+				$upvotes2 = $this->commentStreamsStore->getNumUpVotes( $comment2 );
+				$downvotes2 = $this->commentStreamsStore->getNumDownVotes( $comment2 );
 				$votediff2 = $upvotes2 - $downvotes2;
 				if ( $votediff1 === $votediff2 ) {
 					if ( $upvotes1 === $upvotes2 ) {
@@ -412,9 +383,9 @@ class CommentStreamsHandler {
 	 */
 	private function sortReplies( array $replies ): array {
 		usort(
-			$replies, static function ( $reply1, $reply2 ) {
-				$date1 = $reply1->getCreationTimestamp()->timestamp;
-				$date2 = $reply2->getCreationTimestamp()->timestamp;
+			$replies, static function ( Reply $reply1, Reply $reply2 ) {
+				$date1 = $reply1->getCreated()->timestamp;
+				$date2 = $reply2->getCreated()->timestamp;
 				return $date1 < $date2 ? -1 : 1;
 			}
 		);
@@ -428,19 +399,32 @@ class CommentStreamsHandler {
 	 * @return PageReference[] List of extra page titles
 	 */
 	public function getExtraExportPages( array $inputPages ): array {
+		if ( !( $this->commentStreamsStore instanceof NamespacePageStore ) ) {
+			return [];
+		}
 		$extraPages = [];
 		if ( $this->exportCommentsAutomatically ) {
 			foreach ( $inputPages as $page ) {
-				$title = Title::newFromText( $page );
-				if ( $title->exists() ) {
-					$comments = $this->commentStreamsStore->getAssociatedComments( $title->getArticleID() );
-					foreach ( $comments as $comment ) {
-						$extraPages[] = $comment->getTitle();
-						$replies = $this->commentStreamsStore->getReplies( $comment->getId() );
-						foreach ( $replies as $reply ) {
-							$extraPages[] = $reply->getTitle();
+				try {
+					$title = Title::newFromText( $page );
+					if ( $title->exists() ) {
+						$comments = $this->commentStreamsStore->getAssociatedComments( $title );
+						foreach ( $comments as $comment ) {
+							$commentPage = Title::newFromID( $comment->getId() );
+							if ( $commentPage ) {
+								$extraPages[] = $commentPage;
+								$replies = $this->commentStreamsStore->getReplies( $comment );
+								foreach ( $replies as $reply ) {
+									$replyTitle = Title::newFromID( $reply->getId() );
+									if ( $replyTitle ) {
+										$extraPages[] = $replyTitle;
+									}
+								}
+							}
 						}
 					}
+				} catch ( Throwable $ex ) {
+					// Ignore errorsq
 				}
 			}
 		}

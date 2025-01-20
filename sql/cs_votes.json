@@ -3,7 +3,7 @@
 		"name": "cs_votes",
 		"columns": [
 			{
-				"name": "cst_v_page_id",
+				"name": "cst_v_comment_id",
 				"type": "integer",
 				"options": {
 					"unsigned": true,
@@ -29,7 +29,7 @@
 			}
 		],
 		"indexes": [
-			{ "name": "cst_v_index", "columns": [ "cst_v_page_id", "cst_v_user_id" ], "unique": true }
+			{ "name": "cst_v_index", "columns": [ "cst_v_comment_id", "cst_v_user_id" ], "unique": true }
 		]
 	}
 ]

@@ -28,7 +28,7 @@ module.exports = ( function () {
 		this.querier = querier;
 
 		this.$stream = null;
-		this.pageId = null;
+		this.entityId = null;
 		this.$headCommentBody = null;
 		this.$streamFooter = null;
 		this.replyButton = null;
@@ -86,9 +86,9 @@ module.exports = ( function () {
 
 		const $headComment = this.createComment( commentData );
 
-		const id = 'cs-comment-' + commentData.pageid;
+		const id = 'cs-comment-' + commentData.id;
 
-		this.pageId = commentData.pageid;
+		this.entityId = commentData.id;
 
 		if ( this.env.targetComment === id ) {
 			$headComment.addClass( 'cs-target-comment' );
@@ -122,7 +122,7 @@ module.exports = ( function () {
 			this.$streamFooter.append( this.replyButton.$element );
 
 			this.replyButton.onClick = function () {
-				self.showNewReplyBox( commentData.pageid );
+				self.showNewReplyBox( commentData.id );
 			};
 
 			this.replyButton.on( 'click', this.replyButton.onClick );
@@ -291,14 +291,14 @@ module.exports = ( function () {
 
 		if ( this.env.isLoggedIn ) {
 			this.upButton.onClick = function () {
-				self.vote( $votingSpan, commentData.pageid, true,
+				self.vote( $votingSpan, commentData.id, true,
 					commentData.created_timestamp );
 			};
 
 			this.upButton.on( 'click', this.upButton.onClick );
 
 			this.downButton.onClick = function () {
-				self.vote( $votingSpan, commentData.pageid, false,
+				self.vote( $votingSpan, commentData.id, false,
 					commentData.created_timestamp );
 			};
 
@@ -308,7 +308,7 @@ module.exports = ( function () {
 		return $votingSpan;
 	};
 
-	Stream.prototype.vote = function ( $votingSpan, pageid, up, createdTimestamp ) {
+	Stream.prototype.vote = function ( $votingSpan, entityId, up, createdTimestamp ) {
 		const self = this;
 
 		let upCount = parseInt( this.$upCountSpan.text() );
@@ -334,7 +334,7 @@ module.exports = ( function () {
 			progress: false
 		} );
 		progressBar.$element.insertBefore( this.$headCommentBody );
-		this.querier.vote( pageid, newvote, ( result ) => {
+		this.querier.vote( entityId, newvote, ( result ) => {
 			progressBar.$element.remove();
 			if ( result === undefined ) {
 				if ( up ) {
@@ -404,18 +404,18 @@ module.exports = ( function () {
 
 		menu.onChoose = function ( item ) {
 			const $comment = menu.$element.closest( '.cs-comment' );
-			const pageId = commentData.pageid;
-			const id = 'cs-comment-' + pageId;
+			const entityId = commentData.id;
+			const id = 'cs-comment-' + entityId;
 
 			switch ( item.getData() ) {
 				case 'edit':
-					self.editComment( $comment, pageId );
+					self.editComment( $comment, entityId );
 					break;
 				case 'delete':
-					self.deleteComment( $comment, pageId );
+					self.deleteComment( $comment, entityId );
 					break;
 				case 'watch':
-					self.watch( item.$element, pageId );
+					self.watch( item.$element, entityId );
 					break;
 				case 'collapse':
 					if ( self.collapsed ) {
@@ -425,7 +425,7 @@ module.exports = ( function () {
 					}
 					break;
 				case 'history':
-					location.href = mw.config.get( 'wgScript' ) + '?curid=' + pageId + '&action=history';
+					location.href = mw.config.get( 'wgScript' ) + '?curid=' + entityId + '&action=history';
 					break;
 				case 'link':
 					$( '.cs-target-comment' ).removeClass( 'cs-target-comment' );
@@ -464,9 +464,9 @@ module.exports = ( function () {
 			items.push( this.createCollapseButton() );
 		}
 
-		items.push( this.createHistoryButton( commentData.pageid ) );
+		items.push( this.createHistoryButton( commentData.id ) );
 
-		items.push( this.createPermalinkButton( commentData.pageid ) );
+		items.push( this.createPermalinkButton( commentData.id ) );
 
 		return items;
 	};
@@ -562,7 +562,7 @@ module.exports = ( function () {
 		} );
 	};
 
-	Stream.prototype.watch = function ( button, pageid ) {
+	Stream.prototype.watch = function ( button, entityId ) {
 		const self = this;
 
 		const watch = this.watchButton.getIcon() === 'star';
@@ -571,7 +571,7 @@ module.exports = ( function () {
 			progress: false
 		} );
 		progressBar.$element.insertBefore( this.$headCommentBody );
-		this.querier.watch( pageid, watch, ( result ) => {
+		this.querier.watch( entityId, watch, ( result ) => {
 			progressBar.$element.remove();
 			if ( result === undefined ) {
 				if ( watch ) {
@@ -752,7 +752,7 @@ module.exports = ( function () {
 		} );
 	};
 
-	Stream.prototype.deleteComment = function ( element, pageId ) {
+	Stream.prototype.deleteComment = function ( element, entityId ) {
 		const self = this;
 		const messageText = mw.msg( 'commentstreams-dialog-delete-message' );
 		const yesText = mw.msg( 'commentstreams-dialog-buttontext-yes' );
@@ -769,17 +769,17 @@ module.exports = ( function () {
 			]
 		} ).closed.then( ( data ) => {
 			if ( data && data.action && data.action === 'yes' ) {
-				self.realDeleteComment( element, pageId );
+				self.realDeleteComment( element, entityId );
 			}
 		} );
 	};
 
-	Stream.prototype.realDeleteComment = function ( $element, pageId ) {
+	Stream.prototype.realDeleteComment = function ( $element, entityId ) {
 		const self = this;
 		self.block.disableAllButtons();
 
 		let $fadeElement = $element;
-		if ( this.pageId === pageId && self.moderatorFastDelete ) {
+		if ( this.entityId === entityId && self.moderatorFastDelete ) {
 			$fadeElement = this.$stream;
 		}
 		$fadeElement.fadeTo( 100, 0.2, () => {
@@ -788,7 +788,7 @@ module.exports = ( function () {
 			} );
 			progressBar.$element.insertAfter( $element );
 			if ( $element.hasClass( 'cs-head-comment' ) ) {
-				self.querier.deleteComment( pageId, ( result ) => {
+				self.querier.deleteComment( entityId, ( result ) => {
 					progressBar.$element.remove();
 					if ( result === undefined ||
 						result.error === 'commentstreams-api-error-commentnotfound' ) {
@@ -796,7 +796,7 @@ module.exports = ( function () {
 							.slideUp( 'normal', () => {
 								self.$stream.remove();
 								self.block.enableAllButtons();
-								delete self.block[ self.pageId ];
+								delete self.block[ self.entityId ];
 							} );
 					} else {
 						self.reportError( result.error );
@@ -806,11 +806,11 @@ module.exports = ( function () {
 					}
 				} );
 			} else {
-				self.querier.deleteReply( pageId, ( result ) => {
+				self.querier.deleteReply( entityId, ( result ) => {
 					progressBar.$element.remove();
 					if ( result === undefined ||
 						result.error === 'commentstreams-api-error-commentnotfound' ) {
-						self.querier.queryComment( self.pageId, ( queryResult ) => {
+						self.querier.queryComment( self.entityId, ( queryResult ) => {
 							if ( queryResult.error === undefined ) {
 								self.recreateStreamMenu( queryResult );
 							}
@@ -830,7 +830,7 @@ module.exports = ( function () {
 		} );
 	};
 
-	Stream.prototype.editComment = function ( $element, pageId ) {
+	Stream.prototype.editComment = function ( $element, entityId ) {
 		const self = this;
 
 		self.block.disableAllButtons();
@@ -847,7 +847,7 @@ module.exports = ( function () {
 			progressBar.$element.insertAfter( $element );
 
 			if ( isStream ) {
-				self.querier.queryComment( pageId, ( result ) => {
+				self.querier.queryComment( entityId, ( result ) => {
 					progressBar.$element.remove();
 
 					if ( result.error === undefined ) {
@@ -872,10 +872,10 @@ module.exports = ( function () {
 
 						self.block.submitButton.onClick = function () {
 							if ( self.block.$bodyField.css( 'display' ) === 'none' ) {
-								self.editCommentFromVE( $element, pageId );
+								self.editCommentFromVE( $element, entityId );
 							} else {
 								const commentText = self.block.$bodyField.val();
-								self.realEditComment( $element, pageId, commentText );
+								self.realEditComment( $element, entityId, commentText );
 							}
 						};
 						self.block.submitButton.on( 'click', self.block.submitButton.onClick );
@@ -891,7 +891,7 @@ module.exports = ( function () {
 						self.block.cancelButton.on( 'click', self.block.cancelButton.onClick );
 					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
 						self.reportError( result.error );
-						self.querier.queryComment( self.pageId, ( queryResult ) => {
+						self.querier.queryComment( self.entityId, ( queryResult ) => {
 							if ( queryResult.error === undefined ) {
 								self.recreateStreamMenu( queryResult );
 							} else {
@@ -908,7 +908,7 @@ module.exports = ( function () {
 					}
 				} );
 			} else {
-				self.querier.queryReply( pageId, ( result ) => {
+				self.querier.queryReply( entityId, ( result ) => {
 					progressBar.$element.remove();
 
 					if ( result.error === undefined ) {
@@ -933,10 +933,10 @@ module.exports = ( function () {
 
 						self.block.submitButton.onClick = function () {
 							if ( self.block.$bodyField.css( 'display' ) === 'none' ) {
-								self.editCommentFromVE( $element, pageId );
+								self.editCommentFromVE( $element, entityId );
 							} else {
 								const commentText = self.block.$bodyField.val();
-								self.realEditComment( $element, pageId, commentText );
+								self.realEditComment( $element, entityId, commentText );
 							}
 						};
 						self.block.submitButton.on( 'click', self.block.submitButton.onClick );
@@ -952,7 +952,7 @@ module.exports = ( function () {
 						self.block.cancelButton.on( 'click', self.block.cancelButton.onClick );
 					} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
 						self.reportError( result.error );
-						self.querier.queryReply( self.pageId, ( queryResult ) => {
+						self.querier.queryReply( self.entityId, ( queryResult ) => {
 							if ( queryResult.error === undefined ) {
 								self.recreateStreamMenu( queryResult );
 							} else {
@@ -972,7 +972,7 @@ module.exports = ( function () {
 		} );
 	};
 
-	Stream.prototype.editCommentFromVE = function ( element, pageId ) {
+	Stream.prototype.editCommentFromVE = function ( element, entityId ) {
 		const self = this;
 		const veInstances = this.block.$bodyField.getVEInstances();
 		const curVEEditor = veInstances[ veInstances.length - 1 ];
@@ -984,14 +984,14 @@ module.exports = ( function () {
 			title: mw.config.get( 'wgPageName' ).split( /([\\/])/g ).pop()
 		} ).then( ( data ) => {
 			const commentText = data[ 'veforall-parsoid-utils' ].content;
-			self.realEditComment( element, pageId, commentText );
+			self.realEditComment( element, entityId, commentText );
 		} )
 			.fail( () => {
 				self.reportError( 'commentstreams-ve-conversion-error' );
 			} );
 	};
 
-	Stream.prototype.realEditComment = function ( $element, pageId, commentText ) {
+	Stream.prototype.realEditComment = function ( $element, entityId, commentText ) {
 		const self = this;
 
 		let isStream = false;
@@ -1028,7 +1028,7 @@ module.exports = ( function () {
 				self.querier.editComment(
 					commentTitle,
 					commentText,
-					pageId,
+					entityId,
 					( result ) => {
 						progressBar.$element.remove();
 						if ( result.error === undefined ) {
@@ -1046,7 +1046,7 @@ module.exports = ( function () {
 							} );
 						} else if ( result.error === 'commentstreams-api-error-commentnotfound' ) {
 							self.reportError( result.error );
-							self.querier.queryComment( self.pageId, ( queryResult ) => {
+							self.querier.queryComment( self.entityId, ( queryResult ) => {
 								if ( queryResult.error === undefined ) {
 									self.recreateStreamMenu( queryResult );
 								} else {
@@ -1070,7 +1070,7 @@ module.exports = ( function () {
 			} else {
 				self.querier.editReply(
 					commentText,
-					pageId,
+					entityId,
 					( result ) => {
 						progressBar.$element.remove();
 						if ( result.error === undefined ) {

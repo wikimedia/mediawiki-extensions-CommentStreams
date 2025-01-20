@@ -24,12 +24,12 @@ module.exports = ( function () {
 	function Querier() {
 	}
 
-	Querier.prototype.queryComment = function ( pageid, reply ) {
+	Querier.prototype.queryComment = function ( entityId, reply ) {
 		const self = this;
 		new mw.Api()
 			.get( {
 				action: 'csquerycomment',
-				pageid: pageid
+				entityid: entityId
 			} )
 			.done( ( data ) => {
 				if ( data.csquerycomment === undefined ) {
@@ -42,12 +42,12 @@ module.exports = ( function () {
 			} );
 	};
 
-	Querier.prototype.queryReply = function ( pageid, reply ) {
+	Querier.prototype.queryReply = function ( entityId, reply ) {
 		const self = this;
 		new mw.Api()
 			.get( {
 				action: 'csqueryreply',
-				pageid: pageid
+				entityid: entityId
 			} )
 			.done( ( data ) => {
 				if ( data.csqueryreply === undefined ) {
@@ -60,12 +60,12 @@ module.exports = ( function () {
 			} );
 	};
 
-	Querier.prototype.deleteComment = function ( pageid, reply ) {
+	Querier.prototype.deleteComment = function ( entityId, reply ) {
 		const self = this;
 		new mw.Api()
 			.post( {
 				action: 'csdeletecomment',
-				pageid: pageid,
+				entityid: entityId,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
 			.done( () => {
@@ -76,12 +76,12 @@ module.exports = ( function () {
 			} );
 	};
 
-	Querier.prototype.deleteReply = function ( pageid, reply ) {
+	Querier.prototype.deleteReply = function ( entityId, reply ) {
 		const self = this;
 		new mw.Api()
 			.post( {
 				action: 'csdeletereply',
-				pageid: pageid,
+				entityid: entityId,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
 			.done( () => {
@@ -148,11 +148,11 @@ module.exports = ( function () {
 			} );
 	};
 
-	Querier.prototype.editComment = function ( commenttitle, wikitext, pageid, reply ) {
+	Querier.prototype.editComment = function ( commenttitle, wikitext, entityId, reply ) {
 		const self = this;
 		const params = {
 			action: 'cseditcomment',
-			pageid: pageid,
+			entityid: entityId,
 			wikitext: wikitext,
 			commenttitle: commenttitle,
 			token: mw.user.tokens.get( 'csrfToken' )
@@ -160,37 +160,37 @@ module.exports = ( function () {
 		new mw.Api()
 			.post( params )
 			.done( () => {
-				self.queryComment( pageid, reply );
+				self.queryComment( entityId, reply );
 			} )
 			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
 
-	Querier.prototype.editReply = function ( wikitext, pageid, reply ) {
+	Querier.prototype.editReply = function ( wikitext, entityId, reply ) {
 		const self = this;
 		const params = {
 			action: 'cseditreply',
-			pageid: pageid,
+			entityid: entityId,
 			wikitext: wikitext,
 			token: mw.user.tokens.get( 'csrfToken' )
 		};
 		new mw.Api()
 			.post( params )
 			.done( () => {
-				self.queryReply( pageid, reply );
+				self.queryReply( entityId, reply );
 			} )
 			.fail( ( code, error ) => {
 				self.reportError( error, reply );
 			} );
 	};
 
-	Querier.prototype.vote = function ( pageid, vote, reply ) {
+	Querier.prototype.vote = function ( entityId, vote, reply ) {
 		const self = this;
 		new mw.Api()
 			.post( {
 				action: 'csvote',
-				pageid: pageid,
+				entityid: entityId,
 				vote: vote,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
@@ -202,12 +202,12 @@ module.exports = ( function () {
 			} );
 	};
 
-	Querier.prototype.watch = function ( pageid, action, reply ) {
+	Querier.prototype.watch = function ( entityId, action, reply ) {
 		const self = this;
 		new mw.Api()
 			.post( {
 				action: action ? 'cswatch' : 'csunwatch',
-				pageid: pageid,
+				entityid: entityId,
 				token: mw.user.tokens.get( 'csrfToken' )
 			} )
 			.done( () => {

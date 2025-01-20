@@ -30,16 +30,16 @@ class ApiCSVote extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
+		ICommentStreamsStore $commentStreamsStore,
 		Config $config
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
+		parent::__construct( $main, $action, $commentStreamsStore, $config, true );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class ApiCSVote extends ApiCSCommentBase {
 
 		$vote = $this->getMain()->getVal( 'vote' );
 
-		$result = $this->comment->vote( $vote, $this->getUser() );
+		$result = $this->commentStreamsStore->vote( $this->comment, $vote, $this->getUser() );
 		if ( !$result ) {
 			$this->dieWithError( 'commentstreams-api-error-vote' );
 		}

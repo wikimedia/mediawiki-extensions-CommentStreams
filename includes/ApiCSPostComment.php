@@ -33,15 +33,16 @@ use Title;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSPostComment extends ApiBase {
-	/**
-	 * @var CommentStreamsFactory
-	 */
-	private $commentStreamsFactory;
 
 	/**
-	 * @var EchoInterface
+	 * @var ICommentStreamsStore
 	 */
-	private $echoInterface;
+	private $commentStreamsStore;
+
+	/**
+	 * @var NotifierInterface
+	 */
+	private $notifier;
 
 	/**
 	 * @var bool
@@ -56,22 +57,22 @@ class ApiCSPostComment extends ApiBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
-	 * @param EchoInterface $commentStreamsEchoInterface
+	 * @param ICommentStreamsStore $commentStreamsStore
+	 * @param NotifierInterface $notifier
 	 * @param Config $config
 	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
-		EchoInterface $commentStreamsEchoInterface,
+		ICommentStreamsStore $commentStreamsStore,
+		NotifierInterface $notifier,
 		Config $config,
 		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
-		$this->commentStreamsFactory = $commentStreamsFactory;
-		$this->echoInterface = $commentStreamsEchoInterface;
+		$this->commentStreamsStore = $commentStreamsStore;
+		$this->notifier = $notifier;
 		$this->suppressLogsFromRCs = (bool)$config->get( "CommentStreamsSuppressLogsFromRCs" );
 		$this->wikiPageFactory = $wikiPageFactory;
 	}
@@ -96,23 +97,22 @@ class ApiCSPostComment extends ApiBase {
 		if ( $associatedPage === null || !$associatedPage->getTitle()->exists() ) {
 			$this->dieWithError( 'commentstreams-api-error-post-associatedpagedoesnotexist' );
 		} else {
-			$comment = $this->commentStreamsFactory->newCommentFromValues(
+			$comment = $this->commentStreamsStore->insertComment(
+				$this->getUser(),
+				$wikitext,
 				$associatedId,
 				$commentTitle,
-				$commentBlockName,
-				$wikitext,
-				$this->getUser()
+				$commentBlockName
 			);
 
 			if ( !$comment ) {
 				$this->dieWithError( 'commentstreams-api-error-post' );
 			} else {
-				$title = $comment->getTitle();
-				$this->logAction( 'comment-create', $title );
+				$this->logAction( 'comment-create', Title::castFromPageIdentity( $comment->getAssociatedPage() ) );
 
 				$this->getResult()->addValue( null, $this->getModuleName(), $comment->getId() );
 
-				$this->echoInterface->sendCommentNotifications(
+				$this->notifier->sendCommentNotifications(
 					$comment,
 					$associatedPage,
 					$this->getUser(),

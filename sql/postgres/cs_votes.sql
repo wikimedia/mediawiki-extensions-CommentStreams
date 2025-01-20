@@ -3,8 +3,8 @@
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
 CREATE TABLE cs_votes (
-  cst_v_page_id INT NOT NULL, cst_v_user_id INT NOT NULL,
+  cst_v_comment_id INT NOT NULL, cst_v_user_id INT NOT NULL,
   cst_v_vote SMALLINT NOT NULL
 );
 
-CREATE UNIQUE INDEX cst_v_index ON cs_votes (cst_v_page_id, cst_v_user_id);
+CREATE UNIQUE INDEX cst_v_index ON cs_votes (cst_v_comment_id, cst_v_user_id);

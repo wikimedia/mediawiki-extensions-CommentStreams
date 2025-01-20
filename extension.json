@@ -17,24 +17,30 @@
 			"php": ">= 7.4"
 		}
 	},
-	"SpecialPages": {
-		"CommentStreamsAllComments": {
-			"class": "MediaWiki\\Extension\\CommentStreams\\CommentStreamsAllComments",
-			"services": [
-				"CommentStreamsStore",
-				"CommentStreamsFactory",
-				"LinkRenderer",
-				"WikiPageFactory"
-			]
+	"attributes": {
+		"CommentStreams": {
+			"Store": {
+				"namespace-page": {
+					"class": "MediaWiki\\Extension\\CommentStreams\\Store\\NamespacePageStore",
+					"services": [
+						"DBLoadBalancer",
+						"PermissionManager",
+						"UserFactory",
+						"WikiPageFactory",
+						"TitleFactory",
+						"CommentStreamsSMWInterface",
+						"RevisionLookup",
+						"CommentStreamsLogger",
+						"DeletePageFactory"
+					]
+				}
+			}
 		}
 	},
 	"MessagesDirs": {
 		"CommentStreams": [
 			"i18n"
 		]
-	},
-	"ExtensionMessagesFiles": {
-		"CommentStreamsAlias": "includes/CommentStreams.alias.php"
 	},
 	"ResourceModules": {
 		"ext.CommentStreams": {
@@ -120,15 +126,6 @@
 				"commentstreams-body-field-placeholder",
 				"commentstreams-ve-conversion-error"
 			]
-		},
-		"ext.CommentStreamsAllComments": {
-			"styles": [
-				"CommentStreamsAllComments.css"
-			],
-			"targets": [
-				"desktop",
-				"mobile"
-			]
 		}
 	},
 	"ResourceFileModulePaths": {
@@ -148,8 +145,8 @@
 		"cspostcomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostComment",
 			"services": [
-				"CommentStreamsFactory",
-				"CommentStreamsEchoInterface",
+				"CommentStreamsStore",
+				"CommentStreamsNotifierInterface",
 				"MainConfig",
 				"WikiPageFactory"
 			]
@@ -157,8 +154,8 @@
 		"cspostreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSPostReply",
 			"services": [
-				"CommentStreamsFactory",
-				"CommentStreamsEchoInterface",
+				"CommentStreamsStore",
+				"CommentStreamsNotifierInterface",
 				"MainConfig",
 				"WikiPageFactory"
 			]
@@ -166,63 +163,65 @@
 		"csquerycomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
 			"services": [
-				"CommentStreamsFactory",
-				"MainConfig"
+				"CommentStreamsStore",
+				"MainConfig",
+				"CommentStreamsSerializer"
 			]
 		},
 		"csqueryreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryReply",
 			"services": [
-				"CommentStreamsFactory",
-				"MainConfig"
+				"CommentStreamsStore",
+				"MainConfig",
+				"CommentStreamsSerializer"
 			]
 		},
 		"cseditcomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		},
 		"cseditreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditReply",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		},
 		"csdeletecomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		},
 		"csdeletereply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteReply",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		},
 		"csvote": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		},
 		"cswatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		},
 		"csunwatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch",
 			"services": [
-				"CommentStreamsFactory",
+				"CommentStreamsStore",
 				"MainConfig"
 			]
 		}
@@ -232,7 +231,6 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\MainHooks",
 			"services": [
 				"CommentStreamsHandler",
-				"CommentStreamsFactory",
 				"CommentStreamsStore",
 				"LinkRenderer",
 				"RevisionStore",
@@ -243,6 +241,14 @@
 		},
 		"noservice": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\NoServiceHooks"
+		},
+		"smw": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\SMWHooks",
+			"services": [
+				"CommentStreamsStore",
+				"WikiPageFactory",
+				"MainConfig"
+			]
 		}
 	},
 	"Hooks": {
@@ -258,10 +264,10 @@
 		"AfterImportPage": "main",
 		"CanonicalNamespaces": "noservice",
 		"LoadExtensionSchemaUpdates": "noservice",
-		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\EchoInterface::onBeforeCreateEchoEvent",
-		"SMW::Property::initProperties": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::initProperties",
-		"SMWStore::updateDataBefore": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::updateData",
-		"SMW::Settings::BeforeInitializationComplete": "MediaWiki\\Extension\\CommentStreams\\SMWHooks::onSMWInitialization"
+		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\Notifier\\EchoNotifier::onBeforeCreateEchoEvent",
+		"SMW::Property::initProperties": "smw",
+		"SMWStore::updateDataBefore": "smw",
+		"SMW::Settings::BeforeInitializationComplete": "smw"
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"config": {
@@ -303,6 +309,9 @@
 		},
 		"CommentStreamsTimeFormat": {
 			"value": "M j, Y \\a\\t g:i a"
+		},
+		"CommentStreamsStoreModel": {
+			"value": "namespace-page"
 		}
 	}
 }

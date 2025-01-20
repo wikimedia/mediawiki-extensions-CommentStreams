@@ -25,19 +25,28 @@ use ApiMain;
 use Config;
 
 class ApiCSQueryComment extends ApiCSCommentBase {
+
+	/**
+	 * @var CommentSerializer
+	 */
+	private CommentSerializer $commentSerializer;
+
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param Config $config
+	 * @param CommentSerializer $commentSerializer
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
-		Config $config
+		ICommentStreamsStore $commentStreamsStore,
+		Config $config,
+		CommentSerializer $commentSerializer
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, $config );
+		parent::__construct( $main, $action, $commentStreamsStore, $config );
+		$this->commentSerializer = $commentSerializer;
 	}
 
 	/**
@@ -45,6 +54,6 @@ class ApiCSQueryComment extends ApiCSCommentBase {
 	 * @return ?array result of API request
 	 */
 	protected function executeBody(): ?array {
-		return $this->comment->getJSON( $this );
+		return $this->commentSerializer->serializeComment( $this->comment, $this );
 	}
 }
