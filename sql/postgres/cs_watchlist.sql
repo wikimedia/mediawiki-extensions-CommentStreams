@@ -3,7 +3,9 @@
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
 CREATE TABLE cs_watchlist (
-  cst_wl_page_id INT NOT NULL, cst_wl_user_id INT NOT NULL
+  cst_wl_comment_id INT NOT NULL, cst_wl_user_id INT NOT NULL
 );
 
-CREATE UNIQUE INDEX cst_wl_index ON cs_watchlist (cst_wl_page_id, cst_wl_user_id);
+CREATE UNIQUE INDEX cst_wl_index ON cs_watchlist (
+  cst_wl_comment_id, cst_wl_user_id
+);

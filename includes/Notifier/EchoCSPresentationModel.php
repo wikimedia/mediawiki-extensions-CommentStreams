@@ -19,7 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-namespace MediaWiki\Extension\CommentStreams;
+namespace MediaWiki\Extension\CommentStreams\Notifier;
 
 use EchoEventPresentationModel;
 use Message;

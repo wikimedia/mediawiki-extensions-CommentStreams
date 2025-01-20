@@ -95,7 +95,7 @@ module.exports = ( function () {
 			stream.collapse();
 		}
 
-		this.streams[ commentData.pageid ] = stream;
+		this.streams[ commentData.id ] = stream;
 
 		if ( commentData.children !== undefined ) {
 			for ( const childComment of commentData.children ) {
@@ -220,10 +220,10 @@ module.exports = ( function () {
 		this.enableAllButtons();
 	};
 
-	Block.prototype.postComment = function ( parentPageId ) {
+	Block.prototype.postComment = function ( parentCommentId ) {
 		const self = this;
 		if ( this.env.isLoggedIn ) {
-			self.postComment2( parentPageId );
+			self.postComment2( parentCommentId );
 		} else {
 			const messageText = mw.msg( 'commentstreams-dialog-anonymous-message' );
 			const okText = mw.msg( 'commentstreams-dialog-buttontext-ok' );
@@ -240,23 +240,23 @@ module.exports = ( function () {
 				]
 			} ).closed.then( ( data ) => {
 				if ( data && data.action && data.action === 'ok' ) {
-					self.postComment2( parentPageId );
+					self.postComment2( parentCommentId );
 				}
 			} );
 		}
 	};
 
-	Block.prototype.postComment2 = function ( parentPageId ) {
+	Block.prototype.postComment2 = function ( parentCommentId ) {
 		const self = this;
 		if ( this.$bodyField.css( 'display' ) === 'none' ) {
-			self.postCommentFromVE( parentPageId );
+			self.postCommentFromVE( parentCommentId );
 		} else {
 			const commentText = this.$bodyField.val();
-			self.realPostComment( parentPageId, commentText );
+			self.realPostComment( parentCommentId, commentText );
 		}
 	};
 
-	Block.prototype.postCommentFromVE = function ( parentPageId ) {
+	Block.prototype.postCommentFromVE = function ( parentCommentId ) {
 		const self = this;
 		const veInstances = this.$bodyField.getVEInstances();
 		const curVEEditor = veInstances[ veInstances.length - 1 ];
@@ -268,7 +268,7 @@ module.exports = ( function () {
 			title: mw.config.get( 'wgPageName' ).split( /([\\/])/g ).pop()
 		} ).then( ( data ) => {
 			const commentText = data[ 'veforall-parsoid-utils' ].content;
-			self.realPostComment( parentPageId, commentText );
+			self.realPostComment( parentCommentId, commentText );
 		} )
 			.fail( () => {
 				self.reportError( 'commentstreams-ve-conversion-error' );
@@ -276,13 +276,13 @@ module.exports = ( function () {
 	};
 
 	Block.prototype.realPostComment = function (
-		parentPageId,
+		parentCommentId,
 		commentText
 	) {
 		const self = this;
 
 		let commentTitle;
-		if ( parentPageId === null ) {
+		if ( parentCommentId === null ) {
 			if ( this.$titleField !== null ) {
 				commentTitle = this.$titleField.val();
 				if ( commentTitle === null || commentTitle.trim() === '' ) {
@@ -308,18 +308,19 @@ module.exports = ( function () {
 			} );
 			progressBar.$element.insertAfter( self.$editBox );
 
-			if ( parentPageId ) {
+			if ( parentCommentId ) {
 				self.querier.postReply(
 					commentText,
-					parentPageId,
+					parentCommentId,
 					( result ) => {
 						progressBar.$element.remove();
 						if ( result.error === undefined ) {
 							self.hideEditBox( false );
-							self.streams[ parentPageId ].addReply( result );
-							self.querier.queryComment( parentPageId, ( queryResult ) => {
+							self.streams[ parentCommentId ].addReply( result );
+							self.querier.queryComment( parentCommentId, ( queryResult ) => {
 								if ( queryResult.error === undefined ) {
-									self.streams[ parentPageId ].recreateStreamMenu( queryResult );
+									self.streams[ parentCommentId ]
+										.recreateStreamMenu( queryResult );
 								}
 							} );
 						} else {

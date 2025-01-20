@@ -23,13 +23,15 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use ApiBase;
 use ApiMain;
+use InvalidArgumentException;
+use MediaWiki\Api\ApiUsageException;
 use Wikimedia\ParamValidator\ParamValidator;
 
 abstract class ApiCSBase extends ApiBase {
 	/**
-	 * @var CommentStreamsFactory
+	 * @var ICommentStreamsStore
 	 */
-	protected $commentStreamsFactory;
+	protected ICommentStreamsStore $commentStreamsStore;
 
 	/**
 	 * whether this API module will be editing the database
@@ -40,17 +42,17 @@ abstract class ApiCSBase extends ApiBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param bool $edit whether this API module will be editing the database
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
+		ICommentStreamsStore $commentStreamsStore,
 		bool $edit = false
 	) {
 		parent::__construct( $main, $action );
-		$this->commentStreamsFactory = $commentStreamsFactory;
+		$this->commentStreamsStore = $commentStreamsStore;
 		$this->edit = $edit;
 	}
 
@@ -59,13 +61,14 @@ abstract class ApiCSBase extends ApiBase {
 	 */
 	public function getAllowedParams(): array {
 		return [
-			'pageid' => [
+			'entityid' => [
 				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_REQUIRED => false
 			],
 			'title' => [
 				ParamValidator::PARAM_TYPE => 'string',
-				ParamValidator::PARAM_REQUIRED => false
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_DEPRECATED => true
 			]
 		];
 	}
@@ -75,11 +78,28 @@ abstract class ApiCSBase extends ApiBase {
 	 */
 	public function getExamplesMessages(): array {
 		return [
-			'action=' . $this->getModuleName() . '&pageid=3' =>
+			'action=' . $this->getModuleName() . '&entityid=3' =>
 				'apihelp-' . $this->getModuleName() . '-pageid-example',
-			'action=' . $this->getModuleName() . '&title=CommentStreams:3' =>
-				'apihelp-' . $this->getModuleName() . '-title-example'
 		];
+	}
+
+	/**
+	 * Get requested entity ID
+	 *
+	 * @return int
+	 * @throws ApiUsageException
+	 */
+	protected function getEntityId(): int {
+		$params = $this->extractRequestParams();
+		if ( isset( $this->params['title'] ) && !isset( $this->params['entityid'] ) ) {
+			// Legacy
+			$wp = $this->getTitleOrPageId( $params, $this->edit ? 'fromdbmaster' : 'fromdb' );
+			if ( !$wp ) {
+				$this->dieWithError( [ 'apierror-nosuchpageid', $params['pageid'] ] );
+			}
+			return $wp->getTitle()->getId();
+		}
+		return $params['entityid'] ?? throw new InvalidArgumentException( 'commentstreams-api-error-noentityid' );
 	}
 
 	/**

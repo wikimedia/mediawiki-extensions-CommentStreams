@@ -21,23 +21,16 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ConfigException;
 use ExtensionRegistry;
-use IDBAccessObject;
 use JobQueueGroup;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\User\UserIdentity;
 use SMW\DIProperty;
 use SMW\DIWikiPage;
 use SMW\MediaWiki\Jobs\UpdateJob;
 use SMW\PropertyRegistry;
-use SMW\SemanticData;
-use SMW\Store;
 use SMW\StoreFactory;
 use SMWDataItem;
-use SMWDIBlob;
-use SMWDINumber;
 use Title;
 
 class SMWInterface {
@@ -49,16 +42,6 @@ class SMWInterface {
 	 * @var bool
 	 */
 	private $isLoaded;
-
-	/**
-	 * @var CommentStreamsStore
-	 */
-	private $commentStreamsStore;
-
-	/**
-	 * @var WikiPageFactory
-	 */
-	private $wikiPageFactory;
 
 	/**
 	 * @var JobQueueGroup
@@ -73,22 +56,16 @@ class SMWInterface {
 	/**
 	 * @param ServiceOptions $options
 	 * @param ExtensionRegistry $extensionRegistry
-	 * @param CommentStreamsStore $commentStreamsStore
-	 * @param WikiPageFactory $wikiPageFactory
 	 * @param JobQueueGroup $jobQueueGroup
 	 */
 	public function __construct(
 		ServiceOptions $options,
 		ExtensionRegistry $extensionRegistry,
-		CommentStreamsStore $commentStreamsStore,
-		WikiPageFactory $wikiPageFactory,
 		JobQueueGroup $jobQueueGroup
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->enableVoting = (bool)$options->get( 'CommentStreamsEnableVoting' );
 		$this->isLoaded = $extensionRegistry->isLoaded( 'SemanticMediaWiki' );
-		$this->commentStreamsStore = $commentStreamsStore;
-		$this->wikiPageFactory = $wikiPageFactory;
 		$this->jobQueueGroup = $jobQueueGroup;
 	}
 
@@ -155,72 +132,5 @@ class SMWInterface {
 			$propertyRegistry->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );
 			$propertyRegistry->registerProperty( '___CS_VOTEDIFF', '_num', 'Comment vote diff' );
 		}
-	}
-
-	/**
-	 * Implements Semantic MediaWiki SMWStore::updateDataBefore callback.
-	 * This won't get called unless Semantic MediaWiki is installed.
-	 * If the comment has not been added to the database yet, which is indicated
-	 * by a null associated page id, this function will return early, but it
-	 * will be invoked again by an update job.
-	 *
-	 * @param Store $store semantic data store
-	 * @param SemanticData $semanticData semantic data for page
-	 * @return bool true to continue
-	 * @noinspection PhpUnusedParameterInspection
-	 * @throws ConfigException
-	 */
-	public function updateData( Store $store, SemanticData $semanticData ): bool {
-		$subject = $semanticData->getSubject();
-		if ( !$subject || !$subject->getTitle() || $subject->getTitle()->getNamespace() !== NS_COMMENTSTREAMS ) {
-			return true;
-		}
-
-		$pageId = $subject->getTitle()->getArticleID( IDBAccessObject::READ_LATEST );
-
-		$comment = $this->commentStreamsStore->getComment( $pageId );
-		if ( !$comment ) {
-			$reply = $this->commentStreamsStore->getReply( $pageId );
-			if ( !$reply ) {
-				return true;
-			}
-
-			$parentWikiPage = $this->wikiPageFactory->newFromID( $reply[ 'comment_page_id' ] );
-			if ( $parentWikiPage ) {
-				$propertyDI = new DIProperty( '___CS_REPLYTO' );
-				$dataItem = DIWikiPage::newFromTitle( $parentWikiPage->getTitle() );
-				$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-			}
-
-			return true;
-		}
-
-		$assocWikiPage = $this->wikiPageFactory->newFromID( $comment[ 'assoc_page_id' ] );
-		if ( $assocWikiPage ) {
-			$propertyDI = new DIProperty( '___CS_ASSOCPG' );
-			$dataItem = DIWikiPage::newFromTitle( $assocWikiPage->getTitle() );
-			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-		}
-
-		$propertyDI = new DIProperty( '___CS_TITLE' );
-		$dataItem = new SMWDIBlob( $comment[ 'comment_title' ] );
-		$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-
-		if ( $this->enableVoting ) {
-			$upvotes = $this->commentStreamsStore->getNumUpVotes( $pageId );
-			$propertyDI = new DIProperty( '___CS_UPVOTES' );
-			$dataItem = new SMWDINumber( $upvotes );
-			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-			$downvotes = $this->commentStreamsStore->getNumDownVotes( $pageId );
-			$propertyDI = new DIProperty( '___CS_DOWNVOTES' );
-			$dataItem = new SMWDINumber( $downvotes );
-			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-			$votediff = $upvotes - $downvotes;
-			$propertyDI = new DIProperty( '___CS_VOTEDIFF' );
-			$dataItem = new SMWDINumber( $votediff );
-			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
-		}
-
-		return true;
 	}
 }

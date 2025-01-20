@@ -37,16 +37,16 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
+		ICommentStreamsStore $commentStreamsStore,
 		Config $config
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
+		parent::__construct( $main, $action, $commentStreamsStore, $config, true );
 		$this->moderatorFastDelete = (bool)$config->get( 'CommentStreamsModeratorFastDelete' );
 	}
 
@@ -63,7 +63,7 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 			$this->dieWithError( 'commentstreams-api-error-delete-notloggedin' );
 		}
 
-		$replyCount = $this->comment->getNumReplies();
+		$replyCount = $this->commentStreamsStore->getNumReplies( $this->comment );
 
 		if ( $user->getId() === $this->comment->getAuthor()->getId() && $replyCount === 0 ) {
 			$action = 'cs-comment';
@@ -94,12 +94,9 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @throws MWException
 	 */
 	private function deleteReplies( Comment $comment, string $action, User $user ) {
-		$replies = $comment->getReplies();
-		foreach ( $replies as $wikiPage ) {
-			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
-			if ( $reply ) {
-				$this->deleteReply( $reply, $action, $user );
-			}
+		$replies = $this->commentStreamsStore->getReplies( $comment );
+		foreach ( $replies as $reply ) {
+			$this->deleteReply( $reply, $action, $user );
 		}
 	}
 
@@ -111,12 +108,11 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @throws MWException
 	 */
 	private function deleteComment( Comment $comment, string $action, User $user ) {
-		$title = $comment->getTitle();
-		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
+		if ( !$this->commentStreamsStore->userCan( $action, $user, $comment ) ) {
 			$this->dieWithError( 'commentstreams-api-error-delete-permissions' );
 		}
 
-		$result = $comment->delete( $user );
+		$result = $this->commentStreamsStore->deleteComment( $comment, $user );
 		if ( !$result ) {
 			$this->dieWithError( 'commentstreams-api-error-delete' );
 		}
@@ -136,12 +132,11 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @throws FatalError
 	 */
 	private function deleteReply( Reply $reply, string $action, User $user ) {
-		$title = $reply->getTitle();
-		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
+		if ( !$this->commentStreamsStore->userCan( $action, $user, $reply ) ) {
 			$this->dieWithError( 'commentstreams-api-error-delete-permissions' );
 		}
 
-		$result = $reply->delete( $user );
+		$result = $this->commentStreamsStore->deleteReply( $reply, $user );
 		if ( !$result ) {
 			$this->dieWithError( 'commentstreams-api-error-delete' );
 		}

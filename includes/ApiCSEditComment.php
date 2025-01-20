@@ -31,16 +31,16 @@ class ApiCSEditComment extends ApiCSCommentBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
+		ICommentStreamsStore $commentStreamsStore,
 		Config $config
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, $config, true );
+		parent::__construct( $main, $action, $commentStreamsStore, $config, true );
 	}
 
 	/**
@@ -61,15 +61,16 @@ class ApiCSEditComment extends ApiCSCommentBase {
 			$action = 'cs-moderator-edit';
 		}
 
-		$title = $this->comment->getTitle();
-		if ( !$this->getPermissionManager()->userCan( $action, $user, $title ) ) {
+		if ( !$this->commentStreamsStore->userCan( $action, $user, $this->comment ) ) {
 			$this->dieWithError( 'commentstreams-api-error-edit-permissions' );
 		}
 
 		$commentTitle = $this->getMain()->getVal( 'commenttitle' );
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
-		$result = $this->comment->update( $commentTitle, $wikitext, $this->getUser() );
+		$result = $this->commentStreamsStore->updateComment(
+			$this->comment, $commentTitle, $wikitext, $this->getUser()
+		);
 		if ( !$result ) {
 			$this->dieWithError( 'commentstreams-api-error-edit' );
 		}

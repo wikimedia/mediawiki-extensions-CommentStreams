@@ -3,8 +3,8 @@
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
 CREATE TABLE /*_*/cs_votes (
-  cst_v_page_id INT UNSIGNED NOT NULL,
+  cst_v_comment_id INT UNSIGNED NOT NULL,
   cst_v_user_id INT UNSIGNED NOT NULL,
   cst_v_vote TINYINT NOT NULL,
-  UNIQUE INDEX cst_v_index (cst_v_page_id, cst_v_user_id)
+  UNIQUE INDEX cst_v_index (cst_v_comment_id, cst_v_user_id)
 ) /*$wgDBTableOptions*/;

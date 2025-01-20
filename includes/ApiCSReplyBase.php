@@ -41,18 +41,18 @@ abstract class ApiCSReplyBase extends ApiCSBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param Config $config
 	 * @param bool $edit whether this API module will be editing the database
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
+		ICommentStreamsStore $commentStreamsStore,
 		Config $config,
 		bool $edit = false
 	) {
-		parent::__construct( $main, $action, $commentStreamsFactory, $edit );
+		parent::__construct( $main, $action, $commentStreamsStore, $edit );
 		$this->suppressLogsFromRCs = (bool)$config->get( "CommentStreamsSuppressLogsFromRCs" );
 	}
 
@@ -62,9 +62,7 @@ abstract class ApiCSReplyBase extends ApiCSBase {
 	 * @throws MWException
 	 */
 	public function execute() {
-		$params = $this->extractRequestParams();
-		$wikiPage = $this->getTitleOrPageId( $params, $this->edit ? 'fromdbmaster' : 'fromdb' );
-		$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+		$reply = $this->commentStreamsStore->getReply( $this->getEntityId() );
 		if ( $reply ) {
 			$this->reply = $reply;
 			$result = $this->executeBody();
@@ -84,7 +82,7 @@ abstract class ApiCSReplyBase extends ApiCSBase {
 	protected function logAction( string $action ) {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );
 		$logEntry->setPerformer( $this->getUser() );
-		$logEntry->setTarget( $this->reply->getTitle() );
+		$logEntry->setTarget( $this->reply->getAssociatedPage() );
 		$logId = $logEntry->insert();
 
 		if ( !$this->suppressLogsFromRCs ) {

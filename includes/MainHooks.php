@@ -76,12 +76,7 @@ class MainHooks implements
 	private $commentStreamsHandler;
 
 	/**
-	 * @var CommentStreamsFactory
-	 */
-	private $commentStreamsFactory;
-
-	/**
-	 * @var CommentStreamsStore
+	 * @var ICommentStreamsStore
 	 */
 	private $commentStreamsStore;
 
@@ -112,8 +107,7 @@ class MainHooks implements
 
 	/**
 	 * @param CommentStreamsHandler $commentStreamsHandler
-	 * @param CommentStreamsFactory $commentStreamsFactory
-	 * @param CommentStreamsStore $commentStreamsStore
+	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param LinkRenderer $linkRenderer
 	 * @param RevisionStore $revisionStore
 	 * @param PermissionManager $permissionManager
@@ -122,8 +116,7 @@ class MainHooks implements
 	 */
 	public function __construct(
 		CommentStreamsHandler $commentStreamsHandler,
-		CommentStreamsFactory $commentStreamsFactory,
-		CommentStreamsStore $commentStreamsStore,
+		ICommentStreamsStore $commentStreamsStore,
 		LinkRenderer $linkRenderer,
 		RevisionStore $revisionStore,
 		PermissionManager $permissionManager,
@@ -131,7 +124,6 @@ class MainHooks implements
 		WikiPageFactory $wikiPageFactory
 	) {
 		$this->commentStreamsHandler = $commentStreamsHandler;
-		$this->commentStreamsFactory = $commentStreamsFactory;
 		$this->commentStreamsStore = $commentStreamsStore;
 		$this->linkRenderer = $linkRenderer;
 		$this->revisionStore = $revisionStore;
@@ -162,6 +154,7 @@ class MainHooks implements
 		$mediaWiki
 	) {
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
+			// Only applies to NamespacePageStore, where comments are stored as pages in NS_COMMENTSTREAMS
 			return;
 		}
 
@@ -176,14 +169,14 @@ class MainHooks implements
 		}
 
 		$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
-		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+		$comment = $this->commentStreamsStore->getComment( $wikiPage->getId() );
 		if ( $comment ) {
-			$output->setPageTitle( $comment->getCommentTitle() );
-			$associatedTitle = Title::newFromId( $comment->getAssociatedId() );
+			$output->setPageTitle( $comment->getTitle() );
+			$associatedTitle = $comment->getAssociatedPage();
 			if ( $associatedTitle ) {
 				$values = $this->pageProps->getProperties( $associatedTitle, 'displaytitle' );
-				if ( array_key_exists( $comment->getAssociatedId(), $values ) ) {
-					$displaytitle = $values[$comment->getAssociatedId()];
+				if ( array_key_exists( $associatedTitle->getId(), $values ) ) {
+					$displaytitle = $values[$associatedTitle->getId()];
 				} else {
 					$displaytitle = $associatedTitle->getPrefixedText();
 				}
@@ -193,13 +186,13 @@ class MainHooks implements
 				$output->addHTML( '<p class="error">' . $message . '</p>' );
 			}
 		} else {
-			$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+			$reply = $this->commentStreamsStore->getReply( $wikiPage->getId() );
 			if ( $reply ) {
-				$parentCommentTitle = Title::newFromId( $reply->getParentCommentPageId() );
+				$parentCommentTitle = Title::newFromId( $reply->getParent()->getId() );
 				if ( $parentCommentTitle ) {
 					$values = $this->pageProps->getProperties( $parentCommentTitle, 'displaytitle' );
-					if ( array_key_exists( $reply->getParentCommentPageId(), $values ) ) {
-						$displaytitle = $values[$reply->getParentCommentPageId()];
+					if ( array_key_exists( $reply->getParent()->getId(), $values ) ) {
+						$displaytitle = $values[$reply->getParent()->getId()];
 					} else {
 						$displaytitle = $parentCommentTitle->getPrefixedText();
 					}
@@ -299,6 +292,9 @@ class MainHooks implements
 		&$query,
 		&$attributes
 	) {
+		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
+			return;
+		}
 		if ( $title->getNamespace() !== NS_COMMENTSTREAMS ) {
 			return;
 		}
@@ -308,19 +304,18 @@ class MainHooks implements
 			return;
 		}
 
-		$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+		$reply = $this->commentStreamsStore->getReply( $wikiPage->getId() );
 		if ( $reply ) {
-			$wikiPage = $this->wikiPageFactory->newFromID( $reply->getParentCommentPageId() );
+			$wikiPage = $this->wikiPageFactory->newFromID( $reply->getParent()->getId() );
 			if ( !$wikiPage ) {
 				return;
 			}
 		}
 
-		$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+		$comment = $this->commentStreamsStore->getComment( $wikiPage->getId() );
 		if ( $comment ) {
-			$t = Title::newFromId( $comment->getAssociatedId() );
-			if ( $t ) {
-				$title = $t;
+			if ( $comment->getAssociatedPage() ) {
+				$title = $comment->getAssociatedPage();
 			}
 		}
 	}
@@ -329,7 +324,6 @@ class MainHooks implements
 	 * Adds comment-streams, no-comment-streams, and comment-streams-initially-collapsed magic words.
 	 *
 	 * @param Parser $parser Parser object being initialised
-	 * @throws MWException
 	 */
 	public function onParserFirstCallInit( $parser ) {
 		$parser->setHook( 'comment-streams', [ $this->commentStreamsHandler, 'enableCommentStreams' ] );
@@ -407,23 +401,29 @@ class MainHooks implements
 	 * @return bool|void True or no return value to continue or false to abort
 	 */
 	public function onXmlDumpWriterOpenPage( $writer, &$out, $row, $title ) {
+		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
+			return;
+		}
 		if ( $title->getNamespace() == NS_COMMENTSTREAMS ) {
 			$values = [];
 			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
-			$comment = $this->commentStreamsFactory->newCommentFromWikiPage( $wikiPage );
+			$comment = $this->commentStreamsStore->getComment( $wikiPage->getId() );
 			if ( $comment ) {
 				$metadataTag = 'CommentMetadata';
-				$associatedTitle = Title::newFromId( $comment->getAssociatedId() );
+
+				$associatedTitle = $comment->getAssociatedPage();
 				if ( $associatedTitle ) {
-					$values['associatedPageName'] = $writer::canonicalTitle( $associatedTitle );
-					$values['commentTitle'] = $comment->getCommentTitle();
+					$values['associatedPageName'] = $writer::canonicalTitle(
+						Title::castFromPageIdentity( $associatedTitle )
+					);
+					$values['commentTitle'] = $comment->getTitle();
 					$values['blockName'] = $comment->getBlockName();
 				}
 			} else {
-				$reply = $this->commentStreamsFactory->newReplyFromWikiPage( $wikiPage );
+				$reply = $this->commentStreamsStore->getReply( $wikiPage->getId() );
 				if ( $reply ) {
 					$metadataTag = 'ReplyMetadata';
-					$parentCommentTitle = Title::newFromId( $reply->getParentCommentPageId() );
+					$parentCommentTitle = Title::newFromId( $reply->getParent()->getId() );
 					if ( $parentCommentTitle ) {
 						$values['parentCommentPageName'] = $writer::canonicalTitle( $parentCommentTitle );
 					}
@@ -452,6 +452,9 @@ class MainHooks implements
 	 *	 processing of the tag
 	 */
 	public function onImportHandlePageXMLTag( $wikiImporter, &$pageInfo ) {
+		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
+			return;
+		}
 		$reader = $wikiImporter->getReader();
 		$metadataType = $reader->name;
 		if ( $metadataType === 'CommentMetadata' ) {
@@ -487,11 +490,15 @@ class MainHooks implements
 	 * @param int $revCount Number of revisions in the XML file
 	 * @param int $sRevCount Number of successfully imported revisions
 	 * @param array $pageInfo Associative array of page information
-	 * @return bool|void True or no return value to continue or false to abort
+	 * @return void True or no return value to continue or false to abort
+	 * @throws MWException
 	 */
-	public function onAfterImportPage( $title, $foreignTitle, $revCount,
-									   $sRevCount, $pageInfo
+	public function onAfterImportPage(
+		$title, $foreignTitle, $revCount, $sRevCount, $pageInfo
 	) {
+		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
+			return;
+		}
 		$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
 		if ( isset( $pageInfo['CommentMetadata'] ) ) {
 			$info = $pageInfo['CommentMetadata'];
@@ -499,7 +506,7 @@ class MainHooks implements
 			$associatedTitle = Title::newFromText( $associatedPageName );
 			$associatedPage = $this->wikiPageFactory->newFromTitle( $associatedTitle );
 			if ( !$associatedTitle->exists() ) {
-				$associatedId = CommentStreamsUtils::createEmptyPage( $associatedPage, $user );
+				$associatedId = $this->commentStreamsStore->createEmptyPage( $associatedPage, $user );
 			} else {
 				$associatedId = $associatedTitle->getId();
 			}
@@ -518,7 +525,7 @@ class MainHooks implements
 			$commentTitle = Title::newFromText( $commentPageName );
 			if ( !$commentTitle->exists() ) {
 				$commentPage = $this->wikiPageFactory->newFromTitle( $commentTitle );
-				$commentId = CommentStreamsUtils::createEmptyPage( $commentPage, $user );
+				$commentId = $this->commentStreamsStore->createEmptyPage( $commentPage, $user );
 			} else {
 				$commentId = $commentTitle->getId();
 			}

@@ -29,19 +29,19 @@ use ManualLogEntry;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\WikiPageFactory;
 use MWException;
-use Title;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSPostReply extends ApiBase {
-	/**
-	 * @var CommentStreamsFactory
-	 */
-	private $commentStreamsFactory;
 
 	/**
-	 * @var EchoInterface
+	 * @var ICommentStreamsStore
 	 */
-	private $echoInterface;
+	private $commentStreamsStore;
+
+	/**
+	 * @var NotifierInterface
+	 */
+	private $notifier;
 
 	/**
 	 * @var bool
@@ -56,22 +56,22 @@ class ApiCSPostReply extends ApiBase {
 	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
-	 * @param CommentStreamsFactory $commentStreamsFactory
-	 * @param EchoInterface $commentStreamsEchoInterface
+	 * @param ICommentStreamsStore $commentStreamsStore
+	 * @param NotifierInterface $notifier
 	 * @param Config $config
 	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		CommentStreamsFactory $commentStreamsFactory,
-		EchoInterface $commentStreamsEchoInterface,
+		ICommentStreamsStore $commentStreamsStore,
+		NotifierInterface $notifier,
 		Config $config,
 		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
-		$this->commentStreamsFactory = $commentStreamsFactory;
-		$this->echoInterface = $commentStreamsEchoInterface;
+		$this->commentStreamsStore = $commentStreamsStore;
+		$this->notifier = $notifier;
 		$this->suppressLogsFromRCs = (bool)$config->get( "CommentStreamsSuppressLogsFromRCs" );
 		$this->wikiPageFactory = $wikiPageFactory;
 	}
@@ -90,40 +90,36 @@ class ApiCSPostReply extends ApiBase {
 		$wikitext = $this->getMain()->getVal( 'wikitext' );
 
 		$parentId = (int)$parentId;
-		$parentPage = $this->wikiPageFactory->newFromId( $parentId );
-		if ( !$parentPage || !$parentPage->getTitle()->exists() ) {
+		$parentComment = $this->commentStreamsStore->getComment( $parentId );
+		if ( !$parentComment ) {
 			$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 		} else {
-			$parentComment = $this->commentStreamsFactory->newCommentFromWikiPage( $parentPage );
-			if ( !$parentComment ) {
+			$associatedPage = $parentComment->getAssociatedPage();
+			if ( !$associatedPage ) {
 				$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
 			} else {
-				$associatedPage = $this->wikiPageFactory->newFromId( $parentComment->getAssociatedId() );
-				if ( !$associatedPage ) {
-					$this->dieWithError( 'commentstreams-api-error-post-parentpagedoesnotexist' );
+				$reply = $this->commentStreamsStore->insertReply(
+					$this->getUser(),
+					$wikitext,
+					$parentComment
+				);
+
+				if ( !$reply ) {
+					$this->dieWithError( 'commentstreams-api-error-post' );
 				} else {
-					$reply = $this->commentStreamsFactory->newReplyFromValues(
-						$parentId,
-						$wikitext,
-						$this->getUser()
-					);
-
-					if ( !$reply ) {
-						$this->dieWithError( 'commentstreams-api-error-post' );
-					} else {
-						$title = $reply->getTitle();
-						$this->logAction( 'reply-create', $title );
-
-						$this->getResult()->addValue( null, $this->getModuleName(), $reply->getId() );
-
-						$this->echoInterface->sendReplyNotifications(
-							$reply,
-							$associatedPage,
-							$this->getUser(),
-							$parentComment
-
-						);
+					if ( $reply->getAssociatedPage() ) {
+						$this->logAction( 'reply-create', $reply->getAssociatedPage() );
 					}
+
+					$this->getResult()->addValue( null, $this->getModuleName(), $reply->getId() );
+
+					$this->notifier->sendReplyNotifications(
+						$reply,
+						$this->wikiPageFactory->newFromTitle( $associatedPage ),
+						$this->getUser(),
+						$parentComment
+
+					);
 				}
 			}
 		}
@@ -155,11 +151,13 @@ class ApiCSPostReply extends ApiBase {
 	/**
 	 * log action
 	 * @param string $action the name of the action to be logged
-	 * @param LinkTarget|Title $target the title of the page for the comment that the
-	 *		  action was performed upon, if different from the current comment
-	 * @throws MWException
+	 * @param LinkTarget|null $target the title of the page for the comment that the
+	 *          action was performed upon, if different from the current comment
 	 */
-	protected function logAction( string $action, $target ) {
+	protected function logAction( string $action, ?LinkTarget $target ) {
+		if ( !$target ) {
+			return;
+		}
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );
 		$logEntry->setPerformer( $this->getUser() );
 		$logEntry->setTarget( $target );

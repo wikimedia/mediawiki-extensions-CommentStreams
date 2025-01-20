@@ -21,27 +21,44 @@
  * @author Cindy Cicalese
  */
 
-namespace MediaWiki\Extension\CommentStreams;
+namespace MediaWiki\Extension\CommentStreams\Store;
 
-use FatalError;
+use MediaWiki\CommentStore\CommentStoreComment;
+use MediaWiki\Content\Content;
+use MediaWiki\Extension\CommentStreams\AbstractComment;
+use MediaWiki\Extension\CommentStreams\Comment;
+use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
+use MediaWiki\Extension\CommentStreams\Reply;
+use MediaWiki\Extension\CommentStreams\SMWInterface;
+use MediaWiki\Page\DeletePageFactory;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Status\Status;
+use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\UserFactory;
+use MediaWiki\User\UserIdentity;
+use MediaWiki\Utils\MWTimestamp;
 use MWException;
+use Psr\Log\LoggerInterface;
 use Title;
 use User;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\Subquery;
+use Wikimedia\Timestamp\TimestampException;
 use WikiPage;
 use WikitextContent;
 
 /**
  * Comment Streams database backend interface
  */
-class CommentStreamsStore {
+class NamespacePageStore implements ICommentStreamsStore {
 	/**
 	 * @var ILoadBalancer
 	 */
@@ -63,21 +80,54 @@ class CommentStreamsStore {
 	private $wikiPageFactory;
 
 	/**
+	 * @var TitleFactory
+	 */
+	private $titleFactory;
+
+	/** @var SMWInterface */
+	private SMWInterface $smwInterface;
+
+	/** @var RevisionLookup */
+	private RevisionLookup $revisionLookup;
+
+	/** @var LoggerInterface */
+	private $logger;
+
+	/** @var DeletePageFactory */
+	private $deletePageFactory;
+
+	/**
 	 * @param ILoadBalancer $loadBalancer
 	 * @param PermissionManager $permissionManager
 	 * @param UserFactory $userFactory
 	 * @param WikiPageFactory $wikiPageFactory
+	 * @param TitleFactory $titleFactory
+	 * @param SMWInterface $smwInterface
+	 * @param RevisionLookup $revisionLookup
+	 * @param LoggerInterface $logger
+	 * @param DeletePageFactory $deletePageFactory
 	 */
 	public function __construct(
 		ILoadBalancer $loadBalancer,
 		PermissionManager $permissionManager,
 		UserFactory $userFactory,
-		WikiPageFactory $wikiPageFactory
+		WikiPageFactory $wikiPageFactory,
+		TitleFactory $titleFactory,
+		SMWInterface $smwInterface,
+		RevisionLookup $revisionLookup,
+		LoggerInterface $logger,
+		DeletePageFactory $deletePageFactory
 	) {
 		$this->loadBalancer = $loadBalancer;
 		$this->permissionManager = $permissionManager;
 		$this->userFactory = $userFactory;
 		$this->wikiPageFactory = $wikiPageFactory;
+		$this->titleFactory = $titleFactory;
+		$this->smwInterface = $smwInterface;
+		$this->revisionLookup = $revisionLookup;
+		$this->deletePageFactory = $deletePageFactory;
+
+		$this->logger = $logger;
 	}
 
 	/**
@@ -99,37 +149,66 @@ class CommentStreamsStore {
 
 	/**
 	 * @param int $id
-	 * @return ?array
+	 * @return Comment|null
+	 * @throws TimestampException
 	 */
-	public function getComment( int $id ): ?array {
+	public function getComment( int $id ): ?Comment {
+		$wikiPage = $this->wikiPageFactory->newFromID( $id );
+		if ( !$wikiPage || !$this->isValidAbstractComment( $wikiPage ) ) {
+			return null;
+		}
 		$result = $this->getDBConnection( DB_REPLICA )
-				->newSelectQueryBuilder()
-				->select( [
-					'cst_c_assoc_page_id',
-					'cst_c_comment_title',
-					'cst_c_block_name'
-				] )
-				->from( 'cs_comments' )
-				->where( [
-					'cst_c_comment_page_id' => $id
-				] )
-				->caller( __METHOD__ )
-				->fetchRow();
+			->newSelectQueryBuilder()
+			->select( [
+				'cst_c_assoc_page_id',
+				'cst_c_comment_title',
+				'cst_c_block_name'
+			] )
+			->from( 'cs_comments' )
+			->where( [
+				'cst_c_comment_page_id' => $id
+			] )
+			->caller( __METHOD__ )
+			->fetchRow();
 		if ( $result ) {
-			return [
-				'assoc_page_id' => (int)$result->cst_c_assoc_page_id,
-				'comment_title' => $result->cst_c_comment_title,
-				'block_name' => $result->cst_c_block_name
-			];
+			$firstRevision = $this->revisionLookup->getFirstRevision( $wikiPage->getTitle() );
+			if ( $firstRevision && $firstRevision->isCurrent() ) {
+				$latestRevision = $firstRevision;
+			} else {
+				$latestRevision = $this->revisionLookup->getRevisionByTitle( $wikiPage->getTitle() );
+			}
+			if ( !$firstRevision || !$latestRevision ) {
+				$this->logger->error( 'Could not find revision for comment page ID {id}', [
+					'id' => $id,
+					'page' => $wikiPage->getTitle()->getPrefixedDBkey()
+				] );
+				return null;
+			}
+
+			return new Comment(
+				$id,
+				$result->cst_c_comment_title,
+				$result->cst_c_block_name,
+				$this->titleFactory->newFromID( $result->cst_c_assoc_page_id ),
+				$firstRevision->getUser(),
+				$latestRevision->getUser(),
+				MWTimestamp::getInstance( $firstRevision->getTimestamp() ),
+				MWTimestamp::getInstance( $latestRevision->getTimestamp() ),
+			);
 		}
 		return null;
 	}
 
 	/**
 	 * @param int $id
-	 * @return ?array
+	 * @return ?Reply
+	 * @throws TimestampException
 	 */
-	public function getReply( int $id ): ?array {
+	public function getReply( int $id ): ?Reply {
+		$wikiPage = $this->wikiPageFactory->newFromID( $id );
+		if ( !$wikiPage || !$this->isValidAbstractComment( $wikiPage ) ) {
+			return null;
+		}
 		$result = $this->getDBConnection( DB_REPLICA )
 				->newSelectQueryBuilder()
 				->select( 'cst_r_comment_page_id' )
@@ -140,19 +219,56 @@ class CommentStreamsStore {
 				->caller( __METHOD__ )
 				->fetchRow();
 		if ( $result ) {
-			return [
-				'comment_page_id' => (int)$result->cst_r_comment_page_id
-			];
+			$parent = $this->getComment( (int)$result->cst_r_comment_page_id );
+			if ( !$parent ) {
+				$this->logger->error( 'Could not find parent comment for reply page ID {id}', [
+					'id' => $id
+				] );
+				return null;
+			}
+
+			$firstRevision = $this->revisionLookup->getFirstRevision( $wikiPage->getTitle() );
+			$latestRevision = $this->revisionLookup->getRevisionByTitle( $wikiPage->getTitle() );
+			if ( !$firstRevision || !$latestRevision ) {
+				$this->logger->error( 'Could not find revision for comment page ID {id}', [
+					'id' => $id,
+					'page' => $wikiPage->getTitle()->getPrefixedDBkey()
+				] );
+				return null;
+			}
+			return new Reply(
+				$parent,
+				$id,
+				$firstRevision->getUser(),
+				$latestRevision->getUser(),
+				new MWTimestamp( $firstRevision->getTimestamp() ),
+				new MWTimestamp( $latestRevision->getTimestamp() ),
+			);
 		}
 
 		return null;
 	}
 
 	/**
-	 * @param int $assocPageId
-	 * @return WikiPage[]
+	 * @param string $action
+	 * @param User $user
+	 * @param AbstractComment $comment
+	 * @return bool
 	 */
-	public function getAssociatedComments( int $assocPageId ): array {
+	public function userCan( string $action, User $user, AbstractComment $comment ): bool {
+		$commentPage = $this->wikiPageFactory->newFromID( $comment->getId() );
+		if ( !$commentPage ) {
+			return false;
+		}
+		return $this->permissionManager->userCan( $action, $user, $commentPage->getTitle() );
+	}
+
+	/**
+	 * @param PageIdentity $page
+	 * @return Comment[]
+	 * @throws TimestampException
+	 */
+	public function getAssociatedComments( PageIdentity $page ): array {
 		$result = $this->getDBConnection( DB_REPLICA )
 				->newSelectQueryBuilder()
 				->select( [
@@ -160,54 +276,51 @@ class CommentStreamsStore {
 				] )
 				->from( 'cs_comments' )
 				->where( [
-					'cst_c_assoc_page_id' => $assocPageId
+					'cst_c_assoc_page_id' => $page->getId()
 				] )
 				->caller( __METHOD__ )
 				->fetchResultSet();
 		$commentWikiPages = [];
 		foreach ( $result as $row ) {
-			$wikiPage = $this->wikiPageFactory->newFromID( $row->cst_c_comment_page_id );
-			if ( $wikiPage ) {
-				$commentWikiPages[] = $wikiPage;
-			}
+			$commentWikiPages[] = $this->getComment( $row->cst_c_comment_page_id );
 		}
-		return $commentWikiPages;
+		return array_filter( $commentWikiPages );
 	}
 
 	/**
-	 * @param int $commentPageId
-	 * @return WikiPage[]
+	 * @param Comment $parent
+	 * @return Reply[]
+	 * @throws TimestampException
 	 */
-	public function getReplies( int $commentPageId ): array {
+	public function getReplies( Comment $parent ): array {
 		$result = $this->getDBConnection( DB_REPLICA )
 				->newSelectQueryBuilder()
 				->select( 'cst_r_reply_page_id' )
 				->from( 'cs_replies' )
 				->where( [
-					'cst_r_comment_page_id' => $commentPageId
+					'cst_r_comment_page_id' => $parent->getId(),
 				] )
 				->caller( __METHOD__ )
 				->fetchResultSet();
-		$replyWikiPages = [];
+
+		$replies = [];
 		foreach ( $result as $row ) {
-			$wikiPage = $this->wikiPageFactory->newFromID( $row->cst_r_reply_page_id );
-			if ( $wikiPage ) {
-				$replyWikiPages[] = $wikiPage;
-			}
+			$reply = $this->getReply( $row->cst_r_reply_page_id );
+			$replies[] = $reply;
 		}
-		return $replyWikiPages;
+		return array_filter( $replies );
 	}
 
 	/**
-	 * @param int $commentPageId
+	 * @param Comment $comment
 	 * @return int
 	 */
-	public function getNumReplies( int $commentPageId ): int {
+	public function getNumReplies( Comment $comment ): int {
 		return $this->getDBConnection( DB_REPLICA )
 			->newSelectQueryBuilder()
 			->from( 'cs_replies' )
 			->where( [
-				'cst_r_comment_page_id' => $commentPageId
+				'cst_r_comment_page_id' => $comment->getId(),
 			] )
 			->caller( __METHOD__ )
 			->fetchRowCount();
@@ -264,7 +377,7 @@ class CommentStreamsStore {
 				if ( !$this->permissionManager->userCan( 'cs-comment', $user, $title ) ) {
 					return null;
 				}
-				$status = CommentStreamsUtils::doEditContent(
+				$status = $this->doEditContent(
 					$wikiPage,
 					$content,
 					$user,
@@ -280,13 +393,7 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param User $user
-	 * @param string $wikitext
-	 * @param int $assocPageId
-	 * @param string $commentTitle
-	 * @param ?string $commentBlockName
-	 * @return ?WikiPage
-	 * @throws MWException
+	 * @inheritDoc
 	 */
 	public function insertComment(
 		User $user,
@@ -294,7 +401,7 @@ class CommentStreamsStore {
 		int $assocPageId,
 		string $commentTitle,
 		?string $commentBlockName
-	): ?WikiPage {
+	): ?Comment {
 		$annotatedWikitext = $this->addAnnotations( $wikitext, $commentTitle );
 		$content = new WikitextContent( $annotatedWikitext );
 
@@ -319,21 +426,23 @@ class CommentStreamsStore {
 			return null;
 		}
 
-		return $wikiPage;
+		$this->smwInterface->update( $wikiPage->getTitle() );
+		$createdComment = $this->getComment( $wikiPage->getId() );
+		if ( !$createdComment ) {
+			return null;
+		}
+		$this->watch( $createdComment, $user );
+		return $createdComment;
 	}
 
 	/**
-	 * @param User $user
-	 * @param string $wikitext
-	 * @param int $commentPageId
-	 * @return ?WikiPage
-	 * @throws MWException
+	 * @inheritDoc
 	 */
 	public function insertReply(
 		User $user,
 		string $wikitext,
-		int $commentPageId
-	): ?WikiPage {
+		Comment $parent
+	): ?Reply {
 		$wikiPage = $this->createCommentPage( $user, new WikitextContent( $wikitext ) );
 		if ( !$wikiPage ) {
 			return null;
@@ -344,7 +453,7 @@ class CommentStreamsStore {
 			'cs_replies',
 			[
 				'cst_r_reply_page_id' => $wikiPage->getId(),
-				'cst_r_comment_page_id' => $commentPageId
+				'cst_r_comment_page_id' => $parent->getId(),
 			],
 			__METHOD__
 		);
@@ -353,11 +462,14 @@ class CommentStreamsStore {
 			return null;
 		}
 
-		return $wikiPage;
+		$this->smwInterface->update( $wikiPage->getTitle() );
+		$this->watch( $parent, $user );
+
+		return $this->getReply( $wikiPage->getId() );
 	}
 
 	/**
-	 * @param WikiPage $wikiPage
+	 * @param Comment $comment
 	 * @param string $commentTitle
 	 * @param string $wikitext
 	 * @param User $user
@@ -365,7 +477,7 @@ class CommentStreamsStore {
 	 * @throws MWException
 	 */
 	public function updateComment(
-		WikiPage $wikiPage,
+		Comment $comment,
 		string $commentTitle,
 		string $wikitext,
 		User $user
@@ -373,7 +485,8 @@ class CommentStreamsStore {
 		$annotatedWikitext = $this->addAnnotations( $wikitext, $commentTitle );
 		$content = new WikitextContent( $annotatedWikitext );
 
-		$status = CommentStreamsUtils::doEditContent(
+		$wikiPage = $this->wikiPageFactory->newFromID( $comment->getId() );
+		$status = $this->doEditContent(
 			$wikiPage,
 			$content,
 			$user,
@@ -384,6 +497,9 @@ class CommentStreamsStore {
 		}
 
 		$dbw = $this->getDBConnection( DB_PRIMARY );
+
+		$this->smwInterface->update( $wikiPage->getTitle() );
+
 		return $dbw->update(
 			'cs_comments',
 			[
@@ -397,36 +513,49 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param WikiPage $wikiPage
+	 * @param Reply $reply
 	 * @param string $wikitext
 	 * @param User $user
+	 * @return bool
 	 * @throws MWException
 	 */
 	public function updateReply(
-		WikiPage $wikiPage,
+		Reply $reply,
 		string $wikitext,
 		User $user
-	) {
-		CommentStreamsUtils::doEditContent(
+	): bool {
+		$wikiPage = $this->wikiPageFactory->newFromID( $reply->getId() );
+		$status = $this->doEditContent(
 			$wikiPage,
 			new WikitextContent( $wikitext ),
 			$user,
 			EDIT_UPDATE | EDIT_SUPPRESS_RC
 		);
+
+		return $status->isOK();
 	}
 
 	/**
-	 * @param WikiPage $wikiPage
-	 * @param User $deleter
+	 * @param Comment $comment
+	 * @param Authority $actor
 	 * @return bool
-	 * @throws FatalError
-	 * @throws MWException
 	 */
-	public function deleteComment( WikiPage $wikiPage, User $deleter ): bool {
+	public function deleteComment( Comment $comment, Authority $actor ): bool {
+		$wikiPage = $this->wikiPageFactory->newFromID( $comment->getId() );
+		if ( !$wikiPage ) {
+			$this->logger->error( __METHOD__ . ': Could not find wiki page for comment ID {id}', [
+				'id' => $comment->getId()
+			] );
+			return false;
+		}
 		// must save page ID before deleting page
 		$pageid = $wikiPage->getId();
 
-		$status = $wikiPage->doDeleteArticleReal( 'comment deleted', $deleter, true );
+		$deletePage = $this->deletePageFactory->newDeletePage(
+			$wikiPage->getTitle()->toPageIdentity(), $actor
+		);
+		$deletePage->setSuppress( true );
+		$status = $deletePage->deleteIfAllowed( 'comment deleted' );
 
 		if ( !$status->isGood() ) {
 			return false;
@@ -443,17 +572,26 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param WikiPage $wikiPage
-	 * @param User $deleter
+	 * @param Reply $reply
+	 * @param Authority $actor
 	 * @return bool
-	 * @throws FatalError
-	 * @throws MWException
 	 */
-	public function deleteReply( WikiPage $wikiPage, User $deleter ): bool {
+	public function deleteReply( Reply $reply, Authority $actor ): bool {
+		$wikiPage = $this->wikiPageFactory->newFromID( $reply->getId() );
+		if ( !$wikiPage ) {
+			$this->logger->error( __METHOD__ . ': Could not find wiki page for reply ID {id}', [
+				'id' => $reply->getId()
+			] );
+			return false;
+		}
 		// must save page ID before deleting page
 		$pageid = $wikiPage->getId();
 
-		$status = $wikiPage->doDeleteArticleReal( 'reply deleted', $deleter, true );
+		$deletePage = $this->deletePageFactory->newDeletePage(
+			$wikiPage->getTitle()->toPageIdentity(), $actor
+		);
+		$deletePage->setSuppress( true );
+		$status = $deletePage->deleteIfAllowed( 'reply deleted' );
 
 		if ( !$status->isGood() ) {
 			return false;
@@ -480,9 +618,9 @@ class CommentStreamsStore {
 		int $assocPageId,
 		string $commentTitle,
 		?string $blockName
-	) {
+	): bool {
 		$dbw = $this->getDBConnection( DB_PRIMARY );
-		$dbw->upsert(
+		return $dbw->upsert(
 			'cs_comments',
 			[
 				'cst_c_comment_page_id' => $pageId,
@@ -531,18 +669,18 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param int $pageId
-	 * @param int $userId
+	 * @param AbstractComment $comment
+	 * @param UserIdentity $user
 	 * @return int -1, 0, or 1
 	 */
-	public function getVote( int $pageId, int $userId ): int {
+	public function getVote( AbstractComment $comment, UserIdentity $user ): int {
 		$result = $this->getDBConnection( DB_REPLICA )
 				->newSelectQueryBuilder()
 				->select( 'cst_v_vote' )
 				->from( 'cs_votes' )
 				->where( [
-					'cst_v_page_id' => $pageId,
-					'cst_v_user_id' => $userId
+					'cst_v_comment_id' => $comment->getId(),
+					'cst_v_user_id' => $user->getId(),
 				] )
 				->caller( __METHOD__ )
 				->fetchRow();
@@ -560,19 +698,19 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param int $id
+	 * @param AbstractComment $comment
 	 * @return int
 	 */
-	public function getNumUpVotes( int $id ): int {
-		return $this->getNumVotes( $id, true );
+	public function getNumUpVotes( AbstractComment $comment ): int {
+		return $this->getNumVotes( $comment->getId(), true );
 	}
 
 	/**
-	 * @param int $id
+	 * @param AbstractComment $comment
 	 * @return int
 	 */
-	public function getNumDownVotes( int $id ): int {
-		return $this->getNumVotes( $id, false );
+	public function getNumDownVotes( AbstractComment $comment ): int {
+		return $this->getNumVotes( $comment->getId(), false );
 	}
 
 	/**
@@ -585,7 +723,7 @@ class CommentStreamsStore {
 			->newSelectQueryBuilder()
 			->from( 'cs_votes' )
 			->where( [
-				'cst_v_page_id' => $id,
+				'cst_v_comment_id' => $id,
 				'cst_v_vote' => $up ? 1 : -1
 			] )
 			->caller( __METHOD__ )
@@ -593,19 +731,24 @@ class CommentStreamsStore {
 	}
 
 	/**
+	 * @param AbstractComment $comment
 	 * @param int $vote
-	 * @param int $pageId
-	 * @param int $userId
+	 * @param UserIdentity $user
 	 * @return bool true for OK, false for error
 	 */
-	public function vote( int $vote, int $pageId, int $userId ): bool {
+	public function vote( AbstractComment $comment, int $vote, UserIdentity $user ): bool {
+		$wikiPage = $this->wikiPageFactory->newFromID( $comment->getId() );
+		if ( !$wikiPage ) {
+			return false;
+		}
+
 		$dbw = $this->getDBConnection( DB_PRIMARY );
 		$result = $dbw->newSelectQueryBuilder()
 				->select( 'cst_v_vote' )
 				->from( 'cs_votes' )
 				->where( [
-					'cst_v_page_id' => $pageId,
-					'cst_v_user_id' => $userId
+					'cst_v_comment_id' => $comment->getId(),
+					'cst_v_user_id' => $user->getId(),
 				] )
 				->caller( __METHOD__ )
 				->fetchRow();
@@ -614,28 +757,32 @@ class CommentStreamsStore {
 				return true;
 			}
 			if ( $vote === 1 || $vote === -1 ) {
-				return $dbw->update(
+				$res = $dbw->update(
 					'cs_votes',
 					[
 						'cst_v_vote' => $vote
 					],
 					[
-						'cst_v_page_id' => $pageId,
-						'cst_v_user_id' => $userId
+						'cst_v_comment_id' => $comment->getId(),
+						'cst_v_user_id' => $user->getId()
 					],
 					__METHOD__
 				);
 			} else {
-				return $dbw->delete(
+				$res = $dbw->delete(
 					'cs_votes',
 					[
-						'cst_v_page_id' => $pageId,
-						'cst_v_user_id' => $userId
+						'cst_v_comment_id' => $comment->getId(),
+						'cst_v_user_id' => $user->getId()
 					],
 					__METHOD__
 				);
 			}
+			$this->smwInterface->update( $wikiPage->getTitle() );
+			return $res;
 		}
+
+		$this->smwInterface->update( $wikiPage->getTitle() );
 		if ( $vote === 0 ) {
 			return true;
 		}
@@ -643,8 +790,8 @@ class CommentStreamsStore {
 		return $dbw->insert(
 			'cs_votes',
 			[
-				'cst_v_page_id' => $pageId,
-				'cst_v_user_id' => $userId,
+				'cst_v_comment_id' => $comment->getId(),
+				'cst_v_user_id' => $user->getId(),
 				'cst_v_vote' => $vote
 			],
 			__METHOD__
@@ -652,59 +799,59 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param int $pageId the page ID of the comment to watch
-	 * @param int $userId the user ID of the user watching the comment
+	 * @param AbstractComment $comment
+	 * @param UserIdentity $user
 	 * @return bool true for OK, false for error
 	 */
-	public function watch( int $pageId, int $userId ): bool {
-		if ( $this->isWatching( $pageId, $userId, DB_PRIMARY ) ) {
+	public function watch( AbstractComment $comment, UserIdentity $user ): bool {
+		if ( $this->isWatching( $comment, $user, DB_PRIMARY ) ) {
 			return true;
 		}
 
 		return $this->getDBConnection( DB_PRIMARY )->insert(
 			'cs_watchlist',
 			[
-				'cst_wl_page_id' => $pageId,
-				'cst_wl_user_id' => $userId
+				'cst_wl_comment_id' => $comment->getId(),
+				'cst_wl_user_id' => $user->getId(),
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param int $pageId the page ID of the comment to watch
-	 * @param int $userId the user ID of the user watching the comment
+	 * @param AbstractComment $comment
+	 * @param UserIdentity $user
 	 * @return bool true for OK, false for error
 	 */
-	public function unwatch( int $pageId, int $userId ): bool {
-		if ( !$this->isWatching( $pageId, $userId, DB_PRIMARY ) ) {
+	public function unwatch( AbstractComment $comment, UserIdentity $user ): bool {
+		if ( !$this->isWatching( $comment, $user, DB_PRIMARY ) ) {
 			return true;
 		}
 
 		return $this->getDBConnection( DB_PRIMARY )->delete(
 			'cs_watchlist',
 			[
-				'cst_wl_page_id' => $pageId,
-				'cst_wl_user_id' => $userId
+				'cst_wl_comment_id' => $comment->getId(),
+				'cst_wl_user_id' => $user->getId()
 			],
 			__METHOD__
 		);
 	}
 
 	/**
-	 * @param int $pageId the page ID of the comment to check
-	 * @param int $userId the user ID of the user watching the comment
+	 * @param AbstractComment $comment
+	 * @param UserIdentity $user
 	 * @param int $fromdb DB_PRIMARY or DB_REPLICA
 	 * @return bool database true for OK, false for error
 	 */
-	public function isWatching( int $pageId, int $userId, int $fromdb = DB_REPLICA ): bool {
+	public function isWatching( AbstractComment $comment, UserIdentity $user, int $fromdb = DB_REPLICA ): bool {
 		$count = $this->getDBConnection( $fromdb )
 			   ->newSelectQueryBuilder()
-			   ->select( 'cst_wl_page_id' )
+			   ->select( 'cst_wl_comment_id' )
 			   ->from( 'cs_watchlist' )
 			   ->where( [
-				   'cst_wl_page_id' => $pageId,
-				   'cst_wl_user_id' => $userId
+				   'cst_wl_comment_id' => $comment->getId(),
+				   'cst_wl_user_id' => $user->getId(),
 			   ] )
 			   ->caller( __METHOD__ )
 			   ->fetchRowCount();
@@ -712,16 +859,16 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param int $id
+	 * @param AbstractComment $comment
 	 * @return User[] array of users indexed by user ID
 	 */
-	public function getWatchers( int $id ): array {
+	public function getWatchers( AbstractComment $comment ): array {
 		$result = $this->getDBConnection( DB_REPLICA )
 				->newSelectQueryBuilder()
 				->select( 'cst_wl_user_id' )
 				->from( 'cs_watchlist' )
 				->where( [
-					'cst_wl_page_id' => $id
+					'cst_wl_comment_id' => $comment->getId()
 				] )
 				->caller( __METHOD__ )
 				->fetchRow();
@@ -737,14 +884,17 @@ class CommentStreamsStore {
 	}
 
 	/**
-	 * @param WikiPage $wikiPage
-	 * @param ?string $commentTitle
+	 * @param AbstractComment $comment
 	 * @return string
 	 */
-	public function getWikitext( WikiPage $wikiPage, ?string $commentTitle ): string {
+	public function getWikitext( AbstractComment $comment ): string {
+		$wikiPage = $this->wikiPageFactory->newFromID( $comment->getId() );
+		if ( !$wikiPage ) {
+			return '';
+		}
 		$wikitext = $wikiPage->getContent( RevisionRecord::RAW )->getWikitextForTransclusion();
-		if ( $commentTitle ) {
-			return $this->removeAnnotations( $wikitext, $commentTitle );
+		if ( $comment instanceof Comment ) {
+			return $this->removeAnnotations( $wikitext, $comment->getTitle() );
 		}
 		return $wikitext;
 	}
@@ -779,5 +929,52 @@ $commentTitle
 }}
 EOT;
 		return str_replace( $strip, '', $wikitext );
+	}
+
+	/**
+	 * Internal utility to determine if the page exists and is a comment or reply
+	 *
+	 * @param WikiPage $wikiPage page to check
+	 * @return bool Page exists and is managed by CommentStreams
+	 */
+	private function isValidAbstractComment( WikiPage $wikiPage ): bool {
+		return $wikiPage->getTitle()->getNamespace() === NS_COMMENTSTREAMS && $wikiPage->exists();
+	}
+
+	/**
+	 * @param WikiPage $wikiPage
+	 * @param Content $content
+	 * @param Authority $authority
+	 * @param int $flags
+	 * @return Status
+	 */
+	private function doEditContent(
+		WikiPage $wikiPage,
+		Content $content,
+		Authority $authority,
+		int $flags
+	): Status {
+		$updater = $wikiPage->newPageUpdater( $authority );
+		$updater->setContent( SlotRecord::MAIN, $content );
+		$summary = CommentStoreComment::newUnsavedComment( '' );
+		$updater->saveRevision( $summary, $flags );
+		return $updater->getStatus();
+	}
+
+	/**
+	 * @param WikiPage $wikiPage
+	 * @param Authority $authority
+	 * @return int|null
+	 * @throws MWException
+	 */
+	public function createEmptyPage(
+		WikiPage $wikiPage,
+		Authority $authority
+	) {
+		$result = $this->doEditContent( $wikiPage, new WikitextContent( '' ), $authority, EDIT_NEW );
+		if ( $result->isOK() ) {
+			return $result->getValue()['revision-record']->getId();
+		}
+		return null;
 	}
 }

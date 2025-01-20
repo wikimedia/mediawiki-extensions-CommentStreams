@@ -19,17 +19,23 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-namespace MediaWiki\Extension\CommentStreams;
+namespace MediaWiki\Extension\CommentStreams\Notifier;
 
 use EchoEvent;
+use Exception;
 use ExtensionRegistry;
+use MediaWiki\Extension\CommentStreams\Comment;
+use MediaWiki\Extension\CommentStreams\CommentSerializer;
+use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
+use MediaWiki\Extension\CommentStreams\NotifierInterface;
+use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use PageProps;
 use User;
 use WikiPage;
 
-class EchoInterface {
+class EchoNotifier implements NotifierInterface {
 	/**
 	 * @var bool
 	 */
@@ -41,15 +47,23 @@ class EchoInterface {
 	private $pageProps;
 
 	/**
+	 * @var CommentSerializer
+	 */
+	private $serializer;
+
+	/**
 	 * @param ExtensionRegistry $extensionRegistry
 	 * @param PageProps $pageProps
+	 * @param CommentSerializer $serializer
 	 */
 	public function __construct(
 		ExtensionRegistry $extensionRegistry,
-		PageProps $pageProps
+		PageProps $pageProps,
+		CommentSerializer $serializer
 	) {
 		$this->isLoaded = $extensionRegistry->isLoaded( 'Echo' );
 		$this->pageProps = $pageProps;
+		$this->serializer = $serializer;
 	}
 
 	/**
@@ -67,6 +81,7 @@ class EchoInterface {
 	 * @param User $user
 	 * @param string $commentTitle
 	 * @throws MWException
+	 * @throws Exception
 	 */
 	public function sendCommentNotifications(
 		Comment $comment,
@@ -87,11 +102,11 @@ class EchoInterface {
 
 		$extra = [
 			'comment_id' => $comment->getId(),
-			'comment_author_username' => $comment->getUsername(),
-			'comment_author_display_name' => $comment->getUserDisplayNameUnlinked(),
+			'comment_author_username' => $comment->getAuthor()->getName(),
+			'comment_author_display_name' => $this->serializer->getDisplayNameFromUser( $comment->getAuthor(), false ),
 			'comment_title' => $commentTitle,
 			'associated_page_display_title' => $associatedPageDisplayTitle,
-			'comment_wikitext' => $comment->getWikitext()
+			'comment_wikitext' => $this->serializer->getWikitext( $comment ),
 		];
 
 		EchoEvent::create( [
@@ -130,11 +145,11 @@ class EchoInterface {
 
 		$extra = [
 			'comment_id' => $reply->getId(),
-			'comment_author_username' => $reply->getUsername(),
-			'comment_author_display_name' => $reply->getUserDisplayNameUnlinked(),
-			'comment_title' => $parentComment->getCommentTitle(),
+			'comment_author_username' => $reply->getAuthor()->getName(),
+			'comment_author_display_name' => $this->serializer->getDisplayNameFromUser( $reply->getAuthor(), false ),
+			'comment_title' => $parentComment->getTitle(),
 			'associated_page_display_title' => $associatedPageDisplayTitle,
-			'comment_wikitext' => $reply->getWikitext()
+			'comment_wikitext' => $this->serializer->getWikitext( $reply ),
 		];
 
 		EchoEvent::create( [
@@ -160,11 +175,16 @@ class EchoInterface {
 	public static function locateUsersWatchingComment( EchoEvent $event ): array {
 		$id = $event->getExtraParam( 'comment_id' );
 		if ( $id === null ) {
-			throw new MWException( wfMessage( 'commentstreams-no-comment_id' )->plain() );
+			throw new \RuntimeException( wfMessage( 'commentstreams-no-comment_id' )->plain() );
 		}
 
-		return MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' )->
-			getWatchers( $id );
+		/** @var ICommentStreamsStore $store */
+		$store = MediaWikiServices::getInstance()->getService( 'ICommentStreamsStore' );
+		$comment = $store->getComment( $id );
+		if ( !$comment ) {
+			return [];
+		}
+		return $store->getWatchers( $comment );
 	}
 
 	/**
@@ -197,7 +217,7 @@ class EchoInterface {
 			'presentation-model' => EchoCSPresentationModel::class,
 			'user-locators' => [ 'EchoUserLocator::locateUsersWatchingTitle' ],
 			'user-filters' =>
-				[ '\MediaWiki\Extension\CommentStreams\EchoInterface::locateUsersWatchingComment' ]
+				[ self::class . '::locateUsersWatchingComment' ]
 		];
 
 		$notifications['commentstreams-reply-to-watched-comment'] = [
@@ -206,7 +226,7 @@ class EchoInterface {
 			'section' => 'alert',
 			'presentation-model' => EchoCSPresentationModel::class,
 			'user-locators' =>
-				[ '\MediaWiki\Extension\CommentStreams\EchoInterface::locateUsersWatchingComment' ]
+				[ self::class . '::locateUsersWatchingComment' ]
 		];
 	}
 }

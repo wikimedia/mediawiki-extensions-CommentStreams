@@ -75,7 +75,7 @@ const CommentStreams = ( function () {
 					if ( blockName === null ) {
 						const anchorElement = document.createElement( 'a' );
 						anchorElement.innerHTML = comment.commenttitle;
-						anchorElement.href = `#cs-comment-${ comment.pageid }`;
+						anchorElement.href = `#cs-comment-${ comment.id }`;
 						const listItem = document.createElement( 'li' );
 						listItem.appendChild( anchorElement );
 						commentList.appendChild( listItem );
@@ -119,6 +119,7 @@ const CommentStreams = ( function () {
 				const blockName = parentComment.commentblockname;
 				if ( blockName === null && this.defaultblock ) {
 					this.defaultblock.addStream( parentComment );
+
 				} else if ( blockName in this.namedblocks ) {
 					this.namedblocks[ blockName ].addStream( parentComment );
 				} else {
