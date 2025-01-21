@@ -74,6 +74,7 @@
 	"commentstreams-buttontooltip-moderator-edit": "ویرایش توسط ناظم",
 	"commentstreams-buttontooltip-delete": "حذف",
 	"commentstreams-buttontooltip-moderator-delete": "حذف توسط ناظم",
+	"commentstreams-buttontooltip-history": "تاریخچه",
 	"commentstreams-buttontooltip-permalink": "پیوند دائمی",
 	"commentstreams-buttontooltip-collapse": "نهفتن",
 	"commentstreams-buttontooltip-expand": "گسترش",
@@ -118,6 +119,7 @@
 	"right-cs-moderator-delete": "حذف نظرات سایر کاربران",
 	"action-cs-moderator-delete": "حذف نظرات سایر کاربران",
 	"log-name-commentstreams": "سیاههٔ CommentStreams",
+	"log-description-commentstreams": "این رویدادها زمان رخ دادن رویدادهای CommentStreams را رهگیری می‌کنند.",
 	"logentry-commentstreams-comment-create": "$1 نظر $3 را {{GENDER:$2|ایجاد کرد}}",
 	"logentry-commentstreams-reply-create": "$1 پاسخ $3 را {{GENDER:$2|ایجاد کرد}}",
 	"logentry-commentstreams-comment-edit": "$1 نظر $3 را {{GENDER:$2|ویرایش کرد}}",
@@ -139,5 +141,6 @@
 	"commentstreams-allcomments-label-lastedited": "آخرین ویرایش",
 	"commentstreams-allcomments-label-page": "صفحهٔ نظر",
 	"commentstreams-allcomments-label-associatedpage": "صفحهٔ وابسته",
-	"commentstreams-allcomments-label-blockid": "شناسهٔ بستن"
+	"commentstreams-allcomments-label-blockid": "شناسهٔ بستن",
+	"commentstreams-ve-conversion-error": "خطا در تبدیل میان ویکی‌متن و اچ‌تی‌ام‌ال برای ویرایشگر دیداری"
 }
