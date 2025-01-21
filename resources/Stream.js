@@ -174,7 +174,7 @@ module.exports = ( function () {
 			const $leftDiv = $( '<div>' )
 				.addClass( 'cs-comment-header-left' );
 			if ( commentData.avatar !== null && commentData.avatar.length > 0 ) {
-				const $avatar = $( '<img' ).attr( { src: commentData.avatar, alt: commentData.username } )
+				const $avatar = $( '<img>' ).attr( { src: commentData.avatar, alt: commentData.username } )
 					.addClass( 'cs-avatar' );
 				$leftDiv.append( $avatar );
 			}
