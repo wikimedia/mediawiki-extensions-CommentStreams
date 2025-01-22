@@ -163,5 +163,10 @@
 	"logentry-commentstreams-reply-delete": "The template of the log entry message",
 	"logentry-commentstreams-reply-moderator-delete": "The template of the log entry message",
 	"commentstreams-ve-conversion-error": "Error message",
-	"commentstreams-no-comment_id": "Internal error message"
+	"commentstreams-no-comment_id": "Internal error message",
+	"commentstreams-history-title": "Page title for the comment history page",
+	"commentstreams-ui-close": "Generic close button label{{Identical|Close}}",
+	"commentstreams-history-timestamp": "Comment history column label",
+	"commentstreams-history-actor": "Comment history column label",
+	"commentstreams-history-text": "Comment history column label"
 }

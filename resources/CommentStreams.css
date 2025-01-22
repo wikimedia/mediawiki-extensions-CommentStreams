@@ -173,3 +173,20 @@
 .mw-content-ltr .cs-toc ul {
 	text-align: left;
 }
+
+.commentstreams-history-table {
+	width: 100%;
+}
+
+.commentstreams-history-table th {
+	font-weight: bold;
+	padding: 10px;
+}
+
+.commentstreams-history-table td {
+	padding: 0 10px;
+}
+
+.commentstreams-history-table tr {
+	border-bottom: 1px solid #ddd;
+}

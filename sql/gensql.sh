@@ -4,7 +4,7 @@ dir=$(dirname "$0")
 MW_INSTALL_PATH=${MW_INSTALL_PATH:-$dir/../../..}
 for db in mysql postgres sqlite
 do
-	for schema in cs_comments cs_replies cs_votes cs_watchlist
+	for schema in cs_comments cs_replies cs_votes cs_watchlist cs_associated_pages
 	do
 		echo $db : $schema
 

@@ -42,7 +42,8 @@ return [
 				$services->getService( 'CommentStreamsStore' ),
 				$services->getService( 'CommentStreamsNotifierInterface' ),
 				$services->getPermissionManager(),
-				$services->getService( 'CommentStreamsSerializer' )
+				$services->getService( 'CommentStreamsSerializer' ),
+				$services->getNamespaceInfo()
 			);
 		},
 	'CommentStreamsStore' =>

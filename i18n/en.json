@@ -160,5 +160,10 @@
 	"logentry-commentstreams-reply-delete": "$1 {{GENDER:$2|deleted}} reply $3",
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderator) deleted}} reply $3",
 	"commentstreams-ve-conversion-error": "Error converting between wikitext and HTML for VisualEditor",
-	"commentstreams-no-comment_id": "Internal error: No comment_id found"
+	"commentstreams-no-comment_id": "Internal error: No comment_id found",
+	"commentstreams-history-title": "Comment history",
+	"commentstreams-ui-close": "Close",
+	"commentstreams-history-timestamp": "Time",
+	"commentstreams-history-actor": "Author",
+	"commentstreams-history-text": "Comment"
 }
