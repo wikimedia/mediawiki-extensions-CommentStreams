@@ -25,10 +25,12 @@ use Action;
 use ConfigException;
 use ExtensionRegistry;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\CommentStreams\Store\NamespacePageStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Title\NamespaceInfo;
 use OutputPage;
 use Parser;
 use PPFrame;
@@ -84,18 +86,25 @@ class CommentStreamsHandler {
 	private $commentSerializer;
 
 	/**
+	 * @var NamespaceInfo
+	 */
+	private $namespaceInfo;
+
+	/**
 	 * @param ServiceOptions $options
 	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param NotifierInterface $notifier
 	 * @param PermissionManager $permissionManager
 	 * @param CommentSerializer $commentSerializer
+	 * @param NamespaceInfo $namespaceInfo
 	 */
 	public function __construct(
 		ServiceOptions $options,
 		ICommentStreamsStore $commentStreamsStore,
 		NotifierInterface $notifier,
 		PermissionManager $permissionManager,
-		CommentSerializer $commentSerializer
+		CommentSerializer $commentSerializer,
+		NamespaceInfo $namespaceInfo
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->exportCommentsAutomatically = $options->get( 'CommentStreamsExportCommentsAutomatically' );
@@ -103,6 +112,7 @@ class CommentStreamsHandler {
 		$this->notifier = $notifier;
 		$this->permissionManager = $permissionManager;
 		$this->commentSerializer = $commentSerializer;
+		$this->namespaceInfo = $namespaceInfo;
 	}
 
 	/**
@@ -183,9 +193,10 @@ class CommentStreamsHandler {
 	 * @throws ConfigException
 	 */
 	public function init( OutputPage $output ) {
-		if ( $this->checkDisplayComments( $output ) ) {
-			$comments = $this->getComments( $output );
-			$this->initJS( $output, $comments );
+		$showFor = $this->getTitleToShowCommentsFor( $output );
+		if ( $showFor ) {
+			$comments = $this->getComments( $showFor, $output );
+			$this->initJS( $output, $comments, $showFor );
 		}
 	}
 
@@ -193,18 +204,17 @@ class CommentStreamsHandler {
 	 * checks to see if comments should be displayed on this page
 	 *
 	 * @param OutputPage $output the OutputPage object
-	 * @return bool true if comments should be displayed on this page
-	 * @throws ConfigException
+	 * @return Title|null Title object to show comments for, or null if no comments should be shown
 	 */
-	private function checkDisplayComments( OutputPage $output ): bool {
+	private function getTitleToShowCommentsFor( OutputPage $output ): ?Title {
 		// don't display comments on this page if they are explicitly disabled
 		if ( $this->areCommentsEnabled === self::COMMENTS_DISABLED ) {
-			return false;
+			return null;
 		}
 
 		// don't display comments on any page action other than view action
 		if ( Action::getActionName( $output->getContext() ) !== "view" ) {
-			return false;
+			return null;
 		}
 
 		// if $wgCommentStreamsAllowedNamespaces is not set, display comments
@@ -217,7 +227,7 @@ class CommentStreamsHandler {
 		} elseif (
 			$csAllowedNamespaces === self::COMMENTS_DISABLED && $this->areCommentsEnabled != self::COMMENTS_ENABLED
 		) {
-			return false;
+			return null;
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
 			$csAllowedNamespaces = [ $csAllowedNamespaces ];
 		}
@@ -227,41 +237,49 @@ class CommentStreamsHandler {
 
 		// don't display comments in CommentStreams namespace
 		if ( $namespace === NS_COMMENTSTREAMS ) {
-			return false;
+			return null;
 		}
 
 		// don't display comments on pages that do not exist
 		if ( !$title->exists() ) {
-			return false;
+			return null;
 		}
 
 		// don't display comments on redirect pages
 		if ( $title->isRedirect() ) {
-			return false;
+			return null;
 		}
 
 		// display comments on this page if it contains the <comment-streams/> tag function
 		if ( $this->areCommentsEnabled === self::COMMENTS_ENABLED ) {
-			return true;
+			return null;
 		}
 
+		if ( $title->isTalkPage() ) {
+			// Show comments in talk namespaces if the corresponding subject namespace is allowed
+			$namespace = $this->namespaceInfo->getSubject( $namespace );
+			$title = Title::makeTitle( $namespace, $title->getDBkey() );
+		}
 		// display comments on this page if this namespace is one of the explicitly allowed namespaces
-		return in_array( $namespace, $csAllowedNamespaces );
+		if ( in_array( $namespace, $csAllowedNamespaces ) ) {
+			return $title;
+		}
+		return null;
 	}
 
 	/**
 	 * retrieve all comments for the current page
 	 *
-	 * @param OutputPage $output the OutputPage object for the current page
+	 * @param Title $showFor
+	 * @param IContextSource $context
 	 * @return Comment[] array of comments
-	 * @throws ConfigException
 	 */
-	private function getComments( OutputPage $output ): array {
+	private function getComments( Title $showFor, IContextSource $context ): array {
 		$commentData = [];
 
-		$comments = $this->commentStreamsStore->getAssociatedComments( $output->getTitle() );
+		$comments = $this->commentStreamsStore->getAssociatedComments( $showFor );
 
-		$config = $output->getConfig();
+		$config = $context->getConfig();
 		$newestStreamsOnTop = $config->get( 'CommentStreamsNewestStreamsOnTop' );
 		$votingEnabled = $config->get( 'CommentStreamsEnableVoting' );
 		$sortedComments = $this->sortComments(
@@ -271,12 +289,12 @@ class CommentStreamsHandler {
 		);
 
 		foreach ( $sortedComments as $comment ) {
-			$parentJSON = $this->commentSerializer->serializeComment( $comment, $output );
-
+			$parentJSON = $this->commentSerializer->serializeComment( $comment, $context );
 			$replies = $this->commentStreamsStore->getReplies( $comment );
+
 			$sortedReplies = $this->sortReplies( $replies );
 			foreach ( $sortedReplies as $reply ) {
-				$parentJSON['children'][] = $this->commentSerializer->serializeReply( $reply, $output );
+				$parentJSON['children'][] = $this->commentSerializer->serializeReply( $reply, $context );
 			}
 			$commentData[] = $parentJSON;
 		}
@@ -288,9 +306,10 @@ class CommentStreamsHandler {
 	 *
 	 * @param OutputPage $output the OutputPage object
 	 * @param Comment[] $comments array of comments on the current page
+	 * @param Title $showFor Title object to show comments for
 	 * @throws ConfigException
 	 */
-	private function initJS( OutputPage $output, array $comments ) {
+	private function initJS( OutputPage $output, array $comments, Title $showFor ) {
 		$config = $output->getConfig();
 
 		if ( $this->initiallyCollapseCommentStreams ) {
@@ -304,6 +323,7 @@ class CommentStreamsHandler {
 		if ( !$this->permissionManager->userHasRight( $output->getUser(), 'cs-comment' ) ) {
 			$canComment = false;
 		}
+		$historyHandler = $this->commentStreamsStore->getHistoryHandler();
 
 		$commentStreamsParams = [
 			'canComment' => $canComment,
@@ -317,7 +337,9 @@ class CommentStreamsHandler {
 			'initiallyCollapsed' => $initiallyCollapsed,
 			'enableVoting' => $config->get( 'CommentStreamsEnableVoting' ) ? 1 : 0,
 			'enableWatchlist' => $this->notifier->isLoaded() ? 1 : 0,
-			'comments' => $comments
+			'comments' => $comments,
+			'historyHandler' => $historyHandler ? json_encode( $historyHandler ) : null,
+			'associatedPage' => $showFor->getPrefixedDBkey()
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
 		$output->addModules( 'ext.CommentStreams' );

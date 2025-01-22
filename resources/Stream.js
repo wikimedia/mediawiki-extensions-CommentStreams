@@ -402,7 +402,7 @@ module.exports = ( function () {
 			this.replyMenus.push( menu );
 		}
 
-		menu.onChoose = function ( item ) {
+		menu.onChoose = ( item ) => {
 			const $comment = menu.$element.closest( '.cs-comment' );
 			const entityId = commentData.id;
 			const id = 'cs-comment-' + entityId;
@@ -425,7 +425,7 @@ module.exports = ( function () {
 					}
 					break;
 				case 'history':
-					location.href = mw.config.get( 'wgScript' ) + '?curid=' + entityId + '&action=history';
+					this.onHistoryClick( entityId );
 					break;
 				case 'link':
 					$( '.cs-target-comment' ).removeClass( 'cs-target-comment' );
@@ -439,6 +439,37 @@ module.exports = ( function () {
 		menu.menu.on( 'choose', menu.onChoose );
 
 		return menu.$element;
+	};
+
+	Stream.prototype.onHistoryClick = function ( entityId ) {
+		let handler = this.env.historyHandler;
+		if ( !handler ) {
+			return;
+		}
+		handler = JSON.parse( handler );
+		if ( handler.type === 'url' ) {
+			const url = handler.url.replace( '{id}', entityId );
+			location.href = mw.config.get( 'wgScript' ) + url;
+		} else if ( handler.type === 'js' ) {
+			mw.loader.using( handler.rlModules, () => {
+				const callback = this.stringToCallback( handler.callback );
+				if ( callback ) {
+					callback( entityId );
+				}
+			} );
+		}
+	};
+
+	Stream.prototype.stringToCallback = function ( str ) {
+		const arr = str.split( '.' );
+		let fn = window;
+		for ( let i = 0; i < arr.length; i++ ) {
+			if ( typeof fn[ arr[ i ] ] === 'undefined' ) {
+				return null;
+			}
+			fn = fn[ arr[ i ] ];
+		}
+		return fn;
 	};
 
 	Stream.prototype.recreateStreamMenu = function ( commentData ) {
@@ -464,7 +495,9 @@ module.exports = ( function () {
 			items.push( this.createCollapseButton() );
 		}
 
-		items.push( this.createHistoryButton( commentData.id ) );
+		if ( this.env.historyHandler ) {
+			items.push( this.createHistoryButton( commentData.id ) );
+		}
 
 		items.push( this.createPermalinkButton( commentData.id ) );
 

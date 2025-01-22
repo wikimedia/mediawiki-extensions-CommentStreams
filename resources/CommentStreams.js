@@ -38,7 +38,9 @@ const CommentStreams = ( function () {
 				initiallyCollapsed: config.initiallyCollapsed,
 				enableVoting: config.enableVoting,
 				enableWatchlist: config.enableWatchlist,
-				targetComment: null
+				targetComment: null,
+				historyHandler: config.historyHandler,
+				associatedPage: config.associatedPage
 			};
 
 			this.defaultblock = null;

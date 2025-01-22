@@ -23,6 +23,7 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
+use JsonSerializable;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\User\UserIdentity;
@@ -221,4 +222,9 @@ interface ICommentStreamsStore {
 	 * @return string
 	 */
 	public function getWikitext( AbstractComment $comment ): string;
+
+	/**
+	 * @return JsonSerializable|null
+	 */
+	public function getHistoryHandler(): ?JsonSerializable;
 }

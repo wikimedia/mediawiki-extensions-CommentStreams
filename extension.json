@@ -33,6 +33,19 @@
 						"CommentStreamsLogger",
 						"DeletePageFactory"
 					]
+				},
+				"talk-page": {
+					"class": "MediaWiki\\Extension\\CommentStreams\\Store\\TalkPageStore",
+					"services": [
+						"DBLoadBalancer",
+						"TitleFactory",
+						"RevisionLookup",
+						"WikiPageFactory",
+						"CommentStreamsLogger",
+						"UserFactory",
+						"UserGroupManager",
+						"NamespaceInfo"
+					]
 				}
 			}
 		}
@@ -125,6 +138,21 @@
 				"commentstreams-title-field-placeholder",
 				"commentstreams-body-field-placeholder",
 				"commentstreams-ve-conversion-error"
+			]
+		},
+		"ext.commentStreams.talkPageStore.history": {
+			"scripts": [
+				"talkPageStore/History.js"
+			],
+			"messages": [
+				"commentstreams-history-title",
+				"commentstreams-ui-close",
+				"commentstreams-history-timestamp",
+				"commentstreams-history-actor",
+				"commentstreams-history-text"
+			],
+			"dependencies": [
+				"oojs-ui"
 			]
 		}
 	},
@@ -249,6 +277,9 @@
 				"WikiPageFactory",
 				"MainConfig"
 			]
+		},
+		"talkPageStore": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\Store\\TalkPageStoreHooks"
 		}
 	},
 	"Hooks": {
@@ -267,9 +298,23 @@
 		"BeforeCreateEchoEvent": "MediaWiki\\Extension\\CommentStreams\\Notifier\\EchoNotifier::onBeforeCreateEchoEvent",
 		"SMW::Property::initProperties": "smw",
 		"SMWStore::updateDataBefore": "smw",
-		"SMW::Settings::BeforeInitializationComplete": "smw"
+		"SMW::Settings::BeforeInitializationComplete": "smw",
+		"MediaWikiServices": "talkPageStore"
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
+	"RestRoutes": [
+		{
+			"method": "GET",
+			"path": "/commentstreams/v1/comments/{comment}/history",
+			"class": "MediaWiki\\Extension\\CommentStreams\\Rest\\TaskPageStoreCommentHistoryHandler",
+			"services": [
+				"CommentStreamsStore",
+				"PermissionManager",
+				"ContentLanguage",
+				"UserFactory"
+			]
+		}
+	],
 	"config": {
 		"CommentStreamsNamespaceIndex": {
 			"value": 844
@@ -311,6 +356,7 @@
 			"value": "M j, Y \\a\\t g:i a"
 		},
 		"CommentStreamsStoreModel": {
+			"description": "The model to use for storing comments. Note that models are not interchangeable. When switching model, all comments made using another model will not be available anymore",
 			"value": "namespace-page"
 		}
 	}

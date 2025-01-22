@@ -27,9 +27,12 @@ use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\Content;
 use MediaWiki\Extension\CommentStreams\AbstractComment;
 use MediaWiki\Extension\CommentStreams\Comment;
+use MediaWiki\Extension\CommentStreams\HistoryHandler\UrlHistoryHandler;
 use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
 use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\Extension\CommentStreams\SMWInterface;
+use MediaWiki\Extension\CommentStreams\VoteHelper;
+use MediaWiki\Extension\CommentStreams\WatchHelper;
 use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
@@ -96,6 +99,12 @@ class NamespacePageStore implements ICommentStreamsStore {
 	/** @var DeletePageFactory */
 	private $deletePageFactory;
 
+	/** @var WatchHelper */
+	private $watchHelper;
+
+	/** @var VoteHelper */
+	private $voteHelper;
+
 	/**
 	 * @param ILoadBalancer $loadBalancer
 	 * @param PermissionManager $permissionManager
@@ -128,6 +137,9 @@ class NamespacePageStore implements ICommentStreamsStore {
 		$this->deletePageFactory = $deletePageFactory;
 
 		$this->logger = $logger;
+
+		$this->watchHelper = new WatchHelper( $this->loadBalancer, $this->userFactory );
+		$this->voteHelper = new VoteHelper( $this->loadBalancer );
 	}
 
 	/**
@@ -674,27 +686,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return int -1, 0, or 1
 	 */
 	public function getVote( AbstractComment $comment, UserIdentity $user ): int {
-		$result = $this->getDBConnection( DB_REPLICA )
-				->newSelectQueryBuilder()
-				->select( 'cst_v_vote' )
-				->from( 'cs_votes' )
-				->where( [
-					'cst_v_comment_id' => $comment->getId(),
-					'cst_v_user_id' => $user->getId(),
-				] )
-				->caller( __METHOD__ )
-				->fetchRow();
-		if ( $result ) {
-			$vote = (int)$result->cst_v_vote;
-			if ( $vote > 0 ) {
-				return 1;
-			}
-			if ( $vote < 0 ) {
-				return -1;
-			}
-		}
-
-		return 0;
+		return $this->voteHelper->getVote( $comment, $user );
 	}
 
 	/**
@@ -702,7 +694,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return int
 	 */
 	public function getNumUpVotes( AbstractComment $comment ): int {
-		return $this->getNumVotes( $comment->getId(), true );
+		return $this->voteHelper->getNumUpVotes( $comment );
 	}
 
 	/**
@@ -710,24 +702,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return int
 	 */
 	public function getNumDownVotes( AbstractComment $comment ): int {
-		return $this->getNumVotes( $comment->getId(), false );
-	}
-
-	/**
-	 * @param int $id
-	 * @param bool $up
-	 * @return int
-	 */
-	private function getNumVotes( int $id, bool $up ): int {
-		return $this->getDBConnection( DB_REPLICA )
-			->newSelectQueryBuilder()
-			->from( 'cs_votes' )
-			->where( [
-				'cst_v_comment_id' => $id,
-				'cst_v_vote' => $up ? 1 : -1
-			] )
-			->caller( __METHOD__ )
-			->fetchRowCount();
+		return $this->voteHelper->getNumDownVotes( $comment );
 	}
 
 	/**
@@ -741,61 +716,11 @@ class NamespacePageStore implements ICommentStreamsStore {
 		if ( !$wikiPage ) {
 			return false;
 		}
-
-		$dbw = $this->getDBConnection( DB_PRIMARY );
-		$result = $dbw->newSelectQueryBuilder()
-				->select( 'cst_v_vote' )
-				->from( 'cs_votes' )
-				->where( [
-					'cst_v_comment_id' => $comment->getId(),
-					'cst_v_user_id' => $user->getId(),
-				] )
-				->caller( __METHOD__ )
-				->fetchRow();
-		if ( $result ) {
-			if ( $vote === (int)$result->cst_v_vote ) {
-				return true;
-			}
-			if ( $vote === 1 || $vote === -1 ) {
-				$res = $dbw->update(
-					'cs_votes',
-					[
-						'cst_v_vote' => $vote
-					],
-					[
-						'cst_v_comment_id' => $comment->getId(),
-						'cst_v_user_id' => $user->getId()
-					],
-					__METHOD__
-				);
-			} else {
-				$res = $dbw->delete(
-					'cs_votes',
-					[
-						'cst_v_comment_id' => $comment->getId(),
-						'cst_v_user_id' => $user->getId()
-					],
-					__METHOD__
-				);
-			}
+		if ( $this->voteHelper->vote( $comment, $vote, $user ) ) {
 			$this->smwInterface->update( $wikiPage->getTitle() );
-			return $res;
-		}
-
-		$this->smwInterface->update( $wikiPage->getTitle() );
-		if ( $vote === 0 ) {
 			return true;
 		}
-
-		return $dbw->insert(
-			'cs_votes',
-			[
-				'cst_v_comment_id' => $comment->getId(),
-				'cst_v_user_id' => $user->getId(),
-				'cst_v_vote' => $vote
-			],
-			__METHOD__
-		);
+		return false;
 	}
 
 	/**
@@ -804,18 +729,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return bool true for OK, false for error
 	 */
 	public function watch( AbstractComment $comment, UserIdentity $user ): bool {
-		if ( $this->isWatching( $comment, $user, DB_PRIMARY ) ) {
-			return true;
-		}
-
-		return $this->getDBConnection( DB_PRIMARY )->insert(
-			'cs_watchlist',
-			[
-				'cst_wl_comment_id' => $comment->getId(),
-				'cst_wl_user_id' => $user->getId(),
-			],
-			__METHOD__
-		);
+		return $this->watchHelper->watch( $comment, $user );
 	}
 
 	/**
@@ -824,18 +738,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return bool true for OK, false for error
 	 */
 	public function unwatch( AbstractComment $comment, UserIdentity $user ): bool {
-		if ( !$this->isWatching( $comment, $user, DB_PRIMARY ) ) {
-			return true;
-		}
-
-		return $this->getDBConnection( DB_PRIMARY )->delete(
-			'cs_watchlist',
-			[
-				'cst_wl_comment_id' => $comment->getId(),
-				'cst_wl_user_id' => $user->getId()
-			],
-			__METHOD__
-		);
+		return $this->watchHelper->unwatch( $comment, $user );
 	}
 
 	/**
@@ -845,17 +748,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return bool database true for OK, false for error
 	 */
 	public function isWatching( AbstractComment $comment, UserIdentity $user, int $fromdb = DB_REPLICA ): bool {
-		$count = $this->getDBConnection( $fromdb )
-			   ->newSelectQueryBuilder()
-			   ->select( 'cst_wl_comment_id' )
-			   ->from( 'cs_watchlist' )
-			   ->where( [
-				   'cst_wl_comment_id' => $comment->getId(),
-				   'cst_wl_user_id' => $user->getId(),
-			   ] )
-			   ->caller( __METHOD__ )
-			   ->fetchRowCount();
-		return $count > 0;
+		return $this->watchHelper->isWatching( $comment, $user, $fromdb );
 	}
 
 	/**
@@ -863,24 +756,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @return User[] array of users indexed by user ID
 	 */
 	public function getWatchers( AbstractComment $comment ): array {
-		$result = $this->getDBConnection( DB_REPLICA )
-				->newSelectQueryBuilder()
-				->select( 'cst_wl_user_id' )
-				->from( 'cs_watchlist' )
-				->where( [
-					'cst_wl_comment_id' => $comment->getId()
-				] )
-				->caller( __METHOD__ )
-				->fetchRow();
-		$users = [];
-		if ( $result ) {
-			foreach ( $result as $row ) {
-				$userId = $row->cst_wl_user_id;
-				$user = $this->userFactory->newFromId( $userId );
-				$users[$userId] = $user;
-			}
-		}
-		return $users;
+		return $this->watchHelper->getWatchers( $comment );
 	}
 
 	/**
@@ -976,5 +852,12 @@ EOT;
 			return $result->getValue()['revision-record']->getId();
 		}
 		return null;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getHistoryHandler(): ?\JsonSerializable {
+		return new UrlHistoryHandler( '?curid={id}&action=history' );
 	}
 }

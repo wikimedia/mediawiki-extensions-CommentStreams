@@ -1,0 +1,30 @@
+[
+	{
+		"name": "cs_associated_pages",
+		"columns": [
+			{
+				"name": "csa_page_id",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			},
+			{
+				"name": "csa_comment_id",
+				"type": "integer",
+				"options": {
+					"autoincrement": true,
+					"unsigned": true,
+					"notnull": true,
+					"length": 10
+				}
+			}
+		],
+		"indexes": [],
+		"pk": [
+			"csa_comment_id"
+		]
+	}
+]

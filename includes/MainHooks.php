@@ -24,6 +24,8 @@ namespace MediaWiki\Extension\CommentStreams;
 use Article;
 use HtmlArmor;
 use MediaWiki\Actions\ActionEntryPoint;
+use MediaWiki\Extension\CommentStreams\Store\NamespacePageStore;
+use MediaWiki\Extension\CommentStreams\Store\TalkPageStore;
 use MediaWiki\Hook\AfterImportPageHook;
 use MediaWiki\Hook\BeforePageDisplayHook;
 use MediaWiki\Hook\ImportHandlePageXMLTagHook;
@@ -371,6 +373,8 @@ class MainHooks implements
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
 		$GLOBALS['wgLogTypes'][] = 'commentstreams';
 		$GLOBALS['wgLogActionsHandlers']['commentstreams/*'] = 'LogFormatter';
+
+		define( 'SLOT_COMMENTSTREAMS_COMMENTS', 'cs-comments' );
 	}
 
 	/**
@@ -401,7 +405,7 @@ class MainHooks implements
 	 * @return bool|void True or no return value to continue or false to abort
 	 */
 	public function onXmlDumpWriterOpenPage( $writer, &$out, $row, $title ) {
-		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
+		if ( !( $this->commentStreamsStore instanceof NamespacePageStore ) ) {
 			return;
 		}
 		if ( $title->getNamespace() == NS_COMMENTSTREAMS ) {
@@ -452,7 +456,7 @@ class MainHooks implements
 	 *	 processing of the tag
 	 */
 	public function onImportHandlePageXMLTag( $wikiImporter, &$pageInfo ) {
-		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
+		if ( !( $this->commentStreamsStore instanceof NamespacePageStore ) ) {
 			return;
 		}
 		$reader = $wikiImporter->getReader();
@@ -496,44 +500,48 @@ class MainHooks implements
 	public function onAfterImportPage(
 		$title, $foreignTitle, $revCount, $sRevCount, $pageInfo
 	) {
-		if ( !( $this->commentStreamsStore instanceof ICommentStreamsStore ) ) {
-			return;
+		if ( $this->commentStreamsStore instanceof TalkPageStore ) {
+			if ( $title->isTalkPage() ) {
+				$this->commentStreamsStore->updateAssociationIndex( $title );
+			}
 		}
-		$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
-		if ( isset( $pageInfo['CommentMetadata'] ) ) {
-			$info = $pageInfo['CommentMetadata'];
-			$associatedPageName = $info['associatedPageName'];
-			$associatedTitle = Title::newFromText( $associatedPageName );
-			$associatedPage = $this->wikiPageFactory->newFromTitle( $associatedTitle );
-			if ( !$associatedTitle->exists() ) {
-				$associatedId = $this->commentStreamsStore->createEmptyPage( $associatedPage, $user );
-			} else {
-				$associatedId = $associatedTitle->getId();
-			}
-			$blockName = $info['blockName'] ?? null;
-			if ( $associatedId ) {
-				$this->commentStreamsStore->upsertCommentMetadata(
-					$title->getId(),
-					$associatedId,
-					$info['commentTitle'],
-					$blockName
-				);
-			}
-		} elseif ( isset( $pageInfo['ReplyMetadata'] ) ) {
-			$info = $pageInfo['ReplyMetadata'];
-			$commentPageName = $info['parentCommentPageName'];
-			$commentTitle = Title::newFromText( $commentPageName );
-			if ( !$commentTitle->exists() ) {
-				$commentPage = $this->wikiPageFactory->newFromTitle( $commentTitle );
-				$commentId = $this->commentStreamsStore->createEmptyPage( $commentPage, $user );
-			} else {
-				$commentId = $commentTitle->getId();
-			}
-			if ( $commentId ) {
-				$this->commentStreamsStore->upsertReplyMetadata(
-					$title->getId(),
-					$commentId
-				);
+		if ( $this->commentStreamsStore instanceof NamespacePageStore ) {
+			$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
+			if ( isset( $pageInfo['CommentMetadata'] ) ) {
+				$info = $pageInfo['CommentMetadata'];
+				$associatedPageName = $info['associatedPageName'];
+				$associatedTitle = Title::newFromText( $associatedPageName );
+				$associatedPage = $this->wikiPageFactory->newFromTitle( $associatedTitle );
+				if ( !$associatedTitle->exists() ) {
+					$associatedId = $this->commentStreamsStore->createEmptyPage( $associatedPage, $user );
+				} else {
+					$associatedId = $associatedTitle->getId();
+				}
+				$blockName = $info['blockName'] ?? null;
+				if ( $associatedId ) {
+					$this->commentStreamsStore->upsertCommentMetadata(
+						$title->getId(),
+						$associatedId,
+						$info['commentTitle'],
+						$blockName
+					);
+				}
+			} elseif ( isset( $pageInfo['ReplyMetadata'] ) ) {
+				$info = $pageInfo['ReplyMetadata'];
+				$commentPageName = $info['parentCommentPageName'];
+				$commentTitle = Title::newFromText( $commentPageName );
+				if ( !$commentTitle->exists() ) {
+					$commentPage = $this->wikiPageFactory->newFromTitle( $commentTitle );
+					$commentId = $this->commentStreamsStore->createEmptyPage( $commentPage, $user );
+				} else {
+					$commentId = $commentTitle->getId();
+				}
+				if ( $commentId ) {
+					$this->commentStreamsStore->upsertReplyMetadata(
+						$title->getId(),
+						$commentId
+					);
+				}
 			}
 		}
 	}
