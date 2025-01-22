@@ -14,6 +14,7 @@
 	"commentstreams-error-comment-on-deleted-page": "La page à laquelle ce commentaire est associé a été supprimée.",
 	"commentstreams-error-reply-to-deleted-comment": "Le commentaire auquel ce commentaire est une réponse a été supprimé.",
 	"commentstreams-author-anonymous": "anonyme",
+	"commentstreams-toc": "Commentaires",
 	"apihelp-csquerycomment-summary": "Renvoyer les détails d’un commentaire. L’identifiant de page ou le titre doit être fourni.",
 	"apihelp-csquerycomment-param-pageid": "Identifiant de la page qui contient le commentaire à rechercher",
 	"apihelp-csquerycomment-param-title": "titre de la page qui contient le commentaire à rechercher",
@@ -174,5 +175,6 @@
 	"commentstreams-allcomments-label-page": "Page de commentaire",
 	"commentstreams-allcomments-label-associatedpage": "Page associée",
 	"commentstreams-allcomments-label-blockid": "Identifiant du blocage",
-	"commentstreams-ve-conversion-error": "Erreur de conversion entre le wikicode et le code HTML pour l’ÉditeurVisuel"
+	"commentstreams-ve-conversion-error": "Erreur de conversion entre le wikicode et le code HTML pour l’ÉditeurVisuel",
+	"commentstreams-no-comment_id": "Erreur interne : aucun comment_id trouvé"
 }
