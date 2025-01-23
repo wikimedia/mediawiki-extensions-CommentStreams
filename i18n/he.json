@@ -10,6 +10,7 @@
 	"commentstreams-error-comment-on-deleted-page": "הדף שהתגובה הזאת משויכת אליו נמחק.",
 	"commentstreams-error-reply-to-deleted-comment": "התגובה שהתגובה הזאת היא תשובה אליה נמחקה.",
 	"commentstreams-author-anonymous": "אלמוני",
+	"commentstreams-toc": "הערות",
 	"apihelp-csquerycomment-summary": "החזרת פרטי תגובה. יש לציין את מזהה הדף או את כותרתו.",
 	"apihelp-csquerycomment-param-pageid": "מזהה הדף שבו נמצאת התגובה שעליה תבוצע השאילתה",
 	"apihelp-csquerycomment-param-title": "כותרת הדף שבו נמצאת התגובה שעליה תבוצע השאילתה",

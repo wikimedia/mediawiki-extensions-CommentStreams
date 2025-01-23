@@ -15,6 +15,7 @@
 	"commentstreams-error-comment-on-deleted-page": "الصفحة التي يرتبط بها هذا التعليق تم حذفها.",
 	"commentstreams-error-reply-to-deleted-comment": "تم حذف التعليق الذي يعتبر هذا التعليق رداً عليه.",
 	"commentstreams-author-anonymous": "مجهول",
+	"commentstreams-toc": "تعليق",
 	"apihelp-csquerycomment-summary": "أعد العنوان، والمستخدم والطابع الزمني للإنشاء ونص الويكي للتعليق، يجب توفير إما معرف أو عنوان الصفحة.",
 	"apihelp-csquerycomment-param-pageid": "معرف الصفحة للصفحة التي تحمل التعليق للاستعلام",
 	"apihelp-csquerycomment-param-title": "عنوان الصفحة للصفحة التي تحمل التعليق للاستعلام",
