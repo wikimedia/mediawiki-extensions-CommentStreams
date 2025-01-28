@@ -152,6 +152,8 @@ module.exports = ( function () {
 		this.submitButton = new OO.ui.ButtonWidget( {
 			icon: 'check',
 			flags: 'progressive',
+			classes: [ 'cs-submit-btn' ],
+			label: mw.msg( 'commentstreams-button-add-comment' ),
 			title: mw.msg( 'commentstreams-buttontooltip-submit' ),
 			framed: false
 		} );
@@ -160,7 +162,8 @@ module.exports = ( function () {
 
 		this.cancelButton = new OO.ui.ButtonWidget( {
 			icon: 'cancel',
-			flags: 'destructive',
+			classes: [ 'cs-cancel-btn' ],
+			label: mw.msg( 'commentstreams-button-cancel' ),
 			title: mw.msg( 'commentstreams-buttontooltip-cancel' ),
 			framed: false
 		} );
