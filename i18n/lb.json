@@ -50,5 +50,6 @@
 	"commentstreams-allcomments-label-created": "Ugeluecht",
 	"commentstreams-allcomments-label-lasteditor": "Leschte Benotzer deen eppes geännert huet",
 	"commentstreams-allcomments-label-lastedited": "Lescht Ännerung",
-	"commentstreams-allcomments-label-page": "Bemierkungs-Säit"
+	"commentstreams-allcomments-label-page": "Bemierkungs-Säit",
+	"commentstreams-no-comment_id": "Interne Feeler: Keng comment_id fonnt"
 }
