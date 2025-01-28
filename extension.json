@@ -139,7 +139,9 @@
 				"commentstreams-datetext-moderated",
 				"commentstreams-title-field-placeholder",
 				"commentstreams-body-field-placeholder",
-				"commentstreams-ve-conversion-error"
+				"commentstreams-ve-conversion-error",
+				"commentstreams-button-add-comment",
+				"commentstreams-button-cancel"
 			]
 		},
 		"ext.commentStreams.talkPageStore.history": {

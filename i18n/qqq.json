@@ -168,5 +168,7 @@
 	"commentstreams-ui-close": "Generic close button label{{Identical|Close}}",
 	"commentstreams-history-timestamp": "Comment history column label",
 	"commentstreams-history-actor": "Comment history column label",
-	"commentstreams-history-text": "Comment history column label"
+	"commentstreams-history-text": "Comment history column label",
+	"commentstreams-button-add-comment": "User interface button text",
+	"commentstreams-button-cancel": "User interface button text.\n{{Identical|Cancel}}"
 }
