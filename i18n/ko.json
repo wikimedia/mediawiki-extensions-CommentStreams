@@ -9,6 +9,7 @@
 	"commentstreams-error-prohibitedaction": "$1 동작은 댓글 문서에서 허용되지 않습니다.",
 	"commentstreams-error-comment-on-deleted-page": "이 댓글이 속하는 문서가 삭제되었습니다.",
 	"commentstreams-author-anonymous": "익명",
+	"commentstreams-toc": "의견",
 	"apihelp-csquerycomment-summary": "댓글의 제목, 사용자, 작성 타임스탬프, 위키텍스트를 반환합니다. pageid나 title을 지정해야 합니다.",
 	"apihelp-csdeletecomment-summary": "댓글을 삭제합니다. pageid나 title을 지정해야 합니다.",
 	"apihelp-csdeletecomment-pageid-example": "문서 ID 3의 댓글 삭제",

@@ -10,6 +10,7 @@
 	"commentstreams-error-comment-on-deleted-page": "Страницата со која е поврзан коментарот е избришана.",
 	"commentstreams-error-reply-to-deleted-comment": "Коментарот кому одговара овој коментар е избришан.",
 	"commentstreams-author-anonymous": "анонимен",
+	"commentstreams-toc": "Коментари",
 	"apihelp-csquerycomment-summary": "Дај ги поединостите на коментарот. Мора да се укаже назнака на страницата или наслов.",
 	"apihelp-csquerycomment-param-pageid": "назнака на страницата каде се наоѓа коментарот што се бара",
 	"apihelp-csquerycomment-param-title": "наслов на страницата каде се наоѓа коментарот што се бара",
