@@ -68,6 +68,7 @@ const CommentStreams = ( function () {
 			if ( !commentList ) {
 				return;
 			}
+
 			Array.from( comments ).reverse().forEach(
 				( comment ) => {
 					const blockName = comment.commentblockname;
