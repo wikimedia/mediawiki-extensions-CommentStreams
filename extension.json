@@ -14,7 +14,7 @@
 	"requires": {
 		"MediaWiki": ">= 1.39.0",
 		"platform": {
-			"php": ">= 7.4"
+			"php": ">= 8.0"
 		}
 	},
 	"attributes": {
@@ -31,7 +31,8 @@
 						"CommentStreamsSMWInterface",
 						"RevisionLookup",
 						"CommentStreamsLogger",
-						"DeletePageFactory"
+						"DeletePageFactory",
+						"HookContainer"
 					]
 				},
 				"talk-page": {
@@ -44,7 +45,8 @@
 						"CommentStreamsLogger",
 						"UserFactory",
 						"UserGroupManager",
-						"NamespaceInfo"
+						"NamespaceInfo",
+						"HookContainer"
 					]
 				}
 			}

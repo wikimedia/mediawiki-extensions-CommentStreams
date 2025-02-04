@@ -33,6 +33,7 @@ use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\Extension\CommentStreams\SMWInterface;
 use MediaWiki\Extension\CommentStreams\VoteHelper;
 use MediaWiki\Extension\CommentStreams\WatchHelper;
+use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
@@ -125,7 +126,8 @@ class NamespacePageStore implements ICommentStreamsStore {
 		SMWInterface $smwInterface,
 		RevisionLookup $revisionLookup,
 		LoggerInterface $logger,
-		DeletePageFactory $deletePageFactory
+		DeletePageFactory $deletePageFactory,
+		private readonly HookContainer $hookContainer
 	) {
 		$this->loadBalancer = $loadBalancer;
 		$this->permissionManager = $permissionManager;
@@ -443,7 +445,13 @@ class NamespacePageStore implements ICommentStreamsStore {
 		if ( !$createdComment ) {
 			return null;
 		}
+		$associatedPage = $this->titleFactory->newFromID( $assocPageId );
 		$this->watch( $createdComment, $user );
+		$this->hookContainer->run(
+			'CommentStreamsInsertEntity', [
+				$createdComment, $user, $associatedPage, 'comment', $wikitext
+			]
+		);
 		return $createdComment;
 	}
 
@@ -476,6 +484,11 @@ class NamespacePageStore implements ICommentStreamsStore {
 
 		$this->smwInterface->update( $wikiPage->getTitle() );
 		$this->watch( $parent, $user );
+		$this->hookContainer->run(
+			'CommentStreamsInsertEntity', [
+				$this->getReply( $wikiPage->getId() ), $user, $parent->getAssociatedPage(), 'reply', $wikitext
+			]
+		);
 
 		return $this->getReply( $wikiPage->getId() );
 	}
@@ -497,6 +510,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 		$annotatedWikitext = $this->addAnnotations( $wikitext, $commentTitle );
 		$content = new WikitextContent( $annotatedWikitext );
 
+		$oldText = $this->getWikitext( $comment );
 		$wikiPage = $this->wikiPageFactory->newFromID( $comment->getId() );
 		$status = $this->doEditContent(
 			$wikiPage,
@@ -512,7 +526,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 
 		$this->smwInterface->update( $wikiPage->getTitle() );
 
-		return $dbw->update(
+		$res = $dbw->update(
 			'cs_comments',
 			[
 				'cst_c_comment_title' => $commentTitle
@@ -522,6 +536,16 @@ class NamespacePageStore implements ICommentStreamsStore {
 			],
 			__METHOD__
 		);
+
+		if ( !$res ) {
+			return false;
+		}
+		$this->hookContainer->run(
+			'CommentStreamsUpdateEntity', [
+				$comment, $user, $oldText, $wikitext
+			]
+		);
+		return $res;
 	}
 
 	/**
@@ -536,6 +560,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 		string $wikitext,
 		User $user
 	): bool {
+		$oldText = $this->getWikitext( $reply );
 		$wikiPage = $this->wikiPageFactory->newFromID( $reply->getId() );
 		$status = $this->doEditContent(
 			$wikiPage,
@@ -543,6 +568,14 @@ class NamespacePageStore implements ICommentStreamsStore {
 			$user,
 			EDIT_UPDATE | EDIT_SUPPRESS_RC
 		);
+
+		if ( $status->isOK() ) {
+			$this->hookContainer->run(
+				'CommentStreamsUpdateEntity', [
+					$reply, $user, $oldText, $wikitext
+				]
+			);
+		}
 
 		return $status->isOK();
 	}
@@ -574,13 +607,19 @@ class NamespacePageStore implements ICommentStreamsStore {
 		}
 
 		$dbw = $this->getDBConnection( DB_PRIMARY );
-		return $dbw->delete(
+		$res = $dbw->delete(
 			'cs_comments',
 			[
 				'cst_c_comment_page_id' => $pageid
 			],
 			__METHOD__
 		);
+
+		if ( !$res ) {
+			return false;
+		}
+		$this->hookContainer->run( 'CommentStreamsDeleteEntity', [ $comment, $actor->getUser() ] );
+		return $res;
 	}
 
 	/**
@@ -610,13 +649,19 @@ class NamespacePageStore implements ICommentStreamsStore {
 		}
 
 		$dbw = $this->getDBConnection( DB_PRIMARY );
-		return $dbw->delete(
+		$res = $dbw->delete(
 			'cs_replies',
 			[
 				'cst_r_reply_page_id' => $pageid
 			],
 			__METHOD__
 		);
+
+		if ( !$res ) {
+			return false;
+		}
+		$this->hookContainer->run( 'CommentStreamsDeleteEntity', [ $reply, $actor->getUser() ] );
+		return $res;
 	}
 
 	/**
