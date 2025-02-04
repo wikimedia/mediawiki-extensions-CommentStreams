@@ -14,6 +14,7 @@ use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
 use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\Extension\CommentStreams\VoteHelper;
 use MediaWiki\Extension\CommentStreams\WatchHelper;
+use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Json\FormatJson;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
@@ -46,6 +47,7 @@ class TalkPageStore implements ICommentStreamsStore {
 	 * @param UserFactory $userFactory
 	 * @param UserGroupManager $userGroupManager
 	 * @param NamespaceInfo $nsInfo
+	 * @param HookContainer $hookContainer
 	 * @param WatchHelper|null $watchHelper
 	 * @param VoteHelper|null $voteHelper
 	 * @param BagOStuff $cache
@@ -59,6 +61,7 @@ class TalkPageStore implements ICommentStreamsStore {
 		private readonly UserFactory $userFactory,
 		private readonly UserGroupManager $userGroupManager,
 		private readonly NamespaceInfo $nsInfo,
+		private readonly HookContainer $hookContainer,
 		private ?WatchHelper $watchHelper = null,
 		private ?VoteHelper $voteHelper = null,
 		private readonly BagOStuff $cache = new HashBagOStuff()
@@ -258,6 +261,11 @@ class TalkPageStore implements ICommentStreamsStore {
 			if ( $entity ) {
 				$this->cache->set( $this->makeCacheKeyForId( $entityId ), $pageData[$entityId] );
 			}
+			$this->hookContainer->run(
+				'CommentStreamsInsertEntity', [
+					$entity, $actor, $associatedPage, $type, $data['wikitext']
+				]
+			);
 			return $entity;
 		} else {
 			$this->rollbackAssociation( $entityId );
@@ -304,11 +312,16 @@ class TalkPageStore implements ICommentStreamsStore {
 		$pageData[$entity->getId()]['modified'] = wfTimestampNow();
 		$pageData[$entity->getId()]['wikitext'] = $text;
 		$pageData[$entity->getId()]['lastEditor'] = $actor->getName();
+		$oldText = $this->getWikitext( $entity );
 		$pageData[$entity->getId()]['baseRevision'] = $talkPage->getLatestRevID();
-
 		if ( $this->storeToPage( $talkPage, $pageData, $actor )->isGood() ) {
 			$this->cache->set( $this->makeCacheKeyForPage( $talkPage ), $pageData );
 			$this->cache->set( $this->makeCacheKeyForId( $entity->getId() ), $pageData[$entity->getId()] );
+			$this->hookContainer->run(
+				'CommentStreamsUpdateEntity', [
+					$entity, $actor, $oldText, $text
+				]
+			);
 			return true;
 		}
 		return false;
@@ -347,6 +360,11 @@ class TalkPageStore implements ICommentStreamsStore {
 		if ( $this->storeToPage( $talkPage, $pageData, $actor )->isGood() ) {
 			$this->cache->set( $this->makeCacheKeyForPage( $talkPage ), $pageData );
 			$this->cache->delete( $this->makeCacheKeyForId( $entity->getId() ) );
+			$this->hookContainer->run(
+				'CommentStreamsDeleteEntity', [
+					$entity, $actor
+				]
+			);
 			return true;
 		}
 		return false;
