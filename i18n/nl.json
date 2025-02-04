@@ -12,6 +12,7 @@
 	"commentstreams-error-comment-on-deleted-page": "De pagina waaraan deze opmerking is gekoppeld, is verwijderd.",
 	"commentstreams-error-reply-to-deleted-comment": "De reactie waarop deze reactie een antwoord is, is verwijderd.",
 	"commentstreams-author-anonymous": "anoniem",
+	"commentstreams-toc": "Opmerkingen",
 	"apihelp-csquerycomment-summary": "Details van een reactie retourneren. Er moet een pagina-ID of titel worden opgegeven.",
 	"apihelp-csquerycomment-param-pageid": "pagina-ID van de pagina die de reactie bevat die moet worden opgevraagd",
 	"apihelp-csquerycomment-param-title": "titel van de pagina die de reactie bevat die moet worden opgevraagd",
@@ -172,5 +173,6 @@
 	"commentstreams-allcomments-label-page": "Reactiepagina",
 	"commentstreams-allcomments-label-associatedpage": "Gekoppelde pagina",
 	"commentstreams-allcomments-label-blockid": "Blokkade-ID",
-	"commentstreams-ve-conversion-error": "Fout bij het converteren tussen wikitext en HTML voor VisualEditor"
+	"commentstreams-ve-conversion-error": "Fout bij het converteren tussen wikitext en HTML voor VisualEditor",
+	"commentstreams-no-comment_id": "Interne fout: Geen comment_id gevonden"
 }
