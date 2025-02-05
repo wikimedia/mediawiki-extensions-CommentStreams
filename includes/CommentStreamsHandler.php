@@ -260,6 +260,10 @@ class CommentStreamsHandler {
 			$namespace = $this->namespaceInfo->getSubject( $namespace );
 			$title = Title::makeTitle( $namespace, $title->getDBkey() );
 		}
+		if ( !$output->getUser()->probablyCan( 'read', $title ) ) {
+			// Do not show comments on a page user cannot read
+			return null;
+		}
 		// display comments on this page if this namespace is one of the explicitly allowed namespaces
 		if ( in_array( $namespace, $csAllowedNamespaces ) ) {
 			return $title;
