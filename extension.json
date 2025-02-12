@@ -50,6 +50,38 @@
 						"HookContainer"
 					]
 				}
+			},
+			"Notifier": {
+				"echo": {
+					"class": "MediaWiki\\Extension\\CommentStreams\\Notifier\\EchoNotifier",
+					"services": [ "PageProps", "CommentStreamsSerializer" ]
+				},
+				"notify-me": {
+					"class": "MediaWiki\\Extension\\CommentStreams\\Notifier\\NotifyMeNotifier",
+					"services": [ "MWStake.Notifier" ]
+				}
+			}
+		},
+		"NotifyMe": {
+			"SubscriberProviders": {
+				"comment-streams-watchers": {
+					"class": "MediaWiki\\Extension\\CommentStreams\\NotifyMeSubscriptionProvider",
+					"services": [ "CommentStreamsStore" ]
+				}
+			},
+			"Events": {
+				"cs-new-comment": {
+					"spec": {
+						"class": "MediaWiki\\Extension\\CommentStreams\\Notifier\\Event\\NewCommentEvent"
+					},
+					"buckets": [ "content-high-freq" ]
+				},
+				"cs-new-comment-reply": {
+					"spec": {
+						"class": "MediaWiki\\Extension\\CommentStreams\\Notifier\\Event\\NewReplyEvent"
+					},
+					"buckets": [ "content-high-freq" ]
+				}
 			}
 		}
 	},
@@ -364,6 +396,10 @@
 		"CommentStreamsStoreModel": {
 			"description": "The model to use for storing comments. Note that models are not interchangeable. When switching model, all comments made using another model will not be available anymore",
 			"value": "namespace-page"
+		},
+		"CommentStreamsNotifier": {
+			"description": "The notifier to use for notifying users of new comments. If null, first available notifier will be used",
+			"value": null
 		}
 	}
 }

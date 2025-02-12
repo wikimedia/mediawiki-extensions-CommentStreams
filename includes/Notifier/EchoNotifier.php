@@ -36,10 +36,6 @@ use MWException;
 use WikiPage;
 
 class EchoNotifier implements NotifierInterface {
-	/**
-	 * @var bool
-	 */
-	private $isLoaded;
 
 	/**
 	 * @var PageProps
@@ -52,16 +48,13 @@ class EchoNotifier implements NotifierInterface {
 	private $serializer;
 
 	/**
-	 * @param ExtensionRegistry $extensionRegistry
 	 * @param PageProps $pageProps
 	 * @param CommentSerializer $serializer
 	 */
 	public function __construct(
-		ExtensionRegistry $extensionRegistry,
 		PageProps $pageProps,
 		CommentSerializer $serializer
 	) {
-		$this->isLoaded = $extensionRegistry->isLoaded( 'Echo' );
 		$this->pageProps = $pageProps;
 		$this->serializer = $serializer;
 	}
@@ -70,7 +63,7 @@ class EchoNotifier implements NotifierInterface {
 	 * @return bool
 	 */
 	public function isLoaded(): bool {
-		return $this->isLoaded;
+		return ExtensionRegistry::getInstance()->isLoaded( 'Echo' );
 	}
 
 	/**
@@ -89,7 +82,7 @@ class EchoNotifier implements NotifierInterface {
 		User $user,
 		string $commentTitle
 	) {
-		if ( !$this->isLoaded ) {
+		if ( !$this->isLoaded() ) {
 			return;
 		}
 
@@ -132,7 +125,7 @@ class EchoNotifier implements NotifierInterface {
 		User $user,
 		Comment $parentComment
 	) {
-		if ( !$this->isLoaded ) {
+		if ( !$this->isLoaded() ) {
 			return;
 		}
 

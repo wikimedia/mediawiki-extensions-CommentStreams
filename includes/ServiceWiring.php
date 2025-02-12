@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\CommentStreams\Notifier\EchoNotifier;
+use MediaWiki\Extension\CommentStreams\Notifier\NullNotifier;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -61,11 +61,22 @@ return [
 		},
 	'CommentStreamsNotifierInterface' =>
 		static function ( MediaWikiServices $services ): NotifierInterface {
-			return new EchoNotifier(
-				ExtensionRegistry::getInstance(),
-				$services->getPageProps(),
-				$services->getService( 'CommentStreamsSerializer' )
-			);
+			$config = $services->getMainConfig();
+			$notifierName = $config->get( 'CommentStreamsNotifier' );
+			$specs = ExtensionRegistry::getInstance()->getAttribute( 'CommentStreamsNotifier' );
+			foreach ( $specs as $key => $spec ) {
+				$notifier = $services->getObjectFactory()->createObject( $spec );
+				if ( !( $notifier instanceof NotifierInterface ) ) {
+					continue;
+				}
+				if ( $notifierName && $notifierName === $key ) {
+					return $notifier;
+				}
+				if ( !$notifierName && $notifier->isLoaded() ) {
+					return $notifier;
+				}
+			}
+			return new NullNotifier();
 		},
 	'CommentStreamsSMWInterface' =>
 		static function ( MediaWikiServices $services ): SMWInterface {
