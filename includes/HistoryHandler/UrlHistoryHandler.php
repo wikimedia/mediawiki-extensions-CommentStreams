@@ -17,7 +17,7 @@ class UrlHistoryHandler implements JsonSerializable {
 	/**
 	 * @return array
 	 */
-	public function jsonSerialize() {
+	public function jsonSerialize(): mixed {
 		return [
 			'type' => 'url',
 			'url' => $this->url
