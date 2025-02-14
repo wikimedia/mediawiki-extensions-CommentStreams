@@ -23,7 +23,7 @@ class TalkPageStoreHooks implements MediaWikiServicesHook {
 					SLOT_COMMENTSTREAMS_COMMENTS,
 					CONTENT_MODEL_JSON,
 					[
-						'display' => 'section'
+						'display' => 'none'
 					]
 				);
 			}
