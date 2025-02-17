@@ -29,8 +29,5 @@
 	"commentstreams-datetext-postedon": "प्रेषित मिति",
 	"commentstreams-datetext-lasteditedon": "अन्तिम पटक सम्पादन",
 	"commentstreams-datetext-moderated": "सामान्य",
-	"commentstreams-allcomments-label-author": "लेखक",
-	"commentstreams-allcomments-label-created": "सृजना गरिएको",
-	"commentstreams-allcomments-label-lasteditor": "अन्तिम सम्पादक",
-	"commentstreams-allcomments-label-lastedited": "अन्तिम पटक सम्पादन"
+	"commentstreams-history-actor": "लेखक"
 }

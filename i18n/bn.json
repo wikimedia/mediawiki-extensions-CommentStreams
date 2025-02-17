@@ -10,6 +10,7 @@
 	"commentstreams-desc": "উইকি পাতাগুলিতে মন্তব্য করতে দেয়",
 	"commentstreams-error-prohibitedaction": "মন্তব্যের পাতায় $1 কর্ম অনুমোদিত নয়।",
 	"commentstreams-author-anonymous": "নামহীন",
+	"apihelp-csquerycomment-param-entityid": "মন্তব্য বা উত্তরের আইডি",
 	"apihelp-csvote-param-vote": "ভোট (1, -1, বা 0)।",
 	"commentstreams-api-error-delete": "মন্তব্য অপসারণের সময় ত্রুটি।",
 	"commentstreams-api-error-vote-notloggedin": "ভোট দিতে হলে আপনাকে অবশ্যই প্রবেশ করতে হবে।",
@@ -39,14 +40,10 @@
 	"notification-link-label-commentstreams-reply-on-watched-page": "উত্তর দেখুন",
 	"notification-link-label-commentstreams-reply-to-watched-comment": "উত্তর দেখুন",
 	"action-cs-moderator-delete": "অন্যান্য ব্যবহারকারীদের মন্তব্য অপসারণ করার",
-	"commentstreamsallcomments": "সকল মন্তব্য",
-	"commentstreams-allcomments-nocommentsfound": "কোনো মন্তব্য পাওয়া যায়নি।",
-	"commentstreams-allcomments-label-wikitext": "লেখা",
-	"commentstreams-allcomments-label-commenttitle": "শিরোনাম",
-	"commentstreams-allcomments-label-author": "লেখক",
-	"commentstreams-allcomments-label-created": "তৈরি হয়েছে",
-	"commentstreams-allcomments-label-lasteditor": "সর্বশেষ সম্পাদক",
-	"commentstreams-allcomments-label-lastedited": "সর্বশেষ সম্পাদিত",
-	"commentstreams-allcomments-label-page": "মন্তব্যের পাতা",
-	"commentstreams-allcomments-label-associatedpage": "সংযুক্ত পাতা"
+	"commentstreams-ui-close": "বন্ধ করুন",
+	"commentstreams-history-timestamp": "সময়",
+	"commentstreams-history-actor": "লেখক",
+	"commentstreams-history-text": "মন্তব্য",
+	"commentstreams-button-add-comment": "মন্তব্য যোগ করুন",
+	"commentstreams-button-cancel": "বাতিল"
 }

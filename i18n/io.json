@@ -16,7 +16,5 @@
 	"commentstreams-dialog-buttontext-cancel": "Nuligar",
 	"commentstreams-dialog-buttontext-yes": "Yes",
 	"commentstreams-dialog-buttontext-no": "No",
-	"commentstreams-allcomments-label-wikitext": "Texto",
-	"commentstreams-allcomments-label-commenttitle": "Titulo",
-	"commentstreams-allcomments-label-author": "Autoro"
+	"commentstreams-history-actor": "Autoro"
 }

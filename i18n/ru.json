@@ -31,8 +31,7 @@
 	"commentstreams-title-field-placeholder": "Введите заголовок...",
 	"commentstreams-body-field-placeholder": "Введите новый текст комментария...",
 	"echo-category-title-commentstreams-notification-category": "Новые комментарии и ответы",
-	"commentstreamsallcomments": "Все комментарии",
-	"commentstreams-allcomments-label-author": "Автор",
-	"commentstreams-allcomments-label-created": "Создано",
-	"commentstreams-allcomments-label-blockid": "Идентификатор блока"
+	"commentstreams-history-actor": "Автор",
+	"commentstreams-history-text": "Комментарий",
+	"commentstreams-button-add-comment": "Добавить комментарий"
 }

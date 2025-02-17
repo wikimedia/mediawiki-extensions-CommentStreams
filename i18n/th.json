@@ -10,16 +10,13 @@
 	"commentstreams-error-comment-on-deleted-page": "หน้าที่สัมพันธ์กับความคิดเห็นนี้ถูกลบไปแล้ว",
 	"commentstreams-author-anonymous": "ไม่ระบุตัวตน",
 	"apihelp-csquerycomment-summary": "ส่งกลับชื่อเรื่อง ผู้ใช้ การประทับเวลาการสร้าง และ Wikitext ของข้อคิดเห็น ต้องระบุ pageid หรือชื่อเรื่องอย่างใดอย่างหนึ่ง",
-	"apihelp-csquerycomment-param-pageid": "รหัสหน้าของหน้าที่เก็บความคิดเห็นที่จะสอบถาม",
 	"apihelp-csquerycomment-param-title": "ชื่อของหน้าที่เก็บความคิดเห็นที่จะสอบถาม",
 	"apihelp-csquerycomment-pageid-example": "สอบถามความคิดเห็นพร้อม ID หน้า 3 ใน wikitext",
 	"apihelp-csdeletecomment-summary": "ลบความคิดเห็น ต้องระบุ pageid หรือ title",
-	"apihelp-csdeletecomment-param-pageid": "รหัสหน้าของหน้าที่เก็บความคิดเห็นที่จะลบ",
 	"apihelp-csdeletecomment-param-title": "ชื่อของหน้าที่เก็บความคิดเห็นที่จะลบ",
 	"apihelp-csdeletecomment-pageid-example": "ลบความคิดเห็นด้วยรหัสหน้า 3",
 	"apihelp-cspostcomment-param-commenttitle": "ชื่อที่ไม่บังคับสำหรับความคิดเห็น",
 	"apihelp-cspostcomment-param-wikitext": "wikitext สำหรับความคิดเห็น",
 	"apihelp-cspostcomment-param-associatedid": "หน้าที่เกี่ยวข้องกับความคิดเห็นนี้",
-	"apihelp-cseditcomment-summary": "แก้ไขความคิดเห็นที่มีอยู่ ต้องระบุ pageid หรือ title",
-	"apihelp-cseditcomment-param-pageid": "รหัสหน้าของหน้าที่เก็บความคิดเห็นเพื่อแก้ไข"
+	"apihelp-cseditcomment-summary": "แก้ไขความคิดเห็นที่มีอยู่ ต้องระบุ pageid หรือ title"
 }

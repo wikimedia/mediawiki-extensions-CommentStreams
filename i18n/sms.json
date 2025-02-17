@@ -25,10 +25,5 @@
 	"commentstreams-buttontooltip-unwatch": "jõõsk valvvmest",
 	"commentstreams-buttontooltip-submit": "vuõlttâd",
 	"commentstreams-buttontooltip-cancel": "jõõsk",
-	"commentstreams-dialog-buttontext-cancel": "Jõõsk",
-	"commentstreamsallcomments": "Puk kommeeʹnt",
-	"commentstreams-allcomments-label-wikitext": "Teʹkstt",
-	"commentstreams-allcomments-label-reply": "Vaʹstted",
-	"commentstreams-allcomments-label-created": "Rajjum",
-	"commentstreams-allcomments-label-lastedited": "Mââimõssân muttum"
+	"commentstreams-dialog-buttontext-cancel": "Jõõsk"
 }

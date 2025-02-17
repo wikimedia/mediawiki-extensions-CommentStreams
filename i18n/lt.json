@@ -118,17 +118,6 @@
 	"logentry-commentstreams-comment-moderator-delete": "$1 {{GENDER:$2|(moderatorius) ištrynė}} komentarą $3",
 	"logentry-commentstreams-reply-delete": "$1 {{GENDER:$2|ištrynė}} atsakymą $3",
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(moderatorius) ištrynė}} atsakymą $3",
-	"commentstreamsallcomments": "Visi komentarai",
-	"commentstreams-allcomments-nocommentsfound": "Komentarų nerasta.",
-	"commentstreams-allcomments-label-wikitext": "Tekstas",
-	"commentstreams-allcomments-label-commenttitle": "Pavadinimas",
-	"commentstreams-allcomments-label-reply": "Atsakyti",
-	"commentstreams-allcomments-label-author": "Autorius",
-	"commentstreams-allcomments-label-created": "Sukurtas",
-	"commentstreams-allcomments-label-lasteditor": "Paskutinis redaktorius",
-	"commentstreams-allcomments-label-lastedited": "Paskutinis pakeitimas",
-	"commentstreams-allcomments-label-page": "Komentarų puslapis",
-	"commentstreams-allcomments-label-associatedpage": "Susijęs puslapis",
-	"commentstreams-allcomments-label-blockid": "Blokavimo Id",
-	"commentstreams-ve-conversion-error": "Klaida konvertuojant iš vikiteksto į HTML, skirtą vizualiam redagavimui"
+	"commentstreams-ve-conversion-error": "Klaida konvertuojant iš vikiteksto į HTML, skirtą vizualiam redagavimui",
+	"commentstreams-history-actor": "Autorius"
 }

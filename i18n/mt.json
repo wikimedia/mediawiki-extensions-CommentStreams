@@ -8,7 +8,5 @@
 	"commentstreams-buttontext-reply": "Wieġeb",
 	"commentstreams-buttontooltip-reply": "wieġeb",
 	"notification-body-commentstreams-reply-on-watched-page": "It-tweġiba hija:\n\n\n $5",
-	"notification-link-label-commentstreams-reply-on-watched-page": "Mur għat-tweġiba",
-	"commentstreamsallcomments": "Il-kummenti kollha",
-	"commentstreams-allcomments-label-reply": "Wieġeb"
+	"notification-link-label-commentstreams-reply-on-watched-page": "Mur għat-tweġiba"
 }
