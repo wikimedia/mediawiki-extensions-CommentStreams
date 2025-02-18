@@ -20,9 +20,5 @@
 	"echo-category-title-commentstreams-notification-category": "Ora ana tanggapan lan wangsulané",
 	"action-cs-comment": "kirim, besut, utawa busak tanggapan",
 	"action-cs-moderator-edit": "besut tanggapané naraguna liyané",
-	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|awèh}} tanggapan $3",
-	"commentstreams-allcomments-nocommentsfound": "Ora ana tanggapan.",
-	"commentstreams-allcomments-label-commenttitle": "Sesirah Tanggapan",
-	"commentstreams-allcomments-label-lastedited": "Dibesut Pungkasan",
-	"commentstreams-allcomments-label-page": "Kaca Tanggapan"
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|awèh}} tanggapan $3"
 }

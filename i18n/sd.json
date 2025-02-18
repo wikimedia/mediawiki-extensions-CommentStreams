@@ -22,11 +22,5 @@
 	"commentstreams-datetext-lasteditedon": "تي آخري ڀيرو سنواريو ويو",
 	"commentstreams-title-field-placeholder": "عنوان داخل ڪريو...",
 	"action-cs-moderator-edit": "ٻين واپرائيندڙن پاران تبصرن کي سنواريو",
-	"commentstreams-allcomments-nocommentsfound": "ڪي بہ رايا نہ لڌا.",
-	"commentstreams-allcomments-label-wikitext": "متن",
-	"commentstreams-allcomments-label-author": "ليکڪ",
-	"commentstreams-allcomments-label-created": "سرجيل",
-	"commentstreams-allcomments-label-lasteditor": "آخري سنواريندڙ",
-	"commentstreams-allcomments-label-lastedited": "آخري ڀيرو سنواريل",
-	"commentstreams-allcomments-label-associatedpage": "لاڳاپيل صفحو"
+	"commentstreams-history-actor": "ليکڪ"
 }

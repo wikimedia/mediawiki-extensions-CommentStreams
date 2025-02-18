@@ -16,7 +16,9 @@
 	"commentstreams-dialog-buttontext-cancel": "Չեղարկել",
 	"commentstreams-dialog-buttontext-yes": "Այո",
 	"commentstreams-dialog-buttontext-no": "Ոչ",
-	"commentstreamsallcomments": "Բոլոր մեկնաբանություններ",
-	"commentstreams-allcomments-label-author": "Հեղինակ",
-	"commentstreams-allcomments-label-created": "Ստեղծված է"
+	"commentstreams-ui-close": "Փակել",
+	"commentstreams-history-timestamp": "ժամանակ",
+	"commentstreams-history-actor": "Հեղինակ",
+	"commentstreams-button-add-comment": "Ավելացնել մեկնաբանություն",
+	"commentstreams-button-cancel": "Չեղարկել"
 }

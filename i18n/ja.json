@@ -7,7 +7,8 @@
 			"RYOUMA1117",
 			"Salvare",
 			"Shirayuki",
-			"Sou0012"
+			"Sou0012",
+			"Chqaz"
 		]
 	},
 	"commentstreams-desc": "ウィキページへのコメントを可能にする",
@@ -16,15 +17,12 @@
 	"commentstreams-error-reply-to-deleted-comment": "このコメントへの返信となるコメントは削除されました。",
 	"commentstreams-author-anonymous": "匿名",
 	"apihelp-csquerycomment-summary": "コメントの詳細を返します。ページIDまたはタイトルのいずれかを指定する必要があります。",
-	"apihelp-csquerycomment-param-pageid": "クエリするコメントを保持するページのページID",
 	"apihelp-csquerycomment-param-title": "問い合わせるコメントを保持するページのタイトル",
-	"apihelp-csdeletecomment-param-pageid": "削除するコメントを保持するページのID",
 	"apihelp-cspostcomment-summary": "新しいコメントを投稿する",
 	"apihelp-cspostcomment-param-commenttitle": "コメントのタイトル。",
 	"apihelp-cspostcomment-param-wikitext": "コメントのウィキテキスト。",
 	"apihelp-cspostcomment-param-associatedid": "このコメントと関連するページ",
 	"apihelp-cseditcomment-summary": "既存のコメントを編集します。ページIDまたはタイトルのいずれかを指定する必要があります。",
-	"apihelp-cseditcomment-param-pageid": "編集するコメントを保持するページのページID",
 	"apihelp-cseditcomment-param-title": "編集するコメントを保持するページのタイトル",
 	"apihelp-cseditcomment-param-commenttitle": "コメントのタイトル。",
 	"apihelp-cseditcomment-param-wikitext": "コメントのウィキテキスト。",
@@ -86,15 +84,6 @@
 	"logentry-commentstreams-reply-edit": "$1 が返信 $3 を{{GENDER:$2|編集しました}}",
 	"logentry-commentstreams-comment-delete": "$1 が コメント $3 を{{GENDER:$2|削除しました}}",
 	"logentry-commentstreams-reply-delete": "$1 が返信 $3 を{{GENDER:$2|削除しました}}",
-	"commentstreamsallcomments": "すべてのコメント",
-	"commentstreams-allcomments-nocommentsfound": "コメントはありません。",
-	"commentstreams-allcomments-label-wikitext": "テキスト",
-	"commentstreams-allcomments-label-commenttitle": "ページ名",
-	"commentstreams-allcomments-label-reply": "返信",
-	"commentstreams-allcomments-label-created": "作成日時",
-	"commentstreams-allcomments-label-lasteditor": "最終編集者",
-	"commentstreams-allcomments-label-lastedited": "最終編集",
-	"commentstreams-allcomments-label-page": "コメントページ",
-	"commentstreams-allcomments-label-associatedpage": "関連ページ",
-	"commentstreams-allcomments-label-blockid": "ブロックID"
+	"commentstreams-ui-close": "閉じる",
+	"commentstreams-button-cancel": "キャンセル"
 }

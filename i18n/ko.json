@@ -101,18 +101,7 @@
 	"logentry-commentstreams-comment-moderator-delete": "$1님(조정자)이 $3 댓글을 {{GENDER:$2|삭제했습니다}}",
 	"logentry-commentstreams-reply-delete": "$1님이 $3 답변을 {{GENDER:$2|삭제했습니다}}",
 	"logentry-commentstreams-reply-moderator-delete": "$1님(조정자)이 $3 답변을 {{GENDER:$2|삭제했습니다}}",
-	"commentstreamsallcomments": "모든 댓글",
-	"commentstreams-allcomments-nocommentsfound": "메시지가 없습니다.",
-	"commentstreams-allcomments-label-wikitext": "텍스트",
-	"commentstreams-allcomments-label-commenttitle": "제목",
-	"commentstreams-allcomments-label-reply": "답변",
-	"commentstreams-allcomments-label-author": "만든이",
-	"commentstreams-allcomments-label-created": "만들어짐",
-	"commentstreams-allcomments-label-lasteditor": "마지막 편집자",
-	"commentstreams-allcomments-label-lastedited": "최근 편집",
-	"commentstreams-allcomments-label-page": "댓글 문서",
-	"commentstreams-allcomments-label-associatedpage": "관련 문서",
-	"commentstreams-allcomments-label-blockid": "ID 차단",
 	"commentstreams-ve-conversion-error": "시각편집기에서 위키텍스트와 HTML 간 변환에 오류가 있습니다",
-	"commentstreams-no-comment_id": "내부 오류: comment_id를 찾을 수 없습니다"
+	"commentstreams-no-comment_id": "내부 오류: comment_id를 찾을 수 없습니다",
+	"commentstreams-history-actor": "만든이"
 }

@@ -7,5 +7,10 @@
 	},
 	"commentstreams-toc": "Коментари",
 	"commentstreams-buttontooltip-history": "историја",
-	"action-cs-comment": "објављујете, уређујете или бришете коментаре"
+	"action-cs-comment": "објављујете, уређујете или бришете коментаре",
+	"commentstreams-ui-close": "Затвори",
+	"commentstreams-history-timestamp": "Време",
+	"commentstreams-history-text": "Коментар",
+	"commentstreams-button-add-comment": "Додај коментар",
+	"commentstreams-button-cancel": "Откажи"
 }

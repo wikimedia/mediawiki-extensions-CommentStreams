@@ -54,14 +54,5 @@
 	"group-csmoderator": "Moderadores (CommentStreams)",
 	"group-csmoderator-member": "{{GENDER:$1|moderador|moderadora}} (CommentStreams)",
 	"grouppage-csmoderator": "{{ns:project}}:Moderadores (CommentStreams)",
-	"commentstreamsallcomments": "Todos os comentarios",
-	"commentstreams-allcomments-nocommentsfound": "Non se atopou ningún comentario.",
-	"commentstreams-allcomments-label-wikitext": "Texto",
-	"commentstreams-allcomments-label-commenttitle": "Título",
-	"commentstreams-allcomments-label-author": "Autor",
-	"commentstreams-allcomments-label-created": "Creado",
-	"commentstreams-allcomments-label-lasteditor": "Último editor",
-	"commentstreams-allcomments-label-lastedited": "Última edición",
-	"commentstreams-allcomments-label-page": "Páxina de comentarios",
-	"commentstreams-allcomments-label-associatedpage": "Páxina asociada"
+	"commentstreams-history-actor": "Autor"
 }

@@ -23,9 +23,5 @@
 	"commentstreams-dialog-buttontext-yes": "Sì",
 	"commentstreams-dialog-buttontext-no": "No",
 	"logentry-commentstreams-comment-edit": "$1 {{GENDER:$2|canciau}} lu cummentu $3",
-	"commentstreamsallcomments": "Tutti li cummenti",
-	"commentstreams-allcomments-label-wikitext": "Testu",
-	"commentstreams-allcomments-label-commenttitle": "Tìtulu",
-	"commentstreams-allcomments-label-author": "Auturi",
-	"commentstreams-allcomments-label-lastedited": "Ùrtimu canciamentu"
+	"commentstreams-history-actor": "Auturi"
 }

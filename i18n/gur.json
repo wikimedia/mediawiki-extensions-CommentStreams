@@ -8,7 +8,5 @@
 	"apihelp-cseditcomment-param-commenttitle": "Fu tɔgum la zudaalɛ",
 	"apihelp-cseditcomment-pageid-example": "Maliŋe tee fu yetɔgum na la pɛɛge la id 3",
 	"apihelp-csdeletereply-pageid-example": "Dileti lerekire la pɛɛge la id 3",
-	"apihelp-cseditreply-pageid-example": "Maliŋe tee lerekire la la pɛɛge id 3",
-	"commentstreams-allcomments-label-wikitext": "Tɛxse",
-	"commentstreams-allcomments-label-commenttitle": "Zudaalekɔ"
+	"apihelp-cseditreply-pageid-example": "Maliŋe tee lerekire la la pɛɛge id 3"
 }

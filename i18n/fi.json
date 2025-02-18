@@ -26,9 +26,5 @@
 	"commentstreams-dialog-buttontext-cancel": "Peruuta",
 	"commentstreams-dialog-buttontext-yes": "Kyllä",
 	"commentstreams-dialog-buttontext-no": "Ei",
-	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
-	"commentstreams-allcomments-label-wikitext": "Teksti",
-	"commentstreams-allcomments-label-commenttitle": "Otsikko",
-	"commentstreams-allcomments-label-reply": "Vastaa",
-	"commentstreams-allcomments-label-lastedited": "Viimeksi muokattu"
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3"
 }
