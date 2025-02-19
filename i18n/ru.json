@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Cabadeck",
 			"Danvintius Bookix",
 			"Kareyac",
 			"Okras",
@@ -31,6 +32,8 @@
 	"commentstreams-title-field-placeholder": "Введите заголовок...",
 	"commentstreams-body-field-placeholder": "Введите новый текст комментария...",
 	"echo-category-title-commentstreams-notification-category": "Новые комментарии и ответы",
+	"commentstreams-ui-close": "Закрыть",
+	"commentstreams-history-timestamp": "Время",
 	"commentstreams-history-actor": "Автор",
 	"commentstreams-history-text": "Комментарий",
 	"commentstreams-button-add-comment": "Добавить комментарий"

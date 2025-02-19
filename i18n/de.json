@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Metalhead64",
+			"Mschlindwein",
 			"ToBeFree"
 		]
 	},
@@ -153,5 +154,9 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(Moderator)|(Moderatorin)}} löschte die Antwort $3",
 	"commentstreams-ve-conversion-error": "Fehler beim Konvertieren zwischen Wikitext und HTML für den visuellen Editor",
 	"commentstreams-no-comment_id": "Interner Fehler: Keine comment_id gefunden",
-	"commentstreams-history-actor": "Autor"
+	"commentstreams-ui-close": "Schließen",
+	"commentstreams-history-actor": "Autor",
+	"commentstreams-history-text": "Kommentar",
+	"commentstreams-button-add-comment": "Kommentar hinzufügen",
+	"commentstreams-button-cancel": "Abbrechen"
 }
