@@ -102,7 +102,7 @@ module.exports = ( function () {
 				stream.addReply( childComment );
 			}
 		}
-
+		stream.maybeScrollToTarget();
 		return stream;
 	};
 
