@@ -4,6 +4,20 @@
 			"Cabal"
 		]
 	},
+	"apihelp-csquerycomment-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-csdeletecomment-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-cseditcomment-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-csvote-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-csunwatch-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-csqueryreply-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-csdeletereply-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
+	"apihelp-cseditreply-param-entityid": "ਟਿੱਪਣੀ ਜਾਂ ਜਵਾਬ ਸ਼ਿਨਾਖਤ(ID)",
 	"commentstreams-buttontooltip-edit": "ਸੋਧੋ",
-	"commentstreams-buttontooltip-permalink": "ਪੱਕੀ-ਕੜੀ"
+	"commentstreams-buttontooltip-permalink": "ਪੱਕੀ-ਕੜੀ",
+	"commentstreams-history-title": "ਟਿੱਪਣੀ ਇਤਿਹਾਸ",
+	"commentstreams-ui-close": "ਬੰਦ ਕਰੋ",
+	"commentstreams-history-timestamp": "ਵਕਤ",
+	"commentstreams-history-text": "ਟਿੱਪਣੀ",
+	"commentstreams-button-add-comment": "ਟਿੱਪਣੀ ਜੋੜੋ",
+	"commentstreams-button-cancel": "ਰੱਦ ਕਰੋ"
 }
