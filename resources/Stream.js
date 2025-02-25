@@ -42,6 +42,8 @@ module.exports = ( function () {
 		this.replyMenus = [];
 		this.collapsed = false;
 
+		this.$targetComment = null;
+
 		this.createStream( commentData );
 	}
 
@@ -92,6 +94,7 @@ module.exports = ( function () {
 
 		if ( this.env.targetComment === id ) {
 			$headComment.addClass( 'cs-target-comment' );
+			this.$targetComment = $headComment;
 		}
 
 		this.$stream = $( '<div>' )
@@ -1158,6 +1161,12 @@ module.exports = ( function () {
 				flags: 'primary'
 			} ]
 		} );
+	};
+
+	Stream.prototype.maybeScrollToTarget = function () {
+		if ( this.$targetComment ) {
+			this.controller.scrollToElement( this.$targetComment );
+		}
 	};
 
 	return Stream;
