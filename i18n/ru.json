@@ -6,7 +6,8 @@
 			"Thothsum",
 			"Vlad5250",
 			"Danvintius Bookix",
-			"Cabadeck"
+			"Cabadeck",
+			"Yurina Tatiana"
 		]
 	},
 	"commentstreams-desc": "Позволяет комментировать викистраницы",
@@ -22,6 +23,7 @@
 	"commentstreams-buttontooltip-delete": "удалить",
 	"commentstreams-buttontooltip-expand": "развернуть",
 	"commentstreams-buttontooltip-unwatch": "не следить",
+	"commentstreams-buttontooltip-submit": "отправить",
 	"commentstreams-buttontooltip-cancel": "отмена",
 	"commentstreams-dialog-buttontext-ok": "ОК",
 	"commentstreams-dialog-buttontext-cancel": "Отмена",

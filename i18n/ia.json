@@ -9,6 +9,7 @@
 	"commentstreams-error-comment-on-deleted-page": "Le pagina con le qual iste commento es associate ha essite delite.",
 	"commentstreams-error-reply-to-deleted-comment": "Le commento al qual iste commento es un responsa ha essite delite.",
 	"commentstreams-author-anonymous": "anonyme",
+	"commentstreams-toc": "Commentos",
 	"apihelp-csquerycomment-summary": "Retorna detalios de un commento. O pageid o title debe esser fornite.",
 	"apihelp-csquerycomment-param-pageid": "ID del pagina que tene le commento a consultar",
 	"apihelp-csquerycomment-param-title": "titulo del pagina que tene le commento a consultar",
