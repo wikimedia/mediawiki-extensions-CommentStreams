@@ -435,6 +435,11 @@ module.exports = ( function () {
 					self.controller.scrollToElement( $comment );
 					$comment.addClass( 'cs-target-comment' );
 					window.location.hash = '#' + id;
+					if ( typeof navigator.clipboard !== 'undefined' ) {
+						navigator.clipboard.writeText( window.location.href ).then( () => {
+							mw.notify( mw.msg( 'commentstreams-link-copied' ) );
+						} );
+					}
 					break;
 			}
 		};

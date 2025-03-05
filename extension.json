@@ -141,7 +141,8 @@
 				"commentstreams-body-field-placeholder",
 				"commentstreams-ve-conversion-error",
 				"commentstreams-button-add-comment",
-				"commentstreams-button-cancel"
+				"commentstreams-button-cancel",
+				"commentstreams-link-copied"
 			]
 		},
 		"ext.commentStreams.talkPageStore.history": {
