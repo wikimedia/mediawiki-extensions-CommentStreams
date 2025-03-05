@@ -36,14 +36,14 @@ window.cs.talkPageStore.historyHandler.Dialog.prototype.getReadyProcess = functi
 		.call( this, data )
 		.next( function () {
 			this.pushPending();
-			this.load().done( function ( history ) {
+			this.load().done( ( history ) => {
 				this.render( history );
 				this.popPending();
-			}.bind( this ) ).fail( function () {
+			} ).fail( () => {
 				this.showErrors( [] );
 				this.updateSize();
 				this.popPending();
-			}.bind( this ) );
+			} );
 		}, this );
 };
 
@@ -65,10 +65,10 @@ window.cs.talkPageStore.historyHandler.Dialog.prototype.load = function () {
 		method: 'GET'
 	} );
 
-	response.done( function ( data ) {
+	response.done( ( data ) => {
 		dfd.resolve( data );
 	} );
-	response.fail( function () {
+	response.fail( () => {
 		dfd.reject();
 	} );
 

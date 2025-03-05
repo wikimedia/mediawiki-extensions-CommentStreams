@@ -170,5 +170,6 @@
 	"commentstreams-history-actor": "Comment history column label",
 	"commentstreams-history-text": "Comment history column label",
 	"commentstreams-button-add-comment": "User interface button text",
-	"commentstreams-button-cancel": "User interface button text.\n{{Identical|Cancel}}"
+	"commentstreams-button-cancel": "User interface button text.\n{{Identical|Cancel}}",
+	"commentstreams-link-copied": "Notice when permalink is copied to clipboard"
 }
