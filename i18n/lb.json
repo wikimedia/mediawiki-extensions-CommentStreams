@@ -43,7 +43,7 @@
 	"action-cs-moderator-delete": "Bemierkunge vun anere Benotzer ze läschen",
 	"commentstreams-no-comment_id": "Interne Feeler: Keng comment_id fonnt",
 	"commentstreams-ui-close": "Zoumaachen",
-	"commentstreams-history-timestamp": "Zäit",
+	"commentstreams-history-timestamp": "Zäitstempel",
 	"commentstreams-history-actor": "Auteur",
 	"commentstreams-button-cancel": "Ofbriechen"
 }
