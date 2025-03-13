@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gwendal"
+			"Gwendal",
+			"Huñvreüs"
 		]
 	},
-	"commentstreams-buttontext-reply": "Respont"
+	"commentstreams-buttontext-reply": "Respont",
+	"commentstreams-buttontooltip-collapse": "pakañ"
 }
