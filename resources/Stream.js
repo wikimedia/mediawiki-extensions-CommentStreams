@@ -197,12 +197,23 @@ module.exports = ( function () {
 			.html( commentData.userdisplayname );
 		$centerDiv.append( $author );
 
-		let dateText = ' | ' + mw.msg( 'commentstreams-datetext-postedon' ) +
+		let dateText = ' | ' + mw.msg( 'commentstreams-datetext-posted' ) +
 		' ' + commentData.created;
 
+		if ( commentData.useCustomDateFormat ) {
+			dateText = ' | ' + mw.msg( 'commentstreams-datetext-postedon' ) +
+		' ' + commentData.created;
+		}
+
 		if ( commentData.modified !== null ) {
-			dateText += ' | ' + mw.msg( 'commentstreams-datetext-lasteditedon' ) +
-			' ' + commentData.modified;
+			let lastedited = ' | ' + mw.msg( 'commentstreams-datetext-lastedited' ) +
+			' ' + commentData.created;
+			if ( commentData.useCustomDateFormat ) {
+				lastedited = ' | ' + mw.msg( 'commentstreams-datetext-lasteditedon' ) +
+				' ' + commentData.modified;
+			}
+
+			dateText += lastedited;
 			if ( commentData.moderated ) {
 				dateText += ' (' + mw.msg( 'commentstreams-datetext-moderated' ) +
 				')';

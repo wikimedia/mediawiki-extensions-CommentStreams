@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommentStreams;
 use HtmlArmor;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Page\PageIdentity;
@@ -104,6 +105,7 @@ class CommentSerializer {
 			'created' => $this->formatTimestamp( $comment->getCreated(), $user ),
 			'created_timestamp' => $comment->getCreated()->format( "U" ),
 			'modified' => $this->formatTimestamp( $comment->getModified(), $user ),
+			'useCustomDateFormat' => $this->timeFormat !== null,
 			'watching' => $this->store->isWatching( $comment, $user ) ? 1 : 0
 		];
 
@@ -221,7 +223,11 @@ class CommentSerializer {
 			return null;
 		}
 		$timestamp->offsetForUser( $user );
-		return $timestamp->format( $this->timeFormat );
+		if ( $this->timeFormat ) {
+			return $timestamp->format( $this->timeFormat );
+		}
+		$language = RequestContext::getMain()->getLanguage();
+		return $language->userTimeAndDate( $timestamp, $user, [ 'timecorrection' => true ] );
 	}
 
 	/**
