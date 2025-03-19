@@ -21,8 +21,10 @@
 
 use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
 use MediaWiki\Extension\CommentStreams\Store\TalkPageStore;
+use MediaWiki\Maintenance\LoggedUpdateMaintenance;
 use MediaWiki\Maintenance\MaintenanceFatalError;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 
 $IP ??= getenv( "MW_INSTALL_PATH" ) ?: dirname( __DIR__, 3 );
@@ -114,11 +116,11 @@ class MigrateToTalkPageStorage extends LoggedUpdateMaintenance {
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $page
+	 * @param Title $page
 	 * @param array $comments
 	 * @return int
 	 */
-	private function migrateComments( \MediaWiki\Title\Title $page, array $comments ): int {
+	private function migrateComments( Title $page, array $comments ): int {
 		$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
 		$cnt = 0;
 		foreach ( $comments as $comment ) {
@@ -170,10 +172,10 @@ class MigrateToTalkPageStorage extends LoggedUpdateMaintenance {
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $associatedPage
+	 * @param Title $associatedPage
 	 * @return array
 	 */
-	private function getAssociatedComments( \MediaWiki\Title\Title $associatedPage ) {
+	private function getAssociatedComments( Title $associatedPage ) {
 		$res = $this->getDB( DB_REPLICA )->newSelectQueryBuilder()
 			->select( [ 'page_title', 'page_namespace', 'page_id', 'cst_c_comment_title', 'cst_c_block_name' ] )
 			->from( 'cs_comments', 'csc' )
@@ -196,12 +198,12 @@ class MigrateToTalkPageStorage extends LoggedUpdateMaintenance {
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $commentPage
+	 * @param Title $commentPage
 	 * @param string $title
 	 * @param string|null $block
 	 * @return array|null
 	 */
-	private function getCommentInfo( \MediaWiki\Title\Title $commentPage, string $title, ?string $block ): ?array {
+	private function getCommentInfo( Title $commentPage, string $title, ?string $block ): ?array {
 		$data = [
 			'type' => 'comment',
 			'title' => $title,
@@ -214,10 +216,10 @@ class MigrateToTalkPageStorage extends LoggedUpdateMaintenance {
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $commentPage
+	 * @param Title $commentPage
 	 * @return Generator
 	 */
-	private function getReplies( \MediaWiki\Title\Title $commentPage ): Generator {
+	private function getReplies( Title $commentPage ): Generator {
 		$res = $this->getDB( DB_REPLICA )->newSelectQueryBuilder()
 			->select( [ 'page_title', 'page_namespace', 'page_id' ] )
 			->from( 'cs_replies', 'csc' )
@@ -232,10 +234,10 @@ class MigrateToTalkPageStorage extends LoggedUpdateMaintenance {
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $replyPage
+	 * @param Title $replyPage
 	 * @return string[]
 	 */
-	private function getReplyInfo( \MediaWiki\Title\Title $replyPage ): array {
+	private function getReplyInfo( Title $replyPage ): array {
 		$data = [
 			'type' => 'reply',
 		];
@@ -244,11 +246,11 @@ class MigrateToTalkPageStorage extends LoggedUpdateMaintenance {
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $page
+	 * @param Title $page
 	 * @param array &$data
 	 * @return void
 	 */
-	private function decorateData( \MediaWiki\Title\Title $page, array &$data ) {
+	private function decorateData( Title $page, array &$data ) {
 		$firstRevision = $this->getServiceContainer()->getRevisionLookup()->getFirstRevision( $page );
 		if ( !$firstRevision ) {
 			return null;
@@ -295,10 +297,10 @@ EOT;
 	}
 
 	/**
-	 * @param \MediaWiki\Title\Title $source
+	 * @param Title $source
 	 * @return void
 	 */
-	private function maybeDeleteSource( \MediaWiki\Title\Title $source ) {
+	private function maybeDeleteSource( Title $source ) {
 		if ( $this->hasOption( 'delete-source' ) ) {
 			$this->output( "\n---> Deleting source page {$source->getPrefixedText()}..." );
 			$dpFactory = $this->getServiceContainer()->getDeletePageFactory();

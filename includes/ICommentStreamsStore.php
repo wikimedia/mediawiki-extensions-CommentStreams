@@ -26,8 +26,8 @@ namespace MediaWiki\Extension\CommentStreams;
 use JsonSerializable;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\User\User;
 use MediaWiki\User\UserIdentity;
-use User;
 
 /**
  * Comment Streams database backend interface

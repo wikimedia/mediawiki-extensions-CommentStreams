@@ -2,7 +2,6 @@
 
 namespace MediaWiki\Extension\CommentStreams\Store;
 
-use BagOStuff;
 use JsonSerializable;
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\JsonContent;
@@ -26,13 +25,14 @@ use MediaWiki\Storage\PageUpdateStatus;
 use MediaWiki\Title\NamespaceInfo;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserGroupManager;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use User;
+use Wikimedia\ObjectCache\BagOStuff;
 use Wikimedia\ObjectCache\HashBagOStuff;
 use Wikimedia\Rdbms\ILoadBalancer;
 

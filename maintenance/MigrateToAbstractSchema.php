@@ -19,6 +19,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+use MediaWiki\Maintenance\LoggedUpdateMaintenance;
+
 $IP ??= getenv( "MW_INSTALL_PATH" ) ?: dirname( __DIR__, 3 );
 require_once "$IP/maintenance/Maintenance.php";
 
