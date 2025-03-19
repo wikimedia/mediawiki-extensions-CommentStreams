@@ -2,7 +2,6 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use HashBagOStuff;
 use HtmlArmor;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
@@ -18,6 +17,7 @@ use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 use RepoGroup;
+use Wikimedia\ObjectCache\HashBagOStuff;
 
 class CommentSerializer {
 	/** @var string|null */

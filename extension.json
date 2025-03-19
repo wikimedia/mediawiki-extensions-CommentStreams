@@ -4,7 +4,8 @@
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Jji Jason Ji]",
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]",
-		"[https://www.mediawiki.org/wiki/User:MarkAHershberger Mark A. Hershberger]"
+		"[https://www.mediawiki.org/wiki/User:MarkAHershberger Mark A. Hershberger]",
+		"[https://www.hallowelt.com Hallo Welt! GmbH]"
 	],
 	"url": "https://www.mediawiki.org/wiki/Extension:CommentStreams",
 	"descriptionmsg": "commentstreams-desc",
@@ -12,7 +13,7 @@
 	"type": "parserhook",
 	"license-name": "MIT",
 	"requires": {
-		"MediaWiki": ">= 1.39.0",
+		"MediaWiki": ">= 1.43.0",
 		"platform": {
 			"php": ">= 8.0"
 		}

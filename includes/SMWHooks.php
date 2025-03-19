@@ -21,8 +21,8 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use Config;
-use ConfigException;
+use MediaWiki\Config\Config;
+use MediaWiki\Config\ConfigException;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\WikiPageFactory;
 use SMW\DIProperty;

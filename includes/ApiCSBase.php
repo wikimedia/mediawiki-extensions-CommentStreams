@@ -21,9 +21,9 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiBase;
-use ApiMain;
 use InvalidArgumentException;
+use MediaWiki\Api\ApiBase;
+use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use Wikimedia\ParamValidator\ParamValidator;
 

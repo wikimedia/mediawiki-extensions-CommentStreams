@@ -3,7 +3,7 @@
 namespace SMW\MediaWiki\Jobs;
 
 use IJobSpecification;
-use Title;
+use MediaWiki\Title\Title;
 
 class UpdateJob implements IJobSpecification {
 

@@ -23,16 +23,16 @@ namespace MediaWiki\Extension\CommentStreams\Notifier;
 
 use EchoEvent;
 use Exception;
-use ExtensionRegistry;
 use MediaWiki\Extension\CommentStreams\Comment;
 use MediaWiki\Extension\CommentStreams\CommentSerializer;
 use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
 use MediaWiki\Extension\CommentStreams\NotifierInterface;
 use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageProps;
+use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\User\User;
 use MWException;
-use PageProps;
-use User;
 use WikiPage;
 
 class EchoNotifier implements NotifierInterface {

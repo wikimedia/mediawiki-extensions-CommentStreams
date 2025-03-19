@@ -21,9 +21,10 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ExtensionRegistry;
 use JobQueueGroup;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Title\Title;
 use MediaWiki\User\UserIdentity;
 use SMW\DIProperty;
 use SMW\DIWikiPage;
@@ -31,7 +32,6 @@ use SMW\MediaWiki\Jobs\UpdateJob;
 use SMW\PropertyRegistry;
 use SMW\StoreFactory;
 use SMWDataItem;
-use Title;
 
 class SMWInterface {
 	public const CONSTRUCTOR_OPTIONS = [

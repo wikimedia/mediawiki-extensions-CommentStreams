@@ -21,7 +21,7 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ConfigException;
+use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\User\UserIdentity;
 use wAvatar;
