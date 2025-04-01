@@ -169,7 +169,7 @@
 	"commentstreams-no-comment_id": "خطأ داخلي: لم يتم العثور على comment_id",
 	"commentstreams-history-title": "تاريخ التعليقات",
 	"commentstreams-ui-close": "أغلق",
-	"commentstreams-history-timestamp": "الوقت",
+	"commentstreams-history-timestamp": "الطابع الزمني",
 	"commentstreams-history-actor": "المؤلف",
 	"commentstreams-history-text": "تعليق",
 	"commentstreams-button-add-comment": "أضف تعليق",
