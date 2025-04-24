@@ -153,5 +153,19 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(модератор) го избриша}} одговорот $3",
 	"commentstreams-ve-conversion-error": "Грешка при претворањето од викитекст во HTML за Нагледниот уредник",
 	"commentstreams-no-comment_id": "Внатрешна грешка: Не пронајдов comment_id",
-	"commentstreams-history-actor": "Автор"
+	"commentstreams-history-actor": "Автор",
+	"apihelp-csquerycomment-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-csdeletecomment-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-cseditcomment-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-csvote-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-csunwatch-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-csqueryreply-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-csdeletereply-param-entityid": "Назнака на коментар или одговор",
+	"apihelp-cseditreply-param-entityid": "Назнака на коментар или одговор",
+	"commentstreams-history-title": "Историја на коментирање",
+	"commentstreams-ui-close": "Затвори",
+	"commentstreams-history-timestamp": "Време и датум",
+	"commentstreams-history-text": "Коментар",
+	"commentstreams-button-add-comment": "Додај коментар",
+	"commentstreams-button-cancel": "Откажи"
 }
