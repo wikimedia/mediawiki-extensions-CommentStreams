@@ -21,12 +21,12 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ExtensionRegistry;
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommentStreams\Notifier\EchoNotifier;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Registration\ExtensionRegistry;
 use Psr\Log\LoggerInterface;
 
 // PHP unit does not understand code coverage for this file

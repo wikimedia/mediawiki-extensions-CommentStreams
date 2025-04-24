@@ -21,8 +21,8 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiMain;
-use Config;
+use MediaWiki\Api\ApiMain;
+use MediaWiki\Config\Config;
 
 class ApiCSQueryComment extends ApiCSCommentBase {
 

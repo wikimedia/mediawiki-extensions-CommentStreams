@@ -22,7 +22,7 @@
 namespace MediaWiki\Extension\CommentStreams\Notifier;
 
 use EchoEventPresentationModel;
-use Message;
+use MediaWiki\Message\Message;
 
 class EchoCSPresentationModel extends EchoEventPresentationModel {
 	/**

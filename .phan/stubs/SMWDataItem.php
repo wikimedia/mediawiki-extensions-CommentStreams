@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Title\Title;
+
 class SMWDataItem {
 	const TYPE_BLOB = 0; // phpcs:ignore
 	const TYPE_WIKIPAGE = 0; // phpcs:ignore

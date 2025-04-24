@@ -19,6 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+use MediaWiki\Maintenance\Maintenance;
 use Wikimedia\Rdbms\IDatabase;
 
 $IP ??= getenv( "MW_INSTALL_PATH" ) ?: dirname( __DIR__, 3 );

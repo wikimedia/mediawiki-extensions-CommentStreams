@@ -21,9 +21,9 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ApiMain;
-use ApiUsageException;
-use Config;
+use MediaWiki\Api\ApiMain;
+use MediaWiki\Api\ApiUsageException;
+use MediaWiki\Config\Config;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSVote extends ApiCSCommentBase {

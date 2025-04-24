@@ -25,6 +25,7 @@ namespace MediaWiki\Extension\CommentStreams\Store;
 
 use MediaWiki\CommentStore\CommentStoreComment;
 use MediaWiki\Content\Content;
+use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommentStreams\AbstractComment;
 use MediaWiki\Extension\CommentStreams\Comment;
 use MediaWiki\Extension\CommentStreams\HistoryHandler\UrlHistoryHandler;
@@ -43,21 +44,20 @@ use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Status\Status;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 use MWException;
 use Psr\Log\LoggerInterface;
-use Title;
-use User;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\Subquery;
 use Wikimedia\Timestamp\TimestampException;
 use WikiPage;
-use WikitextContent;
 
 /**
  * Comment Streams database backend interface

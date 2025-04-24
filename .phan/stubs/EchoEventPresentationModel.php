@@ -1,5 +1,8 @@
 <?php
 
+use MediaWiki\Message\Message;
+use Wikimedia\Message\MessageSpecifier;
+
 abstract class EchoEventPresentationModel {
 	/**
 	 * @var EchoEvent
