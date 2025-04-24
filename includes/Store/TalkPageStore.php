@@ -178,7 +178,7 @@ class TalkPageStore implements ICommentStreamsStore {
 	 */
 	public function getNumReplies( Comment $comment ): int {
 		$pageData = $this->getPageData( $comment->getAssociatedPage()->getTalkPageIfDefined() );
-		return count( array_filter( $pageData, fn ( $commentData ) =>
+		return count( array_filter( $pageData, static fn ( $commentData ) =>
 			$commentData['type'] === 'reply' && $commentData['parent'] === $comment->getId() )
 		);
 	}
