@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"require": {
 		"composer/installers": "^2.2.0|^1.0.1",
-		"mwstake/mediawiki-component-events": "~3"
+		"mwstake/mediawiki-component-events": "~4"
 	},
 	"config": {
 		"allow-plugins": {
