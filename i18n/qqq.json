@@ -166,10 +166,15 @@
 	"commentstreams-no-comment_id": "Internal error message",
 	"commentstreams-history-title": "Page title for the comment history page",
 	"commentstreams-ui-close": "Generic close button label{{Identical|Close}}",
+	"commentstreams-notifyme-subscription-description": "Reason for receiving notification",
 	"commentstreams-history-timestamp": "Comment history column label",
 	"commentstreams-history-actor": "Comment history column label",
 	"commentstreams-history-text": "Comment history column label",
 	"commentstreams-button-add-comment": "User interface button text",
 	"commentstreams-button-cancel": "User interface button text.\n{{Identical|Cancel}}",
-	"commentstreams-link-copied": "Notice when permalink is copied to clipboard"
+	"commentstreams-link-copied": "Notice when permalink is copied to clipboard",
+	"commentstreams-event-new-comment-desc": "Event type description",
+	"commentstreams-event-new-comment": "Notification text.\n$1 - actor for gender determination\n$2 - page title",
+	"commentstreams-event-new-comment-reply": "Notification text.\n$1 - actor for gender determination\n$2 - page title",
+	"commentstreams-event-new-comment-reply-desc": "Event type description"
 }
