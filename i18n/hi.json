@@ -10,5 +10,7 @@
 	"commentstreams-api-error-post-permissions": "उपयोगकर्ता को एक टिप्पणी पोस्ट करने की अनुमति नहीं है।",
 	"commentstreams-buttontext-add": "टिप्पणी जोड़ें",
 	"commentstreams-buttontext-reply": "प्रत्युत्तर",
-	"commentstreams-buttontooltip-history": "इतिहास"
+	"commentstreams-buttontooltip-history": "इतिहास",
+	"commentstreams-history-timestamp": "समय",
+	"commentstreams-event-new-comment-desc": "नई टिप्पणी"
 }
