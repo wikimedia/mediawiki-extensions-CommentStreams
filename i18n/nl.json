@@ -4,7 +4,8 @@
 			"Hzjethro",
 			"Mainframe98",
 			"McDutchie",
-			"Romaine"
+			"Romaine",
+			"Siebrand"
 		]
 	},
 	"commentstreams-desc": "Maakt commentaar op wikipagina's mogelijk",
@@ -165,10 +166,15 @@
 	"commentstreams-no-comment_id": "Interne fout: Geen comment_id gevonden",
 	"commentstreams-history-title": "Opmerkingengeschiedenis",
 	"commentstreams-ui-close": "Sluiten",
-	"commentstreams-history-timestamp": "Tijdstip",
+	"commentstreams-notifyme-subscription-description": "U bekijkt de reactie",
+	"commentstreams-history-timestamp": "Tijd",
 	"commentstreams-history-actor": "Auteur",
 	"commentstreams-history-text": "Opmerking",
 	"commentstreams-button-add-comment": "Opmerking toevoegen",
 	"commentstreams-button-cancel": "Annuleren",
-	"commentstreams-link-copied": "Koppeling gekopieerd naar klembord"
+	"commentstreams-link-copied": "Koppeling gekopieerd naar klembord",
+	"commentstreams-event-new-comment-desc": "Nieuwe reactie",
+	"commentstreams-event-new-comment": "{{GENDER:$1|heeft een reactie bewerkt}} op de pagina $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|heeft op een reactie geantwoord}} op de pagina $2",
+	"commentstreams-event-new-comment-reply-desc": "Nieuw antwoord op een reactie"
 }
