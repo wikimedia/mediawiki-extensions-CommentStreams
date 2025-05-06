@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"EmDashUser002",
 			"Gomoko",
 			"JLTRY",
 			"Thibaut120094",
@@ -168,9 +169,13 @@
 	"commentstreams-no-comment_id": "Erreur interne : aucun comment_id trouvé",
 	"commentstreams-history-title": "Historique des commentaires",
 	"commentstreams-ui-close": "Fermer",
-	"commentstreams-history-timestamp": "Horodatage",
+	"commentstreams-notifyme-subscription-description": "Vous suivez le commentaire",
+	"commentstreams-history-timestamp": "Temps",
 	"commentstreams-history-actor": "Auteur",
 	"commentstreams-history-text": "Commentaire",
 	"commentstreams-button-add-comment": "Ajouter un commentaire",
-	"commentstreams-button-cancel": "Annuler"
+	"commentstreams-button-cancel": "Annuler",
+	"commentstreams-event-new-comment": "{{GENDER:$1|ajouté un nouveau commentaire}} sur la page $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|répondu à un commentaire}} sur la page $2",
+	"commentstreams-event-new-comment-reply-desc": "Nouvelle réponse à un commentaire"
 }
