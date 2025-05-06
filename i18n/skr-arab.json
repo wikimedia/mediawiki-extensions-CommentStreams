@@ -27,5 +27,6 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "جواب ݙیکھو",
 	"commentstreams-ui-close": "بند کرو",
 	"commentstreams-history-timestamp": "ویلا",
-	"commentstreams-history-actor": "مصنف"
+	"commentstreams-history-actor": "مصنف",
+	"commentstreams-event-new-comment-desc": "نواں تبصرہ"
 }
