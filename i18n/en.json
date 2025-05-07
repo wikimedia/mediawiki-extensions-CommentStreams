@@ -175,5 +175,7 @@
 	"commentstreams-event-new-comment-desc": "New comment",
 	"commentstreams-event-new-comment": "{{GENDER:$1|added a new comment}} on page $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|replied to a comment}} on page $2",
-	"commentstreams-event-new-comment-reply-desc": "New reply to a comment"
+	"commentstreams-event-new-comment-reply-desc": "New reply to a comment",
+	"commentstreams-event-new-comment-desc-label": "A new comment has been added to a page to which the user has subscribed via preferences",
+	"commentstreams-event-new-comment-reply-desc-label": "Another user replied to a comment that the user has created or is watching"
 }
