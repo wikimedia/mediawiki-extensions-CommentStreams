@@ -176,5 +176,7 @@
 	"commentstreams-event-new-comment-desc": "Event type description",
 	"commentstreams-event-new-comment": "Notification text.\n$1 - actor for gender determination\n$2 - page title",
 	"commentstreams-event-new-comment-reply": "Notification text.\n$1 - actor for gender determination\n$2 - page title",
-	"commentstreams-event-new-comment-reply-desc": "Event type description"
+	"commentstreams-event-new-comment-reply-desc": "Event type description",
+	"commentstreams-event-new-comment-desc-label": "Description when new comment event is triggered",
+	"commentstreams-event-new-comment-reply-desc-label": "Description when new comment reply event is triggered"
 }
