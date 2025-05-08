@@ -113,9 +113,10 @@
 	"commentstreams-no-comment_id": "내부 오류: comment_id를 찾을 수 없습니다",
 	"commentstreams-history-title": "의견 역사",
 	"commentstreams-ui-close": "닫기",
-	"commentstreams-history-timestamp": "타임스탬프",
+	"commentstreams-history-timestamp": "시간",
 	"commentstreams-history-actor": "만든이",
 	"commentstreams-history-text": "의견",
 	"commentstreams-button-add-comment": "의견 추가",
-	"commentstreams-button-cancel": "취소"
+	"commentstreams-button-cancel": "취소",
+	"commentstreams-link-copied": "링크가 클립보드에 복사되었습니다"
 }
