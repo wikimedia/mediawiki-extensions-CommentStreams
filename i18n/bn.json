@@ -3,6 +3,7 @@
 		"authors": [
 			"Aftabuzzaman",
 			"Aishik Rehman",
+			"Nokib Sarkar",
 			"Yahya",
 			"আফতাবুজ্জামান"
 		]
@@ -32,6 +33,8 @@
 	"commentstreams-dialog-buttontext-cancel": "বাতিল",
 	"commentstreams-dialog-buttontext-yes": "হ্যাঁ",
 	"commentstreams-dialog-buttontext-no": "না",
+	"commentstreams-datetext-posted": "পোস্ট করা হয়েছে:",
+	"commentstreams-datetext-lastedited": "সর্বশেষ সম্পাদিত:",
 	"commentstreams-title-field-placeholder": "শিরোনাম লিখুন...",
 	"notification-body-commentstreams-comment-on-watched-page": "মন্তব্যটি হল:\n\n\n$5",
 	"notification-body-commentstreams-reply-on-watched-page": "উত্তরটি হল:\n\n\n$5",
@@ -41,7 +44,7 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "উত্তর দেখুন",
 	"action-cs-moderator-delete": "অন্যান্য ব্যবহারকারীদের মন্তব্য অপসারণ করার",
 	"commentstreams-ui-close": "বন্ধ করুন",
-	"commentstreams-history-timestamp": "সময়তারিখ",
+	"commentstreams-history-timestamp": "সময়",
 	"commentstreams-history-actor": "লেখক",
 	"commentstreams-history-text": "মন্তব্য",
 	"commentstreams-button-add-comment": "মন্তব্য যোগ করুন",
