@@ -21,5 +21,6 @@
 	"commentstreams-history-actor": "Հեղինակ",
 	"commentstreams-history-text": "Մեկնաբանություն",
 	"commentstreams-button-add-comment": "Ավելացնել մեկնաբանություն",
-	"commentstreams-button-cancel": "Չեղարկել"
+	"commentstreams-button-cancel": "Չեղարկել",
+	"commentstreams-event-new-comment-desc": "Նոր մեկնաբանություն"
 }

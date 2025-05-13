@@ -75,7 +75,9 @@
 	"commentstreams-dialog-buttontext-yes": "예",
 	"commentstreams-dialog-buttontext-no": "아니오",
 	"commentstreams-datetext-postedon": "게시한 날짜",
+	"commentstreams-datetext-posted": "게시됨:",
 	"commentstreams-datetext-lasteditedon": "최근 편집:",
+	"commentstreams-datetext-lastedited": "최근 수정:",
 	"commentstreams-title-field-placeholder": "제목을 입력하십시오...",
 	"commentstreams-body-field-placeholder": "새로운 댓글 텍스트를 입력하십시오...",
 	"echo-category-title-commentstreams-notification-category": "새로운 댓글과 답변",
@@ -113,9 +115,10 @@
 	"commentstreams-no-comment_id": "내부 오류: comment_id를 찾을 수 없습니다",
 	"commentstreams-history-title": "의견 역사",
 	"commentstreams-ui-close": "닫기",
-	"commentstreams-history-timestamp": "타임스탬프",
+	"commentstreams-history-timestamp": "시간",
 	"commentstreams-history-actor": "만든이",
 	"commentstreams-history-text": "의견",
 	"commentstreams-button-add-comment": "의견 추가",
-	"commentstreams-button-cancel": "취소"
+	"commentstreams-button-cancel": "취소",
+	"commentstreams-link-copied": "링크가 클립보드에 복사되었습니다"
 }

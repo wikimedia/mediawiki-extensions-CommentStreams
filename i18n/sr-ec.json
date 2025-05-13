@@ -2,15 +2,21 @@
 	"@metadata": {
 		"authors": [
 			"BadDog",
-			"Milicevic01"
+			"Milicevic01",
+			"Aca",
+			"Kizule"
 		]
 	},
 	"commentstreams-toc": "Коментари",
 	"commentstreams-buttontooltip-history": "историја",
+	"commentstreams-datetext-lastedited": "Последња измена:",
 	"action-cs-comment": "објављујете, уређујете или бришете коментаре",
 	"commentstreams-ui-close": "Затвори",
 	"commentstreams-history-timestamp": "Време",
 	"commentstreams-history-text": "Коментар",
 	"commentstreams-button-add-comment": "Додај коментар",
-	"commentstreams-button-cancel": "Откажи"
+	"commentstreams-button-cancel": "Откажи",
+	"commentstreams-event-new-comment-desc": "Нови коментар",
+	"commentstreams-event-new-comment": "{{GENDER:$1|додао|додала}} нови коментар на страницу $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|одговорио|одговорила}} је на коментар на страници $2"
 }
