@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Chrumps"
+			"Chrumps",
+			"Loran"
 		]
 	},
 	"apihelp-csvote-param-vote": "głos (1, -1 albo 0).",

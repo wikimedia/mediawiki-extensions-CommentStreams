@@ -169,9 +169,13 @@
 	"commentstreams-no-comment_id": "خطأ داخلي: لم يتم العثور على comment_id",
 	"commentstreams-history-title": "تاريخ التعليقات",
 	"commentstreams-ui-close": "أغلق",
-	"commentstreams-history-timestamp": "الطابع الزمني",
+	"commentstreams-notifyme-subscription-description": "أنت تشاهد التعليق",
+	"commentstreams-history-timestamp": "وقت",
 	"commentstreams-history-actor": "المؤلف",
 	"commentstreams-history-text": "تعليق",
 	"commentstreams-button-add-comment": "أضف تعليق",
-	"commentstreams-button-cancel": "إلغاء"
+	"commentstreams-button-cancel": "إلغاء",
+	"commentstreams-link-copied": "تم نسخ الرابط إلى الحافظة",
+	"commentstreams-event-new-comment-desc": "تعليق جديد",
+	"commentstreams-event-new-comment-reply-desc": "رد جديد على تعليق"
 }

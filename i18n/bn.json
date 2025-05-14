@@ -4,7 +4,8 @@
 			"Aftabuzzaman",
 			"Aishik Rehman",
 			"Yahya",
-			"আফতাবুজ্জামান"
+			"আফতাবুজ্জামান",
+			"Nokib Sarkar"
 		]
 	},
 	"commentstreams-desc": "উইকি পাতাগুলিতে মন্তব্য করতে দেয়",
@@ -41,7 +42,7 @@
 	"notification-link-label-commentstreams-reply-to-watched-comment": "উত্তর দেখুন",
 	"action-cs-moderator-delete": "অন্যান্য ব্যবহারকারীদের মন্তব্য অপসারণ করার",
 	"commentstreams-ui-close": "বন্ধ করুন",
-	"commentstreams-history-timestamp": "সময়তারিখ",
+	"commentstreams-history-timestamp": "সময়",
 	"commentstreams-history-actor": "লেখক",
 	"commentstreams-history-text": "মন্তব্য",
 	"commentstreams-button-add-comment": "মন্তব্য যোগ করুন",
