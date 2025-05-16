@@ -62,6 +62,7 @@ class CommentSerializerTest extends \MediaWikiIntegrationTestCase {
 			'moderated' => null,
 			'created_timestamp' => $comment->getCreated()->getTimestamp(),
 			'modified' => null,
+			'useCustomDateFormat' => true,
 			'watching' => 0,
 		];
 		if ( $votingEnabled ) {
