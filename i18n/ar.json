@@ -127,7 +127,9 @@
 	"commentstreams-dialog-buttontext-no": "لا",
 	"commentstreams-urldialog-instructions": "انسخ المسار أدناه والصقه لمشاركة الرابط الثابت مع هذا التعليق.، اضغط على الهروب لإغلاق مربع الحوار هذا.",
 	"commentstreams-datetext-postedon": "نُشِر في",
+	"commentstreams-datetext-posted": "تم النشر:",
 	"commentstreams-datetext-lasteditedon": "آخر تعديل في",
+	"commentstreams-datetext-lastedited": "آخر تعديل:",
 	"commentstreams-datetext-moderated": "الإشراف",
 	"commentstreams-title-field-placeholder": "أدخل العنوان...",
 	"commentstreams-body-field-placeholder": "أدخل نص التعليق الجديد...",
@@ -177,5 +179,7 @@
 	"commentstreams-button-cancel": "إلغاء",
 	"commentstreams-link-copied": "تم نسخ الرابط إلى الحافظة",
 	"commentstreams-event-new-comment-desc": "تعليق جديد",
-	"commentstreams-event-new-comment-reply-desc": "رد جديد على تعليق"
+	"commentstreams-event-new-comment-reply-desc": "رد جديد على تعليق",
+	"commentstreams-event-new-comment-desc-label": "تمت إضافة تعليق جديد إلى الصفحة التي اشترك فيها المستخدم عبر التفضيلات",
+	"commentstreams-event-new-comment-reply-desc-label": "رد مستخدم آخر على تعليق أنشأه المستخدم أو يشاهده"
 }
