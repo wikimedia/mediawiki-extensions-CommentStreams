@@ -179,6 +179,8 @@
 	"commentstreams-button-cancel": "إلغاء",
 	"commentstreams-link-copied": "تم نسخ الرابط إلى الحافظة",
 	"commentstreams-event-new-comment-desc": "تعليق جديد",
+	"commentstreams-event-new-comment": "{{GENDER:$1|أضاف تعليقا جديدا}} على الصفحة $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|رد على تعليق}} في الصفحة $2",
 	"commentstreams-event-new-comment-reply-desc": "رد جديد على تعليق",
 	"commentstreams-event-new-comment-desc-label": "تمت إضافة تعليق جديد إلى الصفحة التي اشترك فيها المستخدم عبر التفضيلات",
 	"commentstreams-event-new-comment-reply-desc-label": "رد مستخدم آخر على تعليق أنشأه المستخدم أو يشاهده"
