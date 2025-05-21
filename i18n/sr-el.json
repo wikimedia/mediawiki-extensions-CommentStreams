@@ -4,6 +4,16 @@
 			"Kareyac"
 		]
 	},
+	"commentstreams-toc": "Komentari",
+	"commentstreams-buttontooltip-history": "istorija",
 	"commentstreams-dialog-buttontext-yes": "Da",
-	"action-cs-comment": "objavljujete, uređujete ili brišete komentare"
+	"action-cs-comment": "objavljujete, uređujete ili brišete komentare",
+	"commentstreams-ui-close": "Zatvori",
+	"commentstreams-history-timestamp": "Vreme",
+	"commentstreams-history-text": "Komentar",
+	"commentstreams-button-add-comment": "Dodaj komentar",
+	"commentstreams-button-cancel": "Otkaži",
+	"commentstreams-event-new-comment-desc": "Novi komentar",
+	"commentstreams-event-new-comment": "{{GENDER:$1|dodao|dodala}} novi komentar na stranicu $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|odgovorio|odgovorila}} je na komentar na stranici $2"
 }
