@@ -322,6 +322,9 @@
 		},
 		"talkPageStore": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\Store\\TalkPageStoreHooks"
+		},
+		"registerUsageTracker": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\UsageTracker\\RegisterUsageTracker"
 		}
 	},
 	"Hooks": {
@@ -341,7 +344,8 @@
 		"SMW::Property::initProperties": "smw",
 		"SMWStore::updateDataBefore": "smw",
 		"SMW::Settings::BeforeInitializationComplete": "smw",
-		"MediaWikiServices": "talkPageStore"
+		"MediaWikiServices": "talkPageStore",
+		"BSUsageTrackerRegisterCollectors": "registerUsageTracker"
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"RestRoutes": [
