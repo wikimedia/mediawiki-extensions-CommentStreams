@@ -4,6 +4,8 @@
 			"Kareyac"
 		]
 	},
+	"commentstreams-toc": "Komentari",
+	"commentstreams-buttontooltip-history": "istorija",
 	"commentstreams-dialog-buttontext-yes": "Da",
 	"action-cs-comment": "objavljujete, uređujete ili brišete komentare"
 }
