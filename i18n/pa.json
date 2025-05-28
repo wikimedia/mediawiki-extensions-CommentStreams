@@ -16,8 +16,9 @@
 	"commentstreams-buttontooltip-permalink": "ਪੱਕੀ-ਕੜੀ",
 	"commentstreams-history-title": "ਟਿੱਪਣੀ ਇਤਿਹਾਸ",
 	"commentstreams-ui-close": "ਬੰਦ ਕਰੋ",
-	"commentstreams-history-timestamp": "ਵਕਤ ਦੀ ਮੋਹਰ",
+	"commentstreams-history-timestamp": "ਵਕਤ",
 	"commentstreams-history-text": "ਟਿੱਪਣੀ",
 	"commentstreams-button-add-comment": "ਟਿੱਪਣੀ ਜੋੜੋ",
-	"commentstreams-button-cancel": "ਰੱਦ ਕਰੋ"
+	"commentstreams-button-cancel": "ਰੱਦ ਕਰੋ",
+	"commentstreams-event-new-comment-desc": "ਨਵੀਂ ਟਿੱਪਣੀ"
 }
