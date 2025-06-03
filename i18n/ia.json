@@ -120,7 +120,9 @@
 	"commentstreams-dialog-buttontext-no": "No",
 	"commentstreams-urldialog-instructions": "Copia e colla le URL infra pro condivider un permaligamine a iste commento. Preme Escape pro clauder iste dialogo.",
 	"commentstreams-datetext-postedon": "Publicate le",
+	"commentstreams-datetext-posted": "Publicate:",
 	"commentstreams-datetext-lasteditedon": "Ultime modification le",
+	"commentstreams-datetext-lastedited": "Ultime modification:",
 	"commentstreams-datetext-moderated": "moderate",
 	"commentstreams-title-field-placeholder": "Entra titulo…",
 	"commentstreams-body-field-placeholder": "Entra nove texto de commento…",
@@ -162,9 +164,17 @@
 	"commentstreams-no-comment_id": "Error interne: necun comment_id trovate",
 	"commentstreams-history-title": "Historia de commentos",
 	"commentstreams-ui-close": "Clauder",
+	"commentstreams-notifyme-subscription-description": "Tu ha le commento sub observation",
 	"commentstreams-history-timestamp": "Hora",
 	"commentstreams-history-actor": "Autor",
 	"commentstreams-history-text": "Commento",
 	"commentstreams-button-add-comment": "Adder commento",
-	"commentstreams-button-cancel": "Cancellar"
+	"commentstreams-button-cancel": "Cancellar",
+	"commentstreams-link-copied": "Ligamine copiate al area de transferentia",
+	"commentstreams-event-new-comment-desc": "Nove commento",
+	"commentstreams-event-new-comment": "{{GENDER:$1|ha addite un nove commento}} sur le pagina $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|ha respondite a un commento}} sur le pagina $2",
+	"commentstreams-event-new-comment-reply-desc": "Nove responsa a un commento",
+	"commentstreams-event-new-comment-desc-label": "Un nove commento ha essite addite a un pagina al qual le usator se ha abonate per medio de su preferentias",
+	"commentstreams-event-new-comment-reply-desc-label": "Un altere usator ha respondite a un commento que le usator ha create o ha sub observation"
 }
