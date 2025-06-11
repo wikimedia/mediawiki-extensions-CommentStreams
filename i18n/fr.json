@@ -8,7 +8,8 @@
 			"Urhixidur",
 			"VIGNERON",
 			"Verdy p",
-			"Wladek92"
+			"Wladek92",
+			"Derugon"
 		]
 	},
 	"commentstreams-desc": "Permet de commenter les pages wiki",
@@ -175,7 +176,11 @@
 	"commentstreams-history-text": "Commentaire",
 	"commentstreams-button-add-comment": "Ajouter un commentaire",
 	"commentstreams-button-cancel": "Annuler",
-	"commentstreams-event-new-comment": "{{GENDER:$1|ajouté un nouveau commentaire}} sur la page $2",
-	"commentstreams-event-new-comment-reply": "{{GENDER:$1|répondu à un commentaire}} sur la page $2",
-	"commentstreams-event-new-comment-reply-desc": "Nouvelle réponse à un commentaire"
+	"commentstreams-link-copied": "Lien copié dans le presse-papiers",
+	"commentstreams-event-new-comment-desc": "Nouveau commentaire",
+	"commentstreams-event-new-comment": "{{GENDER:$1|}}a ajouté un nouveau commentaire sur la page $2",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1|}}a répondu à un commentaire sur la page $2",
+	"commentstreams-event-new-comment-reply-desc": "Nouvelle réponse à un commentaire",
+	"commentstreams-event-new-comment-desc-label": "Un nouveau commentaire a été ajouté sur une page à laquelle l’utilisateur s’est abonné via les préférences",
+	"commentstreams-event-new-comment-reply-desc-label": "Un autre utilisateur a répondu à un commentaire que l’utilisateur a créé ou suit"
 }
