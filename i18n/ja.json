@@ -59,7 +59,7 @@
 	"commentstreams-buttontooltip-submit": "送信",
 	"commentstreams-buttontooltip-cancel": "キャンセル",
 	"commentstreams-dialog-delete-message": "このコメントを削除して本当によろしいですか？",
-	"commentstreams-dialog-anonymous-message": "ログインをしてください。このコメントをそのまま保存すると、あなたのIPアドレスは記録され、このコメントを編集または削除することができません。",
+	"commentstreams-dialog-anonymous-message": "ログインしていません。このコメントを保存すると、あなたの IP アドレスが記録され、このコメントを編集または削除できなくなります。",
 	"commentstreams-dialog-buttontext-ok": "OK",
 	"commentstreams-dialog-buttontext-cancel": "キャンセル",
 	"commentstreams-dialog-buttontext-yes": "はい",
