@@ -94,7 +94,7 @@ class CommentSerializer {
 			'id' => $comment->getId(),
 			'commentblockname' => $comment->getBlockName(),
 			'associatedid' => $comment->getAssociatedPage() ? $comment->getAssociatedPage()->getId() : 0,
-			'commenttitle' => htmlspecialchars( $comment->getTitle() ),
+			'commenttitle' => $comment->getTitle(),
 			'wikitext' => htmlspecialchars( $wikitext ),
 			'html' => $this->getHTML( $context, $wikitext, $comment->getAssociatedPage() ),
 			'username' => $comment->getAuthor()->getName(),
