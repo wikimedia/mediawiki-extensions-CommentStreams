@@ -35,7 +35,7 @@ use MediaWiki\Extension\CommentStreams\SMWInterface;
 use MediaWiki\Extension\CommentStreams\VoteHelper;
 use MediaWiki\Extension\CommentStreams\WatchHelper;
 use MediaWiki\HookContainer\HookContainer;
-use MediaWiki\Page\DeletePageFactory;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\Authority;
@@ -97,9 +97,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 	/** @var LoggerInterface */
 	private $logger;
 
-	/** @var DeletePageFactory */
-	private $deletePageFactory;
-
 	/** @var WatchHelper */
 	private $watchHelper;
 
@@ -115,7 +112,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @param SMWInterface $smwInterface
 	 * @param RevisionLookup $revisionLookup
 	 * @param LoggerInterface $logger
-	 * @param DeletePageFactory $deletePageFactory
 	 */
 	public function __construct(
 		ILoadBalancer $loadBalancer,
@@ -126,7 +122,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 		SMWInterface $smwInterface,
 		RevisionLookup $revisionLookup,
 		LoggerInterface $logger,
-		DeletePageFactory $deletePageFactory,
 		private readonly HookContainer $hookContainer
 	) {
 		$this->loadBalancer = $loadBalancer;
@@ -136,7 +131,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 		$this->titleFactory = $titleFactory;
 		$this->smwInterface = $smwInterface;
 		$this->revisionLookup = $revisionLookup;
-		$this->deletePageFactory = $deletePageFactory;
 
 		$this->logger = $logger;
 
@@ -596,7 +590,8 @@ class NamespacePageStore implements ICommentStreamsStore {
 		// must save page ID before deleting page
 		$pageid = $wikiPage->getId();
 
-		$deletePage = $this->deletePageFactory->newDeletePage(
+		// T391074: Cannot be injected as it causes loading of user options too early
+		$deletePage = MediaWikiServices::getInstance()->getDeletePageFactory()->newDeletePage(
 			$wikiPage->getTitle()->toPageIdentity(), $actor
 		);
 		$deletePage->setSuppress( true );
@@ -638,7 +633,8 @@ class NamespacePageStore implements ICommentStreamsStore {
 		// must save page ID before deleting page
 		$pageid = $wikiPage->getId();
 
-		$deletePage = $this->deletePageFactory->newDeletePage(
+		// T391074: Cannot be injected as it causes loading of user options too early
+		$deletePage = MediaWikiServices::getInstance()->getDeletePageFactory()->newDeletePage(
 			$wikiPage->getTitle()->toPageIdentity(), $actor
 		);
 		$deletePage->setSuppress( true );
