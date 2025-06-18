@@ -29,6 +29,7 @@ use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserGroupManager;
 use MediaWiki\User\UserIdentity;
+use MediaWiki\User\UserNameUtils;
 use MediaWiki\Utils\MWTimestamp;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -48,6 +49,7 @@ class TalkPageStore implements ICommentStreamsStore {
 	 * @param UserGroupManager $userGroupManager
 	 * @param NamespaceInfo $nsInfo
 	 * @param HookContainer $hookContainer
+	 * @param UserNameUtils $userNameUtils
 	 * @param WatchHelper|null $watchHelper
 	 * @param VoteHelper|null $voteHelper
 	 * @param BagOStuff $cache
@@ -62,6 +64,7 @@ class TalkPageStore implements ICommentStreamsStore {
 		private readonly UserGroupManager $userGroupManager,
 		private readonly NamespaceInfo $nsInfo,
 		private readonly HookContainer $hookContainer,
+		private readonly UserNameUtils $userNameUtils,
 		private ?WatchHelper $watchHelper = null,
 		private ?VoteHelper $voteHelper = null,
 		private readonly BagOStuff $cache = new HashBagOStuff()
@@ -83,7 +86,14 @@ class TalkPageStore implements ICommentStreamsStore {
 		if ( !$associatedPage ) {
 			return null;
 		}
-		$author = $this->userFactory->newFromName( $data['author'] );
+		if ( $this->userNameUtils->isIP( $data['author'] ) ) {
+			$author = $this->userFactory->newAnonymous( $data['author'] );
+		} else {
+			$author = $this->userFactory->newFromName( $data['author'] );
+		}
+		if ( !$author ) {
+			return null;
+		}
 		return new Comment(
 			$id,
 			$data['title'],
