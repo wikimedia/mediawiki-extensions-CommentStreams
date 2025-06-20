@@ -46,7 +46,8 @@
 						"UserFactory",
 						"UserGroupManager",
 						"NamespaceInfo",
-						"HookContainer"
+						"HookContainer",
+						"UserNameUtils"
 					]
 				}
 			},
