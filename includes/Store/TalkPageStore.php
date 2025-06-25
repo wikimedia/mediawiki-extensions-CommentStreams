@@ -86,11 +86,7 @@ class TalkPageStore implements ICommentStreamsStore {
 		if ( !$associatedPage ) {
 			return null;
 		}
-		if ( $this->userNameUtils->isIP( $data['author'] ) ) {
-			$author = $this->userFactory->newAnonymous( $data['author'] );
-		} else {
-			$author = $this->userFactory->newFromName( $data['author'] );
-		}
+		$author = $this->getAuthor( $data );
 		if ( !$author ) {
 			return null;
 		}
@@ -114,7 +110,10 @@ class TalkPageStore implements ICommentStreamsStore {
 		if ( !$data ) {
 			return null;
 		}
-		$author = $this->userFactory->newFromName( $data['author'] );
+		$author = $this->getAuthor( $data );
+		if ( !$author ) {
+			return null;
+		}
 		return new Reply(
 			$this->getComment( $data['parent'] ),
 			$id,
@@ -828,6 +827,18 @@ class TalkPageStore implements ICommentStreamsStore {
 				return;
 			}
 			$this->getHistoryItem( $entity, $baseRevision, $items );
+		}
+	}
+
+	/**
+	 * @param array $data
+	 * @return User|null
+	 */
+	private function getAuthor( array $data ): ?User {
+		if ( $this->userNameUtils->isIP( $data['author'] ) ) {
+			return $this->userFactory->newAnonymous( $data['author'] );
+		} else {
+			return $this->userFactory->newFromName( $data['author'] );
 		}
 	}
 
