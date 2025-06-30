@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Derugon",
 			"EmDashUser002",
 			"Gomoko",
 			"JLTRY",
@@ -8,8 +9,7 @@
 			"Urhixidur",
 			"VIGNERON",
 			"Verdy p",
-			"Wladek92",
-			"Derugon"
+			"Wladek92"
 		]
 	},
 	"commentstreams-desc": "Permet de commenter les pages wiki",
