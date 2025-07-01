@@ -2,6 +2,13 @@
 	"name": "mediawiki/comment-streams",
 	"type": "mediawiki-extension",
 	"license": "MIT",
+	"authors": [
+		{
+			"name": "Hallo Welt! GmbH",
+			"email": "info@hallowelt.com",
+			"homepage": "https://www.hallowelt.com"
+		}
+	],
 	"require": {
 		"composer/installers": "^2.2.0|^1.0.1",
 		"mwstake/mediawiki-component-events": "~4"
