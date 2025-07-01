@@ -32,7 +32,6 @@
 						"CommentStreamsSMWInterface",
 						"RevisionLookup",
 						"CommentStreamsLogger",
-						"DeletePageFactory",
 						"HookContainer"
 					]
 				},
