@@ -3,6 +3,7 @@
 		"authors": [
 			"Metalhead64",
 			"Mschlindwein",
+			"PretzelRocky",
 			"ToBeFree"
 		]
 	},
@@ -161,6 +162,7 @@
 	"commentstreams-history-text": "Kommentar",
 	"commentstreams-button-add-comment": "Kommentar hinzufügen",
 	"commentstreams-button-cancel": "Abbrechen",
+	"commentstreams-link-copied": "Link in die Zwischenablage kopiert",
 	"commentstreams-event-new-comment-desc-label": "Ein neuer Kommentar wurde zu einer Seite hinzugefügt, die der Benutzer über die Einstellungen abonniert hat",
 	"commentstreams-event-new-comment-reply-desc-label": "Ein anderer Benutzer hat auf einen vom Benutzer erstellten oder beobachteten Kommentar geantwortet"
 }
