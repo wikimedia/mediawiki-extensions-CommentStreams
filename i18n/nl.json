@@ -176,5 +176,7 @@
 	"commentstreams-event-new-comment-desc": "Nieuwe reactie",
 	"commentstreams-event-new-comment": "{{GENDER:$1|heeft een reactie bewerkt}} op de pagina $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|heeft op een reactie geantwoord}} op de pagina $2",
-	"commentstreams-event-new-comment-reply-desc": "Nieuw antwoord op een reactie"
+	"commentstreams-event-new-comment-reply-desc": "Nieuw antwoord op een reactie",
+	"commentstreams-event-new-comment-desc-label": "Er is een nieuwe reactie toegevoegd aan een pagina waarop de gebruiker zich via de voorkeuren heeft geabonneerd",
+	"commentstreams-event-new-comment-reply-desc-label": "Een andere gebruiker heeft gereageerd op een opmerking die de gebruiker heeft gemaakt of volgt"
 }
