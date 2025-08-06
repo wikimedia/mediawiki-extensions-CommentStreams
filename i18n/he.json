@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
-			"Guycn2"
+			"Guycn2",
+			"Neriah"
 		]
 	},
 	"commentstreams-desc": "מתן אפשרות להגיב על דפי ויקי",
@@ -173,5 +174,6 @@
 	"commentstreams-event-new-comment-desc": "תגובה חדשה",
 	"commentstreams-event-new-comment": "{{GENDER:$1|הוסיף|הוסיפה}} תגובה חדשה לדף $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|השיב|השיבה}} לתגובה בדף $2",
-	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה"
+	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה",
+	"commentstreams-datetext-lastedited": "עריכה אחרונה:"
 }
