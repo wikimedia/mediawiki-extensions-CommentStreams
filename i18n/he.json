@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
-			"Guycn2"
+			"Guycn2",
+			"Neriah"
 		]
 	},
 	"commentstreams-desc": "מתן אפשרות להגיב על דפי ויקי",
@@ -122,6 +123,7 @@
 	"commentstreams-urldialog-instructions": "יש להעתיק ולהדביק את כתובת ה־URL שלהלן כדי לשתף קישור קבוע לתגובה הזאת. ניתן להקיש על Esc כדי לסגור את תיבת הדו־שיח הזאת.",
 	"commentstreams-datetext-postedon": "פורסמה בתאריך",
 	"commentstreams-datetext-lasteditedon": "נערכה לאחרונה בתאריך",
+	"commentstreams-datetext-lastedited": "עריכה אחרונה:",
 	"commentstreams-datetext-moderated": "נוהלה",
 	"commentstreams-title-field-placeholder": "יש להקליד כותרת...",
 	"commentstreams-body-field-placeholder": "יש להקליד את הטקסט של התגובה החדשה...",
