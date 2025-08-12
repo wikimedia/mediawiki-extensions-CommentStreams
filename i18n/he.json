@@ -123,6 +123,7 @@
 	"commentstreams-urldialog-instructions": "יש להעתיק ולהדביק את כתובת ה־URL שלהלן כדי לשתף קישור קבוע לתגובה הזאת. ניתן להקיש על Esc כדי לסגור את תיבת הדו־שיח הזאת.",
 	"commentstreams-datetext-postedon": "פורסמה בתאריך",
 	"commentstreams-datetext-lasteditedon": "נערכה לאחרונה בתאריך",
+	"commentstreams-datetext-lastedited": "עריכה אחרונה:",
 	"commentstreams-datetext-moderated": "נוהלה",
 	"commentstreams-title-field-placeholder": "יש להקליד כותרת...",
 	"commentstreams-body-field-placeholder": "יש להקליד את הטקסט של התגובה החדשה...",
@@ -174,6 +175,5 @@
 	"commentstreams-event-new-comment-desc": "תגובה חדשה",
 	"commentstreams-event-new-comment": "{{GENDER:$1|הוסיף|הוסיפה}} תגובה חדשה לדף $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|השיב|השיבה}} לתגובה בדף $2",
-	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה",
-	"commentstreams-datetext-lastedited": "עריכה אחרונה:"
+	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה"
 }
