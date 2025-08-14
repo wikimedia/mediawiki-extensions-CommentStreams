@@ -2,7 +2,7 @@
 -- Source: cs_watchlist_comment_id_patch.json
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
-DROP INDEX cst_wl_index ON /*_*/cs_watchlist;
+DROP INDEX IF EXISTS cst_wl_index ON /*_*/cs_watchlist;
 ALTER TABLE /*_*/cs_watchlist
   CHANGE cst_wl_page_id cst_wl_comment_id INT UNSIGNED NOT NULL;
 
