@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Yueman"
+		]
+	},
+	"commentstreams-buttontooltip-submit": "遞交",
+	"commentstreams-buttontooltip-cancel": "取消",
+	"commentstreams-dialog-buttontext-cancel": "取消",
+	"commentstreams-dialog-buttontext-yes": "係"
+}
