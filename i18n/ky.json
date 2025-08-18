@@ -15,5 +15,6 @@
 	"commentstreams-dialog-buttontext-yes": "Ооба",
 	"commentstreams-dialog-buttontext-no": "Жок",
 	"commentstreams-history-actor": "Автор",
-	"commentstreams-event-new-comment-desc": "Жаңы комментарий"
+	"commentstreams-event-new-comment-desc": "Жаңы комментарий",
+	"commentstreams-buttontooltip-submit": "жөнөтүү"
 }
