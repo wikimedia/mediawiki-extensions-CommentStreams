@@ -174,5 +174,7 @@
 	"commentstreams-event-new-comment-desc": "תגובה חדשה",
 	"commentstreams-event-new-comment": "{{GENDER:$1|הוסיף|הוסיפה}} תגובה חדשה לדף $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|השיב|השיבה}} לתגובה בדף $2",
-	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה"
+	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה",
+	"commentstreams-event-new-comment-desc-label": "תגובה חדשה נוספה לדף שהמשתמש נרשם אליו דרך העדפות",
+	"commentstreams-event-new-comment-reply-desc-label": "משתמש אחר השיב לתגובה שהמשתמש יצר או שהוא עוקב אחריה"
 }
