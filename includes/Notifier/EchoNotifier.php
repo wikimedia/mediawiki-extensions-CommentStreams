@@ -172,7 +172,7 @@ class EchoNotifier implements NotifierInterface {
 		}
 
 		/** @var ICommentStreamsStore $store */
-		$store = MediaWikiServices::getInstance()->getService( 'ICommentStreamsStore' );
+		$store = MediaWikiServices::getInstance()->getService( 'CommentStreamsStore' );
 		$comment = $store->getComment( $id );
 		if ( !$comment ) {
 			return [];
