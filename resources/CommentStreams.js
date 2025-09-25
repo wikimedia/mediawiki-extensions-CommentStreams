@@ -28,7 +28,7 @@ const CommentStreams = ( function () {
 			const env = {
 				username: username,
 				isLoggedIn: username !== null,
-				associatedPageId: mw.config.get( 'wgArticleId' ),
+				associatedPageId: config.associatedPageId,
 				canComment: config.canComment,
 				moderatorEdit: config.moderatorEdit,
 				moderatorDelete: config.moderatorDelete,
