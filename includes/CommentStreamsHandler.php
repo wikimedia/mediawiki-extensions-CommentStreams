@@ -257,8 +257,10 @@ class CommentStreamsHandler {
 			return $title;
 		}
 
-		if ( $title->isTalkPage() ) {
-			// Show comments in talk namespaces if the corresponding subject namespace is allowed
+		// Set the associated page to the subject page if the title is a talk page and the talk
+		// namespace is not specified in $wgCommentStreamsAllowedNamespaces
+		if ( $title->isTalkPage() && !in_array( $namespace, $csAllowedNamespaces ) ) {
+			// Show subject page comments on talk page if the corresponding subject namespace is allowed
 			$namespace = $this->namespaceInfo->getSubject( $namespace );
 			$title = Title::makeTitle( $namespace, $title->getDBkey() );
 		}
