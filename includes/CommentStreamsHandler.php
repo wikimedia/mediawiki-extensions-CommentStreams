@@ -343,7 +343,8 @@ class CommentStreamsHandler {
 			'enableWatchlist' => $this->notifier->isLoaded() ? 1 : 0,
 			'comments' => $comments,
 			'historyHandler' => $historyHandler ? json_encode( $historyHandler ) : null,
-			'associatedPage' => $showFor->getPrefixedDBkey()
+			'associatedPage' => $showFor->getPrefixedDBkey(),
+			'associatedPageId' => $showFor->getId(),
 		];
 		$output->addJsConfigVars( 'CommentStreams', $commentStreamsParams );
 		$output->addModules( 'ext.CommentStreams' );
