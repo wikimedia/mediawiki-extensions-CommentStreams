@@ -15,7 +15,6 @@ class PagesWithComments extends UsageTrackerBase {
 	}
 
 	/**
-	 *
 	 * @return string
 	 */
 	public function getIdentifier() {
@@ -23,7 +22,6 @@ class PagesWithComments extends UsageTrackerBase {
 	}
 
 	/**
-	 *
 	 * @return CollectorResult
 	 */
 	public function getUsageData() {
