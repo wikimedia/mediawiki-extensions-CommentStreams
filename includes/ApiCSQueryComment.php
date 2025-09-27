@@ -22,7 +22,6 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use MediaWiki\Api\ApiMain;
-use MediaWiki\Config\Config;
 
 class ApiCSQueryComment extends ApiCSCommentBase {
 
@@ -35,17 +34,15 @@ class ApiCSQueryComment extends ApiCSCommentBase {
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param ICommentStreamsStore $commentStreamsStore
-	 * @param Config $config
 	 * @param CommentSerializer $commentSerializer
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
 		ICommentStreamsStore $commentStreamsStore,
-		Config $config,
 		CommentSerializer $commentSerializer
 	) {
-		parent::__construct( $main, $action, $commentStreamsStore, $config );
+		parent::__construct( $main, $action, $commentStreamsStore );
 		$this->commentSerializer = $commentSerializer;
 	}
 

@@ -21,12 +21,10 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use ManualLogEntry;
 use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Config\Config;
-use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
 use MediaWiki\Page\WikiPageFactory;
 use MWException;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -34,46 +32,22 @@ use Wikimedia\ParamValidator\ParamValidator;
 class ApiCSPostReply extends ApiBase {
 
 	/**
-	 * @var ICommentStreamsStore
-	 */
-	private $commentStreamsStore;
-
-	/**
-	 * @var NotifierInterface
-	 */
-	private $notifier;
-
-	/**
-	 * @var bool
-	 */
-	private $suppressLogsFromRCs;
-
-	/**
-	 * @var WikiPageFactory
-	 */
-	private $wikiPageFactory;
-
-	/**
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param ICommentStreamsStore $commentStreamsStore
 	 * @param NotifierInterface $notifier
-	 * @param Config $config
+	 * @param CommentStreamsLogFactory $logFactory
 	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
-		ICommentStreamsStore $commentStreamsStore,
-		NotifierInterface $notifier,
-		Config $config,
-		WikiPageFactory $wikiPageFactory
+		private readonly ICommentStreamsStore $commentStreamsStore,
+		private readonly NotifierInterface $notifier,
+		private readonly CommentStreamsLogFactory $logFactory,
+		private readonly WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
-		$this->commentStreamsStore = $commentStreamsStore;
-		$this->notifier = $notifier;
-		$this->suppressLogsFromRCs = (bool)$config->get( "CommentStreamsSuppressLogsFromRCs" );
-		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	/**
@@ -108,7 +82,7 @@ class ApiCSPostReply extends ApiBase {
 					$this->dieWithError( 'commentstreams-api-error-post' );
 				} else {
 					if ( $reply->getAssociatedPage() ) {
-						$this->logAction( 'reply-create', $reply->getAssociatedPage() );
+						$this->logFactory->logReplyAction( 'reply-create-v2', $this->getUser(), $reply );
 					}
 
 					$this->getResult()->addValue( null, $this->getModuleName(), $reply->getId() );
@@ -148,23 +122,4 @@ class ApiCSPostReply extends ApiBase {
 		return 'csrf';
 	}
 
-	/**
-	 * log action
-	 * @param string $action the name of the action to be logged
-	 * @param LinkTarget|null $target the title of the page for the comment that the
-	 *          action was performed upon, if different from the current comment
-	 */
-	protected function logAction( string $action, ?LinkTarget $target ) {
-		if ( !$target ) {
-			return;
-		}
-		$logEntry = new ManualLogEntry( 'commentstreams', $action );
-		$logEntry->setPerformer( $this->getUser() );
-		$logEntry->setTarget( $target );
-		$logId = $logEntry->insert();
-
-		if ( !$this->suppressLogsFromRCs ) {
-			$logEntry->publish( $logId );
-		}
-	}
 }

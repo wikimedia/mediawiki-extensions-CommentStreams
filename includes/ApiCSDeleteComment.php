@@ -25,6 +25,7 @@ use FatalError;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Config\Config;
+use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
 use MediaWiki\User\User;
 use MWException;
 
@@ -38,15 +39,17 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param ICommentStreamsStore $commentStreamsStore
+	 * @param CommentStreamsLogFactory $logFactory
 	 * @param Config $config
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
 		ICommentStreamsStore $commentStreamsStore,
-		Config $config
+		private readonly CommentStreamsLogFactory $logFactory,
+		Config $config,
 	) {
-		parent::__construct( $main, $action, $commentStreamsStore, $config, true );
+		parent::__construct( $main, $action, $commentStreamsStore, true );
 		$this->moderatorFastDelete = (bool)$config->get( 'CommentStreamsModeratorFastDelete' );
 	}
 
@@ -117,9 +120,9 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 			$this->dieWithError( 'commentstreams-api-error-delete' );
 		}
 		if ( $action === 'cs-comment' ) {
-			$this->logAction( 'comment-delete' );
+			$this->logFactory->logCommentAction( 'comment-delete-v2', $user, $comment );
 		} else {
-			$this->logAction( 'comment-moderator-delete' );
+			$this->logFactory->logCommentAction( 'comment-moderator-delete-v2', $user, $comment );
 		}
 	}
 
@@ -142,9 +145,9 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 		}
 
 		if ( $action === 'cs-comment' ) {
-			$this->logAction( 'reply-delete' );
+			$this->logFactory->logCommentAction( 'reply-delete-v2', $user, $reply->getParent() );
 		} else {
-			$this->logAction( 'reply-moderator-delete' );
+			$this->logFactory->logCommentAction( 'reply-moderator-delete-v2', $user, $reply->getParent() );
 		}
 	}
 }
