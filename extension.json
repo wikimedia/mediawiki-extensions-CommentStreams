@@ -217,7 +217,7 @@
 			"services": [
 				"CommentStreamsStore",
 				"CommentStreamsNotifierInterface",
-				"MainConfig",
+				"CommentStreamsLogFactory",
 				"WikiPageFactory"
 			]
 		},
@@ -226,7 +226,7 @@
 			"services": [
 				"CommentStreamsStore",
 				"CommentStreamsNotifierInterface",
-				"MainConfig",
+				"CommentStreamsLogFactory",
 				"WikiPageFactory"
 			]
 		},
@@ -234,7 +234,6 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryComment",
 			"services": [
 				"CommentStreamsStore",
-				"MainConfig",
 				"CommentStreamsSerializer"
 			]
 		},
@@ -242,7 +241,6 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSQueryReply",
 			"services": [
 				"CommentStreamsStore",
-				"MainConfig",
 				"CommentStreamsSerializer"
 			]
 		},
@@ -250,20 +248,21 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditComment",
 			"services": [
 				"CommentStreamsStore",
-				"MainConfig"
+				"CommentStreamsLogFactory"
 			]
 		},
 		"cseditreply": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSEditReply",
 			"services": [
 				"CommentStreamsStore",
-				"MainConfig"
+				"CommentStreamsLogFactory"
 			]
 		},
 		"csdeletecomment": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteComment",
 			"services": [
 				"CommentStreamsStore",
+				"CommentStreamsLogFactory",
 				"MainConfig"
 			]
 		},
@@ -271,28 +270,25 @@
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSDeleteReply",
 			"services": [
 				"CommentStreamsStore",
-				"MainConfig"
+				"CommentStreamsLogFactory"
 			]
 		},
 		"csvote": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSVote",
 			"services": [
-				"CommentStreamsStore",
-				"MainConfig"
+				"CommentStreamsStore"
 			]
 		},
 		"cswatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSWatch",
 			"services": [
-				"CommentStreamsStore",
-				"MainConfig"
+				"CommentStreamsStore"
 			]
 		},
 		"csunwatch": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\ApiCSUnwatch",
 			"services": [
-				"CommentStreamsStore",
-				"MainConfig"
+				"CommentStreamsStore"
 			]
 		}
 	},
