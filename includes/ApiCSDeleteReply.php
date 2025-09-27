@@ -23,7 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Config\Config;
+use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
 use MWException;
 
 class ApiCSDeleteReply extends ApiCSReplyBase {
@@ -31,15 +31,15 @@ class ApiCSDeleteReply extends ApiCSReplyBase {
 	 * @param ApiMain $main main module
 	 * @param string $action name of this module
 	 * @param ICommentStreamsStore $commentStreamsStore
-	 * @param Config $config
+	 * @param CommentStreamsLogFactory $logFactory
 	 */
 	public function __construct(
 		ApiMain $main,
 		string $action,
 		ICommentStreamsStore $commentStreamsStore,
-		Config $config
+		private readonly CommentStreamsLogFactory $logFactory,
 	) {
-		parent::__construct( $main, $action, $commentStreamsStore, $config, true );
+		parent::__construct( $main, $action, $commentStreamsStore, true );
 	}
 
 	/**
@@ -71,9 +71,9 @@ class ApiCSDeleteReply extends ApiCSReplyBase {
 		}
 
 		if ( $action === 'cs-comment' ) {
-			$this->logAction( 'reply-delete' );
+			$this->logFactory->logCommentAction( 'reply-delete-v2', $user, $this->reply->getParent() );
 		} else {
-			$this->logAction( 'reply-moderator-delete' );
+			$this->logFactory->logCommentAction( 'reply-moderator-delete-v2', $user, $this->reply->getParent() );
 		}
 
 		return null;

@@ -373,7 +373,7 @@ class MainHooks implements
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-edit';
 		$GLOBALS['wgAvailableRights'][] = 'cs-moderator-delete';
 		$GLOBALS['wgLogTypes'][] = 'commentstreams';
-		$GLOBALS['wgLogActionsHandlers']['commentstreams/*'] = 'LogFormatter';
+		$GLOBALS['wgLogActionsHandlers']['commentstreams/*'] = 'WikitextLogFormatter';
 
 		define( 'SLOT_COMMENTSTREAMS_COMMENTS', 'cs-comments' );
 	}

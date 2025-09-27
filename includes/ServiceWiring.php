@@ -23,6 +23,7 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
 use MediaWiki\Extension\CommentStreams\Notifier\NullNotifier;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
@@ -44,6 +45,15 @@ return [
 				$services->getPermissionManager(),
 				$services->getService( 'CommentStreamsSerializer' ),
 				$services->getNamespaceInfo()
+			);
+		},
+	'CommentStreamsLogFactory' =>
+		static function ( MediaWikiServices $services ): CommentStreamsLogFactory {
+			return new CommentStreamsLogFactory(
+				new ServiceOptions(
+					CommentStreamsLogFactory::CONSTRUCTOR_OPTIONS,
+					$services->getMainConfig()
+				),
 			);
 		},
 	'CommentStreamsStore' =>
