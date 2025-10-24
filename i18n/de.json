@@ -107,7 +107,7 @@
 	"commentstreams-buttontooltip-unwatch": "Nicht mehr beobachten",
 	"commentstreams-buttontooltip-submit": "Speichern",
 	"commentstreams-buttontooltip-cancel": "Abbrechen",
-	"commentstreams-dialog-delete-message": "Bist du sicher, dass du diesen Kommentar löschen möchtest?",
+	"commentstreams-dialog-delete-message": "{{#FORMAL:Bist du|Sind Sie}} sicher, dass {{#FORMAL:du|Sie}} diesen Kommentar löschen {{#FORMAL:möchtest|möchten}}?",
 	"commentstreams-dialog-anonymous-message": "Du bist nicht angemeldet. Falls du mit dem Speichern dieses Kommentars fortfährst, wird deine IP-Adresse aufgezeichnet und du wirst nicht in der Lage sein, diesen Kommentar zu bearbeiten oder zu löschen.",
 	"commentstreams-dialog-buttontext-ok": "Okay",
 	"commentstreams-dialog-buttontext-cancel": "Abbrechen",
