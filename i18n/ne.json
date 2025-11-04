@@ -29,5 +29,6 @@
 	"commentstreams-datetext-postedon": "प्रेषित मिति",
 	"commentstreams-datetext-lasteditedon": "अन्तिम पटक सम्पादन",
 	"commentstreams-datetext-moderated": "सामान्य",
-	"commentstreams-history-actor": "लेखक"
+	"commentstreams-history-actor": "लेखक",
+	"commentstreams-buttontooltip-unwatch": "अवलोकन सूचीबाट हटाउनुहोस्"
 }
