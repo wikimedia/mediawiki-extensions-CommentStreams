@@ -177,5 +177,15 @@
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|одговори на коментар}} на страницата $2",
 	"commentstreams-event-new-comment-reply-desc": "Нов одговор на коментар",
 	"commentstreams-event-new-comment-desc-label": "Додаден е нов коментар на страницата на која е претплатен корисникот преку нагодувањата",
-	"commentstreams-event-new-comment-reply-desc-label": "Друг корисник одговори на коментар што корисникот го создал или го набљудува"
+	"commentstreams-event-new-comment-reply-desc-label": "Друг корисник одговори на коментар што корисникот го создал или го набљудува",
+	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|создаде}} коментар [[$4|$5]] на $3",
+	"logentry-commentstreams-reply-create-v2": "$1 {{GENDER:$2|создаде}} [[$6|одговор]] на [[$4|$5]] на $3",
+	"logentry-commentstreams-comment-edit-v2": "$1 {{GENDER:$2|уреди}} коментар [[$4|$5]] на $3",
+	"logentry-commentstreams-comment-moderator-edit-v2": "$1 {{GENDER:$2|(модератор) уреди}} коментар [[$4|$5]] на $3",
+	"logentry-commentstreams-reply-edit-v2": "$1 {{GENDER:$2|уреди}} [[$6|одговор]] на [[$4|$5]] на $3",
+	"logentry-commentstreams-reply-moderator-edit-v2": "$1 {{GENDER:$2|(модератор) уреди}} [[$6|одговор]] на [[$4|$5]] на $3",
+	"logentry-commentstreams-comment-delete-v2": "$1 {{GENDER:$2|избриша}} коментар ''$5'' на $3",
+	"logentry-commentstreams-comment-moderator-delete-v2": "$1 {{GENDER:$2|(модератор) избриша}} коментар ''$5'' на $3",
+	"logentry-commentstreams-reply-delete-v2": "$1 {{GENDER:$2|избриша}} одговор на [[$4|$5]] на $3",
+	"logentry-commentstreams-reply-moderator-delete-v2": "$1 {{GENDER:$2|(модератор) избриша}} одговор [[$4|$5]] на $3"
 }
