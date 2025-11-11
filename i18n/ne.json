@@ -20,6 +20,7 @@
 	"commentstreams-buttontooltip-collapse": "खुम्च्याउनुहाेस्",
 	"commentstreams-buttontooltip-expand": "देखाउनुहोस्",
 	"commentstreams-buttontooltip-watch": "अवलोकन",
+	"commentstreams-buttontooltip-unwatch": "अवलोकन सूचीबाट हटाउनुहोस्",
 	"commentstreams-buttontooltip-submit": "पेश गर्नुहोस्",
 	"commentstreams-buttontooltip-cancel": "रद्द गर्नुहोस्",
 	"commentstreams-dialog-buttontext-ok": "ठीक",
@@ -29,6 +30,5 @@
 	"commentstreams-datetext-postedon": "प्रेषित मिति",
 	"commentstreams-datetext-lasteditedon": "अन्तिम पटक सम्पादन",
 	"commentstreams-datetext-moderated": "सामान्य",
-	"commentstreams-history-actor": "लेखक",
-	"commentstreams-buttontooltip-unwatch": "अवलोकन सूचीबाट हटाउनुहोस्"
+	"commentstreams-history-actor": "लेखक"
 }

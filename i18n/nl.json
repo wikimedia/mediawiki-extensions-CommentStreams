@@ -124,7 +124,9 @@
 	"commentstreams-dialog-buttontext-no": "Nee",
 	"commentstreams-urldialog-instructions": "Kopieer en plak de onderstaande URL om een permalink naar deze reactie te delen. Druk op escape om dit dialoogvenster te sluiten.",
 	"commentstreams-datetext-postedon": "Geplaatst op",
+	"commentstreams-datetext-posted": "Geplaatst:",
 	"commentstreams-datetext-lasteditedon": "Laatste bewerkt op",
+	"commentstreams-datetext-lastedited": "Laatste bewerking:",
 	"commentstreams-datetext-moderated": "gemodereerd",
 	"commentstreams-title-field-placeholder": "Voer titel in...",
 	"commentstreams-body-field-placeholder": "Vul tekst nieuw commentaar in...",
@@ -177,8 +179,6 @@
 	"commentstreams-event-new-comment": "{{GENDER:$1|heeft een reactie bewerkt}} op de pagina $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|heeft op een reactie geantwoord}} op de pagina $2",
 	"commentstreams-event-new-comment-reply-desc": "Nieuw antwoord op een reactie",
-	"commentstreams-datetext-posted": "Geplaatst:",
-	"commentstreams-datetext-lastedited": "Laatste bewerking:",
 	"commentstreams-event-new-comment-desc-label": "Er is een nieuwe reactie toegevoegd aan een pagina waarop de gebruiker zich via de voorkeuren heeft geabonneerd",
 	"commentstreams-event-new-comment-reply-desc-label": "Een andere gebruiker heeft gereageerd op een opmerking die de gebruiker heeft gemaakt of volgt"
 }
