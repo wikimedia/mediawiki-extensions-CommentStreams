@@ -180,5 +180,15 @@
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|heeft op een reactie geantwoord}} op de pagina $2",
 	"commentstreams-event-new-comment-reply-desc": "Nieuw antwoord op een reactie",
 	"commentstreams-event-new-comment-desc-label": "Er is een nieuwe reactie toegevoegd aan een pagina waarop de gebruiker zich via de voorkeuren heeft geabonneerd",
-	"commentstreams-event-new-comment-reply-desc-label": "Een andere gebruiker heeft gereageerd op een opmerking die de gebruiker heeft gemaakt of volgt"
+	"commentstreams-event-new-comment-reply-desc-label": "Een andere gebruiker heeft gereageerd op een opmerking die de gebruiker heeft gemaakt of volgt",
+	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|heeft}} reactie [[$4|$5]] gegeven op $3",
+	"logentry-commentstreams-reply-create-v2": "$1 {{GENDER:$2|heeft}} [[$6|een reactie]] gegeven op [[$4|$5]] op $3",
+	"logentry-commentstreams-comment-edit-v2": "$1 {{GENDER:$2|heeft}} reactie [[$4|$5]] bewerkt op $3",
+	"logentry-commentstreams-comment-moderator-edit-v2": "$1 {{GENDER:$2|(moderator) heeft}} de reactie [[$4|$5]] bewerkt op $3",
+	"logentry-commentstreams-reply-edit-v2": "$1 {{GENDER:$2|heeft}} [[$6|een reactie]] bewerkt op [[$4|$5]] op $3",
+	"logentry-commentstreams-reply-moderator-edit-v2": "$1 {{GENDER:$2|(moderator) heeft}} [[$6|een reactie]] bewerkt op [[$4|$5]] op $3",
+	"logentry-commentstreams-comment-delete-v2": "$1 {{GENDER:$2|heeft}} reactie ''$5'' verwijderd op $3",
+	"logentry-commentstreams-comment-moderator-delete-v2": "$1 {{GENDER:$2|(moderator) heeft}} de reactie ''$5'' verwijderd op $3",
+	"logentry-commentstreams-reply-delete-v2": "$1 {{GENDER:$2|heeft}} een reactie verwijderd op [[$4|$5]] op $3",
+	"logentry-commentstreams-reply-moderator-delete-v2": "$1 {{GENDER:$2|(moderator) heeft}} een reacti verwijderd op [[$4|$5]] op $3"
 }

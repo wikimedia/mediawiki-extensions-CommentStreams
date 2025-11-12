@@ -142,5 +142,15 @@
 	"commentstreams-history-actor": "نویسنده",
 	"commentstreams-history-text": "نظر",
 	"commentstreams-button-add-comment": "افزودن نظر",
-	"commentstreams-button-cancel": "لغو"
+	"commentstreams-button-cancel": "لغو",
+	"logentry-commentstreams-comment-create-v2": "$1 نظر [[$4|$5]] را در $3 {{GENDER:$2|ایجاد کرد}}",
+	"logentry-commentstreams-reply-create-v2": "$1 [[$6|یک پاسخ]] به [[$4|$5]] را در $3 {{GENDER:$2|ایجاد کرد}}",
+	"logentry-commentstreams-comment-edit-v2": "$1 نظر [[$4|$5]] را در $3 {{GENDER:$2|ویرایش کرد}}",
+	"logentry-commentstreams-comment-moderator-edit-v2": "$1 نظر [[$4|$5]] را در $3 {{GENDER:$2|ویرایش کرد (ناظم)}}",
+	"logentry-commentstreams-reply-edit-v2": "$1 [[$6|یک پاسخ]] به [[$4|$5]] را در $3 {{GENDER:$2|ویرایش کرد}}",
+	"logentry-commentstreams-reply-moderator-edit-v2": "$1 [[$6|یک پاسخ]] به [[$4|$5]] را در $3 {{GENDER:$2|ویرایش کرد (ناظم)}}",
+	"logentry-commentstreams-comment-delete-v2": "$1 نظر ''$5'' را از $3 {{GENDER:$2|حذف کرد}}",
+	"logentry-commentstreams-comment-moderator-delete-v2": "$1 نظر ''$5'' را از $3 {{GENDER:$2|حذف کرد (ناظم)}}",
+	"logentry-commentstreams-reply-delete-v2": "$1 یک پاسخ به [[$4|$5]] را در $3 {{GENDER:$2|حذف کرد}}",
+	"logentry-commentstreams-reply-moderator-delete-v2": "$1 یک پاسخ به [[$4|$5]] را از $3 {{GENDER:$2|حذف کرد (ناظم)}}"
 }
