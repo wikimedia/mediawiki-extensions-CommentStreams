@@ -176,5 +176,9 @@
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|ha respondite a un commento}} sur le pagina $2",
 	"commentstreams-event-new-comment-reply-desc": "Nove responsa a un commento",
 	"commentstreams-event-new-comment-desc-label": "Un nove commento ha essite addite a un pagina al qual le usator se ha abonate per medio de su preferentias",
-	"commentstreams-event-new-comment-reply-desc-label": "Un altere usator ha respondite a un commento que le usator ha create o ha sub observation"
+	"commentstreams-event-new-comment-reply-desc-label": "Un altere usator ha respondite a un commento que le usator ha create o ha sub observation",
+	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|ha create}} un commento [[$4|$5]] sur $3",
+	"logentry-commentstreams-reply-create-v2": "$1 {{GENDER:$2|ha create}} [[$6|un responsa]] a [[$4|$5]] sur $3",
+	"logentry-commentstreams-comment-edit-v2": "$1 {{GENDER:$2|ha modificate}} le commento [[$4|$5]] sur $3",
+	"logentry-commentstreams-comment-moderator-edit-v2": "$1 (moderat{{GENDER:$2|or|rice}}) ha modificate le commento [[$4|$5]] sur $3"
 }
