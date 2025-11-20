@@ -4,10 +4,21 @@
 			"Dvorapa",
 			"Ilimanaq29",
 			"Patriccck",
-			"Patrik L."
+			"Patrik L.",
+			"Polda18"
 		]
 	},
 	"commentstreams-buttontext-add": "Přidat komentář",
 	"commentstreams-buttontext-reply": "Odpovědět",
+	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|vytvořil|vytvořila}} komentář [[$4|$5]] k příspěvku $3",
+	"logentry-commentstreams-reply-create-v2": "$1{{GENDER:$2|vytvořil|vytvořila}} [[$6|odpověď]] na stránce $3 na [[$4|$5]]",
+	"logentry-commentstreams-comment-edit-v2": "$1 {{GENDER:$2|upravil|upravila}} komentář [[$4|$5]] k příspěvku $3",
+	"logentry-commentstreams-comment-moderator-edit-v2": "$1 {{GENDER:$2|(moderátor) upravil|(moderátorka) upravila}} komentář [[$4|$5]] k příspěvku $3",
+	"logentry-commentstreams-reply-edit-v2": "$1{{GENDER:$2|upravil|upravila}} [[$6|odpověď]] na stránce $3 na [[$4|$5]]",
+	"logentry-commentstreams-reply-moderator-edit-v2": "$1 {{GENDER:$2|(moderátor) upravil|(moderátorka) upravila}} [[$6|odpověď]] uživateli [[$4|$5]] dne $3",
+	"logentry-commentstreams-comment-delete-v2": "$1 {{GENDER:$2|smazal|smazala}} komentář ''$5'' k příspěvku $3",
+	"logentry-commentstreams-comment-moderator-delete-v2": "$1 {{GENDER:$2|(moderátor) smazal|(moderátorka) smazala}} komentář '' $5 '' k příspěvku $3",
+	"logentry-commentstreams-reply-delete-v2": "$1{{GENDER:$2|smazal|smazala}} odpověď na stránce $3 na [[$4|$5]]",
+	"logentry-commentstreams-reply-moderator-delete-v2": "$1{{GENDER:$2|(moderátor) smazal|(moderátorka) smazala}} odpověď na stránce $3 na [[$4|$5]]",
 	"commentstreams-ve-conversion-error": "Chyba při převodu mezi Wikitextem a HTML pro Vizuální editor"
 }

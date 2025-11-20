@@ -36,6 +36,8 @@
 	"notification-body-commentstreams-reply-on-watched-page": "La risposta è:\n\n\n$5",
 	"action-cs-moderator-edit": "modificare i commenti degli altri utenti",
 	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|ha creato}} il commento $3",
+	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|ha creato}} un commento [[$4|$5]] su $3",
+	"logentry-commentstreams-reply-edit-v2": "$1 {{GENDER:$2|ha modificato}} [[$6|una risposta]] a [[$4|$5]] su $3",
 	"commentstreams-no-comment_id": "Errore interno: nessun comment_id trovato",
 	"commentstreams-history-actor": "Autore"
 }
