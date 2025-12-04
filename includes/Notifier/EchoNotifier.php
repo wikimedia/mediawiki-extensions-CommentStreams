@@ -141,6 +141,7 @@ class EchoNotifier implements NotifierInterface {
 			'comment_author_username' => $reply->getAuthor()->getName(),
 			'comment_author_display_name' => $this->serializer->getDisplayNameFromUser( $reply->getAuthor(), false ),
 			'comment_title' => $parentComment->getTitle(),
+			'parent_id' => $parentComment->getId(),
 			'associated_page_display_title' => $associatedPageDisplayTitle,
 			'comment_wikitext' => $this->serializer->getWikitext( $reply ),
 		];
@@ -166,7 +167,7 @@ class EchoNotifier implements NotifierInterface {
 	 * @throws MWException
 	 */
 	public static function locateUsersWatchingComment( EchoEvent $event ): array {
-		$id = $event->getExtraParam( 'comment_id' );
+		$id = $event->getExtraParam( 'parent_id', $event->getExtraParam( 'comment_id' ) );
 		if ( $id === null ) {
 			throw new \RuntimeException( wfMessage( 'commentstreams-no-comment_id' )->plain() );
 		}
