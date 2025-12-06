@@ -88,14 +88,7 @@ module.exports = ( function () {
 
 		const $headComment = this.createComment( commentData );
 
-		const id = 'cs-comment-' + commentData.id;
-
 		this.entityId = commentData.id;
-
-		if ( this.env.targetComment === id ) {
-			$headComment.addClass( 'cs-target-comment' );
-			this.$targetComment = $headComment;
-		}
 
 		this.$stream = $( '<div>' )
 			.addClass( 'cs-stream' )
@@ -252,6 +245,13 @@ module.exports = ( function () {
 			this.$headCommentBody = $commentBody;
 		} else {
 			$comment.addClass( 'cs-reply-comment' );
+		}
+
+		const id = 'cs-comment-' + commentData.id;
+
+		if ( this.env.targetComment === id ) {
+			$comment.addClass( 'cs-target-comment' );
+			this.$targetComment = $comment;
 		}
 
 		$comment.append( [ $commentHeader, $commentBody, $commentFooter ] );
