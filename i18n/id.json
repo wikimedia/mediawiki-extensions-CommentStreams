@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Veracious"
+			"Veracious",
+			"Penyuwangi"
 		]
 	},
 	"commentstreams-desc": "Memungkinan untuk berkomentar di halaman wiki",
@@ -12,5 +13,5 @@
 	"apihelp-csdeletecomment-pageid-example": "hapus komentar dengan ID halaman 3",
 	"apihelp-cspostcomment-summary": "Pos komentar baru.",
 	"apihelp-cspostcomment-param-commenttitle": "judul untuk komentar.",
-	"apihelp-cspostcomment-param-wikitext": "wikiteks untuk komentar."
+	"apihelp-cspostcomment-param-wikitext": "teks wiki untuk komentar."
 }
