@@ -71,5 +71,6 @@
 	"commentstreams-button-cancel": "Ofbriechen",
 	"commentstreams-link-copied": "Link an den Tëschespäicher kopéiert",
 	"commentstreams-event-new-comment-desc": "Neie Kommentar",
-	"commentstreams-event-new-comment-reply-desc": "Nei Äntwert op e Kommentar"
+	"commentstreams-event-new-comment-reply-desc": "Nei Äntwert op e Kommentar",
+	"commentstreams-buttontooltip-unwatch": "net méi iwwerwaachen"
 }
