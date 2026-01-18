@@ -126,7 +126,9 @@ class SMWInterface {
 	public function initProperties( PropertyRegistry $propertyRegistry ) {
 		$propertyRegistry->registerProperty( '___CS_ASSOCPG', '_wpg', 'Comment on' );
 		$propertyRegistry->registerProperty( '___CS_REPLYTO', '_wpg', 'Reply to' );
+		$propertyRegistry->registerProperty( '___CS_BLOCK', '_txt', 'Comment block ID' );
 		$propertyRegistry->registerProperty( '___CS_TITLE', '_txt', 'Comment title of' );
+		$propertyRegistry->registerProperty( '___CS_TEXT', '_txt', 'Comment text of' );
 		if ( $this->enableVoting ) {
 			$propertyRegistry->registerProperty( '___CS_UPVOTES', '_num', 'Comment up votes' );
 			$propertyRegistry->registerProperty( '___CS_DOWNVOTES', '_num', 'Comment down votes' );

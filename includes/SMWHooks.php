@@ -116,8 +116,19 @@ class SMWHooks {
 			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 		}
 
+		$blockName = $comment->getBlockName();
+		if ( $blockName !== null ) {
+			$propertyDI = new DIProperty( '___CS_BLOCK' );
+			$dataItem = new SMWDIBlob( $blockName );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+		}
+
 		$propertyDI = new DIProperty( '___CS_TITLE' );
 		$dataItem = new SMWDIBlob( $comment->getTitle() );
+		$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+
+		$propertyDI = new DIProperty( '___CS_TEXT' );
+		$dataItem = new SMWDIBlob( $this->commentStreamsStore->getWikitext( $comment ) );
 		$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 
 		if (
