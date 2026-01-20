@@ -46,6 +46,7 @@
 	"commentstreams-buttontooltip-collapse": "zesummeklappen",
 	"commentstreams-buttontooltip-expand": "Opklappen",
 	"commentstreams-buttontooltip-watch": "Iwwerwaachen",
+	"commentstreams-buttontooltip-unwatch": "net méi iwwerwaachen",
 	"commentstreams-buttontooltip-submit": "späicheren",
 	"commentstreams-buttontooltip-cancel": "ofbriechen",
 	"commentstreams-dialog-delete-message": "Sidd Dir sécher, datt Dir dëse Kommentar läsche wëllt?",
@@ -71,6 +72,5 @@
 	"commentstreams-button-cancel": "Ofbriechen",
 	"commentstreams-link-copied": "Link an den Tëschespäicher kopéiert",
 	"commentstreams-event-new-comment-desc": "Neie Kommentar",
-	"commentstreams-event-new-comment-reply-desc": "Nei Äntwert op e Kommentar",
-	"commentstreams-buttontooltip-unwatch": "net méi iwwerwaachen"
+	"commentstreams-event-new-comment-reply-desc": "Nei Äntwert op e Kommentar"
 }
