@@ -14,6 +14,6 @@ do
   	do
   		echo $db : $schema
 
-  		php $dir/../../../maintenance/generateSchemaChangeSql.php --json $patch.json --sql $db/$patch.sql --type=$db
+  		php "${MW_INSTALL_PATH}/maintenance/generateSchemaSql.php" --json $patch.json --sql $db/$patch.sql --type=$db
   	done
 done
