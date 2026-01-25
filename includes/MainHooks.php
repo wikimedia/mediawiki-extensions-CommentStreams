@@ -343,7 +343,9 @@ class MainHooks implements
 	 * Sets configuration constants.
 	 */
 	public static function onRegistration() {
-		mwsInitComponents();
+		if ( $GLOBALS['wgCommentStreamsNotifier'] !== 'echo' ) {
+			mwsInitComponents();
+		}
 		define( 'NS_COMMENTSTREAMS', $GLOBALS['wgCommentStreamsNamespaceIndex'] );
 		define( 'NS_COMMENTSTREAMS_TALK', $GLOBALS['wgCommentStreamsNamespaceIndex'] + 1 );
 		if ( $GLOBALS['wgCommentStreamsEnableSearch'] ) {
