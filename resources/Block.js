@@ -262,7 +262,7 @@ module.exports = ( function () {
 	Block.prototype.postCommentFromVE = function ( parentCommentId ) {
 		const self = this;
 		const veInstances = this.$bodyField.getVEInstances();
-		const curVEEditor = veInstances[ veInstances.length - 1 ];
+		const curVEEditor = veInstances.find( ( ve ) => ve.$node.is( this.$bodyField ) );
 		new mw.Api().post( {
 			action: 'veforall-parsoid-utils',
 			from: 'html',

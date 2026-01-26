@@ -1027,7 +1027,7 @@ module.exports = ( function () {
 	Stream.prototype.editCommentFromVE = function ( element, entityId ) {
 		const self = this;
 		const veInstances = this.block.$bodyField.getVEInstances();
-		const curVEEditor = veInstances[ veInstances.length - 1 ];
+		const curVEEditor = veInstances.find( ( ve ) => ve.$node.is( this.block.$bodyField ) );
 		new mw.Api().post( {
 			action: 'veforall-parsoid-utils',
 			from: 'html',
