@@ -1,7 +1,6 @@
 [
 	{
 		"resourceModule": "ext.CommentStreams",
-		"ignoreDependencies": true,
-		"maxSize": "9 kB"
+		"maxSize": "10 kB"
 	}
 ]
