@@ -144,7 +144,19 @@ const CommentStreams = ( function () {
 
 	$( () => {
 		if ( mw.config.exists( 'CommentStreams' ) ) {
-			CommentStreams.initialize();
+			mw.loader.using( [
+				'oojs-ui-core',
+				'oojs-ui-widgets',
+				'oojs-ui-windows',
+				'oojs-ui.styles.icons-alerts',
+				'oojs-ui.styles.icons-content',
+				'oojs-ui.styles.icons-editing-core',
+				'oojs-ui.styles.icons-interactions',
+				'oojs-ui.styles.icons-moderation',
+				'oojs-ui.styles.icons-movement'
+			] ).then( () => {
+				CommentStreams.initialize();
+			} );
 		}
 	} );
 }() );
