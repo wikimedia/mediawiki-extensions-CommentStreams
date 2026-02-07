@@ -178,5 +178,6 @@
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|השיב|השיבה}} לתגובה בדף $2",
 	"commentstreams-event-new-comment-reply-desc": "תשובה חדשה לתגובה",
 	"commentstreams-event-new-comment-desc-label": "תגובה חדשה נוספה לדף שהמשתמש נרשם אליו דרך העדפות",
-	"commentstreams-event-new-comment-reply-desc-label": "משתמש אחר השיב לתגובה שהמשתמש יצר או שהוא עוקב אחריה"
+	"commentstreams-event-new-comment-reply-desc-label": "משתמש אחר השיב לתגובה שהמשתמש יצר או שהוא עוקב אחריה",
+	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|הגיב|הגיבה}} [[$4|$5]] ב־$3"
 }
