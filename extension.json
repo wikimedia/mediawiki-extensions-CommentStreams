@@ -318,6 +318,9 @@
 		},
 		"registerUsageTracker": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\UsageTracker\\RegisterUsageTracker"
+		},
+		"addNamespaceProperties": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\Hook\\NamespaceManagerCollectNamespaceProperties\\AddNamespaceProperties"
 		}
 	},
 	"Hooks": {
@@ -338,7 +341,8 @@
 		"SMWStore::updateDataBefore": "smw",
 		"SMW::Settings::BeforeInitializationComplete": "smw",
 		"MediaWikiServices": "talkPageStore",
-		"BSUsageTrackerRegisterCollectors": "registerUsageTracker"
+		"BSUsageTrackerRegisterCollectors": "registerUsageTracker",
+		"NamespaceManagerCollectNamespaceProperties": "addNamespaceProperties"
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"RestRoutes": [
