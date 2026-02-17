@@ -4,7 +4,7 @@ namespace MediaWiki\Extension\CommentStreams\Tests;
 
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommentStreams\CommentSerializer;
-use MediaWiki\Extension\CommentStreams\Store\TalkPageStore;
+use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
 
 /**
  * @covers \MediaWiki\Extension\CommentStreams\CommentSerializer
@@ -28,7 +28,7 @@ class CommentSerializerTest extends \MediaWikiIntegrationTestCase {
 	 * @return void
 	 */
 	public function testSerialization() {
-		/** @var TalkPageStore $store */
+		/** @var ICommentStreamsStore $store */
 		$store = $this->getServiceContainer()->getService( 'CommentStreamsStore' );
 		$comment = $store->insertComment(
 			$this->getTestSysop()->getUser(), 'Foo', $this->pageData['id'], 'Bar', null
