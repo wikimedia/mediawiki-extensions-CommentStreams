@@ -192,13 +192,20 @@ class NamespacePageStore implements ICommentStreamsStore {
 				return null;
 			}
 
+			$author = $firstRevision->getUser();
+			$lastEditor = $latestRevision->getUser();
+			if ( !$author || !$lastEditor ) {
+				// The author of one of the revisions was hidden.
+				return null;
+			}
+
 			return new Comment(
 				$id,
 				$result->cst_c_comment_title,
 				$result->cst_c_block_name,
 				$this->titleFactory->newFromID( $result->cst_c_assoc_page_id ),
-				$firstRevision->getUser(),
-				$latestRevision->getUser(),
+				$author,
+				$lastEditor,
 				MWTimestamp::getInstance( $firstRevision->getTimestamp() ),
 				MWTimestamp::getInstance( $latestRevision->getTimestamp() ),
 			);
