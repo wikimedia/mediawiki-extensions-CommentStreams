@@ -28,7 +28,6 @@ use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
-use MWException;
 
 class CommentStreamsLogFactory {
 
@@ -49,7 +48,6 @@ class CommentStreamsLogFactory {
 	 * @param User $user the user taking the action
 	 * @param LinkTarget|PageReference $target the page related to the action
 	 * @param array $params log params to add
-	 * @throws MWException
 	 */
 	public function logAction( string $action, User $user, $target, array $params = [] ): void {
 		$logEntry = new ManualLogEntry( 'commentstreams', $action );
@@ -69,7 +67,6 @@ class CommentStreamsLogFactory {
 	 * @param User $user the user taking the action
 	 * @param Comment $comment the comment related to the action
 	 * @param array $params additional log params to add
-	 * @throws MWException
 	 */
 	public function logCommentAction( string $action, User $user, Comment $comment, array $params = [] ): void {
 		$logTarget = Title::castFromPageIdentity( $comment->getAssociatedPage() );
@@ -88,7 +85,6 @@ class CommentStreamsLogFactory {
 	 * @param string $action the name of the action to be logged
 	 * @param User $user the user taking the action
 	 * @param Reply $reply the reply related to the action
-	 * @throws MWException
 	 */
 	public function logReplyAction( string $action, User $user, Reply $reply ): void {
 		$replyLinkTarget = Title::castFromPageIdentity( $reply->getAssociatedPage() );

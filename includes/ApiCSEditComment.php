@@ -24,7 +24,6 @@ namespace MediaWiki\Extension\CommentStreams;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
-use MWException;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSEditComment extends ApiCSCommentBase {
@@ -47,7 +46,6 @@ class ApiCSEditComment extends ApiCSCommentBase {
 	 * the real body of the execute function
 	 * @return ?array result of API request
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 */
 	protected function executeBody(): ?array {
 		$user = $this->getUser();

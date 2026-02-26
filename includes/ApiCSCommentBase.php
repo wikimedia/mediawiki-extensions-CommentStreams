@@ -23,7 +23,6 @@ namespace MediaWiki\Extension\CommentStreams;
 
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
-use MWException;
 
 abstract class ApiCSCommentBase extends ApiCSBase {
 	/**
@@ -49,7 +48,6 @@ abstract class ApiCSCommentBase extends ApiCSBase {
 	/**
 	 * execute the API request
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 */
 	public function execute() {
 		$comment = $this->commentStreamsStore->getComment( $this->getEntityId() );

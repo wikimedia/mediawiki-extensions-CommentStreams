@@ -27,7 +27,6 @@ use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Config\Config;
 use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
 use MediaWiki\User\User;
-use MWException;
 
 class ApiCSDeleteComment extends ApiCSCommentBase {
 	/**
@@ -58,7 +57,6 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 *
 	 * @return ?array result of API request
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 */
 	protected function executeBody(): ?array {
 		$user = $this->getUser();
@@ -94,7 +92,6 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @param string $action
 	 * @param User $user
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 */
 	private function deleteReplies( Comment $comment, string $action, User $user ) {
 		$replies = $this->commentStreamsStore->getReplies( $comment );
@@ -108,7 +105,6 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @param string $action
 	 * @param User $user
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 */
 	private function deleteComment( Comment $comment, string $action, User $user ) {
 		if ( !$this->commentStreamsStore->userCan( $action, $user, $comment ) ) {
@@ -131,7 +127,6 @@ class ApiCSDeleteComment extends ApiCSCommentBase {
 	 * @param string $action
 	 * @param User $user
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 * @throws FatalError
 	 */
 	private function deleteReply( Reply $reply, string $action, User $user ) {

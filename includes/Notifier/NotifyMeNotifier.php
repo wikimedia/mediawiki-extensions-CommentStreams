@@ -10,7 +10,6 @@ use MediaWiki\Extension\CommentStreams\NotifierInterface;
 use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\User\User;
-use MWException;
 use MWStake\MediaWiki\Component\Events\Notifier;
 use WikiPage;
 
@@ -42,7 +41,6 @@ class NotifyMeNotifier implements NotifierInterface {
 	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
 	 * @param string $commentTitle
-	 * @throws MWException
 	 * @throws Exception
 	 */
 	public function sendCommentNotifications(
@@ -60,7 +58,6 @@ class NotifyMeNotifier implements NotifierInterface {
 	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
 	 * @param Comment $parentComment
-	 * @throws MWException
 	 * @throws Exception
 	 */
 	public function sendReplyNotifications(

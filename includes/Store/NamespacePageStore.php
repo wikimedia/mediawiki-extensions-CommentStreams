@@ -50,7 +50,6 @@ use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
-use MWException;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
@@ -373,7 +372,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @param User $user
 	 * @param WikitextContent $content
 	 * @return WikiPage|null
-	 * @throws MWException
 	 */
 	private function createCommentPage( User $user, WikitextContent $content ): ?WikiPage {
 		do {
@@ -493,7 +491,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @param string $wikitext
 	 * @param User $user
 	 * @return bool
-	 * @throws MWException
 	 */
 	public function updateComment(
 		Comment $comment,
@@ -547,7 +544,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 	 * @param string $wikitext
 	 * @param User $user
 	 * @return bool
-	 * @throws MWException
 	 */
 	public function updateReply(
 		Reply $reply,
@@ -697,7 +693,6 @@ class NamespacePageStore implements ICommentStreamsStore {
 	/**
 	 * @param int $pageId
 	 * @param int $commentPageId
-	 * @throws MWException
 	 */
 	public function upsertReplyMetadata(
 		int $pageId,
@@ -882,7 +877,6 @@ EOT;
 	 * @param WikiPage $wikiPage
 	 * @param Authority $authority
 	 * @return int|null
-	 * @throws MWException
 	 */
 	public function createEmptyPage(
 		WikiPage $wikiPage,

@@ -52,7 +52,6 @@ use MediaWiki\Title\ForeignTitle;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use MediaWiki\Xml\Xml;
-use MWException;
 use SearchResult;
 use Skin;
 use stdClass;
@@ -145,7 +144,6 @@ class MainHooks implements
 	 * @param WebRequest $request Context request
 	 * @param ActionEntryPoint $mediaWiki
 	 * @return bool|void True or no return value to continue or false to abort
-	 * @throws MWException
 	 */
 	public function onMediaWikiPerformAction(
 		$output,
@@ -498,7 +496,6 @@ class MainHooks implements
 	 * @param int $sRevCount Number of successfully imported revisions
 	 * @param array $pageInfo Associative array of page information
 	 * @return void True or no return value to continue or false to abort
-	 * @throws MWException
 	 */
 	public function onAfterImportPage(
 		$title, $foreignTitle, $revCount, $sRevCount, $pageInfo

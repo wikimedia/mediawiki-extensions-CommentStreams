@@ -26,7 +26,6 @@ use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommentStreams\Log\CommentStreamsLogFactory;
 use MediaWiki\Page\WikiPageFactory;
-use MWException;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiCSPostComment extends ApiBase {
@@ -53,7 +52,6 @@ class ApiCSPostComment extends ApiBase {
 	/**
 	 * execute the API request
 	 * @throws ApiUsageException
-	 * @throws MWException
 	 */
 	public function execute() {
 		if ( !$this->getPermissionManager()->userHasRight( $this->getUser(), 'cs-comment' ) ) {

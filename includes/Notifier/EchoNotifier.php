@@ -32,7 +32,6 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\User\User;
-use MWException;
 use WikiPage;
 
 class EchoNotifier implements NotifierInterface {
@@ -73,7 +72,6 @@ class EchoNotifier implements NotifierInterface {
 	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
 	 * @param string $commentTitle
-	 * @throws MWException
 	 * @throws Exception
 	 */
 	public function sendCommentNotifications(
@@ -117,7 +115,6 @@ class EchoNotifier implements NotifierInterface {
 	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
 	 * @param Comment $parentComment
-	 * @throws MWException
 	 */
 	public function sendReplyNotifications(
 		Reply $reply,
@@ -164,7 +161,6 @@ class EchoNotifier implements NotifierInterface {
 	 * Used by Echo to locate the users watching a comment being replied to.
 	 * @param EchoEvent $event the Echo event
 	 * @return array array mapping user id to User object
-	 * @throws MWException
 	 */
 	public static function locateUsersWatchingComment( EchoEvent $event ): array {
 		$id = $event->getExtraParam( 'parent_id', $event->getExtraParam( 'comment_id' ) );
