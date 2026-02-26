@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Cindy Cicalese",
 			"Jason Ji",
 			"Liuxinyu970226",
@@ -166,7 +167,7 @@
 	"logentry-commentstreams-reply-moderator-delete": "The template of the log entry message. No longer used for new entries",
 	"logentry-commentstreams-comment-create-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment",
 	"logentry-commentstreams-reply-create-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment\n$6 - The name of the page with a fragment pointing to the reply",
-	"logentry-commentstreams-comment-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment",
+	"logentry-commentstreams-comment-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n* $4 - The name of the page with a fragment pointing to the comment\n* $5 - The title of the comment",
 	"logentry-commentstreams-comment-moderator-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment",
 	"logentry-commentstreams-reply-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment\n$6 - The name of the page with a fragment pointing to the reply",
 	"logentry-commentstreams-reply-moderator-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment\n$6 - The name of the page with a fragment pointing to the reply",
