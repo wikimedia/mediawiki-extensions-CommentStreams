@@ -5,7 +5,8 @@
 			"Jason Ji",
 			"Liuxinyu970226",
 			"Robby",
-			"Verdy p"
+			"Verdy p",
+			"Amire80"
 		]
 	},
 	"commentstreams-desc": "{{desc|name=CommentStreams|url=https://www.mediawiki.org/wiki/Extension:CommentStreams}}",
@@ -183,7 +184,7 @@
 	"commentstreams-event-new-comment-reply-desc-label": "Description when new comment reply event is triggered",
 	"logentry-commentstreams-comment-create-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment",
 	"logentry-commentstreams-reply-create-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment\n$6 - The name of the page with a fragment pointing to the reply",
-	"logentry-commentstreams-comment-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment",
+	"logentry-commentstreams-comment-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n* $4 - The name of the page with a fragment pointing to the comment\n* $5 - The title of the comment",
 	"logentry-commentstreams-comment-moderator-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment",
 	"logentry-commentstreams-reply-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment\n$6 - The name of the page with a fragment pointing to the reply",
 	"logentry-commentstreams-reply-moderator-edit-v2": "{{Logentry|[[Special:Log/commentstreams]]}}\nAdditional parameters:\n$4 - The name of the page with a fragment pointing to the comment\n$5 - The title of the comment\n$6 - The name of the page with a fragment pointing to the reply",
