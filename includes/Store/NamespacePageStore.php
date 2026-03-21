@@ -595,7 +595,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 			$wikiPage->getTitle()->toPageIdentity(), $actor
 		);
 		$deletePage->setSuppress( true );
-		$status = $deletePage->deleteIfAllowed( 'comment deleted' );
+		$status = $deletePage->deleteUnsafe( 'comment deleted' );
 
 		if ( !$status->isGood() ) {
 			return false;
@@ -638,7 +638,7 @@ class NamespacePageStore implements ICommentStreamsStore {
 			$wikiPage->getTitle()->toPageIdentity(), $actor
 		);
 		$deletePage->setSuppress( true );
-		$status = $deletePage->deleteIfAllowed( 'reply deleted' );
+		$status = $deletePage->deleteUnsafe( 'reply deleted' );
 
 		if ( !$status->isGood() ) {
 			return false;
