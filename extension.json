@@ -323,7 +323,7 @@
 		"MediaWikiPerformAction": "main",
 		"MovePageIsValidMove": "main",
 		"GetUserPermissionsErrors": "main",
-		"BeforePageDisplay": "main",
+		"OutputPageParserOutput": "main",
 		"ShowSearchHitTitle": "main",
 		"ParserFirstCallInit": "main",
 		"SpecialExportGetExtraPages": "main",

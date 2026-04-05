@@ -30,6 +30,7 @@ use MediaWiki\Html\Html;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -42,28 +43,20 @@ class CommentStreamsHandler {
 		'CommentStreamsExportCommentsAutomatically'
 	];
 
-	public const COMMENTS_ENABLED = 1;
-	public const COMMENTS_DISABLED = -1;
-	public const COMMENTS_INHERITED = 0;
+	public const NAMESPACES_DISABLED = -1;
+
+	public const COMMENTS_ENABLED = 'enabled';
+	public const COMMENTS_DISABLED = 'disabled';
+
+	public const COMMENTS_DATA_KEY = 'commentstreams';
+	public const COLLAPSE_INITIALLY_DATA_KEY = 'commentstreams-collapse-initially';
+
+	private bool $initialized = false;
 
 	/**
 	 * @var bool
 	 */
 	private $exportCommentsAutomatically;
-
-	/**
-	 * no CommentStreams flag
-	 *
-	 * @var int
-	 */
-	private $areCommentsEnabled = self::COMMENTS_INHERITED;
-
-	/**
-	 * initially collapse CommentStreams flag
-	 *
-	 * @var bool
-	 */
-	private $initiallyCollapseCommentStreams = false;
 
 	/**
 	 * @var ICommentStreamsStore
@@ -132,8 +125,7 @@ class CommentStreamsHandler {
 		Parser $parser,
 		PPFrame $frame
 	): string {
-		$parser->getOutput()->updateCacheExpiry( 0 );
-		$this->areCommentsEnabled = self::COMMENTS_ENABLED;
+		$parser->getOutput()->setExtensionData( self::COMMENTS_DATA_KEY, self::COMMENTS_ENABLED );
 		if ( isset( $args['id'] ) ) {
 			$ret = '<div class="cs-comments" data-id="' . htmlspecialchars( $args['id'] ) . '"></div>';
 		} else {
@@ -159,8 +151,7 @@ class CommentStreamsHandler {
 		Parser $parser,
 		PPFrame $frame
 	): string {
-		$parser->getOutput()->updateCacheExpiry( 0 );
-		$this->areCommentsEnabled = self::COMMENTS_DISABLED;
+		$parser->getOutput()->setExtensionData( self::COMMENTS_DATA_KEY, self::COMMENTS_DISABLED );
 		return '';
 	}
 
@@ -181,34 +172,33 @@ class CommentStreamsHandler {
 		Parser $parser,
 		PPFrame $frame
 	): string {
-		$parser->getOutput()->updateCacheExpiry( 0 );
-		$this->initiallyCollapseCommentStreams = true;
+		$parser->getOutput()->setExtensionData( self::COLLAPSE_INITIALLY_DATA_KEY, true );
 		return '';
 	}
 
 	/**
 	 * initializes the display of comments
 	 *
-	 * @param OutputPage $output OutputPage object
 	 * @throws ConfigException
 	 */
-	public function init( OutputPage $output ) {
-		$showFor = $this->getTitleToShowCommentsFor( $output );
-		if ( $showFor ) {
+	public function init( OutputPage $output, ParserOutput $parserOutput ) {
+		$showFor = $this->getTitleToShowCommentsFor( $output, $parserOutput );
+		if ( $showFor && !$this->initialized ) {
+			$this->initialized = true;
 			$comments = $this->getComments( $showFor, $output );
-			$this->initJS( $output, $comments, $showFor );
+			$this->initJS( $output, $parserOutput, $comments, $showFor );
 		}
 	}
 
 	/**
 	 * checks to see if comments should be displayed on this page
 	 *
-	 * @param OutputPage $output the OutputPage object
 	 * @return Title|null Title object to show comments for, or null if no comments should be shown
 	 */
-	private function getTitleToShowCommentsFor( OutputPage $output ): ?Title {
+	private function getTitleToShowCommentsFor( OutputPage $output, ParserOutput $parserOutput ): ?Title {
+		$commentsEnabled = $parserOutput->getExtensionData( self::COMMENTS_DATA_KEY );
 		// don't display comments on this page if they are explicitly disabled
-		if ( $this->areCommentsEnabled === self::COMMENTS_DISABLED ) {
+		if ( $commentsEnabled === self::COMMENTS_DISABLED ) {
 			return null;
 		}
 
@@ -225,7 +215,7 @@ class CommentStreamsHandler {
 		if ( $csAllowedNamespaces === null ) {
 			$csAllowedNamespaces = $config->get( 'ContentNamespaces' );
 		} elseif (
-			$csAllowedNamespaces === self::COMMENTS_DISABLED && $this->areCommentsEnabled != self::COMMENTS_ENABLED
+			$csAllowedNamespaces === self::NAMESPACES_DISABLED && $commentsEnabled !== self::COMMENTS_ENABLED
 		) {
 			return null;
 		} elseif ( !is_array( $csAllowedNamespaces ) ) {
@@ -252,7 +242,7 @@ class CommentStreamsHandler {
 
 		// display comments on this page if it contains the <comment-streams/> tag function and the
 		// user can read the page
-		if ( $this->areCommentsEnabled === self::COMMENTS_ENABLED &&
+		if ( $commentsEnabled === self::COMMENTS_ENABLED &&
 			$output->getUser()->probablyCan( 'read', $title ) ) {
 			return $title;
 		}
@@ -313,14 +303,15 @@ class CommentStreamsHandler {
 	 * initialize JavaScript
 	 *
 	 * @param OutputPage $output the OutputPage object
+	 * @param ParserOutput $parserOutput
 	 * @param Comment[] $comments array of comments on the current page
 	 * @param Title $showFor Title object to show comments for
 	 * @throws ConfigException
 	 */
-	private function initJS( OutputPage $output, array $comments, Title $showFor ) {
+	private function initJS( OutputPage $output, ParserOutput $parserOutput, array $comments, Title $showFor ) {
 		$config = $output->getConfig();
 
-		if ( $this->initiallyCollapseCommentStreams ) {
+		if ( $parserOutput->getExtensionData( self::COLLAPSE_INITIALLY_DATA_KEY ) ) {
 			$initiallyCollapsed = true;
 		} else {
 			$initiallyCollapsedNamespaces = $config->get( 'CommentStreamsInitiallyCollapsedNamespaces' );
