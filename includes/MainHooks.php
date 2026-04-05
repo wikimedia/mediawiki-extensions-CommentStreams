@@ -34,7 +34,7 @@ use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\SpecialExportGetExtraPagesHook;
 use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Output\Hook\BeforePageDisplayHook;
+use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Page\PageReference;
@@ -53,7 +53,6 @@ use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use MediaWiki\Xml\Xml;
 use SearchResult;
-use Skin;
 use stdClass;
 use WikiImporter;
 use XmlDumpWriter;
@@ -63,7 +62,7 @@ class MainHooks implements
 	MediaWikiPerformActionHook,
 	MovePageIsValidMoveHook,
 	GetUserPermissionsErrorsHook,
-	BeforePageDisplayHook,
+	OutputPageParserOutputHook,
 	ShowSearchHitTitleHook,
 	ParserFirstCallInitHook,
 	SpecialExportGetExtraPagesHook,
@@ -260,12 +259,10 @@ class MainHooks implements
 
 	/**
 	 * Gets comments for page and initializes variables to be passed to JavaScript.
-	 *
-	 * @param OutputPage $out
-	 * @param Skin $skin
+	 * @inheritDoc
 	 */
-	public function onBeforePageDisplay( $out, $skin ): void {
-		$this->commentStreamsHandler->init( $out );
+	public function onOutputPageParserOutput( $outputPage, $parserOutput ): void {
+		$this->commentStreamsHandler->init( $outputPage, $parserOutput );
 	}
 
 	/**
