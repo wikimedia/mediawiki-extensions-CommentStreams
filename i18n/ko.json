@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Apzp79",
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
@@ -120,5 +121,11 @@
 	"commentstreams-history-text": "의견",
 	"commentstreams-button-add-comment": "의견 추가",
 	"commentstreams-button-cancel": "취소",
-	"commentstreams-link-copied": "링크가 클립보드에 복사되었습니다"
+	"commentstreams-link-copied": "링크가 클립보드에 복사되었습니다",
+	"apihelp-cseditcomment-param-commenttitle": "댓글의 제목입니다.",
+	"apihelp-cseditcomment-param-wikitext": "댓글의 위키텍스트입니다.",
+	"apihelp-cspostreply-param-wikitext": "답변의 위키텍스트입니다.",
+	"apihelp-cseditreply-param-wikitext": "답변의 위키텍스트입니다.",
+	"commentstreams-buttontooltip-upvote": "찬성",
+	"commentstreams-buttontooltip-downvote": "반대"
 }
