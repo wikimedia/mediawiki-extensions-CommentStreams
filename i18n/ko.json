@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Apzp79",
-			"Ykhwong"
+			"Ykhwong",
+			"Tensama0415"
 		]
 	},
 	"commentstreams-desc": "위키 문서에 댓글을 달 수 있게 합니다",
@@ -20,6 +21,8 @@
 	"apihelp-cspostcomment-param-wikitext": "댓글의 위키텍스트입니다.",
 	"apihelp-cspostcomment-param-associatedid": "이 댓글이 속한 문서.",
 	"apihelp-cseditcomment-param-entityid": "의견 또는 답변 ID",
+	"apihelp-cseditcomment-param-commenttitle": "댓글의 제목입니다.",
+	"apihelp-cseditcomment-param-wikitext": "댓글의 위키텍스트입니다.",
 	"apihelp-csvote-summary": "댓글에 투표(찬성, 반대, 중립)합니다.",
 	"apihelp-csvote-param-entityid": "의견 또는 답변 ID",
 	"apihelp-csvote-param-vote": "투표 (1, -1, 0).",
@@ -29,7 +32,9 @@
 	"apihelp-csqueryreply-param-entityid": "의견 또는 답변 ID",
 	"apihelp-csdeletereply-param-entityid": "의견 또는 답변 ID",
 	"apihelp-cspostreply-summary": "새 답변을 게시합니다.",
+	"apihelp-cspostreply-param-wikitext": "답변의 위키텍스트입니다.",
 	"apihelp-cseditreply-param-entityid": "의견 또는 답변 ID",
+	"apihelp-cseditreply-param-wikitext": "답변의 위키텍스트입니다.",
 	"commentstreams-api-error-invalid": "유효하지 않은 API 응답입니다.",
 	"commentstreams-api-error-notloggedin": "로그인해야 합니다.",
 	"commentstreams-api-error-commentnotfound": "요청하신 댓글을 찾을 수 없습니다.",
@@ -64,6 +69,8 @@
 	"commentstreams-buttontooltip-permalink": "고유링크",
 	"commentstreams-buttontooltip-collapse": "접기",
 	"commentstreams-buttontooltip-expand": "펼치기",
+	"commentstreams-buttontooltip-upvote": "찬성",
+	"commentstreams-buttontooltip-downvote": "반대",
 	"commentstreams-buttontooltip-watch": "주시",
 	"commentstreams-buttontooltip-unwatch": "주시 해제",
 	"commentstreams-buttontooltip-submit": "제출",
