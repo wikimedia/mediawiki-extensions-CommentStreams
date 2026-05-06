@@ -359,7 +359,7 @@ module.exports = ( function () {
 	};
 
 	Block.prototype.reportError = function ( message ) {
-		/* eslint-disable mediawiki/msg-doc */
+
 		let messageText = message;
 		const mwmessage = mw.message( message );
 		if ( mwmessage.exists() ) {
