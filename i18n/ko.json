@@ -62,7 +62,7 @@
 	"apihelp-csdeletereply-title-example": "문서 제목 CommentStreams:3의 답글을 삭제",
 	"apihelp-cspostreply-summary": "새 답변을 게시합니다.",
 	"apihelp-cspostreply-param-wikitext": "답변의 위키텍스트입니다.",
-	"apihelp-cspostreply-param-parentid": "부모 댓글의 문서 ID입니다.",
+	"apihelp-cspostreply-param-parentid": "상위 댓글의 문서 ID입니다.",
 	"apihelp-cseditreply-summary": "기존의 답글을 편집합니다. pageid 또는 title을 지정해야 합니다.",
 	"apihelp-cseditreply-param-entityid": "의견 또는 답변 ID",
 	"apihelp-cseditreply-param-title": "편집하려는 답글의 문서의 제목",
