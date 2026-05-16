@@ -157,7 +157,7 @@
 	"apihelp-csdeletereply-param-title": "삭제하려는 답글의 문서의 제목",
 	"apihelp-csdeletereply-pageid-example": "문서 ID 3의 답글을 삭제",
 	"apihelp-csdeletereply-title-example": "문서 제목 CommentStreams:3의 답글을 삭제",
-	"apihelp-cspostreply-param-parentid": "부모 댓글의 문서 ID입니다.",
+	"apihelp-cspostreply-param-parentid": "상위 댓글의 문서 ID입니다.",
 	"apihelp-cseditreply-summary": "기존의 답글을 편집합니다. pageid 또는 title을 지정해야 합니다.",
 	"apihelp-cseditreply-param-title": "편집하려는 답글의 문서의 제목",
 	"apihelp-cseditreply-pageid-example": "문서 ID 3의 답변을 편집",
