@@ -145,11 +145,11 @@
 	"group-csmoderator-member": "{{GENDER:$1|조정자 (CommentStreams)}}",
 	"grouppage-csmoderator": "{{ns:project}}:조정자 (CommentStreams)",
 	"right-cs-comment": "사용자 자신의 댓글을 게시, 편집, 삭제",
-	"action-cs-comment": "댓글을 게시, 편집, 삭제할",
+	"action-cs-comment": "댓글을 게시, 편집, 삭제",
 	"right-cs-moderator-edit": "사용자의 댓글 편집",
-	"action-cs-moderator-edit": "다른 사용자의 댓글을 편집할",
+	"action-cs-moderator-edit": "다른 사용자의 댓글 편집",
 	"right-cs-moderator-delete": "사용자의 댓글 삭제",
-	"action-cs-moderator-delete": "다른 사용자의 댓글을 삭제할",
+	"action-cs-moderator-delete": "다른 사용자의 댓글 삭제",
 	"log-name-commentstreams": "CommentStreams 기록",
 	"log-description-commentstreams": "이 이벤트는 CommentStreams 이벤트가 발생할 때 추적합니다.",
 	"logentry-commentstreams-comment-create": "$1님이 $3 댓글을 {{GENDER:$2|만들었습니다}}",
@@ -187,6 +187,6 @@
 	"commentstreams-event-new-comment": "$2 문서에서 {{GENDER:$1|새로운 댓글을 추가함}}",
 	"commentstreams-event-new-comment-reply": "$2 문서에서 {{GENDER:$1|댓글에 답글을 달음}}",
 	"commentstreams-event-new-comment-reply-desc": "댓글에 대한 새로운 답글",
-	"commentstreams-event-new-comment-desc-label": "사용자가 환경설정을 통해 구독한 문서에 새로운 댓글이 추가되었습니다",
+	"commentstreams-event-new-comment-desc-label": "사용자가 환경 설정을 통해 구독한 문서에 새로운 댓글이 추가되었습니다",
 	"commentstreams-event-new-comment-reply-desc-label": "사용자가 만들었거나 주시중인 댓글에 다른 사용자가 답글을 달았습니다."
 }
