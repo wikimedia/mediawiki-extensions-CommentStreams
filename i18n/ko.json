@@ -7,7 +7,7 @@
 		]
 	},
 	"commentstreams-desc": "위키 문서에 댓글을 달 수 있게 합니다",
-	"commentstreams-error-prohibitedaction": "$1 동작은 댓글 문서에서 허용되지 않습니다.",
+	"commentstreams-error-prohibitedaction": "$1 작업은 댓글 문서에서 허용되지 않습니다.",
 	"commentstreams-error-comment-on-deleted-page": "이 댓글이 속하는 문서가 삭제되었습니다.",
 	"commentstreams-error-reply-to-deleted-comment": "이 댓글이 답글로 달린 댓글이 삭제되었습니다.",
 	"commentstreams-author-anonymous": "익명",
@@ -87,7 +87,7 @@
 	"commentstreams-api-error-delete": "댓글 삭제 중에 오류가 발생했습니다.",
 	"commentstreams-api-error-vote-notloggedin": "투표하려면 로그인해야 합니다.",
 	"commentstreams-api-error-vote-novoteonreply": "답변에 투표하는 것은 허용되지 않습니다.",
-	"commentstreams-api-error-vote": "댓글에 투표하는 중에 오류가 발생했습니다.",
+	"commentstreams-api-error-vote": "댓글에 투표하던 중에 오류가 발생했습니다.",
 	"commentstreams-api-error-watch-notloggedin": "댓글을 주시하려면 로그인해야 합니다.",
 	"commentstreams-api-error-watch-nowatchreply": "댓글 주시는 허용되지 않습니다.",
 	"commentstreams-api-error-watch": "댓글 주시에 오류가 발생했습니다.",
