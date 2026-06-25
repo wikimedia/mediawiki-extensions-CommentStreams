@@ -5,9 +5,9 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CommentStreams\Notifier\Event;
 
 use MediaWiki\Extension\CommentStreams\AbstractComment;
+use MediaWiki\Message\Message;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\User\UserIdentity;
-use Message;
 use MWStake\MediaWiki\Component\Events\Delivery\IChannel;
 use MWStake\MediaWiki\Component\Events\TitleEvent;
 
