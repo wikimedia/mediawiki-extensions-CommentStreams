@@ -317,6 +317,10 @@
 		},
 		"addNamespaceProperties": {
 			"class": "MediaWiki\\Extension\\CommentStreams\\Hook\\NamespaceManagerCollectNamespaceProperties\\AddNamespaceProperties"
+		},
+		"resolveCommentWatcherForNotification": {
+			"class": "MediaWiki\\Extension\\CommentStreams\\Notifier\\NotifyMeWatchlistProviderHooks",
+			"services": [ "CommentStreamsStore" ]
 		}
 	},
 	"Hooks": {
@@ -338,7 +342,9 @@
 		"SMW::Settings::BeforeInitializationComplete": "smw",
 		"MediaWikiServices": "talkPageStore",
 		"BSUsageTrackerRegisterCollectors": "registerUsageTracker",
-		"NamespaceManagerCollectNamespaceProperties": "addNamespaceProperties"
+		"NamespaceManagerCollectNamespaceProperties": "addNamespaceProperties",
+		"NotifyMeWatchlistProviderGetWatchSource": "resolveCommentWatcherForNotification",
+		"NotifyMeWatchlistProviderGetWatchers": "resolveCommentWatcherForNotification"
 	},
 	"callback": "MediaWiki\\Extension\\CommentStreams\\MainHooks::onRegistration",
 	"RestRoutes": [
