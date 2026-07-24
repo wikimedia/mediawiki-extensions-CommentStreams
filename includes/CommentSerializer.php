@@ -222,8 +222,8 @@ class CommentSerializer {
 		if ( !$timestamp ) {
 			return null;
 		}
-		$timestamp->offsetForUser( $user );
 		if ( $this->timeFormat ) {
+			$timestamp->offsetForUser( $user );
 			return $timestamp->format( $this->timeFormat );
 		}
 		$language = RequestContext::getMain()->getLanguage();
