@@ -3,7 +3,8 @@
 		"authors": [
 			"Eduardo Addad de Oliveira",
 			"Eduardoaddad",
-			"Fúlvio"
+			"Fúlvio",
+			"NenhumaFênix"
 		]
 	},
 	"commentstreams-desc": "Permite deixar comentários nas páginas da wiki",
@@ -109,7 +110,7 @@
 	"notification-link-label-commentstreams-reply-on-watched-page": "Visitar a resposta",
 	"notification-link-label-commentstreams-reply-to-watched-comment": "Visitar a resposta",
 	"group-csmoderator": "Moderadores (CommentStreams)",
-	"group-csmoderator-member": "{{GENDER:$1|moderador|moderadora}} (CommentStreams)",
+	"group-csmoderator-member": "{{GENDER:$1|moderador|moderadora|moderação}} (CommentStreams)",
 	"grouppage-csmoderator": "{{ns:project}}:Moderadores (CommentStreams)",
 	"right-cs-comment": "Publicar, editar e eliminar comentários do próprio usuário",
 	"action-cs-comment": "publicar, editar ou eliminar comentários",
