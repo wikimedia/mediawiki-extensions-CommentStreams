@@ -5,6 +5,7 @@
 			"Ebrahim",
 			"Ebraminio",
 			"Jeeputer",
+			"LordProfo",
 			"Ommmmid"
 		]
 	},
@@ -63,11 +64,11 @@
 	"commentstreams-api-error-vote-notloggedin": "برای رأی دادن باید وارد سامانه شده باشید.",
 	"commentstreams-api-error-vote-novoteonreply": "رأی دادن به پاسخ‌ها مجاز نیست.",
 	"commentstreams-api-error-vote": "خطا در رأی دادن به نظر.",
-	"commentstreams-api-error-watch-notloggedin": "برای پی‌گیری یک نظر باید وارد سامانه شده باشید.",
+	"commentstreams-api-error-watch-notloggedin": "برای پیگیری یک نظر باید وارد سامانه شده باشید.",
 	"commentstreams-api-error-watch-nowatchreply": "پیگیری پاسخ‌ها مجاز نیست.",
 	"commentstreams-api-error-watch": "خطا در پیگیری نظر.",
 	"commentstreams-api-error-unwatch-notloggedin": "برای توقف پیگیری یک نظر باید وارد سامانه شده باشید.",
-	"commentstreams-api-error-unwatch-nounwatchreply": "توقف پی‌گیری پاسخ‌ها مجاز نیست.",
+	"commentstreams-api-error-unwatch-nounwatchreply": "توقف پیگیری پاسخ‌ها مجاز نیست.",
 	"commentstreams-api-error-unwatch": "خطا در توقف پی‌گیری نظر.",
 	"commentstreams-validation-error-nocommenttitle": "باید عنوان یک نظر را وارد کنید.",
 	"commentstreams-validation-error-nocommenttext": "باید متن نظر را وارد کنید.",
