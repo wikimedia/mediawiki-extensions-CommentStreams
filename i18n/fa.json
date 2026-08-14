@@ -6,7 +6,8 @@
 			"Ebraminio",
 			"Jeeputer",
 			"Ommmmid",
-			"LordProfo"
+			"LordProfo",
+			"LProfo"
 		]
 	},
 	"commentstreams-desc": "امکان نظر دادن در صفحه‌های ویکی را فراهم می‌کند",
@@ -69,7 +70,7 @@
 	"commentstreams-api-error-watch": "خطا در پیگیری نظر.",
 	"commentstreams-api-error-unwatch-notloggedin": "برای توقف پیگیری یک نظر باید وارد سامانه شده باشید.",
 	"commentstreams-api-error-unwatch-nounwatchreply": "توقف پیگیری پاسخ‌ها مجاز نیست.",
-	"commentstreams-api-error-unwatch": "خطا در توقف پی‌گیری نظر.",
+	"commentstreams-api-error-unwatch": "خطا در توقف پیگیری نظر.",
 	"commentstreams-validation-error-nocommenttitle": "باید عنوان یک نظر را وارد کنید.",
 	"commentstreams-validation-error-nocommenttext": "باید متن نظر را وارد کنید.",
 	"commentstreams-buttontext-add": "افزودن نظر",
