@@ -25,7 +25,7 @@
 	"apihelp-csdeletecomment-param-title": "عنوان صفحه‌ای که حاوی نظر مورد نظر برای حذف است",
 	"apihelp-csdeletecomment-pageid-example": "حذف نظر با شناسهٔ صفحهٔ 3",
 	"apihelp-csdeletecomment-title-example": "حذف نظر از صفحه‌ای با عنوان CommnetStreams:3",
-	"apihelp-cspostcomment-summary": "ارسال نظر تازه.",
+	"apihelp-cspostcomment-summary": "ارسال دیدگاهی تازه.",
 	"apihelp-cspostcomment-param-commenttitle": "عنوان نظر.",
 	"apihelp-cspostcomment-param-wikitext": "ویکی‌متن نظر.",
 	"apihelp-cspostcomment-param-associatedid": "صفحه‌ای که این نظر با آن مرتبط است.",
