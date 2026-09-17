@@ -18,6 +18,7 @@ use MediaWiki\Json\FormatJson;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
@@ -27,7 +28,6 @@ use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
 use MediaWiki\User\UserFactory;
-use MediaWiki\User\UserGroupManager;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\User\UserNameUtils;
 use MediaWiki\Utils\MWTimestamp;
@@ -46,7 +46,7 @@ class TalkPageStore implements ICommentStreamsStore {
 	 * @param WikiPageFactory $wikiPageFactory
 	 * @param LoggerInterface $logger
 	 * @param UserFactory $userFactory
-	 * @param UserGroupManager $userGroupManager
+	 * @param PermissionManager $permissionManager
 	 * @param NamespaceInfo $nsInfo
 	 * @param HookContainer $hookContainer
 	 * @param UserNameUtils $userNameUtils
@@ -61,7 +61,7 @@ class TalkPageStore implements ICommentStreamsStore {
 		private readonly WikiPageFactory $wikiPageFactory,
 		private readonly LoggerInterface $logger,
 		private readonly UserFactory $userFactory,
-		private readonly UserGroupManager $userGroupManager,
+		private readonly PermissionManager $permissionManager,
 		private readonly NamespaceInfo $nsInfo,
 		private readonly HookContainer $hookContainer,
 		private readonly UserNameUtils $userNameUtils,
@@ -136,11 +136,12 @@ class TalkPageStore implements ICommentStreamsStore {
 			// User can do anything to own comments
 			return true;
 		}
-		if ( in_array( 'sysop', $this->userGroupManager->getUserGroups( $user ) ) ) {
-			// Sysops can do anything on anyone comments
-			return true;
+		$page = $comment->getAssociatedPage();
+		if ( $page ) {
+			return $this->permissionManager->userCan( $action, $user, $page );
+		} else {
+			return $this->permissionManager->userHasRight( $user, $action );
 		}
-		return false;
 	}
 
 	/**
