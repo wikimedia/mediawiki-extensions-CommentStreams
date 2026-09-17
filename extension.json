@@ -44,7 +44,7 @@
 						"WikiPageFactory",
 						"CommentStreamsLogger",
 						"UserFactory",
-						"UserGroupManager",
+						"PermissionManager",
 						"NamespaceInfo",
 						"HookContainer",
 						"UserNameUtils"
