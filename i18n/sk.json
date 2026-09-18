@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Pmikolas44"
+			"Pmikolas44",
+			"KormiSK"
 		]
 	},
-	"commentstreams-error-comment-on-deleted-page": "Stránka, ku ktorej je tento komentár priradený, bola odstránená."
+	"commentstreams-error-comment-on-deleted-page": "Stránka, ku ktorej je tento komentár priradený, bola odstránená.",
+	"logentry-commentstreams-reply-create-v2": "$1 {{GENDER:$2|vytvoril|vytvorila|vytvoril(a)}} [[$6|odpoveď]] na stránke $3 na [[$4|$5]]"
 }
