@@ -21,13 +21,14 @@
 
 namespace MediaWiki\Extension\CommentStreams\Notifier;
 
-use EchoEvent;
 use Exception;
 use MediaWiki\Extension\CommentStreams\Comment;
 use MediaWiki\Extension\CommentStreams\CommentSerializer;
 use MediaWiki\Extension\CommentStreams\ICommentStreamsStore;
 use MediaWiki\Extension\CommentStreams\NotifierInterface;
 use MediaWiki\Extension\CommentStreams\Reply;
+use MediaWiki\Extension\Notifications\Model\Event;
+use MediaWiki\Extension\Notifications\UserLocator;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -100,7 +101,7 @@ class EchoNotifier implements NotifierInterface {
 			'comment_wikitext' => $this->serializer->getWikitext( $comment ),
 		];
 
-		EchoEvent::create( [
+		Event::create( [
 			'type' => 'commentstreams-comment-on-watched-page',
 			'title' => $associatedPage->getTitle(),
 			'extra' => $extra,
@@ -143,13 +144,13 @@ class EchoNotifier implements NotifierInterface {
 			'comment_wikitext' => $this->serializer->getWikitext( $reply ),
 		];
 
-		EchoEvent::create( [
+		Event::create( [
 			'type' => 'commentstreams-reply-on-watched-page',
 			'title' => $associatedPage->getTitle(),
 			'extra' => $extra,
 			'agent' => $user
 		] );
-		EchoEvent::create( [
+		Event::create( [
 			'type' => 'commentstreams-reply-to-watched-comment',
 			'title' => $associatedPage->getTitle(),
 			'extra' => $extra,
@@ -159,10 +160,10 @@ class EchoNotifier implements NotifierInterface {
 
 	/**
 	 * Used by Echo to locate the users watching a comment being replied to.
-	 * @param EchoEvent $event the Echo event
+	 * @param Event $event the Echo event
 	 * @return array array mapping user id to User object
 	 */
-	public static function locateUsersWatchingComment( EchoEvent $event ): array {
+	public static function locateUsersWatchingComment( Event $event ): array {
 		$id = $event->getExtraParam( 'parent_id', $event->getExtraParam( 'comment_id' ) );
 		if ( $id === null ) {
 			throw new \RuntimeException( wfMessage( 'commentstreams-no-comment_id' )->plain() );
@@ -197,7 +198,7 @@ class EchoNotifier implements NotifierInterface {
 			'group' => 'positive',
 			'section' => 'alert',
 			'presentation-model' => EchoCSPresentationModel::class,
-			'user-locators' => [ 'EchoUserLocator::locateUsersWatchingTitle' ]
+			'user-locators' => [ UserLocator::class . '::locateUsersWatchingTitle' ]
 		];
 
 		$notifications['commentstreams-reply-on-watched-page'] = [
@@ -205,7 +206,7 @@ class EchoNotifier implements NotifierInterface {
 			'group' => 'positive',
 			'section' => 'alert',
 			'presentation-model' => EchoCSPresentationModel::class,
-			'user-locators' => [ 'EchoUserLocator::locateUsersWatchingTitle' ],
+			'user-locators' => [ UserLocator::class . '::locateUsersWatchingTitle' ],
 			'user-filters' =>
 				[ self::class . '::locateUsersWatchingComment' ]
 		];
