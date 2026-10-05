@@ -187,7 +187,7 @@
 	"commentstreams-event-new-comment-desc": "Comentario novo",
 	"commentstreams-event-new-comment": "{{GENDER:$1|engadiu un comentario novo}} na páxina «$2»",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|respondeu un comentario}} na páxina «$2»",
-	"commentstreams-event-new-comment-reply-desc": "Nova resposta a un comentario",
-	"commentstreams-event-new-comment-desc-label": "Engadiuse un comentario novo a unha páxina á que o usuario se subscribiu a través das preferencias",
+	"commentstreams-event-new-comment-reply-desc": "Responder a un comentario",
+	"commentstreams-event-new-comment-desc-label": "Comentar nunha páxina",
 	"commentstreams-event-new-comment-reply-desc-label": "Outro usuario respondeu a un comentario que o usuario creou ou que está a vixiar"
 }
