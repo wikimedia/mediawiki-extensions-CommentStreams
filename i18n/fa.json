@@ -154,5 +154,6 @@
 	"commentstreams-history-actor": "نویسنده",
 	"commentstreams-history-text": "نظر",
 	"commentstreams-button-add-comment": "افزودن نظر",
-	"commentstreams-button-cancel": "لغو"
+	"commentstreams-button-cancel": "لغو",
+	"commentstreams-event-new-comment-reply-desc": "پاسخ به یک نظر"
 }
