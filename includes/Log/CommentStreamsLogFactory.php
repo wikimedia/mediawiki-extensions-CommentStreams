@@ -20,11 +20,11 @@
 
 namespace MediaWiki\Extension\CommentStreams\Log;
 
-use ManualLogEntry;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommentStreams\Comment;
 use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
