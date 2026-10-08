@@ -163,6 +163,5 @@
 	"commentstreams-button-add-comment": "Kommentar hinzufügen",
 	"commentstreams-button-cancel": "Abbrechen",
 	"commentstreams-link-copied": "Link in die Zwischenablage kopiert",
-	"commentstreams-event-new-comment-desc-label": "Antwort auf einen Kommentar",
-	"commentstreams-event-new-comment-reply-desc-label": "Kommentar auf einer Seite"
+	"commentstreams-event-new-comment-desc-label": "Antwort auf einen Kommentar"
 }
