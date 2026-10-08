@@ -164,5 +164,5 @@
 	"commentstreams-button-cancel": "Abbrechen",
 	"commentstreams-link-copied": "Link in die Zwischenablage kopiert",
 	"commentstreams-event-new-comment-desc-label": "Ein neuer Kommentar wurde zu einer Seite hinzugefügt, die der Benutzer über die Einstellungen abonniert hat",
-	"commentstreams-event-new-comment-reply-desc-label": "Ein anderer Benutzer hat auf einen vom Benutzer erstellten oder beobachteten Kommentar geantwortet"
+	"commentstreams-event-new-comment-reply-desc-label": "Kommentar auf einer Seite"
 }
