@@ -76,13 +76,6 @@
 					},
 					"buckets": [ "content-high-freq" ],
 					"description": "commentstreams-event-new-comment-desc-label"
-				},
-				"cs-new-comment-reply": {
-					"spec": {
-						"class": "MediaWiki\\Extension\\CommentStreams\\Notifier\\Event\\NewReplyEvent"
-					},
-					"buckets": [ "content-high-freq" ],
-					"description": "commentstreams-event-new-comment-reply-desc-label"
 				}
 			}
 		}

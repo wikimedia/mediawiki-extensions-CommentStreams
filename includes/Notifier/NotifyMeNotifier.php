@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommentStreams\Notifier;
 use Exception;
 use MediaWiki\Extension\CommentStreams\Comment;
 use MediaWiki\Extension\CommentStreams\Notifier\Event\NewCommentEvent;
-use MediaWiki\Extension\CommentStreams\Notifier\Event\NewReplyEvent;
 use MediaWiki\Extension\CommentStreams\NotifierInterface;
 use MediaWiki\Extension\CommentStreams\Reply;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -36,8 +35,6 @@ class NotifyMeNotifier implements NotifierInterface {
 	}
 
 	/**
-	 * Send Echo notifications if Echo is installed.
-	 *
 	 * @param Comment $comment the comment to send notifications for
 	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
@@ -54,8 +51,6 @@ class NotifyMeNotifier implements NotifierInterface {
 	}
 
 	/**
-	 * Send Echo notifications if Echo is installed.
-	 *
 	 * @param Reply $reply the comment to send notifications for
 	 * @param WikiPage $associatedPage the associated page for the comment
 	 * @param User $user
@@ -70,7 +65,7 @@ class NotifyMeNotifier implements NotifierInterface {
 		Comment $parentComment
 	) {
 		$this->notifier->emit(
-			new NewReplyEvent( $parentComment, $user, $associatedPage->getTitle() )
+			new NewCommentEvent( $reply, $user, $associatedPage->getTitle() )
 		);
 	}
 
