@@ -145,6 +145,7 @@
 	"commentstreams-history-text": "نظر",
 	"commentstreams-button-add-comment": "افزودن نظر",
 	"commentstreams-button-cancel": "لغو",
+	"commentstreams-event-new-comment-reply-desc": "پاسخ به یک نظر",
 	"logentry-commentstreams-comment-create-v2": "$1 نظر [[$4|$5]] را در $3 {{GENDER:$2|ایجاد کرد}}",
 	"logentry-commentstreams-reply-create-v2": "$1 [[$6|یک پاسخ]] به [[$4|$5]] را در $3 {{GENDER:$2|ایجاد کرد}}",
 	"logentry-commentstreams-comment-edit-v2": "$1 نظر [[$4|$5]] را در $3 {{GENDER:$2|ویرایش کرد}}",

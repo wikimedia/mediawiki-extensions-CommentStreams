@@ -5,7 +5,8 @@
 			"Nike",
 			"Pyscowicz",
 			"Silvonen",
-			"Yupik"
+			"Yupik",
+			"Wikipeedikko"
 		]
 	},
 	"apihelp-cspostcomment-param-commenttitle": "kommentin otsikko.",
@@ -26,5 +27,6 @@
 	"commentstreams-dialog-buttontext-cancel": "Peruuta",
 	"commentstreams-dialog-buttontext-yes": "Kyllä",
 	"commentstreams-dialog-buttontext-no": "Ei",
-	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3"
+	"logentry-commentstreams-comment-create": "$1 {{GENDER:$2|loi}} kommentin $3",
+	"commentstreams-event-new-comment-reply-desc": "Vastaa kommenttiin"
 }

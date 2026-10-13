@@ -13,7 +13,8 @@
 			"Tranve",
 			"Zorua Fox",
 			"列维劳德",
-			"沈澄心"
+			"沈澄心",
+			"Villager-bloc-h"
 		]
 	},
 	"commentstreams-desc": "允许在wiki页面上评论",
@@ -186,8 +187,8 @@
 	"commentstreams-event-new-comment-desc": "新评论",
 	"commentstreams-event-new-comment": "在 $2 {{GENDER:$1|添加了一条新评论}}",
 	"commentstreams-event-new-comment-reply": "在 $2 {{GENDER:$1|回复了一条评论}}",
-	"commentstreams-event-new-comment-reply-desc": "对评论的新回复",
-	"commentstreams-event-new-comment-desc-label": "用户通过偏好设置订阅的页面添加了一条新评论",
+	"commentstreams-event-new-comment-reply-desc": "回复评论",
+	"commentstreams-event-new-comment-desc-label": "在页面上评论",
 	"commentstreams-event-new-comment-reply-desc-label": "另一位用户回复了该用户创建或正在关注的评论",
 	"logentry-commentstreams-comment-create-v2": "$1在$3上{{GENDER:$2|创建了}}评论：[[$4|$5]]",
 	"logentry-commentstreams-reply-create-v2": "$1在$3上{{GENDER:$2|创建了}}一个对[[$4|$5]]的[[$6|回复]]",
