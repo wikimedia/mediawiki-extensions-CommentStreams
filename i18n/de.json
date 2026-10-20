@@ -3,6 +3,7 @@
 		"authors": [
 			"Metalhead64",
 			"Mschlindwein",
+			"Osnard",
 			"PretzelRocky",
 			"ToBeFree"
 		]
@@ -164,5 +165,12 @@
 	"commentstreams-button-cancel": "Abbrechen",
 	"commentstreams-link-copied": "Link in die Zwischenablage kopiert",
 	"commentstreams-event-new-comment-desc-label": "Antwort auf einen Kommentar",
-	"commentstreams-event-new-comment-reply-desc-label": "Kommentar auf einer Seite"
+	"commentstreams-event-new-comment-reply-desc-label": "Kommentar auf einer Seite",
+	"commentstreams-history-title": "Kommentarverlauf",
+	"commentstreams-notifyme-subscription-description": "{{#FORMAL:Du beobachtest|Sie beobachten}} den Kommentar",
+	"commentstreams-history-timestamp": "Zeit",
+	"commentstreams-event-new-comment-desc": "Neuer Kommentar",
+	"commentstreams-event-new-comment": "{{GENDER:$1| hat einen neuen Kommentar auf Seite $2 hinzugefügt}}",
+	"commentstreams-event-new-comment-reply": "{{GENDER:$1| hat auf einen Kommentar auf Seite $2 geantwortet}}",
+	"commentstreams-event-new-comment-reply-desc": "Antwort auf einen Kommentar"
 }
