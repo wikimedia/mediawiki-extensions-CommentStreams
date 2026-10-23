@@ -4,7 +4,8 @@
 			"Metalhead64",
 			"Mschlindwein",
 			"PretzelRocky",
-			"ToBeFree"
+			"ToBeFree",
+			"Osnard"
 		]
 	},
 	"commentstreams-desc": "Erlaubt die Kommentierung von Wikiseiten",
@@ -157,12 +158,16 @@
 	"logentry-commentstreams-reply-moderator-delete": "$1 {{GENDER:$2|(Moderator)|(Moderatorin)}} löschte die Antwort $3",
 	"commentstreams-ve-conversion-error": "Fehler beim Konvertieren zwischen Wikitext und HTML für den visuellen Editor",
 	"commentstreams-no-comment_id": "Interner Fehler: Keine comment_id gefunden",
+	"commentstreams-history-title": "Kommentarverlauf",
 	"commentstreams-ui-close": "Schließen",
+	"commentstreams-history-timestamp": "Zeit",
 	"commentstreams-history-actor": "Autor",
 	"commentstreams-history-text": "Kommentar",
 	"commentstreams-button-add-comment": "Kommentar hinzufügen",
 	"commentstreams-button-cancel": "Abbrechen",
 	"commentstreams-link-copied": "Link in die Zwischenablage kopiert",
+	"commentstreams-event-new-comment-desc": "Neuer Kommentar",
+	"commentstreams-event-new-comment": "{{GENDER:$1| hat einen neuen Kommentar auf Seite $2 hinzugefügt}}",
 	"commentstreams-event-new-comment-desc-label": "Ein neuer Kommentar wurde zu einer Seite hinzugefügt, die der Benutzer über die Einstellungen abonniert hat",
 	"commentstreams-event-new-comment-reply-desc-label": "Kommentar auf einer Seite"
 }
