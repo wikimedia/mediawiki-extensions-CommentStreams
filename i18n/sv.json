@@ -185,8 +185,5 @@
 	"commentstreams-link-copied": "Länken kopierades till urklipp",
 	"commentstreams-event-new-comment-desc": "Nya kommentarer",
 	"commentstreams-event-new-comment": "{{GENDER:$1|lade till en ny kommentar}} på sidan $2",
-	"commentstreams-event-new-comment-reply": "{{GENDER:$1|svarade på en kommentar}} på sidan $2",
-	"commentstreams-event-new-comment-reply-desc": "Nytt svar på en kommentar",
-	"commentstreams-event-new-comment-desc-label": "En ny kommentar har lagts till på en sida som användaren prenumererar på via inställningar",
-	"commentstreams-event-new-comment-reply-desc-label": "En annan användare svarade på en kommentar som användaren har skapat eller tittar på"
+	"commentstreams-event-new-comment-desc-label": "En ny kommentar har lagts till på en sida som användaren prenumererar på via inställningar"
 }

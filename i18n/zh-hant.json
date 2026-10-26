@@ -190,8 +190,5 @@
 	"commentstreams-link-copied": "連結已複製到剪貼簿",
 	"commentstreams-event-new-comment-desc": "新評論",
 	"commentstreams-event-new-comment": "在頁面$2{{GENDER:$1|添加一則新評論}}",
-	"commentstreams-event-new-comment-reply": "在頁面$2{{GENDER:$1|回覆一則新評論}}",
-	"commentstreams-event-new-comment-reply-desc": "對評論的新回覆",
-	"commentstreams-event-new-comment-desc-label": "一則評論新增在使用者透過偏好設定所訂閱的頁面上。",
-	"commentstreams-event-new-comment-reply-desc-label": "另一名使用者回覆了該名使用者所建立或關注的評論。"
+	"commentstreams-event-new-comment-desc-label": "一則評論新增在使用者透過偏好設定所訂閱的頁面上。"
 }

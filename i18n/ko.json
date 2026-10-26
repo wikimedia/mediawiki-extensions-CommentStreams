@@ -185,8 +185,5 @@
 	"commentstreams-link-copied": "링크가 클립보드에 복사되었습니다",
 	"commentstreams-event-new-comment-desc": "새 댓글",
 	"commentstreams-event-new-comment": "$2 문서에서 {{GENDER:$1|새로운 댓글을 추가함}}",
-	"commentstreams-event-new-comment-reply": "$2 문서에서 {{GENDER:$1|댓글에 답글을 달음}}",
-	"commentstreams-event-new-comment-reply-desc": "댓글에 대한 새로운 답글",
-	"commentstreams-event-new-comment-desc-label": "사용자가 환경 설정을 통해 구독한 문서에 새로운 댓글이 추가되었습니다",
-	"commentstreams-event-new-comment-reply-desc-label": "사용자가 만들었거나 주시중인 댓글에 다른 사용자가 답글을 달았습니다."
+	"commentstreams-event-new-comment-desc-label": "사용자가 환경 설정을 통해 구독한 문서에 새로운 댓글이 추가되었습니다"
 }

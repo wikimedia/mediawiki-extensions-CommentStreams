@@ -89,8 +89,5 @@
 	"commentstreams-link-copied": "Skopiowano link do schowka",
 	"commentstreams-event-new-comment-desc": "Nowy komentarz",
 	"commentstreams-event-new-comment": "{{GENDER:$1|dodał|dodała}} nowy komentarz na stronie $2",
-	"commentstreams-event-new-comment-reply": "{{GENDER:$1|odpowiedział|odpowiedziała}} na komentarz na stronie $2",
-	"commentstreams-event-new-comment-reply-desc": "Nowa odpowiedź na komentarz",
-	"commentstreams-event-new-comment-desc-label": "Dodano nowy komentarz do strony, którą użytkownik zaobserwował za pomocą preferencji",
-	"commentstreams-event-new-comment-reply-desc-label": "Inny użytkownik odpowiedział na komentarz, który sam utworzył lub obserwuje"
+	"commentstreams-event-new-comment-desc-label": "Dodano nowy komentarz do strony, którą użytkownik zaobserwował za pomocą preferencji"
 }
