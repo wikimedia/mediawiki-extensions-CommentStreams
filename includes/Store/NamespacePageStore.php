@@ -37,6 +37,7 @@ use MediaWiki\Extension\CommentStreams\WatchHelper;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionManager;
@@ -56,7 +57,6 @@ use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\Subquery;
 use Wikimedia\Timestamp\TimestampException;
-use WikiPage;
 
 /**
  * Comment Streams database backend interface
