@@ -21,7 +21,6 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use Article;
 use HtmlArmor;
 use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Extension\CommentStreams\Store\NamespacePageStore;
@@ -36,6 +35,7 @@ use MediaWiki\Hook\XmlDumpWriterOpenPageHook;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Output\OutputPage;
+use MediaWiki\Page\Article;
 use MediaWiki\Page\PageProps;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPageFactory;
