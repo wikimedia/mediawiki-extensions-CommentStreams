@@ -15,6 +15,5 @@
 	"commentstreams-button-add-comment": "Dodaj komentar",
 	"commentstreams-button-cancel": "Otkaži",
 	"commentstreams-event-new-comment-desc": "Novi komentar",
-	"commentstreams-event-new-comment": "{{GENDER:$1|dodao|dodala}} novi komentar na stranicu $2",
-	"commentstreams-event-new-comment-reply": "{{GENDER:$1|odgovorio|odgovorila}} je na komentar na stranici $2"
+	"commentstreams-event-new-comment": "{{GENDER:$1|dodao|dodala}} novi komentar na stranicu $2"
 }
