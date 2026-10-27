@@ -6,8 +6,8 @@ use Exception;
 use MediaWiki\Extension\CommentStreams\Comment;
 use MediaWiki\Extension\CommentStreams\NotifierInterface;
 use MediaWiki\Extension\CommentStreams\Reply;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\User\User;
-use WikiPage;
 
 class NullNotifier implements NotifierInterface {
 
