@@ -21,7 +21,6 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use HtmlArmor;
 use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Extension\CommentStreams\Store\NamespacePageStore;
 use MediaWiki\Extension\CommentStreams\Store\TalkPageStore;
@@ -55,6 +54,7 @@ use MediaWiki\Xml\Xml;
 use SearchResult;
 use stdClass;
 use WikiImporter;
+use Wikimedia\HtmlArmor\HtmlArmor;
 use XmlDumpWriter;
 use XMLReader;
 
