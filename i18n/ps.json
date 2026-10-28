@@ -51,7 +51,5 @@
 	"commentstreams-button-cancel": "ناگارل",
 	"commentstreams-link-copied": "تړونی ټينگدړې ته ولمېسل شو",
 	"commentstreams-event-new-comment-desc": "نوې څرگندونه",
-	"commentstreams-event-new-comment": "په $2 مخ کې {{GENDER:$1|يوه څرگندونه ورگډه کړه}}",
-	"commentstreams-event-new-comment-reply": "په $2 مخ کې {{GENDER:$1|يوه څرگندونه ځواب کړه}}",
-	"commentstreams-event-new-comment-reply-desc": "څرگندونې ته نوی ځواب"
+	"commentstreams-event-new-comment": "په $2 مخ کې {{GENDER:$1|يوه څرگندونه ورگډه کړه}}"
 }
