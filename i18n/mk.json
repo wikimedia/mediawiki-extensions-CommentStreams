@@ -186,6 +186,6 @@
 	"commentstreams-event-new-comment": "{{GENDER:$1|додаде нов коментар}} на страницата $2",
 	"commentstreams-event-new-comment-reply": "{{GENDER:$1|одговори на коментар}} на страницата $2",
 	"commentstreams-event-new-comment-reply-desc": "Нов одговор на коментар",
-	"commentstreams-event-new-comment-desc-label": "Додаден е нов коментар на страницата на која е претплатен корисникот преку нагодувањата",
+	"commentstreams-event-new-comment-desc-label": "Коментар на страница",
 	"commentstreams-event-new-comment-reply-desc-label": "Друг корисник одговори на коментар што корисникот го создал или го набљудува"
 }
