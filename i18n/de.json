@@ -160,6 +160,7 @@
 	"commentstreams-no-comment_id": "Interner Fehler: Keine comment_id gefunden",
 	"commentstreams-history-title": "Kommentarverlauf",
 	"commentstreams-ui-close": "Schließen",
+	"commentstreams-notifyme-subscription-description": "{{#FORMAL:Du beobachtest|Sie beobachten}} den Kommentar",
 	"commentstreams-history-timestamp": "Zeit",
 	"commentstreams-history-actor": "Autor",
 	"commentstreams-history-text": "Kommentar",
