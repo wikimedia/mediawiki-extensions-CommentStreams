@@ -22,6 +22,7 @@
 namespace MediaWiki\Extension\CommentStreams;
 
 use MediaWiki\Actions\ActionEntryPoint;
+use MediaWiki\Export\XmlDumpWriter;
 use MediaWiki\Extension\CommentStreams\Store\NamespacePageStore;
 use MediaWiki\Extension\CommentStreams\Store\TalkPageStore;
 use MediaWiki\Hook\AfterImportPageHook;
@@ -55,7 +56,6 @@ use MediaWiki\User\User;
 use MediaWiki\Xml\Xml;
 use stdClass;
 use Wikimedia\HtmlArmor\HtmlArmor;
-use XmlDumpWriter;
 use XMLReader;
 
 class MainHooks implements
