@@ -21,7 +21,7 @@
 
 namespace MediaWiki\Extension\CommentStreams;
 
-use Action;
+use MediaWiki\Actions\Action;
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
