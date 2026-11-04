@@ -185,5 +185,5 @@
 	"commentstreams-link-copied": "링크가 클립보드에 복사되었습니다",
 	"commentstreams-event-new-comment-desc": "새 댓글",
 	"commentstreams-event-new-comment": "$2 문서에서 {{GENDER:$1|새로운 댓글을 추가함}}",
-	"commentstreams-event-new-comment-desc-label": "사용자가 환경 설정을 통해 구독한 문서에 새로운 댓글이 추가되었습니다"
+	"commentstreams-event-new-comment-desc-label": "문서에 댓글 추가됨"
 }
