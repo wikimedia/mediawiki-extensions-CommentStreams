@@ -4,6 +4,7 @@
 			"Diskdance",
 			"Kly",
 			"Liuxinyu970226",
+			"LowensteinYang",
 			"SunAfterRain",
 			"Tranve",
 			"Winston Sung",
@@ -192,6 +193,6 @@
 	"commentstreams-event-new-comment": "在頁面$2{{GENDER:$1|添加一則新評論}}",
 	"commentstreams-event-new-comment-reply": "在頁面$2{{GENDER:$1|回覆一則新評論}}",
 	"commentstreams-event-new-comment-reply-desc": "對評論的新回覆",
-	"commentstreams-event-new-comment-desc-label": "一則評論新增在使用者透過偏好設定所訂閱的頁面上。",
+	"commentstreams-event-new-comment-desc-label": "在頁面中發表評論",
 	"commentstreams-event-new-comment-reply-desc-label": "另一名使用者回覆了該名使用者所建立或關注的評論。"
 }
