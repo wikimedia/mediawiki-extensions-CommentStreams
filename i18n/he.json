@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"A100Star",
 			"Amire80",
 			"Guycn2",
 			"Neriah"
@@ -178,5 +179,5 @@
 	"commentstreams-link-copied": "הקישור הועתק ללוח",
 	"commentstreams-event-new-comment-desc": "תגובה חדשה",
 	"commentstreams-event-new-comment": "{{GENDER:$1|הוסיף|הוסיפה}} תגובה חדשה לדף $2",
-	"commentstreams-event-new-comment-desc-label": "תגובה חדשה נוספה לדף שהמשתמש נרשם אליו דרך העדפות"
+	"commentstreams-event-new-comment-desc-label": "הוספת תגובה לדף"
 }
