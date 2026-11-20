@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"A100Star",
 			"Amire80",
 			"Guycn2",
 			"Neriah"
@@ -175,7 +176,7 @@
 	"commentstreams-link-copied": "הקישור הועתק ללוח",
 	"commentstreams-event-new-comment-desc": "תגובה חדשה",
 	"commentstreams-event-new-comment": "{{GENDER:$1|הוסיף|הוסיפה}} תגובה חדשה לדף $2",
-	"commentstreams-event-new-comment-desc-label": "תגובה חדשה נוספה לדף שהמשתמש נרשם אליו דרך העדפות",
+	"commentstreams-event-new-comment-desc-label": "הוספת תגובה לדף",
 	"logentry-commentstreams-comment-create-v2": "$1 {{GENDER:$2|הגיב|הגיבה}} [[$4|$5]] ב־$3",
 	"logentry-commentstreams-comment-edit-v2": "$1 {{GENDER:$2|ערך|ערכה}} את התגובה [[$4|$5]] ב־$3",
 	"logentry-commentstreams-comment-delete-v2": "$1 {{GENDER:$2|מחק|מחקה}} את התגובה ''$5'' ב־$3"
