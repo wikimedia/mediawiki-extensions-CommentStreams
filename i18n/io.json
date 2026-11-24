@@ -11,11 +11,11 @@
 	"commentstreams-buttontooltip-edit": "redaktar",
 	"commentstreams-buttontooltip-delete": "efacar",
 	"commentstreams-buttontooltip-permalink": "Permananta ligilo",
+	"commentstreams-buttontooltip-expand": "expansez",
 	"commentstreams-buttontooltip-submit": "sendar",
 	"commentstreams-buttontooltip-cancel": "anular",
 	"commentstreams-dialog-buttontext-cancel": "Nuligar",
 	"commentstreams-dialog-buttontext-yes": "Yes",
 	"commentstreams-dialog-buttontext-no": "No",
-	"commentstreams-history-actor": "Autoro",
-	"commentstreams-buttontooltip-expand": "expansez"
+	"commentstreams-history-actor": "Autoro"
 }
